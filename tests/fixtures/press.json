@@ -1,0 +1,163 @@
+{
+  "data": {
+    "id": 57987,
+    "date": "2026-09-30T10:00:00",
+    "number": 57987,
+    "title": "İşgücü İstatistikleri",
+    "period": "Ağustos 2026",
+    "contactEmail": "isgucuistatistikleri@tuik.gov.tr",
+    "content": "<strong>İşgücü İstatistikleri, Ağustos 2026</strong>",
+    "isIncluded": true,
+    "isSdmx": true,
+    "relatedInstitutions": [],
+    "statisticalTables": [
+      {
+        "type": "dataflow",
+        "title": "Temel İşgücü Göstergeleri",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "İstihdam Edilenlerin Fiili Çalışma Süreleri",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_FIIL_CALISMA_SURE_C,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "İşgücüne İlişkin Tamamlayıcı Göstergeleri",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C,1.0"
+      }
+    ],
+    "tables": [
+      {
+        "type": "pdf",
+        "title": "Metodolojik açıklama dokümanı",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=Sh6hi41imMD6zr0grQ93Jcy28aQ4Vg6EJXPaHRLoRyq4APSP1EM82BSDHGeTQ5Gj5I2B03V3A8SXo33LdlnaWrFQqWIieg1etHfA9K8mEOY%2BBEXcQMglhdLna0czEdkU"
+      },
+      {
+        "type": "xls",
+        "title": "Mevsim etkisinden arındırılmış temel işgücü göstergeleri (15+ yaş)",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=J3vvpjxl1zegFbLLcBKuKu97D1lt311K3wSl5AXSqOXDqyFVu74pWwLO33eZ2r84iYzRB3Te8ErmXuZxyR4alrOrLEDP7u7%2BR0zYd3RCScVAkOvj5zIobgmAp2dHxkMKSZypftgJzd39Uv9KWPWI900%2F2labit3PGYue5qUH4zo%2BxWOwyQEqE2No%2BBELJOkF"
+      },
+      {
+        "type": "xls",
+        "title": "Mevsim etkisinden arındırılmış temel işgücü göstergeleri (15-24 yaş)",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=tnxUgpagZRcDabW7N82x8JzIaC4MJFB52Lnr7ef%2BpdrJjnhLc2d8bwhpfflvkJuYi1Ey2y1xpQ%2BZGVupN77XkzLRlza30KTSAEEjDUgcfjcgLZ52i2hkh1mBoeEql6I4PPvWKnBpQvG8HIvBehW59htpECo3GlHMnwFEtMe13%2BPICogku2Lis%2FL3KnHig19t"
+      },
+      {
+        "type": "xls",
+        "title": "Mevsim ve takvim etkilerinden arındırılmış işgücüne ilişkin tamamlayıcı göstergeler",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=vn4DE3L3bevB%2F528cvuV2kq5Ufa4iZEn%2FxfmJ1E%2BbGaFkNY%2BvlBMFpxiFWG6FgpnDlyx%2FtxTV5htvJXLrEu%2FT8Di%2Br%2FIkxhEzjqV9y%2BfrGNNc7RbUEOJSOoxuSLVPsAq0JhnNIs7gbIeuTLQ71DNjsuBnMD3WBj55XMyzpTm%2FzTrK8W%2Fb%2BxZZLHeelTxmwl633mmLj1LgiF85jCMRLiGfQ%3D%3D"
+      },
+      {
+        "type": "xls",
+        "title": "Mevsim ve takvim etkilerinden arındırılmış istihdam edilenlerin fiili çalışma süreleri",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=brn330YFQrgWmpXAPsG46uBRNv8k7E2Os42Gca0pY%2BgS1WVvgydvfJzIcdKWoY%2FLIO6xesfx64bEivdy%2Bk4M9dS9PSj3WWL%2F0SDnSjXIvx2aQevVRU1ckUWbHApk0GJz5szdko1ffL%2B1huN6Ff90WFM7uMZH3QiHXyKH0Xow6Ww2DRKjvdMJHlmoFnLNKf0khyZnrysfXR5xVHzkZJgy5Q%3D%3D"
+      },
+      {
+        "type": "xls",
+        "title": "Temel işgücü göstergeleri (15+ yaş)",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=6wkH0wwJrjrBxiRiTmECnfW6rigj94fSOa77sB59s1fgOfW5b%2BuJqBwbaDRayMd%2FznPSo2whF4XlwDogUyBFZweQpFnTlAm7hGDDS0jcstWLNOxRgNObrd4LhixflH%2Fe"
+      },
+      {
+        "type": "xls",
+        "title": "Temel işgücü göstergeleri (15-24 yaş)",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=bt5UsqNfArC87u86SGf9P0hN2WbcEoysIVZYBeijDFpJFFrep4Ml%2BKZelGMJtko0Z%2FFp772AnXfcK3q8Me%2FR2xkV1nWCO8zc04te59sXJkOIp9Cx1Q3B85x8KU2lclwFKEO%2B3nlIWspV%2FG4mqldPiA%3D%3D"
+      },
+      {
+        "type": "xls",
+        "title": "İşgücüne ilişkin tamamlayıcı göstergeler",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=PWYTm74Cjq7Acn%2FzcSeNT2Tx2F%2B82Uj0vQ%2BZG7mhKvAkLLyTifu6kLOf5edjhHg%2F4EIuxOD6iZpQPlWTKGlkOhGelvK0HnecSvYhdfJ6BlktpqlGXU7tMhteycpWiAkzosGQY2dCfuKLWmhvZHy5og%3D%3D"
+      },
+      {
+        "type": "xls",
+        "title": "İstihdam edilenlerin fiili çalışma süreleri",
+        "url": "/api/tr/data/downloads?t=t&pid=57987&p=7CHR%2BC%2FBv%2FE2U%2FvulI%2F7sYvd5K9PGadQWxwPm2gDvDEXOCVPiV2cten0JRX5jV6qHXd72Vwqgr5QRRzqepg8yBYeRf0ssuSnyEzRB1bbCwvI4LT4E8jQEygkVToTiN5vDmh%2B9UZe7nyeOhZTIHPbBg%3D%3D"
+      }
+    ],
+    "reports": [],
+    "metadatas": [
+      {
+        "title": "İşgücü İstatistikleri",
+        "data": [
+          {
+            "title": "1. İletişim",
+            "detail": [
+              {
+                "title": "1.1. Kurum Adı",
+                "content": "<div style=\"text-align: justify;\">Türkiye İstatistik Kurumu (TÜİK)</div>"
+              },
+              {
+                "title": "1.5. İletişim Kurulacak Birimin Adresi",
+                "content": "<div style=\"text-align: justify;\">Devlet Mahallesi Necatibey Caddesi No:114 06420 Çankaya/Ankara</div>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "previousPresses": [
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Temmuz 2026",
+        "url": "/tr/press/57999"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Haziran 2026",
+        "url": "/tr/press/57986"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Mayıs 2026",
+        "url": "/tr/press/57985"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Nisan 2026",
+        "url": "/tr/press/57984"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Mart 2026",
+        "url": "/tr/press/57998"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Şubat 2026",
+        "url": "/tr/press/57997"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Ocak 2026",
+        "url": "/tr/press/57983"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Aralık 2025",
+        "url": "/tr/press/57982"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Kasım 2025",
+        "url": "/tr/press/54068"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Ekim 2025",
+        "url": "/tr/press/54067"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Eylül 2025",
+        "url": "/tr/press/54066"
+      },
+      {
+        "title": "İşgücü İstatistikleri",
+        "period": "Ağustos 2025",
+        "url": "/tr/press/54065"
+      }
+    ]
+  },
+  "isError": false,
+  "message": "ok"
+}

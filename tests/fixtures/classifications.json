@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 207,
+    "Tur_Sira_No": 1,
+    "Ad": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması NACE Rev.1",
+    "Ad_en": "Statistical Classification of Economic Activities in the European Community, Revision 1",
+    "Kisa_Ad": "NACE Rev.1",
+    "Kisa_Ad_en": null,
+    "Href": "https://showvoc.op.europa.eu/#/home",
+    "Sahibi": "EUROSTAT",
+    "Sahibi_en": "EUROSTAT",
+    "Img": "/images/classification/eurostat.svg"
+  },
+  {
+    "Id": 4,
+    "Tur_Sira_No": 1,
+    "Ad": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması, NACE Rev.1.1",
+    "Ad_en": "Statistical Classification of Economic Activities in the European Community, Revision 1.1 ",
+    "Kisa_Ad": "NACE Rev.1.1",
+    "Kisa_Ad_en": null,
+    "Href": "https://showvoc.op.europa.eu/#/home",
+    "Sahibi": "EUROSTAT",
+    "Sahibi_en": "EUROSTAT",
+    "Img": "/images/classification/eurostat.svg"
+  },
+  {
+    "Id": 191,
+    "Tur_Sira_No": 1,
+    "Ad": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması , NACE Rev.2",
+    "Ad_en": "Statistical Classification of Economic Activities in the European Community, Revision 2 ",
+    "Kisa_Ad": "NACE Rev.2",
+    "Kisa_Ad_en": null,
+    "Href": "https://showvoc.op.europa.eu/#/home",
+    "Sahibi": "EUROSTAT",
+    "Sahibi_en": "EUROSTAT",
+    "Img": "/images/classification/eurostat.svg"
+  }
+]

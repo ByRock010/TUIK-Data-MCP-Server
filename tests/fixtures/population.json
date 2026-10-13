@@ -1,0 +1,88 @@
+{
+  "data": {
+    "data": [
+      {
+        "type": 0,
+        "icon": "nip",
+        "title": "Nüfus İstatistikleri Portalı",
+        "content": "Nüfus İstatistikleri Portalı (NİP) ile araştırmacılar, politika yapıcılar, sivil toplum kuruluşları ve bireysel kullanıcılar tarafından sıklıkla talep edilen nüfus (nüfus büyüklüğü, yaş ve cinsiyet yapısı, göç, eğitim, doğum yeri, yabancı nüfus, bina ve konut vb. ) ve demografiye (doğum, evlenme, boşanma, ölüm, vb.) ilişkin tarihsel verinin grafik, tematik harita, dinamik tablo, görsel nesneler vb. veri görselleştirme araçları aracılığıyla daha anlaşılır/bütüncül/kullanıcı odaklı bir şekilde sunulması, bilgilerin erişilebilirliğinin ve farkındalığın arttırılması hedeflenmektedir.",
+        "url": "https://nip.tuik.gov.tr/"
+      },
+      {
+        "date": "2026-02-09T10:00:00",
+        "type": 1,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2025",
+        "content": "Erkek <span class=\"highlight\">nüfus</span> 43 milyon 59 bin 434 kişi olurken, kadın <span class=\"highlight\">nüfus</span> 43 milyon 32 bin 734 kişi oldu. Diğer bir ifadeyle toplam <span class=\"highlight\">nüfusun</span> %50,02'sini erkekler, %49,98'ini ise kadınlar oluşturdu.",
+        "url": "/tr/press/53899"
+      },
+      {
+        "date": "2025-02-06T10:00:00",
+        "type": 1,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2024",
+        "content": "Adrese Dayalı <span class=\"highlight\">Nüfus</span> Kayıt Sistemi Sonuçları, 2024 Türkiye <span class=\"highlight\">nüfusu</span> 85 milyon 664 bin 944 kişi oldu Türkiye'de ikamet eden <span class=\"highlight\">nüfus</span>, 31 Aralık 2024 tarihi itibarıyla bir önceki yıla göre 292 bin 567 kişi artarak 85 milyon 664 bin 944 kişi oldu.",
+        "url": "/tr/press/53783"
+      },
+      {
+        "date": "2024-02-06T10:00:00",
+        "type": 1,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2023",
+        "content": "Erkek <span class=\"highlight\">nüfus</span> 42 milyon 734 bin 71 kişi olurken, kadın <span class=\"highlight\">nüfus</span> 42 milyon 638 bin 306 kişi oldu. Diğer bir ifadeyle toplam <span class=\"highlight\">nüfusun</span> %50,1'ini erkekler, %49,9'unu ise kadınlar oluşturdu.",
+        "url": "/tr/press/49684"
+      },
+      {
+        "date": "2023-02-06T10:00:00",
+        "type": 1,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2022",
+        "content": "Erkek <span class=\"highlight\">nüfus</span> 42 milyon 704 bin 112 kişi olurken, kadın <span class=\"highlight\">nüfus</span> 42 milyon 575 bin 441 kişi oldu. Diğer bir ifadeyle toplam <span class=\"highlight\">nüfusun</span> %50,1'ini erkekler, %49,9'unu ise kadınlar oluşturdu.",
+        "url": "/tr/press/49685"
+      },
+      {
+        "type": 5,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları",
+        "content": "31 Aralık tarihi itibarıyla yıllık olarak Adrese Dayalı <span class=\"highlight\">Nüfus</span> Kayıt Sistemi (ADNKS)\\'nden elde edilen yerleşim yerlerine göre <span class=\"highlight\">nüfus</span> büyüklüğü ile <span class=\"highlight\">nüfusun</span> temel nitelik bilgilerini içermektedir.",
+        "url": "http://biruni.tuik.gov.tr/medas/?kn=95&locale=tr"
+      },
+      {
+        "type": 3,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi İstatistikleri",
+        "content": "İstatistiksel İşleme Veri İşleme: NVİGM tarafından güncellenen ADNKS’de kayıtlı olan <span class=\"highlight\">nüfusla</span> birlikte, kurumsal yerlerde kalan <span class=\"highlight\">nüfus</span> ve ülkemizde ikamet eden yabancı uyruklu <span class=\"highlight\">nüfus</span> dikkate alınarak hesaplanmaktadır.Kurumsal <span class=\"highlight\">nüfus</span>: ADNKS’de kurumsal <span class=\"highlight\">nüfusa</span>",
+        "url": "/tr/press/53783/metadata",
+        "pressName": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları",
+        "pressUrl": "/tr/press/53783"
+      },
+      {
+        "type": 3,
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi İstatistikleri",
+        "content": "<span class=\"highlight\">Nüfus</span> artış hızı, yaş ve cinsiyet dağılımı gibi temel göstergeler ile doğum, ölüm sayılarındaki değişimler kontrol edilmektedir.Yabancı <span class=\"highlight\">nüfus</span> büyüklüğündeki değişimlerin toplam <span class=\"highlight\">nüfusa</span> etkisi ve kurumsal <span class=\"highlight\">nüfusun</span> dağılımı detaylı bir şekilde analiz edilmektedir.Hanehalkı",
+        "url": "/tr/press/53784/metadata",
+        "pressName": "İstatistiklerle Aile",
+        "pressUrl": "/tr/press/53784"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Yıllara Göre İl Nüfusları",
+        "content": "Tablo, 2000 yılından itibaren il düzeyinde <span class=\"highlight\">nüfus</span> büyüklüğü bilgisini içermektedir. 2000-2006 dönemi yıl sonu <span class=\"highlight\">nüfusları</span>, ADNKS sonuçlarına göre tahmin edilmiştir.<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, Gözlem Sıklığı, İstatistiksel Gösterge, Nüfus kütüğüne kayıtlı olunan il, Yerleşim Yeri türü, Vatandaşlık Ülkesi, Doğum Yeri (il), İkamet edilen yer, Doğum Yeri Durum, Doğum Yeri (ülke), Yaş, Doğum yılı, Hanehalkı tipi, Hanehalkı büyüklüğü, Cinsiyet, Yaş Grubu, Erkek İsim, Kadın İsim, Medeni Durum, ADNKS Gösterge</p><p><strong>İstatistiksel Gösterge:</strong> Adrese Dayalı <span class=\"highlight\">Nüfus</span> Kayıt Sistemi</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T30,1.1"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Yıllara ve Cinsiyete Göre İl / İlçe Merkezleri ve Belde / Köy Nüfusu, Genel Nüfus Sayımları - ADNKS",
+        "content": "Tablo, 1927 yılından itibaren Türkiye toplamı için cinsiyete göre il/ilçe merkezleri ve belde/köy <span class=\"highlight\">nüfusu</span> bilgisini içermektedir. 1927-2000 dönemi için bilgiler: ilki 1927 yılında, 1935-1990 döneminde 5 yılda bir ve sonuncusu 2000 yılında gerçekleştirilen<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, Gözlem Sıklığı, İstatistiksel Gösterge, Nüfus kütüğüne kayıtlı olunan il, Yerleşim Yeri türü, Vatandaşlık Ülkesi, Doğum Yeri (il), İkamet edilen yer, Doğum Yeri Durum, Doğum Yeri (ülke), Yaş, Doğum yılı, Hanehalkı tipi, Hanehalkı büyüklüğü, Cinsiyet, Yaş Grubu, Erkek İsim, Kadın İsim, Medeni Durum, ADNKS Gösterge</p><p><strong>İstatistiksel Gösterge:</strong> Adrese Dayalı <span class=\"highlight\">Nüfus</span> Kayıt Sistemi</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T26,1.1"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Yıllara, Yaş Grubu ve Cinsiyete Göre Nüfus, Genel Nüfus Sayımları - ADNKS",
+        "content": "Geniş yaş grupları \"0-14, 15-64 ve 65+\" şeklindedir. 1935-2000 dönemi için bilgiler: 1935-1990 döneminde 5 yılda bir ve sonuncusu 2000 yılında gerçekleştirilen Genel <span class=\"highlight\">Nüfus</span> Sayımı (GNS) sonuçlarına göre verilmiştir. 2007 yılından itibaren ise yıllık bilgiler<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, Gözlem Sıklığı, İstatistiksel Gösterge, Nüfus kütüğüne kayıtlı olunan il, Yerleşim Yeri türü, Vatandaşlık Ülkesi, Doğum Yeri (il), İkamet edilen yer, Doğum Yeri Durum, Doğum Yeri (ülke), Yaş, Doğum yılı, Hanehalkı tipi, Hanehalkı büyüklüğü, Cinsiyet, Yaş Grubu, Erkek İsim, Kadın İsim, Medeni Durum, ADNKS Gösterge</p><p><strong>İstatistiksel Gösterge:</strong> Adrese Dayalı <span class=\"highlight\">Nüfus</span> Kayıt Sistemi</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T27,1.1"
+      }
+    ],
+    "total": 1331,
+    "responseTimeMs": 229
+  },
+  "isError": false,
+  "message": "Arama sonuçları listelendi"
+}

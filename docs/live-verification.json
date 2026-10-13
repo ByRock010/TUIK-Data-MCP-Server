@@ -1,0 +1,453 @@
+{
+  "tools": [
+    "search_tuik",
+    "get_tuik_resource",
+    "get_tuik_data",
+    "list_tuik_themes",
+    "search_tuik_classifications"
+  ],
+  "searches": {
+    "işsizlik": [
+      {
+        "id": "resource:dc3c2fbe2131f53990c6fef69e92ee6a5298ef5eebce1fc35a1b90fc50953925",
+        "title": "İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=sDo0HAY4O%2FRgXjCcYZbBirbyx5STvk5%2FHvXYDIkOIbvqE6BgxLSjt9Ud%2B0dcLvwK"
+      },
+      {
+        "id": "resource:0b2f0d33cde5e404d1d9515212c767bc930ed800fdc9346cc3f24bf79f2ddc9a",
+        "title": "Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=xCbtzRWXhyGdzdyzHlGfguyWGWT7pWLqI2Y1WNRuFssuCygqQa4VJTL9ErpbHuT87%2F8gTh5n0wYIHvcbTaSSQA%3D%3D"
+      },
+      {
+        "id": "resource:02eb10d980c6a420666ad3bd6f33c6f50f61155ca7c9334a99235c31012fa8ba",
+        "title": "İl düzeyinde işsizlik oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=XqsQCSKPikue9SOZc0vmf2fn2DMsDMaknpS8atTSZCLqJhaF%2BdqtgLFIeSSUiGO2F2zhBxK%2BJcLbM3DPCp15MQ%3D%3D"
+      }
+    ],
+    "nüfus": [
+      {
+        "id": "resource:f0d30030e8a6e870f4897877369b0e1ead0d9b901de999a33d930b74e3cd81e1",
+        "title": "Nüfus İstatistikleri Portalı",
+        "source_url": "https://nip.tuik.gov.tr/"
+      },
+      {
+        "id": "press:53899",
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2025",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/53899"
+      },
+      {
+        "id": "press:53783",
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2024",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/53783"
+      }
+    ],
+    "enflasyon": [
+      {
+        "id": "press:58298",
+        "title": "Tüketici Fiyat Endeksi, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58298"
+      },
+      {
+        "id": "press:58290",
+        "title": "Tüketici Fiyat Endeksi, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58290"
+      },
+      {
+        "id": "press:58297",
+        "title": "Tüketici Fiyat Endeksi, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58297"
+      }
+    ],
+    "TÜFE": [
+      {
+        "id": "press:58298",
+        "title": "Tüketici Fiyat Endeksi, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58298"
+      },
+      {
+        "id": "press:58290",
+        "title": "Tüketici Fiyat Endeksi, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58290"
+      },
+      {
+        "id": "press:58297",
+        "title": "Tüketici Fiyat Endeksi, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58297"
+      }
+    ],
+    "dış ticaret": [
+      {
+        "id": "press:58257",
+        "title": "Dış Ticaret Endeksleri, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58257"
+      },
+      {
+        "id": "flow:DF_DIS_TICARET_HADLERI_V1+V1.0",
+        "title": "Dış Ticaret Hadleri",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_DIS_TICARET_HADLERI_V1,1.0"
+      },
+      {
+        "id": "press:58239",
+        "title": "Dış Ticaret İstatistikleri, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58239"
+      }
+    ],
+    "İstanbul nüfusu": [
+      {
+        "id": "flow:DF_ADNKS_T18+V1.1",
+        "title": "Belediye Sayısı ve Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T18,1.1"
+      },
+      {
+        "id": "flow:DF_ADNKS_T14+V1.1",
+        "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T14,1.1"
+      },
+      {
+        "id": "flow:DF_ADNKS_T22+V1.1",
+        "title": "İl ve İlçelere Göre İl/İlçe Merkezi, Belde/Köy Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T22,1.1"
+      }
+    ],
+    "genç işsizlik": [
+      {
+        "id": "resource:d8510af648bb77fab62dc45d38f4be5cfe44ad31faf33070de4b853fd64f28dd",
+        "title": "Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=3LpkO8zrqrq2%2Fi4fNQHZhjJW4%2BCKaaeHPbcXraYgGsm3qX7IgQb%2Fq1Y%2FnEfqKI9BUyE%2FcctiZiLrKqmWgOE%2BdA%3D%3D"
+      },
+      {
+        "id": "resource:7accb6c4fc6af8b6f7c46c30479471a9b043a1f796c6adedd877070f022d2257",
+        "title": "Cinsiyete Göre Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=pF1bOWrsaRPAiaX98jkAzqZ4xXogy0DK%2F0FQTNFI5Txhnsg75VUJ9xIySnkZAF8LDjLk3sWeVOM%2BVnSqqzfL1SgfnftMVNzy7uY2yf1r7zg%3D"
+      },
+      {
+        "id": "resource:428bacaf101499405c8205ebc28c9b8729979e01b0e81594a88fdca45a464143",
+        "title": "Cinsiyete göre genç işsizlik oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=zfyJyEgFutNtSXnnTZmvS%2BofHWpH6n4kAdJAQbEiAi7b28VhPrOHgJFrYd1IXqCz0Rha0rK5N8cq96cqUyaPa7ZaSvWIDG2ttsbmU%2BD%2FPB4%3D"
+      }
+    ],
+    "konut satışları": [
+      {
+        "id": "press:58346",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58346"
+      },
+      {
+        "id": "press:58339",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58339"
+      },
+      {
+        "id": "press:58344",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Haziran 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58344"
+      }
+    ]
+  },
+  "bulletin": {
+    "id": "press:57987",
+    "title": "İşgücü İstatistikleri, Ağustos 2026",
+    "download_count": 9,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/57987"
+  },
+  "download": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=sDo0HAY4O%2FRgXjCcYZbBirbyx5STvk5%2FHvXYDIkOIbvqE6BgxLSjt9Ud%2B0dcLvwK",
+    "retrieved_at": "2026-10-13T20:03:14.177424Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "resource:dc3c2fbe2131f53990c6fef69e92ee6a5298ef5eebce1fc35a1b90fc50953925",
+    "status": "download_available",
+    "message": "Official download verified. Spreadsheet/PDF ingestion is outside this MVP; limit does not truncate the file.",
+    "columns": [],
+    "rows": [],
+    "unit": null,
+    "notes": "Metadata available from the official search record; further fields are not exposed by a supported detail endpoint.",
+    "download_links": [
+      {
+        "title": "İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=sDo0HAY4O%2FRgXjCcYZbBirbyx5STvk5%2FHvXYDIkOIbvqE6BgxLSjt9Ud%2B0dcLvwK",
+        "format": "xls",
+        "verified": true,
+        "size_bytes": 71168
+      }
+    ],
+    "total_rows": null,
+    "truncated": false
+  },
+  "csv": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+    "retrieved_at": "2026-10-13T20:03:52.446314Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+    "status": "ok",
+    "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+    "columns": [
+      "Gözlem Sıklığı (M)",
+      "Ölçü Birimi (RO)",
+      "Dış Ticaret Göstergeleri (18)",
+      "Dış Ticaret Türü (_O)",
+      "İstatistiksel Gösterge (UTOD_DISTIC_END)",
+      "İktisadi Faaliyet (0)",
+      "Dış Ticaret Endeks Sektör Kodları (0)",
+      "Temel Dönem/Yıl (2015)",
+      "Coğrafi Kapsam (TR)",
+      "Zaman (2015-01)",
+      "Gözlem Değeri",
+      "Gözlem Durumu",
+      "Gizlilik Durumu",
+      "Ondalık Basamak Sayısı",
+      "Zaman Formatı",
+      "Birim Çarpanı"
+    ],
+    "rows": [
+      {
+        "Gözlem Sıklığı (M)": "Aylık",
+        "Ölçü Birimi (RO)": "Oran",
+        "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+        "Dış Ticaret Türü (_O)": "Diğer",
+        "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+        "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+        "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+        "Temel Dönem/Yıl (2015)": "2015",
+        "Coğrafi Kapsam (TR)": "Türkiye",
+        "Zaman (2015-01)": "2015-01",
+        "Gözlem Değeri": "98,4622068329301",
+        "Gözlem Durumu": "",
+        "Gizlilik Durumu": "",
+        "Ondalık Basamak Sayısı": "",
+        "Zaman Formatı": "",
+        "Birim Çarpanı": ""
+      },
+      {
+        "Gözlem Sıklığı (M)": "Aylık",
+        "Ölçü Birimi (RO)": "Oran",
+        "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+        "Dış Ticaret Türü (_O)": "Diğer",
+        "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+        "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+        "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+        "Temel Dönem/Yıl (2015)": "2015",
+        "Coğrafi Kapsam (TR)": "Türkiye",
+        "Zaman (2015-01)": "2015-02",
+        "Gözlem Değeri": "101,664854746884",
+        "Gözlem Durumu": "",
+        "Gizlilik Durumu": "",
+        "Ondalık Basamak Sayısı": "",
+        "Zaman Formatı": "",
+        "Birim Çarpanı": ""
+      }
+    ],
+    "unit": null,
+    "notes": null,
+    "download_links": [
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+        "format": "csv",
+        "verified": true,
+        "size_bytes": 2939621
+      },
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/json",
+        "format": "json",
+        "verified": false,
+        "size_bytes": null
+      },
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/xml",
+        "format": "xml",
+        "verified": false,
+        "size_bytes": null
+      }
+    ],
+    "total_rows": 11564,
+    "truncated": true
+  },
+  "themes": {
+    "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+    "retrieved_at": "2026-10-13T20:03:54.639790Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "themes": [
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639227Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "1",
+        "name": "Adalet ve Seçim"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639251Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "2",
+        "name": "Bilim, Teknoloji ve Bilgi Toplumu"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639254Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "3",
+        "name": "Çevre"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639257Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "4",
+        "name": "Eğitim"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639258Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "5",
+        "name": "Enerji"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639260Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "6",
+        "name": "Fiyat İstatistikleri"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639263Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "7",
+        "name": "Gelir, Tüketim ve Yoksulluk"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639265Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "8",
+        "name": "İstihdam, İşsizlik ve Ücret"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639267Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "9",
+        "name": "Kısa Dönemli Ekonomik Göstergeler"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639269Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "10",
+        "name": "Kültür ve Spor"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639271Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "11",
+        "name": "Nüfus ve Demografi"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639272Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "12",
+        "name": "Sağlık ve Sosyal Koruma"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639274Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "13",
+        "name": "Tarım"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639276Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "14",
+        "name": "Turizm"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639277Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "15",
+        "name": "Ulaştırma ve Haberleşme"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639279Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "16",
+        "name": "Ulusal Hesaplar"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639280Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "17",
+        "name": "Uluslararası Ticaret"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639282Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "18",
+        "name": "Yapısal Ekonomik Göstergeler ve İş Demografisi"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-13T20:03:54.639283Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "20",
+        "name": "Çok Boyutlu İstatistikler"
+      }
+    ]
+  },
+  "classifications": {
+    "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsTurDetay?tur=0&searchname=NACE",
+    "retrieved_at": "2026-10-13T20:03:54.828994Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "query": "NACE",
+    "results": [
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=207",
+        "retrieved_at": "2026-10-13T20:03:54.828914Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:207",
+        "title": "NACE Rev.1",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması NACE Rev.1",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      },
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=4",
+        "retrieved_at": "2026-10-13T20:03:54.828932Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:4",
+        "title": "NACE Rev.1.1",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması, NACE Rev.1.1",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      },
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=191",
+        "retrieved_at": "2026-10-13T20:03:54.828938Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:191",
+        "title": "NACE Rev.2",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması , NACE Rev.2",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      }
+    ],
+    "total": 9,
+    "warnings": []
+  }
+}

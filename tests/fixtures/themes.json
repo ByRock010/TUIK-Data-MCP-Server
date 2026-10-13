@@ -1,0 +1,82 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "name": "Adalet ve Seçim"
+    },
+    {
+      "id": "2",
+      "name": "Bilim, Teknoloji ve Bilgi Toplumu"
+    },
+    {
+      "id": "3",
+      "name": "Çevre"
+    },
+    {
+      "id": "4",
+      "name": "Eğitim"
+    },
+    {
+      "id": "5",
+      "name": "Enerji"
+    },
+    {
+      "id": "6",
+      "name": "Fiyat İstatistikleri"
+    },
+    {
+      "id": "7",
+      "name": "Gelir, Tüketim ve Yoksulluk"
+    },
+    {
+      "id": "8",
+      "name": "İstihdam, İşsizlik ve Ücret"
+    },
+    {
+      "id": "9",
+      "name": "Kısa Dönemli Ekonomik Göstergeler"
+    },
+    {
+      "id": "10",
+      "name": "Kültür ve Spor"
+    },
+    {
+      "id": "11",
+      "name": "Nüfus ve Demografi"
+    },
+    {
+      "id": "12",
+      "name": "Sağlık ve Sosyal Koruma"
+    },
+    {
+      "id": "13",
+      "name": "Tarım"
+    },
+    {
+      "id": "14",
+      "name": "Turizm"
+    },
+    {
+      "id": "15",
+      "name": "Ulaştırma ve Haberleşme"
+    },
+    {
+      "id": "16",
+      "name": "Ulusal Hesaplar"
+    },
+    {
+      "id": "17",
+      "name": "Uluslararası Ticaret"
+    },
+    {
+      "id": "18",
+      "name": "Yapısal Ekonomik Göstergeler ve İş Demografisi"
+    },
+    {
+      "id": "20",
+      "name": "Çok Boyutlu İstatistikler"
+    }
+  ],
+  "isError": false,
+  "message": "ok"
+}

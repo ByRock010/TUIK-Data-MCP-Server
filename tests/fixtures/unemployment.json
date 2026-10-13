@@ -1,0 +1,75 @@
+{
+  "data": {
+    "data": [
+      {
+        "type": 2,
+        "icon": "tablo",
+        "title": "İşsizlik Oranı",
+        "url": "/api/tr/data/downloads?t=i&p=sDo0HAY4O%2FRgXjCcYZbBirbyx5STvk5%2FHvXYDIkOIbvqE6BgxLSjt9Ud%2B0dcLvwK"
+      },
+      {
+        "type": 2,
+        "icon": "tablo",
+        "title": "Genç İşsizlik Oranı",
+        "url": "/api/tr/data/downloads?t=i&p=xCbtzRWXhyGdzdyzHlGfguyWGWT7pWLqI2Y1WNRuFssuCygqQa4VJTL9ErpbHuT87%2F8gTh5n0wYIHvcbTaSSQA%3D%3D"
+      },
+      {
+        "type": 2,
+        "icon": "tablo",
+        "title": "İl düzeyinde işsizlik oranı",
+        "url": "/api/tr/data/downloads?t=i&p=XqsQCSKPikue9SOZc0vmf2fn2DMsDMaknpS8atTSZCLqJhaF%2BdqtgLFIeSSUiGO2F2zhBxK%2BJcLbM3DPCp15MQ%3D%3D"
+      },
+      {
+        "type": 2,
+        "icon": "tablo",
+        "title": "Cinsiyete Göre Genç İşsizlik Oranı",
+        "url": "/api/tr/data/downloads?t=i&p=F1H7zKbInEdasS9vaaJQNuGqAyinyuzB5UBuR69EkI9yLJI%2Fdnx7HP5GiBagQQxHWPM6PjUFQijj2kTZ%2FOJr%2FEclX75iiuhquphRQgOqa2I%3D"
+      },
+      {
+        "type": 2,
+        "icon": "tablo",
+        "title": "Cinsiyete göre genç işsizlik oranı",
+        "url": "/api/tr/data/downloads?t=i&p=efpYomMjCnW4jNI2YeIuppssKwiipdFhAFcMRdZ0ej%2BuQoLhbVnOgMdFaZuZsvWoucLUudUGAgP162eu8Vauo9qzO%2Fn7e1u2Eg8RTp1Ae54%3D"
+      },
+      {
+        "date": "2026-09-30T10:00:00",
+        "type": 1,
+        "title": "İşgücü İstatistikleri, Ağustos 2026",
+        "content": "İşgücü İstatistikleri, Ağustos 2026 Mevsim etkisinden arındırılmış <span class=\"highlight\">işsizlik</span> oranı %7,8 seviyesinde gerçekleşti Hanehalkı İşgücü Araştırması sonuçlarına göre; 15 ve daha yukarı yaştaki kişilerde işsiz sayısı 2026 yılı Ağustos ayında bir önceki aya göre",
+        "url": "/tr/press/57987"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Temel İşgücü Göstergeleri",
+        "content": "Türkiye’de cinsiyet düzeyinde 15+ ve 15–24 yaş grupları için aylık temel işgücü göstergelerini (nüfus, işgücü, istihdam, işsiz, işgücüne dahil olmayanlar, işgücüne katılma oranı, istihdam oranı, <span class=\"highlight\">işsizlik</span> oranı) sunmaktadır.<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, Gözlem Sıklığı, İstatistiksel Gösterge, İşgücü Göstergeleri, Temel Yaş, Mevsimsel Düzeltme, Cinsiyet, Fiili Çalışma Süresi, Revizyon Dönemi</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C,1.0"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Temel İşgücü Göstergeleri-Revizyon Geçmişi",
+        "content": "Türkiye’de cinsiyet düzeyinde 15+ ve 15–24 yaş grupları için aylık temel işgücü göstergelerini (nüfus, işgücü, istihdam, işsiz, işgücüne dahil olmayanlar, işgücüne katılma oranı, istihdam oranı, <span class=\"highlight\">işsizlik</span> oranı) sunmaktadır.<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, Gözlem Sıklığı, İstatistiksel Gösterge, İşgücü Göstergeleri, Temel Yaş, Mevsimsel Düzeltme, Cinsiyet, Fiili Çalışma Süresi, Revizyon Dönemi</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O,1.0"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Temel İşgücü Göstergeleri",
+        "content": "15 ve üzeri ile 15–24 yaş gruplarına ait  temel işgücü göstergeleri (nüfus, işgücü, istihdam, işsizler, işgücüne dâhil olmayanlar, işgücüne katılma oranı, istihdam oranı ve <span class=\"highlight\">işsizlik</span> oranı), cinsiyet kırılımında çeyreklik olarak sunulmaktadır.<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, İstatistiksel Gösterge, Temel Yaş, Mevsimsel Düzeltme, İşgücü Göstergeleri, Gözlem Sıklığı, Ölçü Birimi, İşgücü Durumu, Sektör, Revizyon Dönemi, İşteki Durum, Sosyal Güvenlik Kurumuna Kayıt Durumu, Eğitim Durumu, İş Arama Süresi, İşgücüne Dahil Olmama Nedeni, Yaş Grubu, Ne Eğitimde Ne İstihdamda Olanlar, İş Arama Kanalı, Meslek Grubu, Cinsiyet, Fiili Çalışma Süresi, Tarım / Tarımdışı, Çalışan Sayısı, Çalışma Süresi, Çalışma Şekli, İstihdam Türü, İşsizlik Nedeni, Aranılan İşin Türü, En Son İşinden Ayrılma Nedeni, İktisadi Faaliyet (Nace Rev2), İktisadi Faaliyet (Nace Rev2.1)</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C,1.0"
+      },
+      {
+        "type": 2,
+        "icon": "dataflow",
+        "title": "Temel İşgücü Göstergeleri-Revizyon Geçmişi",
+        "content": "15 ve üzeri ile 15–24 yaş gruplarına ait  temel işgücü göstergeleri (nüfus, işgücü, istihdam, işsizler, işgücüne dâhil olmayanlar, işgücüne katılma oranı, istihdam oranı ve <span class=\"highlight\">işsizlik</span> oranı), cinsiyet kırılımında çeyreklik olarak sunulmaktadır.<p style=\"margin-top:8px\"><strong>Boyutlar:</strong> Coğrafi Kapsam, İstatistiksel Gösterge, Temel Yaş, Mevsimsel Düzeltme, İşgücü Göstergeleri, Gözlem Sıklığı, Ölçü Birimi, İşgücü Durumu, Sektör, Revizyon Dönemi, İşteki Durum, Sosyal Güvenlik Kurumuna Kayıt Durumu, Eğitim Durumu, İş Arama Süresi, İşgücüne Dahil Olmama Nedeni, Yaş Grubu, Ne Eğitimde Ne İstihdamda Olanlar, İş Arama Kanalı, Meslek Grubu, Cinsiyet, Fiili Çalışma Süresi, Tarım / Tarımdışı, Çalışan Sayısı, Çalışma Süresi, Çalışma Şekli, İstihdam Türü, İşsizlik Nedeni, Aranılan İşin Türü, En Son İşinden Ayrılma Nedeni, İktisadi Faaliyet (Nace Rev2), İktisadi Faaliyet (Nace Rev2.1)</p>",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O,1.0"
+      }
+    ],
+    "total": 553,
+    "responseTimeMs": 269
+  },
+  "isError": false,
+  "message": "Arama sonuçları listelendi"
+}

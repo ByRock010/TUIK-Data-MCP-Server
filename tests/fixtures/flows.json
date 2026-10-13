@@ -1,0 +1,19 @@
+[
+  {
+    "id": "DF_ALTINSIZ_DTH+V1.0",
+    "name": "Altın Hariç Dış Ticaret Hadleri",
+    "version": "1.0",
+    "period": "2026-08",
+    "updatedAt": "2026-10-13T10:00:00",
+    "downloadable": true,
+    "category": {
+      "name": "Uluslararası Ticaret",
+      "child": {
+        "name": "Uluslararası Mal Ticareti İstatistikleri",
+        "child": {
+          "name": "Dış Ticaret Endeksleri"
+        }
+      }
+    }
+  }
+]
