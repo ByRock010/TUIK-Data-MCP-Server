@@ -56,21 +56,21 @@ Logging goes to stderr; stdout is reserved for MCP messages.
 
 ## Connect an MCP client
 
-For this workspace, a Claude Desktop style configuration is:
+A Claude Desktop style configuration is:
 
 ```json
 {
   "mcpServers": {
     "tuik": {
-      "command": "/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project/.venv/bin/tuik-mcp",
+      "command": "/absolute/path/to/TUIK-Data-MCP-Server/.venv/bin/tuik-mcp",
       "args": []
     }
   }
 }
 ```
 
-On another machine, replace `command` with the absolute path to that environment's
-`tuik-mcp` executable (`Scripts/tuik-mcp.exe` on Windows). Any stdio-compatible MCP
+Replace `command` with the absolute path to your environment's `tuik-mcp`
+executable (`Scripts/tuik-mcp.exe` on Windows). Any stdio-compatible MCP
 client can launch the same command; no API key or working-directory setting is
 required. Restart the client after changing its configuration.
 
