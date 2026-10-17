@@ -1,5 +1,31 @@
 # MVP verification
 
+## Dataset discovery increment — 2026-10-17
+
+Added `search_tuik_datasets` with Turkish text matching, optional exact major-theme
+filtering, public-export filtering enabled by default, reusable catalog IDs, and
+advertised formats/download links. Discovery and detail share a one-hour catalog
+cache and preserve the catalog retrieval timestamp.
+
+- `.venv/bin/pytest -q`: **59 passed, 1 deselected**. New tests cover discovery →
+  metadata → CSV retrieval, result ranking/counts, Turkish casing, theme and export
+  filters, cache sharing under concurrent requests, fresh-session ID resolution,
+  empty catalogs, invalid inputs, and malformed upstream records.
+- Ruff lint and format checks passed.
+- The full live stdio workflow passed with **all six tools**, all eight original
+  Turkish portal queries, bulletin detail, XLS download, themes and classifications.
+- The live script now discovers **Altın Hariç Dış Ticaret Hadleri** through the new
+  tool and uses its returned ID to retrieve metadata and CSV data. It returned
+  `flow:DF_ALTINSIZ_DTH+V1.0`, with **2 of 11,564 rows** and **16 columns**.
+- A separate direct catalog check found **510 entries**, **342 advertising exports**.
+  Export availability is not verified by discovery; file retrieval still verifies it.
+
+Evidence: [live-verification-2026-10-17.json](live-verification-2026-10-17.json).
+No new endpoints, databases, licensing changes or external service connections
+were introduced. The original MVP run is preserved below.
+
+## Original MVP — 2026-10-13
+
 Verified on **2026-10-13**, Europe/Istanbul, using Python **3.14.0**, official MCP
 SDK **1.30.0**, httpx **0.28.1**, and pytest **9.1.1**. The package requires Python
 3.12+; this run did not independently test Python 3.12 or 3.13.

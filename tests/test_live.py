@@ -11,4 +11,4 @@ async def test_live_mcp_workflow():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     report = await module.run()
-    assert len(report["tools"]) == 5
+    assert len(report["tools"]) == 6

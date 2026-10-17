@@ -1,8 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
-from .common import Provenance
+from .common import Provenance, SearchInput
 from .search import TuikSearchResult
 
 
@@ -26,6 +26,25 @@ class TuikResource(TuikSearchResult):
     dimensions: list[str] = Field(default_factory=list)
     metadata: list[MetadataSection] = Field(default_factory=list)
     notes: str | None = None
+
+
+class DatasetSearchInput(SearchInput):
+    downloadable_only: bool = Field(default=True, strict=True)
+    theme: str | None = Field(default=None, min_length=1, max_length=200)
+
+    @field_validator("theme")
+    @classmethod
+    def clean_theme(cls, value: str | None) -> str | None:
+        return cls.clean_query(value) if value is not None else None
+
+
+class DatasetSearchResponse(Provenance):
+    query: str
+    downloadable_only: bool
+    theme: str | None = None
+    results: list[TuikResource]
+    total: int
+    truncated: bool
 
 
 class DataResponse(Provenance):

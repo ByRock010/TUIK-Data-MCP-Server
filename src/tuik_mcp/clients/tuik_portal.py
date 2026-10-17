@@ -26,13 +26,17 @@ class SearchPage(BaseModel):
     total: int = Field(ge=0)
 
 
+class FlowCategory(BaseModel):
+    name: str = Field(min_length=1)
+
+
 class Flow(BaseModel):
-    id: str
-    name: str
+    id: str = Field(pattern=r"^[A-Z0-9_]{1,150}\+V[0-9]+(?:\.[0-9]+){1,3}$")
+    name: str = Field(min_length=1)
     description: str | None = None
     updatedAt: str | None = None
-    downloadable: bool = False
-    category: dict = Field(default_factory=dict)
+    downloadable: bool = Field(default=False, strict=True)
+    category: FlowCategory | None = None
     footnotes: list[str] = Field(default_factory=list)
 
 
@@ -151,10 +155,10 @@ class TuikPortal:
         )
         return TuikResource(
             id="flow:" + flow.id,
-            title=flow.name,
+            title=plain_text(flow.name) or flow.name,
             description=plain_text(flow.description),
             resource_type="dataset",
-            theme=flow.category.get("name"),
+            theme=plain_text(flow.category.name) if flow.category else None,
             updated_at=flow.updatedAt,
             source_url=f"https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,{code},{version}",
             download_links=links,

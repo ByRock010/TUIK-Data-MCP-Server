@@ -10,6 +10,7 @@ verifies official table downloads. Runtime results always come from TÜİK.
 | Tool | Purpose |
 | --- | --- |
 | `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
+| `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100)` | CSV rows, verified download, or an explicit unsupported response |
 | `list_tuik_themes()` | Current major statistical categories |
@@ -88,6 +89,29 @@ NACE sınıflamasını TÜİK'te ara.
 {"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0", "filters": {}, "limit": 5}
 ```
 
+To find datasets that can return rows, first call `search_tuik_datasets`:
+
+```json
+{"query": "işsizlik", "limit": 5}
+{"query": "nüfus", "theme": "Nüfus ve Demografi", "limit": 5}
+```
+
+Then pass a returned `flow:` ID to `get_tuik_resource` or `get_tuik_data`. The dataset
+search returns `available_formats`, advertised `download_links`, `updated_at` when
+provided, the major theme, and source provenance. It searches a cached copy of the
+official export catalog, using Turkish case-insensitive matching: every query word
+must appear in the title, description or major theme. Exact titles rank first,
+followed by title phrase/word matches; ties use title and ID. This is literal text
+matching, without stemming or semantic search. Optional `theme` must match the full
+major theme name, case-insensitively; use `list_tuik_themes` to discover names.
+
+By default only datasets advertising public exports are included. Set
+`downloadable_only: false` to also discover entries without an export.
+`total` counts all matching catalog entries before the result limit; `truncated`
+indicates omitted matches. Discovery does not download export files. Availability
+is checked by `get_tuik_data`, so advertised links remain `verified: false` until
+fetched. Catalog-backed IDs work across sessions while the upstream record exists.
+
 The third example is a public foreign-trade CSV verified during development.
 For other resources, use the ID returned by search. `press:` and `flow:` IDs are
 reusable across server restarts. Other IDs are bounded in-memory search handles:
@@ -128,7 +152,9 @@ used. See [source research](docs/TUIK_SOURCES.md).
 
 The replaceable `Cache` interface has a bounded in-memory TTL implementation:
 search 10 minutes, metadata/catalog/search handles one hour, themes six hours,
-small downloads 10 minutes. Large files are not cached. Cache hits retain the
+small downloads 10 minutes. Dataset discovery and detail share one catalog fetch,
+including concurrent calls, and retain its retrieval timestamp. Large files are not cached.
+Cache hits retain the
 original source retrieval timestamp where applicable. Caches are process-local.
 
 ## Tests and live verification
@@ -146,8 +172,9 @@ original source retrieval timestamp where applicable. Caches are process-local.
 ```
 
 Offline tests use reduced real response fixtures and mocked HTTP, plus an actual
-stdio subprocess for tool discovery and validation. Live checks exercise all five
-tools, eight Turkish queries, bulletin detail, an XLS download and CSV rows.
+stdio subprocess for tool discovery and validation. Live checks exercise all six
+tools, eight Turkish queries, bulletin detail, an XLS download, and dataset
+discovery followed by CSV retrieval using the returned ID.
 See [the verification report](docs/VERIFICATION.md) for results and limitations of
 the development run.
 
@@ -218,8 +245,9 @@ Use `-i` without `-t` for MCP stdio. A client can launch `docker` with arguments
 
 ## Future roadmap
 
-The next step is adapter contract monitoring and better discovery of public CSV
-exports, with stable catalog-backed identities for all search resources.
+Dataset discovery now searches public export availability and returns catalog-backed
+identities. The next step is automated adapter contract monitoring, followed by
+stable identities for remaining table/publication search handles.
 Later phases may add a PostgreSQL canonical catalog, OpenSearch Turkish full-text
 search, PDF/DOCX/XLSX ingestion, automatic synchronization, revision/version
 tracking, semantic/hybrid search, dataset/document linking, and richer citations

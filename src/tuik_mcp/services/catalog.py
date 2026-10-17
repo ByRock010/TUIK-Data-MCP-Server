@@ -1,3 +1,5 @@
+import asyncio
+from datetime import datetime
 from urllib.parse import urlencode
 
 from tuik_mcp.cache import Cache, MemoryTTLCache
@@ -5,8 +7,14 @@ from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.classification import ClassificationClient
 from tuik_mcp.clients.tuik_portal import TuikPortal, normalize_result
 from tuik_mcp.config import CLASSIFICATION, PORTAL
-from tuik_mcp.models.common import SearchInput
-from tuik_mcp.models.dataset import DataResponse, DownloadLink, TuikResource
+from tuik_mcp.models.common import SearchInput, now
+from tuik_mcp.models.dataset import (
+    DataResponse,
+    DatasetSearchInput,
+    DatasetSearchResponse,
+    DownloadLink,
+    TuikResource,
+)
 from tuik_mcp.models.search import SearchResponse, ThemesResponse
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
@@ -16,9 +24,85 @@ class CatalogService:
         self.portal = TuikPortal(http)
         self.classifications = ClassificationClient(http)
         self.cache = cache if cache is not None else MemoryTTLCache()
+        self._dataset_lock = asyncio.Lock()
 
     def remember(self, result):
         self.cache.set("record:" + result.id, result, 3600)
+
+    async def _datasets(self) -> tuple[datetime, list[TuikResource]]:
+        # Share one catalog fetch across discovery/detail and concurrent tool calls.
+        async with self._dataset_lock:
+            cached = self.cache.get("datasets")
+            if cached is not None:
+                return cached
+            flows = await self.portal.flows()
+            retrieved_at = now()
+            resources = [self.portal.flow_resource(flow) for flow in flows]
+            for resource in resources:
+                resource.retrieved_at = retrieved_at
+            result = (retrieved_at, resources)
+            self.cache.set("datasets", result, 3600)
+            return result
+
+    async def search_datasets(
+        self,
+        query: str,
+        limit: int = 10,
+        downloadable_only: bool = True,
+        theme: str | None = None,
+    ) -> DatasetSearchResponse:
+        args = DatasetSearchInput(
+            query=query,
+            limit=limit,
+            downloadable_only=downloadable_only,
+            theme=theme,
+        )
+        retrieved_at, datasets = await self._datasets()
+        normalized_query = turkish_casefold(args.query)
+        terms = normalized_query.split()
+        normalized_theme = turkish_casefold(args.theme) if args.theme is not None else None
+        matches = []
+        for dataset in datasets:
+            if args.downloadable_only and "csv" not in dataset.available_formats:
+                continue
+            if (
+                normalized_theme is not None
+                and turkish_casefold(dataset.theme or "") != normalized_theme
+            ):
+                continue
+            text = turkish_casefold(
+                " ".join(
+                    [
+                        dataset.title,
+                        dataset.description or "",
+                        dataset.theme or "",
+                    ]
+                )
+            )
+            if all(term in text for term in terms):
+                matches.append(dataset)
+
+        def rank(dataset: TuikResource):
+            title = turkish_casefold(dataset.title)
+            return (
+                title != normalized_query,
+                normalized_query not in title,
+                -sum(term in title for term in terms),
+                title,
+                dataset.id,
+            )
+
+        matches.sort(key=rank)
+        return DatasetSearchResponse(
+            query=args.query,
+            downloadable_only=args.downloadable_only,
+            theme=args.theme,
+            results=matches[: args.limit],
+            total=len(matches),
+            truncated=len(matches) > args.limit,
+            source_url=f"{PORTAL}/api/tr/dataflows",
+            retrieved_at=retrieved_at,
+        )
 
     async def search(self, query: str, limit: int = 10) -> SearchResponse:
         args = SearchInput(query=query, limit=limit)
@@ -93,18 +177,14 @@ class CatalogService:
         if resource_id.startswith("press:"):
             result = await self.portal.press(resource_id)
         elif resource_id.startswith("flow:"):
-            flows = self.cache.get("flows")
-            if flows is None:
-                flows = await self.portal.flows()
-                self.cache.set("flows", flows, 3600)
-            flow = next((f for f in flows if "flow:" + f.id == resource_id), None)
-            if flow is None:
+            _, datasets = await self._datasets()
+            result = next((dataset for dataset in datasets if dataset.id == resource_id), None)
+            if result is None:
                 raise SourceError(
                     "not_found",
                     "Dataflow is absent from the current public catalog",
                     f"{PORTAL}/api/tr/dataflows",
                 )
-            result = self.portal.flow_resource(flow)
         else:
             record = self.cache.get("record:" + resource_id)
             if record is None:

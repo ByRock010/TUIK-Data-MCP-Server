@@ -55,9 +55,16 @@ async def run():
                     assert download["status"] == "download_available"
                     assert download["download_links"][0]["verified"]
                     report["download"] = download
-            csv = await call(
-                "get_tuik_data", {"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0", "limit": 2}
+            datasets = await call(
+                "search_tuik_datasets", {"query": "Altın Hariç Dış Ticaret Hadleri", "limit": 3}
             )
+            assert datasets["results"], datasets
+            dataset = datasets["results"][0]
+            assert dataset["id"].startswith("flow:") and "csv" in dataset["available_formats"]
+            report["datasets"] = datasets
+            dataset_detail = await call("get_tuik_resource", {"resource_id": dataset["id"]})
+            assert dataset_detail["available_formats"] == dataset["available_formats"]
+            csv = await call("get_tuik_data", {"resource_id": dataset["id"], "limit": 2})
             assert csv["status"] == "ok" and csv["rows"]
             report["csv"] = csv
             themes = await call("list_tuik_themes", {})

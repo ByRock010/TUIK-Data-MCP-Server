@@ -46,7 +46,7 @@ contract discovered. The implementation isolates them in `TuikPortal`.
 | `/api/tr/data/search` | Search; **POST**, read-only | JSON `text`, one-based `page`, `typeIds`, `categoryIds`, `subCategoryIds`, `years`, `levels`, `archive`, `autoFilter` | `{data:{data:[...],total,...},isError,message}` | MVP sends empty filters, `archive:false`, `autoFilter:false`; query ≤200 chars, max five pages. Ordering is upstream relevance. |
 | `/api/tr/press/{id}` | Bulletin detail; **GET** | Numeric ID from `/tr/press/{id}` | `{data:{id,title,period,date,content,tables,statisticalTables,reports,metadatas,...},isError,message}` | HTML content/metadata fragments are stripped to plain text. No dates or dimensions are inferred. |
 | `/api/tr/data/statistical-themes` | Current category tree; **GET** | None | Envelope containing nested `id`, `name`, `children`, `icon`, `url` nodes | MVP exposes major root categories only and caches six hours. |
-| `/api/tr/dataflows` | Public export catalog; **GET** | None | Bare JSON array: `id`, `name`, `version`, optional description/footnotes/category/updatedAt, `downloadable` | Used to resolve stable flow IDs and determine export availability. |
+| `/api/tr/dataflows` | Public export catalog; **GET** | None | Bare JSON array: `id`, `name`, `version`, optional description/footnotes/category/updatedAt, `downloadable` | Used by `search_tuik_datasets` and resource detail. Query/theme/export filtering is local, not invented upstream parameters. Cached for one hour. |
 | `/api/tr/dataflows/{id}/file/{format}` | Public export; **GET** | Catalog ID e.g. `DF_ALTINSIZ_DTH+V1.0` (percent-encoded); format `csv`, `json`, `xml` | CSV verified live as UTF-8 BOM, semicolon-separated, `text/csv`; JSON/XML are advertised links | CSV only parsed. JSON/XML format options were observed in `DataflowCards-B04ONG0Q.js` and are exposed as unverified advertised links. Only downloadable catalog entries qualify. |
 | `/api/tr/data/downloads` | Official tables/documents; **GET** | Opaque `t`, `p`, and optional `pid` exactly as returned in search or bulletin detail | XLS verified as `application/vnd.ms-excel` with OLE file signature; may advertise other documents | Never construct encrypted `p` values. No universal spreadsheet ingestion. File signatures/media types and response size checked. |
 
@@ -99,3 +99,13 @@ official-looking subdomains and external publications are omitted until verified
 Raw research downloads, if present under `docs/research`, are ignored by version
 control and never loaded by runtime code. Small test fixtures are isolated in
 `tests/fixtures` and do not provide production fallback data.
+
+## Dataset discovery follow-up, 2026-10-17
+
+The existing public `GET /api/tr/dataflows` endpoint was rechecked: 510 catalog
+records, 342 with `downloadable: true`. These counts are observations, not runtime
+constants. The adapter validates catalog IDs, titles, major category names and
+boolean export flags; malformed responses fail explicitly without populating the
+cache. Dataset search uses the normalized title, description and major category.
+Category children are not indexed in this increment. No new source endpoint or
+allowed host was added.
