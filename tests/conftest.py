@@ -51,6 +51,9 @@ async def catalog():
             return httpx.Response(200, json=fixture("classifications"))
         raise AssertionError(f"Unexpected request: {request.url}")
 
-    http = HttpClient(Settings(min_interval_seconds=0, attempts=1), httpx.MockTransport(handler))
+    http = HttpClient(
+        Settings(min_interval_seconds=0, download_interval_seconds=0, attempts=1),
+        httpx.MockTransport(handler),
+    )
     yield CatalogService(http), calls
     await http.close()
