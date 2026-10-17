@@ -127,8 +127,9 @@ search again after a restart, expiration (one hour), or cache eviction.
 - `not_structured`: no supported public export is advertised.
 - `unsupported_filters`: filters were requested for a non-CSV resource; none applied.
 - `error`: a structured `code`, `message`, and source URL, for example an upstream
-  timeout, unavailable resource or oversized export. MCP schema validation failures
-  are standard MCP tool errors before execution.
+  timeout, unavailable resource, oversized export or `download_throttled` (TÜİK kept
+  limiting file downloads; the message says when to retry). MCP schema validation
+  failures are standard MCP tool errors before execution.
 
 CSV filters are **local exact string equality**, not a universal query language.
 Call without filters to inspect the exact column labels, then use those labels as
@@ -144,6 +145,13 @@ attempts, exponential backoff, and at least 0.5 seconds between request starts.
 Only transport errors, HTTP 429 and HTTP 5xx are retried. Redirects are checked
 against the same centralized host allowlist; POST redirects are rejected.
 Responses are limited to 10 MiB of decoded content.
+
+Table and document downloads (`/api/tr/data/downloads`) run one at a time, at least
+6 seconds apart (`TUIK_DOWNLOAD_INTERVAL_SECONDS`). TÜİK answers back-to-back
+downloads with an HTML "wait" page instead of the file; the server recognizes that
+page, waits for its countdown and retries within the attempt budget. If the limit
+persists, `get_tuik_data` returns `download_throttled`. Dataflow CSV exports are not
+limited this way and keep the normal request pacing.
 
 The User-Agent is `Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research)`.
 The public portal rejected curl's default User-Agent during investigation; this

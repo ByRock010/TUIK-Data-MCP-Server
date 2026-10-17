@@ -1,7 +1,12 @@
+import asyncio
 import csv
 import io
+import math
+import re
+import time
 from urllib.parse import quote, urlsplit
 
+import httpx
 from pydantic import BaseModel, Field, ValidationError
 
 from tuik_mcp.config import PORTAL
@@ -93,9 +98,42 @@ def normalize_result(item: SearchItem) -> TuikSearchResult:
     )
 
 
+THROTTLE_MARKER = b"tekrar dosya indirebilirsiniz"
+COUNTDOWN = re.compile(rb"\blet\s+time\s*=\s*(\d{1,3})\s*;")
+
+
+def file_format(body: bytes, mime: str) -> str | None:
+    if body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return "xls"
+    if body.startswith(b"PK\x03\x04"):
+        # ZIP payloads are offered as downloads, never decompressed.
+        return "xlsx" if "spreadsheetml" in mime else "zip"
+    if body.startswith(b"%PDF-"):
+        return "pdf"
+    if mime in {"text/csv", "application/csv"} and body:
+        return "csv"
+    return None
+
+
+def throttle_wait(body: bytes, default: float) -> float | None:
+    """Seconds to wait when TÜİK returned its download throttle page instead of a file."""
+    if (
+        len(body) > 64 * 1024
+        or not body.lstrip()[:15].lower().startswith((b"<!doctype html", b"<html"))
+        or THROTTLE_MARKER not in body
+    ):
+        return None
+    match = COUNTDOWN.search(body)
+    wait = int(match.group(1)) + 1.0 if match else default
+    # The page reloads when its countdown ends; bound it so a changed page cannot stall calls.
+    return min(60.0, max(1.0, wait))
+
+
 class TuikPortal:
     def __init__(self, http: HttpClient):
         self.http = http
+        self._download_slot = asyncio.Lock()
+        self._next_download = 0.0
 
     async def search_page(self, query: str, page: int) -> SearchPage:
         url = f"{PORTAL}/api/tr/data/search"
@@ -219,29 +257,46 @@ class TuikPortal:
             parsed.hostname == "veriportali.tuik.gov.tr" and parsed.path == "/api/tr/data/downloads"
         )
 
+    async def _fetch_file(self, url: str) -> httpx.Response:
+        if not self.is_download(url):
+            return await self.http.request("GET", url)
+        # One download at a time, spaced apart; dataflow exports are not throttled upstream.
+        async with self._download_slot:
+            await asyncio.sleep(max(0, self._next_download - time.monotonic()))
+            try:
+                return await self.http.request("GET", url)
+            finally:
+                self._next_download = (
+                    time.monotonic() + self.http.settings.download_interval_seconds
+                )
+
     async def download(self, link: DownloadLink) -> tuple[bytes, DownloadLink]:
-        response = await self.http.request("GET", link.source_url)
-        body = response.content
-        mime = response.headers.get("content-type", "").split(";")[0]
-        fmt = link.format
-        if body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
-            fmt = "xls"
-        elif body.startswith(b"PK\x03\x04"):
-            # ZIP payloads are offered as downloads, never decompressed.
-            fmt = "xlsx" if "spreadsheetml" in mime else "zip"
-        elif body.startswith(b"%PDF-"):
-            fmt = "pdf"
-        elif mime in {"text/csv", "application/csv"} and body:
-            fmt = "csv"
-        else:
-            raise SourceError(
-                "unsupported_download",
-                "The source did not return a recognized table/document file",
-                link.source_url,
-            )
-        return body, link.model_copy(
-            update={"format": fmt, "verified": True, "size_bytes": len(body)}
-        )
+        attempts = self.http.settings.attempts
+        for attempt in range(1, attempts + 1):
+            response = await self._fetch_file(link.source_url)
+            body = response.content
+            fmt = file_format(body, response.headers.get("content-type", "").split(";")[0])
+            if fmt is not None:
+                return body, link.model_copy(
+                    update={"format": fmt, "verified": True, "size_bytes": len(body)}
+                )
+            wait = throttle_wait(body, self.http.settings.download_interval_seconds)
+            if wait is None:
+                raise SourceError(
+                    "unsupported_download",
+                    "The source did not return a recognized table/document file",
+                    link.source_url,
+                )
+            if attempt == attempts:
+                raise SourceError(
+                    "download_throttled",
+                    f"TÜİK is limiting file downloads; retry in about {math.ceil(wait)} seconds",
+                    link.source_url,
+                )
+            if self.is_download(link.source_url):
+                self._next_download = max(self._next_download, time.monotonic() + wait)
+            else:
+                await asyncio.sleep(wait)
 
     @staticmethod
     def csv_rows(body: bytes, source_url: str, limit: int, filters: dict[str, str]):

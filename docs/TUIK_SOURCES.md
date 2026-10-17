@@ -48,7 +48,27 @@ contract discovered. The implementation isolates them in `TuikPortal`.
 | `/api/tr/data/statistical-themes` | Current category tree; **GET** | None | Envelope containing nested `id`, `name`, `children`, `icon`, `url` nodes | MVP exposes major root categories only and caches six hours. |
 | `/api/tr/dataflows` | Public export catalog; **GET** | None | Bare JSON array: `id`, `name`, `version`, optional description/footnotes/category/updatedAt, `downloadable` | Used by `search_tuik_datasets` and resource detail. Query/theme/export filtering is local, not invented upstream parameters. Cached for one hour. |
 | `/api/tr/dataflows/{id}/file/{format}` | Public export; **GET** | Catalog ID e.g. `DF_ALTINSIZ_DTH+V1.0` (percent-encoded); format `csv`, `json`, `xml` | CSV verified live as UTF-8 BOM, semicolon-separated, `text/csv`; JSON/XML are advertised links | CSV only parsed. JSON/XML format options were observed in `DataflowCards-B04ONG0Q.js` and are exposed as unverified advertised links. Only downloadable catalog entries qualify. |
-| `/api/tr/data/downloads` | Official tables/documents; **GET** | Opaque `t`, `p`, and optional `pid` exactly as returned in search or bulletin detail | XLS verified as `application/vnd.ms-excel` with OLE file signature; may advertise other documents | Never construct encrypted `p` values. No universal spreadsheet ingestion. File signatures/media types and response size checked. |
+| `/api/tr/data/downloads` | Official tables/documents; **GET** | Opaque `t`, `p`, and optional `pid` exactly as returned in search or bulletin detail | XLS verified as `application/vnd.ms-excel` with OLE file signature; may advertise other documents | Never construct encrypted `p` values. No universal spreadsheet ingestion. File signatures/media types and response size checked. Throttled: see below. |
+
+### Download throttling
+
+Observed 2026-10-17. `/api/tr/data/downloads` limits back-to-back requests. Instead of
+an HTTP error it returns **HTTP 200, `text/html`, about 1 KB**: a page titled
+`Yönlendiriliyor...` with the text *"… saniye sonra tekrar dosya indirebilirsiniz"* and
+a countdown in its script (`let time = 5;`) after which the page reloads.
+
+- All download links of two bulletins fetched back to back with 0.5 s spacing:
+  17 of 20 requests returned this page.
+- The same kind of requests with 6 s spacing: 7 of 7 returned the XLS file.
+- Dataflow exports (`/api/tr/dataflows/{id}/file/csv`) were not throttled: three
+  different exports back to back all succeeded.
+
+`TuikPortal` therefore downloads from this endpoint one file at a time, at least
+`TUIK_DOWNLOAD_INTERVAL_SECONDS` (default 6) apart. When the throttle page still
+appears, it waits for the advertised countdown plus one second (bounded to 1–60 s) and
+retries within the attempt budget; persistent throttling is reported as
+`download_throttled`. A reduced copy of the page is in
+`tests/fixtures/download_throttle.html`.
 
 Search fields were observed in `main-C0Z3qMtl.js`, search rendering/type labels in
 `Search-BKFeVgwd.js`, detail calls in `press-WcRk5lkh.js`, category requests in

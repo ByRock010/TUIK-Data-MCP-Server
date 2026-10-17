@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>Yönlendiriliyor...</title>
+  <script>
+    // Yönlendirme süresi (saniye)
+    let time = 5;
+    let countdown;
+
+    function stopwatch() {
+      const timeSpan = document.getElementById("time");
+      timeSpan.textContent = time;
+    }
+  </script>
+</head>
+
+<body onload="stopwatch()">
+  <span id="time"></span> saniye sonra tekrar dosya indirebilirsiniz. Lütfen bekleyiniz...
+</body>
+</html>

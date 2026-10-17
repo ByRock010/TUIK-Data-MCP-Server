@@ -15,6 +15,13 @@ All notable changes to this project are documented here. The format follows
 
 - README client configuration uses a generic path instead of a developer's machine path.
 
+### Fixed
+
+- TÜİK's download throttle page is no longer reported as `unsupported_download`.
+  Table/document downloads run one at a time at least 6 seconds apart
+  (`TUIK_DOWNLOAD_INTERVAL_SECONDS`), the page's countdown is honored with a retry,
+  and persistent throttling returns `download_throttled` (#2).
+
 ## [0.1.0] - 2026-10-17
 
 ### Added
