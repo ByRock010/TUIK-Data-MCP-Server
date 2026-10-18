@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Weekly, optional live contract checks with JSON/JUnit/log artifacts, deduplicated
+  failure issue reporting, a no-traffic reporting exercise and a triage guide (#28).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
