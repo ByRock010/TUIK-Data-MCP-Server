@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Automatically close explicitly completed issues when their PR is merged into
+  `develop`, with offline tests and documented PR-body closing directives.
+
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
 

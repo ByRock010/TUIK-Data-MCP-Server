@@ -4,6 +4,10 @@
 
 Closes #
 
+<!-- Use a standalone "Closes #12" / "Fixes #12" / "Resolves #12" line only
+when this PR completes the issue. Develop merge automation reads these lines.
+For partial work or pending acceptance checks, use "Refs #12" instead. -->
+
 ## Type
 
 - [ ] feat — new tool or capability
