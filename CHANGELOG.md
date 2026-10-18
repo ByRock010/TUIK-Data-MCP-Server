@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Shared parser models and registry, with CSV parsing offloaded from the MCP event
+  loop and parsing library decisions recorded in ADR 0001 (#3).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.

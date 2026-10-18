@@ -1,6 +1,4 @@
 import asyncio
-import csv
-import io
 import math
 import re
 import time
@@ -12,6 +10,8 @@ from pydantic import BaseModel, Field, ValidationError
 from tuik_mcp.config import PORTAL
 from tuik_mcp.models.dataset import DownloadLink, MetadataSection, TuikResource
 from tuik_mcp.models.search import Theme, TuikSearchResult
+from tuik_mcp.parsers.errors import InvalidFiltersError, ParseError
+from tuik_mcp.parsers.registry import parse_table
 from tuik_mcp.utils.normalization import official_url, plain_text, resource_id
 
 from .base import HttpClient, SourceError
@@ -301,28 +301,9 @@ class TuikPortal:
     @staticmethod
     def csv_rows(body: bytes, source_url: str, limit: int, filters: dict[str, str]):
         try:
-            text = body.decode("utf-8-sig")
-            dialect = csv.Sniffer().sniff(text[:8192], delimiters=";,\t")
-            reader = csv.DictReader(io.StringIO(text), dialect=dialect, strict=True)
-            columns = reader.fieldnames
-            if not columns or len(columns) != len(set(columns)) or any(not c for c in columns):
-                raise ValueError("Missing or duplicate CSV columns")
-            if set(filters) - set(columns):
-                raise SourceError(
-                    "invalid_filters",
-                    "Use exact column names returned by get_tuik_data",
-                    source_url,
-                )
-            rows, total = [], 0
-            for row in reader:
-                if None in row or any(v is None for v in row.values()):
-                    raise ValueError("CSV row width mismatch")
-                if all(row[key] == value for key, value in filters.items()):
-                    total += 1
-                    if len(rows) < limit:
-                        rows.append(row)
-            return columns, rows, total
-        except (UnicodeError, csv.Error, ValueError) as exc:
-            raise SourceError(
-                "malformed_response", "TÜİK returned unsupported or malformed CSV", source_url
-            ) from exc
+            table = parse_table(body, "csv", limit=limit, filters=filters)[0]
+        except InvalidFiltersError as exc:
+            raise SourceError("invalid_filters", str(exc), source_url) from exc
+        except ParseError as exc:
+            raise SourceError("malformed_response", str(exc), source_url) from exc
+        return table.columns, table.rows, table.total_rows
