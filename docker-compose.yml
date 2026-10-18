@@ -1,0 +1,49 @@
+# Local development only: security is disabled and ports bind to loopback.
+services:
+  opensearch:
+    image: opensearchproject/opensearch:3.3.2
+    environment:
+      discovery.type: single-node
+      cluster.name: tuik-local
+      node.name: tuik-local-1
+      bootstrap.memory_lock: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl --fail --silent
+          'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s'
+          > /dev/null
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:3.3.0
+    profiles: [dashboards]
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+    ports:
+      - "127.0.0.1:5601:5601"
+    depends_on:
+      opensearch:
+        condition: service_healthy
+
+volumes:
+  opensearch-data:

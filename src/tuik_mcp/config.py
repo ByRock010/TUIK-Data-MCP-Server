@@ -1,6 +1,6 @@
 import os
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 PORTAL = "https://veriportali.tuik.gov.tr"
 CLASSIFICATION = "https://siniflama.tuik.gov.tr"
@@ -19,6 +19,12 @@ USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research
 
 
 class Settings(BaseModel):
+    # Reserved for the optional indexed-search backend; base tools stay live-only.
+    opensearch_url: HttpUrl | None = None
+    opensearch_index: str = Field(
+        default="tuik-resources", max_length=255, pattern=r"^[a-z0-9][a-z0-9._-]*$"
+    )
+
     timeout_seconds: float = Field(default=20, ge=1, le=60)
     attempts: int = Field(default=3, ge=1, le=3)
     min_interval_seconds: float = Field(default=0.5, ge=0, le=60)
