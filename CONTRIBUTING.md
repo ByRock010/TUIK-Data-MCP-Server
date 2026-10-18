@@ -60,8 +60,8 @@ Closes #12
 
 `Fixes #12` and `Resolves #12` are also accepted (including the other standard
 English keyword forms, case-insensitively). For partial work use `Refs #12`.
-For example, #28 must remain a reference until its GitHub-hosted acceptance runs
-are complete. Each issue still has its own branch and PR into `develop`.
+An issue with outstanding GitHub-hosted acceptance runs must remain a reference
+until those runs are complete. Each issue still has its own branch and PR into `develop`.
 
 The parser accepts multiple references separated by commas/semicolons or on
 separate directive lines. Same-repository qualified references and GitHub issue
@@ -151,7 +151,14 @@ closed monitoring issue is reopened on recurrence. Success does not close issues
 
 GitHub requires the workflow to exist on the default branch (`master`) for
 **both** schedule and `workflow_dispatch`. Until the next release includes it,
-use the equivalent local commands below. Once present on `master`, maintainers
+use the equivalent local commands below. For pre-release GitHub acceptance,
+maintainers can use a separate, disposable branch with a push trigger restricted
+to that branch, run the normal and injected-failure paths, and then delete the
+branch. Keep that temporary trigger out of the production PR. This is a manually
+initiated push run, not a `workflow_dispatch` run; it does not activate scheduling.
+The completed #28 exercise is recorded in
+[`docs/verification/issue-28-2026-10-18.md`](docs/verification/issue-28-2026-10-18.md).
+Once present on `master`, maintainers
 can select `develop` or a feature branch from Actions → Live TÜİK contracts →
 Run workflow, or run:
 
