@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- A 12-file, 2.64 MB official XLS/XLSX/PDF fixture corpus with provenance, SHA-256,
+  reviewed golden source observations and a paced refresh script (#4).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
