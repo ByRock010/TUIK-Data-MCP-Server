@@ -129,3 +129,31 @@ boolean export flags; malformed responses fail explicitly without populating the
 cache. Dataset search uses the normalized title, description and major category.
 Category children are not indexed in this increment. No new source endpoint or
 allowed host was added.
+
+## Bulletin dataflow links (2026-10-18, #26)
+
+`/api/tr/press/{id}` advertises dataflow tables under both `tables` and
+`statisticalTables`, with `type: "dataflow"`. Two observed forms are:
+
+```text
+https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C,1.0
+https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_SATIS_SEKLI_SATIS_DURUMU_V3,1.0
+```
+
+The last component maps `TR,<CODE>,<version>` to `flow:<CODE>+V<version>`.
+The optional category path retains both major/subcategory IDs (`["9", "9_4"]`);
+it is not inferred from text. Only HTTPS links on the exact databrowser host with
+recognized fragment structure are accepted. Duplicate flow IDs across the two
+lists are collapsed, preferring an available category path. Source titles are
+stripped of HTML. Other file downloads are preserved separately.
+
+The service matches these IDs against the cached public export catalog. Formats
+and `downloadable` are advertised catalog facts, not a download verification.
+Absent entries remain listed with no formats and `downloadable: false`.
+Related records retain their official databrowser URLs and the catalog lookup's
+retrieval timestamp. No export is downloaded during metadata discovery.
+
+Live on 2026-10-18, `press:58347` (*Konut ve İş Yeri Satış İstatistikleri, Eylül
+2026*) exposed eight dataflow links. The reduced official response is in
+`tests/fixtures/press_dataflows.json`. The live test follows the first downloadable
+ID to CSV rows. The original `press:57987` fixture also covers the older URL form.

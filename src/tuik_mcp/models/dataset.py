@@ -19,12 +19,21 @@ class MetadataSection(BaseModel):
     content: str
 
 
+class RelatedDataset(Provenance):
+    id: str
+    title: str
+    available_formats: list[str] = Field(default_factory=list)
+    category_path: list[str] = Field(default_factory=list)
+    downloadable: bool = False
+
+
 class TuikResource(TuikSearchResult):
     updated_at: str | None = None
     available_formats: list[str] = Field(default_factory=list)
     download_links: list[DownloadLink] = Field(default_factory=list)
     dimensions: list[str] = Field(default_factory=list)
     metadata: list[MetadataSection] = Field(default_factory=list)
+    related_datasets: list[RelatedDataset] = Field(default_factory=list)
     notes: str | None = None
 
 
@@ -49,7 +58,9 @@ class DatasetSearchResponse(Provenance):
 
 class DataResponse(Provenance):
     resource_id: str
-    status: Literal["ok", "not_structured", "download_available", "unsupported_filters"]
+    status: Literal[
+        "ok", "not_structured", "download_available", "unsupported_filters", "related_datasets"
+    ]
     message: str | None = None
     columns: list[str] = Field(default_factory=list)
     rows: list[dict[str, str]] = Field(default_factory=list)
@@ -57,4 +68,5 @@ class DataResponse(Provenance):
     notes: str | None = None
     download_links: list[DownloadLink] = Field(default_factory=list)
     total_rows: int | None = None
+    related_datasets: list[RelatedDataset] = Field(default_factory=list)
     truncated: bool = False

@@ -112,6 +112,21 @@ indicates omitted matches. Discovery does not download export files. Availabilit
 is checked by `get_tuik_data`, so advertised links remain `verified: false` until
 fetched. Catalog-backed IDs work across sessions while the upstream record exists.
 
+Bulletin metadata also includes `related_datasets`, parsed from the official
+`tables` and `statisticalTables` dataflow links. Each entry carries a reusable
+`flow:` ID, title, source URL, category path (when present), advertised formats and
+`downloadable`. Availability is matched against the same cached export catalog
+used by dataset search. Missing or non-exportable entries remain visible with
+`downloadable: false`; links are not verified until downloaded. A catalog failure
+is reported as an error rather than silently marking datasets unavailable.
+
+For example, inspect `press:58347` and call `get_tuik_data` with a returned
+`flow:` ID to retrieve that table's CSV. `get_tuik_data(press:...)` returns
+`status: related_datasets` when related tables exist; filters on the bulletin
+return `unsupported_filters` with the same choices. Apply filters to the chosen
+`flow:` ID after inspecting its exact column names. Plain XLS-only bulletins keep
+the existing download behavior.
+
 The third example is a public foreign-trade CSV verified during development.
 For other resources, use the ID returned by search. `press:` and `flow:` IDs are
 reusable across server restarts. Other IDs are bounded in-memory search handles:
@@ -121,6 +136,9 @@ search again after a restart, expiration (one hour), or cache eviction.
 
 - `ok`: CSV `columns`, string-valued `rows`, `total_rows` after filtering, and
   `truncated`. Turkish decimal text, labels and missing-value markers are retained.
+- `related_datasets`: the bulletin links dataflow tables. Choose a returned `flow:`
+  ID marked `downloadable: true` and call this tool again to retrieve CSV rows.
+  No table is selected automatically; existing file downloads remain in the response.
 - `download_available`: an actual file has been downloaded within the size bound
   and its signature/media type checked. `download_links` includes its official URL,
   format, verification flag and byte count. XLS, XLSX, ZIP and PDF are not ingested.

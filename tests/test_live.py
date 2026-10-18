@@ -9,6 +9,23 @@ from tuik_mcp.services.catalog import CatalogService
 
 
 @pytest.mark.live
+async def test_live_bulletin_related_datasets_to_csv():
+    http = HttpClient(Settings())
+    try:
+        service = CatalogService(http)
+        resource = await service.resource("press:58347")
+        related = [item for item in resource.related_datasets if item.downloadable]
+        assert related and all(item.category_path for item in related)
+        response = await service.data(resource.id)
+        assert response.status == "related_datasets"
+        data = await service.data(related[0].id, limit=2)
+        assert data.status == "ok" and data.rows
+        assert data.source_url.endswith("/file/csv")
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
 async def test_live_mcp_workflow():
     script = Path(__file__).parents[1] / "scripts" / "live_smoke.py"
     spec = importlib.util.spec_from_file_location("live_smoke", script)

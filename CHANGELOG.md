@@ -10,6 +10,9 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Bulletin metadata exposes related dataflows with catalog export formats and
+  category paths. `get_tuik_data` returns `related_datasets` choices for these
+  bulletins; callers select a reusable `flow:` ID to retrieve CSV rows (#26).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
