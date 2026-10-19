@@ -289,7 +289,8 @@ need `vm.max_map_count` of at least `262144`; Docker Desktop users configure
 resources in Docker Desktop. `.env` does not load into the Python process: export
 settings or configure them in the MCP client's environment.
 
-`TUIK_OPENSEARCH_URL` accepts an HTTP(S) URL and defaults to unset;
+`TUIK_OPENSEARCH_URL` accepts an HTTP(S) URL and defaults to unset. Empty or
+whitespace-only values also leave the optional backend disabled;
 `TUIK_OPENSEARCH_INDEX` defaults to the future `tuik-resources` alias. The client
 extra is never imported by the base server. For a separate CI instance use
 `docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration

@@ -16,7 +16,14 @@ def test_search_is_optional_and_env_settings_are_read(monkeypatch):
     assert settings.opensearch_index == "tuik-test-resources"
 
 
-@pytest.mark.parametrize("url", ["", "localhost:9200", "file:///tmp/index", "ftp://localhost"])
+@pytest.mark.parametrize("url", ["", " ", "\t\n"])
+def test_blank_search_url_disables_optional_backend(monkeypatch, url):
+    monkeypatch.setenv("TUIK_OPENSEARCH_URL", url)
+    assert Settings.from_env().opensearch_url is None
+    assert Settings(opensearch_url=url).opensearch_url is None
+
+
+@pytest.mark.parametrize("url", ["localhost:9200", "file:///tmp/index", "ftp://localhost"])
 def test_invalid_search_url(url):
     with pytest.raises(ValidationError):
         Settings(opensearch_url=url)
