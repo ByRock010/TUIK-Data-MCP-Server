@@ -7,11 +7,9 @@ refreshing; normal offline tests never invoke this script.
 import argparse
 import asyncio
 import hashlib
-import io
 import json
 import re
 import sys
-import zipfile
 from pathlib import Path
 
 from tuik_mcp.clients.base import HttpClient
@@ -23,17 +21,11 @@ FILES = Path(__file__).resolve().parents[1] / "tests/fixtures/files"
 MAX_CORPUS_BYTES = 3_000_000
 
 
-def fixture_format(body: bytes, verified_format: str) -> str:
-    # Some official XLS links are OOXML served with an XLS media type (PR #30).
-    # Inspect only directory names; never extract archive entries to disk.
-    if verified_format == "zip":
-        with zipfile.ZipFile(io.BytesIO(body)) as archive:
-            names = set(archive.namelist())
-        if {"[Content_Types].xml", "xl/workbook.xml"} <= names:
-            return "xlsx"
-    if verified_format not in {"xls", "xlsx", "pdf"}:
-        raise ValueError(f"Unexpected fixture format: {verified_format}")
-    return verified_format
+def write_manifest(output: Path, entries: list[dict]) -> None:
+    path = output / "manifest.json"
+    temporary = output / "manifest.json.tmp"
+    temporary.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
 
 
 async def fetch(sources: list[dict], output: Path, *, resume: bool = False) -> list[dict]:
@@ -84,7 +76,10 @@ async def fetch(sources: list[dict], output: Path, *, resume: bool = False) -> l
             if len(links) != 1:
                 raise ValueError(f"Ambiguous or missing download: {source['key']}")
             body, verified = await service.portal.download(links[0])
-            fmt = fixture_format(body, verified.format)
+            # download() uses the shared production file-format detector.
+            fmt = verified.format
+            if fmt not in {"xls", "xlsx", "pdf"}:
+                raise ValueError(f"Unexpected fixture format: {fmt}")
             total += len(body)
             if total >= MAX_CORPUS_BYTES:
                 raise ValueError("Fixture corpus must stay below 3 MB; select smaller sources")
@@ -107,14 +102,18 @@ async def fetch(sources: list[dict], output: Path, *, resume: bool = False) -> l
                     "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
                 }
             )
-            # Persist progress so interrupted refreshes retain provenance for fetched files.
-            (output / "manifest.json").write_text(
-                json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            # Retain unprocessed resume entries; verify their identity/hash when reached.
+            updated = {item["key"]: item for item in manifest}
+            write_manifest(
+                output,
+                [
+                    updated.get(key, previous.get(key))
+                    for key in keys
+                    if key in updated or key in previous
+                ],
             )
             print(f"{filename}: {len(body)} bytes ({total} total)", file=sys.stderr, flush=True)
-        (output / "manifest.json").write_text(
-            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
+        write_manifest(output, manifest)
         return manifest
     finally:
         await http.close()

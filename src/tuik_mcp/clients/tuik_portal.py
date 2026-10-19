@@ -4,6 +4,7 @@ import io
 import math
 import re
 import time
+import zipfile
 from urllib.parse import quote, urlsplit
 
 import httpx
@@ -106,8 +107,15 @@ def file_format(body: bytes, mime: str) -> str | None:
     if body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
         return "xls"
     if body.startswith(b"PK\x03\x04"):
-        # ZIP payloads are offered as downloads, never decompressed.
-        return "xlsx" if "spreadsheetml" in mime else "zip"
+        # Official XLS links sometimes serve OOXML with an XLS media type.
+        # Inspect directory names only; never extract or decompress entries.
+        try:
+            with zipfile.ZipFile(io.BytesIO(body)) as archive:
+                if {"[Content_Types].xml", "xl/workbook.xml"} <= set(archive.namelist()):
+                    return "xlsx"
+        except zipfile.BadZipFile:
+            pass
+        return "zip"
     if body.startswith(b"%PDF-"):
         return "pdf"
     if mime in {"text/csv", "application/csv"} and body:

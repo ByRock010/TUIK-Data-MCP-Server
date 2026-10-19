@@ -22,6 +22,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Production download verification recognizes XLSX archives served with XLS media
+  types; interrupted fixture refreshes retain unprocessed resume entries (#4).
+
 - TÜİK's download throttle page is no longer reported as `unsupported_download`.
   Table/document downloads run one at a time at least 6 seconds apart
   (`TUIK_DOWNLOAD_INTERVAL_SECONDS`), the page's countdown is honored with a retry,

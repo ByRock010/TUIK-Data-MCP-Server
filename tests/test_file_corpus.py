@@ -1,12 +1,16 @@
 import hashlib
 import importlib.util
+import io
 import json
+import zipfile
 from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 
+import httpx
 import pytest
 
+from tuik_mcp.clients.tuik_portal import file_format
 from tuik_mcp.utils.normalization import official_url
 
 FILES = Path(__file__).parent / "fixtures/files"
@@ -99,15 +103,43 @@ def test_corpus_covers_observed_layout_and_pdf_edge_cases():
     assert load("labour-methodology")["page_count"] == 10
 
 
-def test_fetcher_recognizes_real_xlsx_despite_upstream_xls_label():
-    script = Path(__file__).parents[1] / "scripts/fetch_fixtures.py"
-    spec = importlib.util.spec_from_file_location("fetch_fixtures", script)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+def test_production_recognizes_real_xlsx_despite_upstream_xls_label():
     body = (FILES / "cpi-basket.xlsx").read_bytes()
-    assert module.fixture_format(body, "zip") == "xlsx"
-    with pytest.raises(ValueError, match="Unexpected fixture format"):
-        module.fixture_format(b"arbitrary", "csv")
+    assert file_format(body, "application/vnd.ms-excel") == "xlsx"
+
+
+async def test_data_response_verifies_mislabeled_xlsx(catalog, monkeypatch):
+    service, _ = catalog
+
+    async def fetch_file(url):
+        return httpx.Response(
+            200,
+            content=(FILES / "cpi-basket.xlsx").read_bytes(),
+            headers={"content-type": "application/vnd.ms-excel"},
+        )
+
+    monkeypatch.setattr(service.portal, "_fetch_file", fetch_file)
+    data = await service.data("press:57987")
+    assert data.status == "download_available"
+    assert data.download_links[0].format == "xlsx" and data.download_links[0].verified
+
+
+@pytest.mark.parametrize("names", [["report.txt"], ["[Content_Types].xml"], ["xl/workbook.xml"]])
+def test_generic_zip_is_not_a_spreadsheet_even_with_xlsx_mime(names):
+    body = io.BytesIO()
+    with zipfile.ZipFile(body, "w") as archive:
+        for name in names:
+            archive.writestr(name, "data")
+    assert (
+        file_format(
+            body.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        == "zip"
+    )
+
+
+def test_truncated_zip_does_not_raise_or_claim_xlsx():
+    assert file_format(b"PK\x03\x04truncated", "application/vnd.ms-excel") == "zip"
 
 
 @pytest.mark.parametrize("change", [None, "resource_id", "query", "title", "body"])
@@ -174,3 +206,61 @@ async def test_refresh_resumes_only_matching_source_and_content(tmp_path, monkey
         assert result[0]["sha256"] != saved["sha256"]
         assert result[0]["resource_id"] == source.get("resource_id")
     assert json.loads((tmp_path / "manifest.json").read_text()) == result
+
+
+async def test_interrupted_resume_keeps_unprocessed_manifest_entries(tmp_path, monkeypatch):
+    script = Path(__file__).parents[1] / "scripts/fetch_fixtures.py"
+    spec = importlib.util.spec_from_file_location("fetch_fixtures_interrupted", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    sources, previous = [], []
+    for index in range(3):
+        key = f"test-{index}"
+        body = f"%PDF-old {index}".encode()
+        sources.append({"key": key, "resource_id": f"press:{index}", "file_title": key})
+        previous.append(
+            {
+                "key": key,
+                "title": key,
+                "resource_id": f"press:{index}",
+                "search_query": None,
+                "file": f"{key}.pdf",
+                "format": "pdf",
+                "sha256": hashlib.sha256(body).hexdigest(),
+                "size_bytes": len(body),
+            }
+        )
+        (tmp_path / f"{key}.pdf").write_bytes(body)
+    (tmp_path / "manifest.json").write_text(json.dumps(previous))
+    # Refresh the first file, then interrupt before processing the final valid file.
+    (tmp_path / "test-0.pdf").write_bytes(b"corrupted")
+    (tmp_path / "test-1.pdf").write_bytes(b"corrupted")
+    calls = []
+    interrupt = True
+
+    class Service:
+        def __init__(self, http):
+            self.portal = self
+
+        async def resource(self, resource_id):
+            if resource_id == "press:1" and interrupt:
+                raise RuntimeError("refresh interrupted")
+            key = "test-" + resource_id.split(":")[1]
+            return SimpleNamespace(
+                download_links=[SimpleNamespace(title=key)], source_url="official page"
+            )
+
+        async def download(self, link):
+            calls.append(link.title)
+            return b"%PDF-new fixture", SimpleNamespace(format="pdf", source_url="official file")
+
+    monkeypatch.setattr(module, "CatalogService", Service)
+    with pytest.raises(RuntimeError, match="refresh interrupted"):
+        await module.fetch(sources, tmp_path, resume=True)
+    partial = json.loads((tmp_path / "manifest.json").read_text())
+    assert len(partial) == 3 and partial[2] == previous[2]
+    assert partial[0]["sha256"] != previous[0]["sha256"]
+    interrupt = False
+    result = await module.fetch(sources, tmp_path, resume=True)
+    assert calls == ["test-0", "test-1"]
+    assert len(result) == 3 and result[2] == previous[2]
