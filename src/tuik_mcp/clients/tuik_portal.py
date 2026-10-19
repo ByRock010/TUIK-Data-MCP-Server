@@ -5,6 +5,7 @@ import math
 import re
 import time
 import zipfile
+from io import BytesIO
 from urllib.parse import quote, urlsplit
 
 import httpx
@@ -110,7 +111,7 @@ def file_format(body: bytes, mime: str) -> str | None:
         # Official XLS links sometimes serve OOXML with an XLS media type.
         # Inspect directory names only; never extract or decompress entries.
         try:
-            with zipfile.ZipFile(io.BytesIO(body)) as archive:
+            with zipfile.ZipFile(BytesIO(body)) as archive:
                 if {"[Content_Types].xml", "xl/workbook.xml"} <= set(archive.namelist()):
                     return "xlsx"
         except zipfile.BadZipFile:
