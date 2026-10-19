@@ -23,6 +23,10 @@ delimiter detection, validation, exact string filters, errors and row limits.
 Keep `TuikPortal.csv_rows` as a compatibility/error translation wrapper. The
 asynchronous service invokes it through `asyncio.to_thread` so parsing does not
 block the MCP event loop. New async callers must also offload registry calls.
+Parser failures derive from `Exception`, not `ValueError`, so malformed upstream
+files and unsupported formats cannot be mistaken for invalid MCP caller input.
+Service/adapter boundaries must translate them to `SourceError`; the existing
+CSV wrapper preserves its `malformed_response` and `invalid_filters` codes.
 
 For later ingestion features choose:
 

@@ -1,4 +1,4 @@
-class ParseError(ValueError):
+class ParseError(Exception):
     """The file could not be parsed using the selected format."""
 
 

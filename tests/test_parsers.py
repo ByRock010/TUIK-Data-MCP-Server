@@ -64,6 +64,13 @@ def test_unimplemented_parsers_are_explicit(fmt):
         parse_document(b"arbitrary", fmt)
 
 
+@pytest.mark.parametrize("body,fmt", [(b"a;b\n1\n", "csv"), (b"arbitrary", "xlsx")])
+def test_upstream_parser_failures_are_not_invalid_caller_input(body, fmt):
+    with pytest.raises(ParseError) as error:
+        parse_table(body, fmt)
+    assert not isinstance(error.value, ValueError)
+
+
 @pytest.mark.parametrize("limit", [0, -1, True, 1.5])
 def test_invalid_parser_limit(limit):
     with pytest.raises(ValueError, match="positive integer"):
