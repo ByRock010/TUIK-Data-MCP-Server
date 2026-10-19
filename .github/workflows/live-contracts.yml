@@ -51,7 +51,8 @@ jobs:
         id: pytest
         if: ${{ !cancelled() && steps.install.outcome == 'success' && !inputs.exercise_failure }}
         continue-on-error: true
-        run: pytest -m live -q --junitxml=artifacts/live-tests.xml 2>&1 | tee artifacts/live-tests.log
+        # The next step runs the full MCP workflow once and preserves its JSON report.
+        run: pytest -m live -k 'not test_live_mcp_workflow' -q --junitxml=artifacts/live-tests.xml 2>&1 | tee artifacts/live-tests.log
 
       - name: MCP stdio live smoke
         id: smoke

@@ -18,6 +18,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Weekly live contract checks run the full MCP smoke workflow once, preserving
+  the separate JSON report without duplicating upstream requests (#28).
+
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed

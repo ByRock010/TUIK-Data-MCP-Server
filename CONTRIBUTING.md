@@ -141,7 +141,8 @@ Configure branch protection on GitHub for both `master` and `develop`:
 ## Live upstream contract monitoring
 
 `Live TÜİK contracts` runs weekly on Monday at 06:17 UTC (09:17 Istanbul),
-separately from CI. It runs `pytest -m live` and the MCP stdio smoke script,
+separately from CI. It runs `pytest -m live -k 'not test_live_mcp_workflow'`
+and the MCP stdio smoke script (the full MCP workflow runs only once),
 sequentially with the existing HTTP pacing; it never crawls files. Keep this
 workflow out of required branch checks: an upstream outage must not block PRs.
 The `tuik-live-contracts-<run>-<attempt>` artifact contains JSON, JUnit and logs,
