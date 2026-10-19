@@ -98,7 +98,7 @@ async def get_tuik_data(
     """Get public CSV rows or verified download links. Filters are exact CSV column/string pairs.
 
     Call with empty filters first to learn column names. XLS/PDF files remain downloads.
-    Bulletins linking dataflows return related_datasets; choose a flow: ID and call
+    Bulletins with downloadable dataflows return related_datasets; choose a flow: ID and call
     this tool again to retrieve CSV rows. Downloadability is advertised, not verified.
     Non-CSV filters return unsupported_filters; unavailable exports return not_structured.
     """

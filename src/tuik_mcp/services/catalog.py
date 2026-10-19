@@ -177,7 +177,16 @@ class CatalogService:
         if resource_id.startswith("press:"):
             result = await self.portal.press(resource_id)
             if result.related_datasets:
-                retrieved_at, datasets = await self._datasets()
+                try:
+                    retrieved_at, datasets = await self._datasets()
+                except SourceError as exc:
+                    note = (
+                        f"Related dataset availability could not be checked ({exc.code}); "
+                        "retry later. Entries marked downloadable=false are unconfirmed."
+                    )
+                    result.notes = "\n".join(filter(None, [result.notes, note]))
+                    # Keep bulletin metadata/files available and retry the catalog next time.
+                    return result
                 by_id = {dataset.id: dataset for dataset in datasets}
                 for related in result.related_datasets:
                     dataset = by_id.get(related.id)
@@ -237,7 +246,7 @@ class CatalogService:
             related_datasets=resource.related_datasets,
         )
         csv_link = next((link for link in resource.download_links if link.format == "csv"), None)
-        if resource.related_datasets and csv_link is None:
+        if csv_link is None and any(item.downloadable for item in resource.related_datasets):
             return DataResponse(
                 **base,
                 status="unsupported_filters" if filters else "related_datasets",

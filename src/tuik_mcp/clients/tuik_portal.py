@@ -216,7 +216,7 @@ class TuikPortal:
             if parsed.hostname != "databrowser2.tuik.gov.tr" or parsed.scheme != "https":
                 return None
             match = re.fullmatch(
-                r"/tr/tuik/(?:categories/([0-9]+)/([0-9_]+)/)?"
+                r"/tr/tuik/(?:categories/((?:[0-9_]+/)+))?"
                 r"TR,([A-Z0-9_]{1,150}),([0-9]+(?:\.[0-9]+){1,3})",
                 unquote(parsed.fragment),
             )
@@ -224,9 +224,9 @@ class TuikPortal:
                 return None
             title = entry.get("title")
             return RelatedDataset(
-                id=validate_id(f"flow:{match[3]}+V{match[4]}"),
-                title=(plain_text(title) if isinstance(title, str) else None) or match[3],
-                category_path=[match[1], match[2]] if match[1] else [],
+                id=validate_id(f"flow:{match[2]}+V{match[3]}"),
+                title=(plain_text(title) if isinstance(title, str) else None) or match[2],
+                category_path=match[1].strip("/").split("/") if match[1] else [],
                 source_url=url,
             )
         except (ValueError, KeyError, TypeError):

@@ -23,6 +23,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Bulletin dataflows retain category paths at every depth. Catalog outages preserve
+  bulletin metadata without caching unconfirmed availability, and unavailable
+  related datasets no longer prevent existing file downloads (#26).
+
 - TÜİK's download throttle page is no longer reported as `unsupported_download`.
   Table/document downloads run one at a time at least 6 seconds apart
   (`TUIK_DOWNLOAD_INTERVAL_SECONDS`), the page's countdown is honored with a retry,

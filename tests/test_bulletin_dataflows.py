@@ -96,6 +96,10 @@ async def test_existing_bulletin_keeps_download_links_and_unavailable_dataset_re
     assert len(resource.related_datasets) == 3
     assert all(not item.downloadable for item in resource.related_datasets)
     assert resource.download_links
+    data = await service.data(resource.id)
+    assert data.status == "download_available"
+    assert data.download_links[0].verified and data.download_links[0].format == "xls"
+    assert data.related_datasets == resource.related_datasets
 
 
 async def test_no_dataflow_links_does_not_fetch_catalog(bulletin):
@@ -121,16 +125,47 @@ async def test_malformed_links_do_not_hide_valid_bulletin_datasets(bulletin):
     assert resource.related_datasets[0].downloadable
 
 
-async def test_catalog_failure_is_not_cached_as_unavailable(bulletin):
+async def test_catalog_failure_preserves_bulletin_and_is_not_cached(bulletin):
     service, calls, _, flows, _ = bulletin
     original = flows[0]["id"]
     flows[0]["id"] = "bad/id"
-    with pytest.raises(SourceError) as error:
-        await service.resource("press:58347")
-    assert error.value.code == "malformed_response"
+    degraded = await service.resource("press:58347")
+    assert degraded.title and degraded.source_url and degraded.related_datasets
+    assert all(not item.downloadable for item in degraded.related_datasets)
+    assert "malformed_response" in degraded.notes and "unconfirmed" in degraded.notes
     flows[0]["id"] = original
     assert (await service.resource("press:58347")).related_datasets[0].downloadable
     assert len(calls) == 4
+
+
+async def test_catalog_timeout_preserves_metadata_and_xls_fallback(catalog, monkeypatch):
+    service, _ = catalog
+    original = service.portal.flows
+
+    async def unavailable():
+        raise SourceError(
+            "timeout", "Timed out", "https://veriportali.tuik.gov.tr/api/tr/dataflows"
+        )
+
+    monkeypatch.setattr(service.portal, "flows", unavailable)
+    resource = await service.resource("press:57987")
+    assert resource.title and resource.metadata and resource.download_links
+    assert "timeout" in resource.notes and "unconfirmed" in resource.notes
+    data = await service.data(resource.id)
+    assert data.status == "download_available" and data.download_links[0].verified
+    assert all(not item.downloadable for item in data.related_datasets)
+    monkeypatch.setattr(service.portal, "flows", original)
+    recovered = await service.resource(resource.id)
+    assert "unconfirmed" not in (recovered.notes or "")
+    assert recovered is not resource
+
+
+async def test_unavailable_datasets_without_files_are_not_structured(bulletin):
+    service, _, _, flows, _ = bulletin
+    flows.clear()
+    data = await service.data("press:58347")
+    assert data.status == "not_structured" and data.related_datasets
+    assert all(not item.downloadable for item in data.related_datasets)
 
 
 async def test_concurrent_bulletin_details_share_catalog(bulletin):
@@ -165,3 +200,18 @@ def test_old_link_format_and_untrusted_title_are_normalized():
     )
     assert dataset.id == "flow:DF_TEST+V1.0" and dataset.category_path == []
     assert dataset.title == "İşgücü"
+
+
+@pytest.mark.parametrize("path", ["8/", "8/8_1/", "8/8_1/8_1_4/", "8/8_1/8_1_4/8_1_4_2/"])
+def test_dataflow_links_keep_every_category_level(path):
+    dataset = TuikPortal.related_dataset(
+        {
+            "type": "dataflow",
+            "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/"
+            + path
+            + "TR,DF_UCRETLI_CALISAN_ISTATISTIKLERI_C,1.0",
+        }
+    )
+    assert dataset is not None
+    assert dataset.id == "flow:DF_UCRETLI_CALISAN_ISTATISTIKLERI_C+V1.0"
+    assert dataset.category_path == path.strip("/").split("/")
