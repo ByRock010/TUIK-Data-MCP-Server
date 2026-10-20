@@ -1,8 +1,12 @@
 """Exercise the installed server through a real MCP stdio session (network required)."""
 
+import argparse
 import asyncio
 import json
 import sys
+import traceback
+from datetime import UTC, datetime
+from pathlib import Path
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -78,5 +82,30 @@ async def run():
             return report
 
 
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, help="Write a JSON report on success or failure")
+    args = parser.parse_args(argv)
+    checked_at = datetime.now(UTC).isoformat()
+    try:
+        report = {"status": "ok", "checked_at": checked_at, **asyncio.run(run())}
+        exit_code = 0
+    except Exception as exc:
+        traceback.print_exc(file=sys.stderr)
+        report = {
+            "status": "error",
+            "checked_at": checked_at,
+            "error_type": type(exc).__name__,
+            "message": str(exc),
+        }
+        exit_code = 1
+    output = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(output, encoding="utf-8")
+    print(output, end="")
+    return exit_code
+
+
 if __name__ == "__main__":
-    print(json.dumps(asyncio.run(run()), ensure_ascii=False, indent=2))
+    sys.exit(main())

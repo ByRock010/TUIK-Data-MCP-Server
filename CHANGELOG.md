@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Weekly, optional live contract checks with JSON/JUnit/log artifacts, deduplicated
+  failure issue reporting, a no-traffic reporting exercise and a triage guide (#28).
 - Bulletin metadata exposes related dataflows with catalog export formats and
   category paths. `get_tuik_data` returns `related_datasets` choices for these
   bulletins; callers select a reusable `flow:` ID to retrieve CSV rows (#26).
@@ -24,6 +26,9 @@ All notable changes to this project are documented here. The format follows
   `CONTRIBUTING.md` and this changelog.
 
 ### Changed
+
+- Weekly live contract checks run the full MCP smoke workflow once, preserving
+  the separate JSON report without duplicating upstream requests (#28).
 
 - README client configuration uses a generic path instead of a developer's machine path.
 

@@ -42,6 +42,9 @@ jobs:
       - name: Develop issue-closing tests (no network)
         run: node --test .github/scripts/close-develop-issues.test.cjs
 
+      - name: Issue reporter tests (no network)
+        run: node --test .github/scripts/report-live-contracts.test.cjs
+
       # Live tests hit real TÜİK endpoints and are excluded by default (addopts).
       - name: Pytest
         run: pytest -q
