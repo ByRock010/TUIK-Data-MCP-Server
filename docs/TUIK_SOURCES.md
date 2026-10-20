@@ -162,3 +162,38 @@ Live on 2026-10-18, `press:58347` (*Konut ve İş Yeri Satış İstatistikleri, 
 2026*) exposed eight dataflow links. The reduced official response is in
 `tests/fixtures/press_dataflows.json`. The live test follows the first downloadable
 ID to CSV rows. The original `press:57987` fixture also covers the older URL form.
+
+## Download URL stability and identities (#27, 2026-10-20)
+
+Download URLs are `/api/tr/data/downloads?t=<list>&[pid=<bulletin>&]p=<opaque>`.
+`t` names the list: `t` bulletin table, `i` statistical table, `r` report,
+`y` publication. Observations on 2026-10-20 14:44 UTC:
+
+- **`p` is not stable.** 15 of 15 files recorded 1–3 days earlier (12 fixture files
+  from 2026-10-18 08:08 UTC, 3 search tables from 2026-10-17) were still listed
+  under the same title, with unchanged `t` and `pid`, but every `p` had changed.
+  Two requests seconds apart return the same `p`.
+- **Bulletin files repeat titles across lists.** 45 random bulletins list 365 files
+  (`t`: 197, `i`: 167, `r`: 1). 41 share a title with another file of the same
+  bulletin; the same title appears as a bulletin table (`t=t`) and as a statistical
+  table (`t=i`), which are different files (e.g. *Hizmet Ciro Endeksi* in
+  `press:54133`: 58 rows versus a 215-row series). Title plus `t` leaves 4
+  repeats: one statistical table listed twice in each of two bulletins.
+- **Standalone search results.** Type 2 lists 2,624 items: 510 dataflows and 2,114
+  downloads (`t=i`, no date field). 1,149 of these downloads share their title with
+  another item (510 titles, mostly pairs); 4 of 4 sampled pairs were byte-identical
+  files. Type 3 (125 metadata pages) links `/tr/press/<id>/metadata`. Type 4 has 23
+  reports (`t=r`) and type 6 130 publications (`t=y`); 2 titles repeat in each.
+- **Search finds titles again.** 40 of 40 sampled exact titles were on the first
+  result page with the type filter. The search ignores case and the ı/i difference
+  (`coicop`, `coıcop` and `COICOP` return the same results).
+- **Search rate limit.** Continuous search requests at 0.5 s spacing received HTTP 429
+  after about 90 seconds; about 430 requests at 2 s spacing received none. Bulk
+  listing (#15) needs at least 2 s spacing and a cool-down on 429.
+
+The resulting ID scheme (ADR 0003) derives file IDs from the exact title: bulletin
+files as `press:<id>:file:<key>` with `t` as discriminator, downloadable search
+results as `table:`, `report:` or `publication:<key>`. With those IDs, 30 of 30
+sampled tables, reports and publications and the files of `press:58298` resolved
+in fresh server sessions.
+
