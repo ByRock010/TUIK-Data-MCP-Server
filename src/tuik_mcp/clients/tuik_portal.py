@@ -4,17 +4,17 @@ import re
 import time
 import zipfile
 from io import BytesIO
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 import httpx
 from pydantic import BaseModel, Field, ValidationError
 
 from tuik_mcp.config import PORTAL
-from tuik_mcp.models.dataset import DownloadLink, MetadataSection, TuikResource
+from tuik_mcp.models.dataset import DownloadLink, MetadataSection, RelatedDataset, TuikResource
 from tuik_mcp.models.search import Theme, TuikSearchResult
 from tuik_mcp.parsers.errors import InvalidFiltersError, ParseError
 from tuik_mcp.parsers.registry import parse_table
-from tuik_mcp.utils.normalization import official_url, plain_text, resource_id
+from tuik_mcp.utils.normalization import official_url, plain_text, resource_id, validate_id
 
 from .base import HttpClient, SourceError
 
@@ -213,6 +213,34 @@ class TuikPortal:
             notes="\n".join(flow.footnotes) or None,
         )
 
+    @staticmethod
+    def related_dataset(entry: dict) -> RelatedDataset | None:
+        if entry.get("type") != "dataflow":
+            return None
+        if not isinstance(entry.get("url"), str):
+            return None
+        try:
+            url = official_url(entry["url"])
+            parsed = urlsplit(url)
+            if parsed.hostname != "databrowser2.tuik.gov.tr" or parsed.scheme != "https":
+                return None
+            match = re.fullmatch(
+                r"/tr/tuik/(?:categories/((?:[0-9_]+/)+))?"
+                r"TR,([A-Z0-9_]{1,150}),([0-9]+(?:\.[0-9]+){1,3})",
+                unquote(parsed.fragment),
+            )
+            if match is None:
+                return None
+            title = entry.get("title")
+            return RelatedDataset(
+                id=validate_id(f"flow:{match[2]}+V{match[3]}"),
+                title=(plain_text(title) if isinstance(title, str) else None) or match[2],
+                category_path=match[1].strip("/").split("/") if match[1] else [],
+                source_url=url,
+            )
+        except (ValueError, KeyError, TypeError):
+            return None
+
     async def press(self, resource_id: str) -> TuikResource:
         number = resource_id.split(":")[1]
         url = f"{PORTAL}/api/tr/press/{number}"
@@ -224,18 +252,29 @@ class TuikPortal:
             raise SourceError("malformed_response", "Bulletin identifier mismatch", url)
         links = []
         for entry in press.tables + press.statisticalTables + press.reports:
+            if not isinstance(entry.get("url"), str):
+                continue
             try:
                 link = official_url(entry["url"])
                 if self.is_download(link):
+                    title = entry.get("title")
                     links.append(
                         DownloadLink(
-                            title=plain_text(entry.get("title")) or press.title,
+                            title=(plain_text(title) if isinstance(title, str) else None)
+                            or press.title,
                             source_url=link,
                             format=entry.get("type"),
                         )
                     )
             except (ValueError, KeyError):
                 continue
+        related = {}
+        for entry in press.tables + press.statisticalTables:
+            dataset = self.related_dataset(entry)
+            if dataset is not None:
+                existing = related.get(dataset.id)
+                if existing is None or (not existing.category_path and dataset.category_path):
+                    related[dataset.id] = dataset
         sections = []
         try:
             for metadata in press.metadatas:
@@ -257,6 +296,7 @@ class TuikPortal:
             available_formats=sorted({link.format for link in links if link.format}),
             download_links=links,
             metadata=sections,
+            related_datasets=list(related.values()),
         )
 
     @staticmethod

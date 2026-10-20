@@ -10,6 +10,9 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Bulletin metadata exposes related dataflows with catalog export formats and
+  category paths. `get_tuik_data` returns `related_datasets` choices for these
+  bulletins; callers select a reusable `flow:` ID to retrieve CSV rows (#26).
 - Optional local OpenSearch 3.3.2 Compose stack, Dashboards profile, search client
   extra and validated environment settings (#12). Existing tools stay live-only.
 - A 12-file, 2.64 MB official XLS/XLSX/PDF fixture corpus with provenance, SHA-256,
@@ -26,6 +29,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Bulletin dataflows retain category paths at every depth. Catalog outages preserve
+  bulletin metadata without caching unconfirmed availability, and unavailable
+  related datasets no longer prevent existing file downloads (#26).
 - Empty or whitespace-only `TUIK_OPENSEARCH_URL` values disable the optional backend
   instead of preventing the MCP server from starting (#12).
 - Production download verification recognizes XLSX archives served with XLS media

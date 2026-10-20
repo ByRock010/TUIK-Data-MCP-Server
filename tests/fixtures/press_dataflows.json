@@ -1,0 +1,52 @@
+{
+  "isError": false,
+  "data": {
+    "id": 58347,
+    "title": "Konut ve İş Yeri Satış İstatistikleri",
+    "period": "Eylül 2026",
+    "date": "2026-10-16T10:00:00",
+    "tables": [],
+    "statisticalTables": [
+      {
+        "type": "dataflow",
+        "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_SATIS_SEKLI_SATIS_DURUMU_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (İl)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_SATIS_SEKLI_DURUMU_ILILCE_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Yabancılara Yapılan Satış Sayıları (Türkiye)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_YABANCILARA_SATIS_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Yabancılara Yapılan Satış Sayıları (İl/İlçe)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_YABANCILARA_SATILAR_ILILCE_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Ülke Uyruklarına Göre Yabancılara Yapılan Satış Sayıları (Türkiye)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_UYRUKLARA_GORE_SATISLAR_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Ülke Uyruklarına Göre Yabancılara Yapılan Satış Sayıları (İl/İlçe)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_UYRUKLARA_GORE_ILILCE_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Yıllık Satışların Cinsiyete Göre Payları (%)",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_CINSIYETE_GORE_SATISLAR_V3,1.0"
+      },
+      {
+        "type": "dataflow",
+        "title": "Mevsim ve Takvim Etkilerinden Arındırılmış Satış Sayıları",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/9/9_4/TR,DF_MEVSIM_TAKVIM_V3,1.0"
+      }
+    ]
+  }
+}
