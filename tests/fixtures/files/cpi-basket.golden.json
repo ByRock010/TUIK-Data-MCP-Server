@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "sha256": "72733dab476f8b35a46071a9a2570babcf59c51fc17e281a2f2b2faec09926db",
+  "format": "xlsx",
+  "sheet": "Tablo 4",
+  "sheets": [
+    "Tablo 4"
+  ],
+  "title": "Tüketici fiyat endeksi (TÜFE) mal ve hizmet sepeti ve ağırlıklar, 2026",
+  "title_en": "Basket of goods and services and weights of consumer price index (CPI) for 2026",
+  "unit": "2025=100",
+  "columns": [
+    "Kod Code",
+    "COICOP 2018 [column 2]",
+    "COICOP 2018 [column 3]",
+    "Ağırlık (%) Weight (%)"
+  ],
+  "header_rows": [
+    3
+  ],
+  "first_row_indices": [
+    4,
+    5
+  ],
+  "first_rows": [
+    {
+      "Kod Code": "01",
+      "COICOP 2018 [column 2]": "Gıda ve alkolsüz içecekler",
+      "COICOP 2018 [column 3]": "Food and non-alcoholic beverages",
+      "Ağırlık (%) Weight (%)": "24.4444"
+    },
+    {
+      "Kod Code": "011",
+      "COICOP 2018 [column 2]": "Gıda",
+      "COICOP 2018 [column 3]": "Food",
+      "Ağırlık (%) Weight (%)": "22.1040"
+    }
+  ],
+  "notes": [
+    "TÜİK, Tüketici Fiyat Endeksi, Mart 2026",
+    "TurkStat, Consumer Price Index, March 2026"
+  ],
+  "source_note": "TÜİK, Tüketici Fiyat Endeksi, Mart 2026",
+  "source_shape": [
+    758,
+    4
+  ],
+  "last_nonempty_row": 757,
+  "merged_ranges": [],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "Kod\nCode",
+        "COICOP 2018",
+        "COICOP 2018",
+        "Ağırlık (%)\nWeight (%)"
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "01",
+        "Gıda ve alkolsüz içecekler",
+        "Food and non-alcoholic beverages",
+        24.4444
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "011",
+        "Gıda",
+        "Food",
+        22.104009353262075
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 4,
+      "column": 3,
+      "value": 24.4444,
+      "number_format": "0.0000",
+      "rendered": "24.4444"
+    },
+    {
+      "row": 5,
+      "column": 3,
+      "value": 22.104009353262075,
+      "number_format": "0.0000",
+      "rendered": "22.1040"
+    }
+  ]
+}

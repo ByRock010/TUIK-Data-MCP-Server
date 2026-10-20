@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "sha256": "2b35b74ed3418ee915801961d9e493a015362fbf374c3fbebbf2c2f0e56ebf7a",
+  "format": "xls",
+  "sheet": "Tablo1",
+  "sheets": [
+    "Tablo1"
+  ],
+  "title": "Tüketici fiyat endeksi (TÜFE) ve değişim oranları",
+  "title_en": "Consumer price index (CPI) and rates of change",
+  "unit": "2025=100",
+  "columns": [
+    "Yıl / Year",
+    "Ocak / January",
+    "Şubat / February",
+    "Mart / March",
+    "Nisan / April",
+    "Mayıs / May",
+    "Haziran / June",
+    "Temmuz / July",
+    "Ağustos / August",
+    "Eylül / September",
+    "Ekim / October",
+    "Kasım / November",
+    "Aralık / December",
+    "column_14"
+  ],
+  "header_rows": [
+    3,
+    4
+  ],
+  "first_row_indices": [
+    6,
+    7
+  ],
+  "first_rows": [
+    {
+      "Yıl / Year": "2005",
+      "Ocak / January": "3.60",
+      "Şubat / February": "3.60",
+      "Mart / March": "3.61",
+      "Nisan / April": "3.63",
+      "Mayıs / May": "3.67",
+      "Haziran / June": "3.67",
+      "Temmuz / July": "3.65",
+      "Ağustos / August": "3.68",
+      "Eylül / September": "3.72",
+      "Ekim / October": "3.78",
+      "Kasım / November": "3.84",
+      "Aralık / December": "3.85",
+      "column_14": ""
+    },
+    {
+      "Yıl / Year": "2006",
+      "Ocak / January": "3.88",
+      "Şubat / February": "3.89",
+      "Mart / March": "3.90",
+      "Nisan / April": "3.95",
+      "Mayıs / May": "4.03",
+      "Haziran / June": "4.04",
+      "Temmuz / July": "4.08",
+      "Ağustos / August": "4.06",
+      "Eylül / September": "4.11",
+      "Ekim / October": "4.16",
+      "Kasım / November": "4.22",
+      "Aralık / December": "4.22",
+      "column_14": ""
+    }
+  ],
+  "notes": [
+    "TÜİK, Tüketici Fiyat Endeksi",
+    "TurkStat, Consumer Price Index",
+    "(*) 2026 yılı itibarıyla TÜFE hesaplamalarında 2025=100 bazlı yeni seri kullanılmaya başlanmıştır. Aynı zamanda, endekste kullanılan sınıflama da güncellenmiş ve geriye dönük  tüm hesaplamalar COICOP-2018 sınıflamasına göre yeniden yapılmıştır. Sınıflama değişikliği, TÜFE’nin genel endeks seviyesini etkilememekte; ancak sınıflamanın yapısı gereği alt harcama gruplarında bazı değişikliklere yol açmaktadır.",
+    "(*) As of 2026, a new series based on 2025=100 has been used in CPI calculations. At the same time, the classification used in the index has also been updated, and all retrospective calculations have been redone according to the COICOP-2018 classification. This classification change does not affect the overall index level of the CPI; however, due to the nature of classification, it leads to some changes in the sub-expenditure groups."
+  ],
+  "source_note": "TÜİK, Tüketici Fiyat Endeksi",
+  "source_shape": [
+    125,
+    14
+  ],
+  "last_nonempty_row": 124,
+  "merged_ranges": [
+    [
+      5,
+      6,
+      1,
+      13
+    ],
+    [
+      28,
+      29,
+      1,
+      13
+    ],
+    [
+      51,
+      52,
+      1,
+      13
+    ],
+    [
+      74,
+      75,
+      1,
+      13
+    ],
+    [
+      97,
+      98,
+      1,
+      13
+    ],
+    [
+      123,
+      124,
+      0,
+      13
+    ],
+    [
+      124,
+      125,
+      0,
+      13
+    ]
+  ],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "Yıl",
+        "Ocak",
+        "Şubat",
+        "Mart",
+        "Nisan",
+        "Mayıs",
+        "Haziran",
+        "Temmuz",
+        "Ağustos",
+        "Eylül",
+        "Ekim",
+        "Kasım",
+        "Aralık",
+        ""
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "Year",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        ""
+      ]
+    },
+    {
+      "row": 6,
+      "values": [
+        2005.0,
+        3.596523,
+        3.597387,
+        3.606715,
+        3.632475,
+        3.665774,
+        3.669544,
+        3.648496,
+        3.679597,
+        3.717294,
+        3.783893,
+        3.836984,
+        3.853006,
+        ""
+      ]
+    },
+    {
+      "row": 7,
+      "values": [
+        2006.0,
+        3.881907,
+        3.890389,
+        3.90107,
+        3.953218,
+        4.027357,
+        4.040865,
+        4.075107,
+        4.057201,
+        4.109349,
+        4.161497,
+        4.215216,
+        4.224955,
+        ""
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 6,
+      "column": 0,
+      "value": 2005.0,
+      "number_format": "0",
+      "rendered": "2005"
+    },
+    {
+      "row": 6,
+      "column": 1,
+      "value": 3.596523,
+      "number_format": "0.00",
+      "rendered": "3.60"
+    },
+    {
+      "row": 6,
+      "column": 2,
+      "value": 3.597387,
+      "number_format": "0.00",
+      "rendered": "3.60"
+    },
+    {
+      "row": 6,
+      "column": 3,
+      "value": 3.606715,
+      "number_format": "0.00",
+      "rendered": "3.61"
+    },
+    {
+      "row": 6,
+      "column": 4,
+      "value": 3.632475,
+      "number_format": "0.00",
+      "rendered": "3.63"
+    },
+    {
+      "row": 6,
+      "column": 5,
+      "value": 3.665774,
+      "number_format": "0.00",
+      "rendered": "3.67"
+    },
+    {
+      "row": 6,
+      "column": 6,
+      "value": 3.669544,
+      "number_format": "0.00",
+      "rendered": "3.67"
+    },
+    {
+      "row": 6,
+      "column": 7,
+      "value": 3.648496,
+      "number_format": "0.00",
+      "rendered": "3.65"
+    },
+    {
+      "row": 6,
+      "column": 8,
+      "value": 3.679597,
+      "number_format": "0.00",
+      "rendered": "3.68"
+    },
+    {
+      "row": 6,
+      "column": 9,
+      "value": 3.717294,
+      "number_format": "0.00",
+      "rendered": "3.72"
+    },
+    {
+      "row": 6,
+      "column": 10,
+      "value": 3.783893,
+      "number_format": "0.00",
+      "rendered": "3.78"
+    },
+    {
+      "row": 6,
+      "column": 11,
+      "value": 3.836984,
+      "number_format": "0.00",
+      "rendered": "3.84"
+    }
+  ],
+  "section_sample": {
+    "row": 5,
+    "column": 1,
+    "text": "Endeks - Index "
+  }
+}

@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "sha256": "6a3380dd0694909afd4f2b6a0a51fac1303f07d499e378881a107c467d114b3d",
+  "format": "xls",
+  "sheet": "t1",
+  "sheets": [
+    "t1"
+  ],
+  "title": "İllere göre il/ilçe merkezi, belde/köy nüfusu ve yıllık nüfus artış hızı, 2024, 2025",
+  "title_en": "Population of province/district centers and towns/villages and annual population growth rate by province, 2024, 2025",
+  "unit": null,
+  "columns": [
+    "İl Provinces",
+    "Toplam Total / 2024.0",
+    "2025.0 [column 3]",
+    "column_4",
+    "İl ve ilçe merkezleri Province and district centers / 2024.0",
+    "2025.0 [column 6]",
+    "column_7",
+    "Belde ve köyler Towns and villages / 2024.0",
+    "2025.0 [column 9]",
+    "column_10",
+    "Yıllık nüfus artış hızı(1) Annual population growth rate(1) (‰) / 2023-2024",
+    "2024-2025",
+    "column_13",
+    "column_14"
+  ],
+  "header_rows": [
+    2,
+    3
+  ],
+  "first_row_indices": [
+    4,
+    5
+  ],
+  "first_rows": [
+    {
+      "İl Provinces": "Toplam-Total",
+      "Toplam Total / 2024.0": "85664944",
+      "2025.0 [column 3]": "86092168",
+      "column_4": "",
+      "İl ve ilçe merkezleri Province and district centers / 2024.0": "80007258",
+      "2025.0 [column 6]": "80555475",
+      "column_7": "",
+      "Belde ve köyler Towns and villages / 2024.0": "5657686",
+      "2025.0 [column 9]": "5536693",
+      "column_10": "",
+      "Yıllık nüfus artış hızı(1) Annual population growth rate(1) (‰) / 2023-2024": "3.4",
+      "2024-2025": "5.0",
+      "column_13": "",
+      "column_14": ""
+    },
+    {
+      "İl Provinces": "Adana",
+      "Toplam Total / 2024.0": "2280484",
+      "2025.0 [column 3]": "2283609",
+      "column_4": "",
+      "İl ve ilçe merkezleri Province and district centers / 2024.0": "2280484",
+      "2025.0 [column 6]": "2283609",
+      "column_7": "",
+      "Belde ve köyler Towns and villages / 2024.0": "-",
+      "2025.0 [column 9]": "-",
+      "column_10": "",
+      "Yıllık nüfus artış hızı(1) Annual population growth rate(1) (‰) / 2023-2024": "4.5",
+      "2024-2025": "1.4",
+      "column_13": "",
+      "column_14": ""
+    }
+  ],
+  "notes": [
+    "TÜİK, Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2025",
+    "TurkStat, The Results of Address Based Population Registration System, 2025",
+    "(1) Yıllık nüfus artış hızları hesaplanırken, ilgili dönemin son yılına ait idari bölünüş yapısı dikkate alınmıştır.",
+    "(1) In the calculation of annual population growth rate for the related period, administrative division of the latest year was taken into consideration.",
+    "- Bilgi yoktur."
+  ],
+  "source_note": "TÜİK, Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2025",
+  "source_shape": [
+    92,
+    14
+  ],
+  "last_nonempty_row": 91,
+  "merged_ranges": [
+    [
+      2,
+      3,
+      1,
+      3
+    ],
+    [
+      2,
+      3,
+      4,
+      6
+    ],
+    [
+      2,
+      3,
+      7,
+      9
+    ],
+    [
+      2,
+      3,
+      10,
+      12
+    ],
+    [
+      2,
+      4,
+      0,
+      1
+    ]
+  ],
+  "raw_rows": [
+    {
+      "row": 2,
+      "values": [
+        "\n\n\nİl\nProvinces",
+        "\nToplam\nTotal",
+        "",
+        "",
+        "\nİl ve ilçe merkezleri\nProvince and district centers",
+        "",
+        "",
+        "\nBelde ve köyler\nTowns and villages",
+        "",
+        "",
+        "Yıllık nüfus artış hızı(1) \nAnnual population \ngrowth rate(1) \n (‰) ",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 3,
+      "values": [
+        "",
+        2024.0,
+        2025.0,
+        "",
+        2024.0,
+        2025.0,
+        "",
+        2024.0,
+        2025.0,
+        "",
+        "2023-2024",
+        "2024-2025",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "Toplam-Total",
+        85664944.0,
+        86092168.0,
+        "",
+        80007258.0,
+        80555475.0,
+        "",
+        5657686.0,
+        5536693.0,
+        "",
+        3.421092936170313,
+        4.9747562253495525,
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "Adana",
+        2280484.0,
+        2283609.0,
+        "",
+        2280484.0,
+        2283609.0,
+        "",
+        "-",
+        "-",
+        "",
+        4.476600729534182,
+        1.3693851060166369,
+        "",
+        ""
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 4,
+      "column": 1,
+      "value": 85664944.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "85664944"
+    },
+    {
+      "row": 4,
+      "column": 2,
+      "value": 86092168.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "86092168"
+    },
+    {
+      "row": 4,
+      "column": 4,
+      "value": 80007258.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "80007258"
+    },
+    {
+      "row": 4,
+      "column": 5,
+      "value": 80555475.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "80555475"
+    },
+    {
+      "row": 4,
+      "column": 7,
+      "value": 5657686.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "5657686"
+    },
+    {
+      "row": 4,
+      "column": 8,
+      "value": 5536693.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "5536693"
+    },
+    {
+      "row": 4,
+      "column": 10,
+      "value": 3.421092936170313,
+      "number_format": "0.0",
+      "rendered": "3.4"
+    },
+    {
+      "row": 4,
+      "column": 11,
+      "value": 4.9747562253495525,
+      "number_format": "0.0",
+      "rendered": "5.0"
+    },
+    {
+      "row": 5,
+      "column": 1,
+      "value": 2280484.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "2280484"
+    },
+    {
+      "row": 5,
+      "column": 2,
+      "value": 2283609.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "2283609"
+    },
+    {
+      "row": 5,
+      "column": 4,
+      "value": 2280484.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "2280484"
+    },
+    {
+      "row": 5,
+      "column": 5,
+      "value": 2283609.0,
+      "number_format": "##\\ ###\\ ###",
+      "rendered": "2283609"
+    }
+  ]
+}

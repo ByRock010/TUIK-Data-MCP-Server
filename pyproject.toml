@@ -12,6 +12,7 @@ dependencies = ["mcp>=1.26,<2", "httpx>=0.28,<1", "pydantic>=2.11,<3", "beautifu
 
 [project.optional-dependencies]
 search = ["opensearch-py>=3,<4"]
+fixtures = ["xlrd>=2,<3", "openpyxl>=3.1,<4", "pdfplumber>=0.11,<1"]
 dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 
 [project.scripts]
