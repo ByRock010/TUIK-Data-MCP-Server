@@ -251,6 +251,54 @@ docker run --rm -i tuik-mcp
 Use `-i` without `-t` for MCP stdio. A client can launch `docker` with arguments
 `["run", "--rm", "-i", "tuik-mcp"]` after the image is built.
 
+## Local OpenSearch development stack
+
+OpenSearch is optional. The base install and all six MCP tools continue to work
+without it. This issue provides infrastructure and settings; indexing and routing
+MCP searches to the index follow in #14–#18. Setting a URL alone does not yet change
+search behavior.
+
+```bash
+# Requires Docker Compose v2 and a running Docker daemon
+# Pins: OpenSearch 3.3.2 + Dashboards 3.3.0 (the published release pair)
+docker compose up -d --wait
+curl --fail 'http://localhost:9200/_cluster/health?pretty'
+
+# Optional client library for search development
+python -m pip install -e '.[dev,search]'
+export TUIK_OPENSEARCH_URL=http://localhost:9200
+export TUIK_OPENSEARCH_INDEX=tuik-resources
+
+# Optional UI at http://localhost:5601
+docker compose --profile dashboards up -d
+
+# Stop containers; retain the named data volume
+docker compose --profile dashboards down
+```
+
+The [official 3.3.2 release](https://github.com/opensearch-project/opensearch-build/blob/main/release-notes/opensearch-release-notes-3.3.2.md)
+pairs OpenSearch 3.3.2 with Dashboards 3.3.0; a Dashboards 3.3.2 image was not
+published. Both images are pinned explicitly.
+
+Security and demo configuration are disabled **for local development only**. Both
+published ports bind to `127.0.0.1`; do not expose this configuration publicly or
+use it in production. The node has a 512 MiB heap; allow Docker at least 2 GiB of
+memory (more with Dashboards). Single-node clusters can report `yellow` when
+replicas are unassigned; the healthcheck accepts yellow or green. Linux hosts
+need `vm.max_map_count` of at least `262144`; Docker Desktop users configure
+resources in Docker Desktop. `.env` does not load into the Python process: export
+settings or configure them in the MCP client's environment.
+
+`TUIK_OPENSEARCH_URL` accepts an HTTP(S) URL and defaults to unset. Empty or
+whitespace-only values also leave the optional backend disabled;
+`TUIK_OPENSEARCH_INDEX` defaults to the future `tuik-resources` alias. The client
+extra is never imported by the base server. For a separate CI instance use
+`docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration
+checks are tracked in #19.
+
+See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
+for host prerequisites and production security configuration.
+
 ## Future roadmap
 
 Dataset discovery now searches public export availability and returns catalog-backed
