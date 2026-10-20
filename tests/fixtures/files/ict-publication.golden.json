@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "sha256": "2f0211ba45170cf430b7762393aa45b582e2846ef6ad8e8f64ed33a211ee144c",
+  "format": "pdf",
+  "title": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026",
+  "page_count": 17,
+  "page_samples": [
+    {
+      "page": 1,
+      "text_prefix": "TÜRKİYE İSTATİSTİK KURUMU Turkish Statistical Institute HANEHALKI BİLİŞİM TEKNOLOJİLERİ KULLANIM ARAŞTIRMASI MİKRO VERİ SETİ Information and Communication Techn",
+      "raw_chars": 292,
+      "deduplicated_chars": 288
+    },
+    {
+      "page": 2,
+      "text_prefix": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026 Daha Önce Yayımlanmış Mikro Veriler 2004 2005 2007 2008 2009 2010 2011 2012 2013 2014",
+      "raw_chars": 856,
+      "deduplicated_chars": 856
+    },
+    {
+      "page": 3,
+      "text_prefix": "İÇİNDEKİLER Sayfa Hanehalkı Bilişim Teknolojileri Kullanım İstatistikleri 3 1. Sözleşme 3 2. Veri Kılavuzu 3 3. Meta Veri 12 3.1 Amaç 12 3.2 Tarihçe 12 3.3 Kaps",
+      "raw_chars": 305,
+      "deduplicated_chars": 305
+    }
+  ]
+}
