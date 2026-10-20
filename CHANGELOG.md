@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- Shared parser models and registry, with CSV parsing offloaded from the MCP event
+  loop and parsing library decisions recorded in ADR 0001 (#3).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
@@ -19,6 +21,9 @@ All notable changes to this project are documented here. The format follows
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed
+
+- Parser failures are distinct from invalid caller input; the CSV adapter keeps
+  its existing source-error codes (#3).
 
 - TÜİK's download throttle page is no longer reported as `unsupported_download`.
   Table/document downloads run one at a time at least 6 seconds apart

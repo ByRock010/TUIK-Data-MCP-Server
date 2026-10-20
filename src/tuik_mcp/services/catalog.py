@@ -266,7 +266,9 @@ class CatalogService:
                     "this MVP; limit does not truncate the file."
                 ),
             )
-        columns, rows, total = self.portal.csv_rows(body, verified.source_url, limit, filters)
+        columns, rows, total = await asyncio.to_thread(
+            self.portal.csv_rows, body, verified.source_url, limit, filters
+        )
         base["source_url"] = verified.source_url
         return DataResponse(
             **base,
