@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "sha256": "3f305e98e7572ca488e91b4988d4ca330610b6d857dcb77e83a07b9dfc629d60",
+  "format": "xls",
+  "sheet": "t3",
+  "sheets": [
+    "t3"
+  ],
+  "title": "Yabancılara yapılan konut satış sayıları, 2013-2025\nHouse sales to foreigners, 2013-2025",
+  "title_en": "",
+  "unit": null,
+  "columns": [
+    "Yıl Year",
+    "Ay Month",
+    "Konut satış sayıları House sale numbers / Toplam Total",
+    "Yabancılara yapılan satışlar Sales to foreigners",
+    "Pay Share (%)"
+  ],
+  "header_rows": [
+    1,
+    2
+  ],
+  "first_row_indices": [
+    3,
+    4
+  ],
+  "first_rows": [
+    {
+      "Yıl Year": "2013",
+      "Ay Month": "",
+      "Konut satış sayıları House sale numbers / Toplam Total": "1157190",
+      "Yabancılara yapılan satışlar Sales to foreigners": "12181",
+      "Pay Share (%)": "1.1"
+    },
+    {
+      "Yıl Year": "2014",
+      "Ay Month": "",
+      "Konut satış sayıları House sale numbers / Toplam Total": "1165381",
+      "Yabancılara yapılan satışlar Sales to foreigners": "18959",
+      "Pay Share (%)": "1.6"
+    }
+  ],
+  "notes": [],
+  "source_note": null,
+  "source_shape": [
+    179,
+    5
+  ],
+  "last_nonempty_row": 174,
+  "merged_ranges": [
+    [
+      0,
+      1,
+      0,
+      5
+    ],
+    [
+      1,
+      2,
+      2,
+      5
+    ]
+  ],
+  "raw_rows": [
+    {
+      "row": 1,
+      "values": [
+        "",
+        "",
+        "Konut satış sayıları \nHouse sale numbers",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 2,
+      "values": [
+        "Yıl                        Year",
+        "Ay\nMonth",
+        "Toplam\nTotal",
+        "Yabancılara yapılan satışlar\nSales to foreigners",
+        "Pay \nShare (%)"
+      ]
+    },
+    {
+      "row": 3,
+      "values": [
+        2013.0,
+        "",
+        1157190.0,
+        12181.0,
+        1.0526361271701277
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        2014.0,
+        "",
+        1165381.0,
+        18959.0,
+        1.6268499314816356
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 3,
+      "column": 0,
+      "value": 2013.0,
+      "number_format": "General",
+      "rendered": "2013"
+    },
+    {
+      "row": 3,
+      "column": 2,
+      "value": 1157190.0,
+      "number_format": "###\\ ###\\ ###\\ ###",
+      "rendered": "1157190"
+    },
+    {
+      "row": 3,
+      "column": 3,
+      "value": 12181.0,
+      "number_format": "###\\ ###\\ ###\\ ###",
+      "rendered": "12181"
+    },
+    {
+      "row": 3,
+      "column": 4,
+      "value": 1.0526361271701277,
+      "number_format": "0.0",
+      "rendered": "1.1"
+    },
+    {
+      "row": 4,
+      "column": 0,
+      "value": 2014.0,
+      "number_format": "General",
+      "rendered": "2014"
+    },
+    {
+      "row": 4,
+      "column": 2,
+      "value": 1165381.0,
+      "number_format": "###\\ ###\\ ###\\ ###",
+      "rendered": "1165381"
+    },
+    {
+      "row": 4,
+      "column": 3,
+      "value": 18959.0,
+      "number_format": "###\\ ###\\ ###\\ ###",
+      "rendered": "18959"
+    },
+    {
+      "row": 4,
+      "column": 4,
+      "value": 1.6268499314816356,
+      "number_format": "0.0",
+      "rendered": "1.6"
+    }
+  ]
+}

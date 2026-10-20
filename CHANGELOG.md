@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows
 
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
+- A 12-file, 2.64 MB official XLS/XLSX/PDF fixture corpus with provenance, SHA-256,
+  reviewed golden source observations and a paced refresh script (#4).
 - Shared parser models and registry, with CSV parsing offloaded from the MCP event
   loop and parsing library decisions recorded in ADR 0001 (#3).
 
@@ -22,6 +24,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Production download verification recognizes XLSX archives served with XLS media
+  types; interrupted fixture refreshes retain unprocessed resume entries (#4).
 - Parser failures are distinct from invalid caller input; the CSV adapter keeps
   its existing source-error codes (#3).
 
