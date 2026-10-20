@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "sha256": "73a577892b93597a59c0ebacffaecd9092d65d55da4b6c0cb874b94460e2ca37",
+  "format": "xls",
+  "sheet": "Tablo 1",
+  "sheets": [
+    "Tablo 1"
+  ],
+  "title": "Ana harcama gruplarına göre ağırlıklar, tüketici fiyat endeksi (TÜFE) ve değişim oranları, Eylül 2026",
+  "title_en": "Consumer price index (CPI), rates of change and weights by main expenditure groups, September 2026",
+  "unit": "2025=100",
+  "columns": [
+    "Ana harcama grupları (COICOP 2018, 2'li düzey) Main expenditure groups (COICOP 2018, 2 digit level)",
+    "Ana harcama grubu ağırlıkları (%) Weights of main expenditure groups (%)",
+    "Bir önceki aya göre değişim oranı (%) Monthly rate of change (%)",
+    "Bir önceki yılın Aralık ayına göre değişim oranı (%) Rate of change to December of the previous year (%)",
+    "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%) Annual rate of change (%)",
+    "On iki aylık ortalamalara göre değişim oranı (%) Rate of change in 12 month averages (%)",
+    "Endeks Index"
+  ],
+  "header_rows": [
+    3
+  ],
+  "first_row_indices": [
+    4,
+    5
+  ],
+  "first_rows": [
+    {
+      "Ana harcama grupları (COICOP 2018, 2'li düzey) Main expenditure groups (COICOP 2018, 2 digit level)": "TÜFE\nCPI",
+      "Ana harcama grubu ağırlıkları (%) Weights of main expenditure groups (%)": "100.00",
+      "Bir önceki aya göre değişim oranı (%) Monthly rate of change (%)": "1.84",
+      "Bir önceki yılın Aralık ayına göre değişim oranı (%) Rate of change to December of the previous year (%)": "24.32",
+      "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%) Annual rate of change (%)": "29.73",
+      "On iki aylık ortalamalara göre değişim oranı (%) Rate of change in 12 month averages (%)": "31.49",
+      "Endeks Index": "137.23"
+    },
+    {
+      "Ana harcama grupları (COICOP 2018, 2'li düzey) Main expenditure groups (COICOP 2018, 2 digit level)": "Gıda ve alkolsüz içecekler \nFood and non-alcoholic beverages",
+      "Ana harcama grubu ağırlıkları (%) Weights of main expenditure groups (%)": "24.44",
+      "Bir önceki aya göre değişim oranı (%) Monthly rate of change (%)": "-0.20",
+      "Bir önceki yılın Aralık ayına göre değişim oranı (%) Rate of change to December of the previous year (%)": "21.84",
+      "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%) Annual rate of change (%)": "27.62",
+      "On iki aylık ortalamalara göre değişim oranı (%) Rate of change in 12 month averages (%)": "32.95",
+      "Endeks Index": "134.04"
+    }
+  ],
+  "notes": [
+    "TÜİK, Tüketici Fiyat Endeksi, Eylül 2026",
+    "TurkStat, Consumer Price Index, September 2026"
+  ],
+  "source_note": "TÜİK, Tüketici Fiyat Endeksi, Eylül 2026",
+  "source_shape": [
+    20,
+    7
+  ],
+  "last_nonempty_row": 19,
+  "merged_ranges": [],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "Ana harcama grupları (COICOP 2018, 2'li düzey)\nMain expenditure groups (COICOP 2018, 2 digit level)",
+        "Ana harcama grubu ağırlıkları (%)\nWeights of main expenditure groups (%)",
+        "Bir önceki aya göre değişim oranı (%) \nMonthly rate of change (%)",
+        "Bir önceki yılın Aralık ayına göre değişim oranı (%)\nRate of change to December of the previous year (%)",
+        "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%)\nAnnual rate of change (%)",
+        "On iki aylık ortalamalara göre değişim oranı (%) \nRate of change in 12 month averages (%) ",
+        "Endeks\nIndex      "
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "TÜFE\nCPI",
+        100.0,
+        1.84,
+        24.32,
+        29.73,
+        31.49,
+        137.23
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "Gıda ve alkolsüz içecekler \nFood and non-alcoholic beverages",
+        24.444400000000005,
+        -0.2,
+        21.84,
+        27.62,
+        32.95,
+        134.04
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 4,
+      "column": 1,
+      "value": 100.0,
+      "number_format": "0.00",
+      "rendered": "100.00"
+    },
+    {
+      "row": 4,
+      "column": 2,
+      "value": 1.84,
+      "number_format": "0.00",
+      "rendered": "1.84"
+    },
+    {
+      "row": 4,
+      "column": 3,
+      "value": 24.32,
+      "number_format": "0.00",
+      "rendered": "24.32"
+    },
+    {
+      "row": 4,
+      "column": 4,
+      "value": 29.73,
+      "number_format": "0.00",
+      "rendered": "29.73"
+    },
+    {
+      "row": 4,
+      "column": 5,
+      "value": 31.49,
+      "number_format": "0.00",
+      "rendered": "31.49"
+    },
+    {
+      "row": 4,
+      "column": 6,
+      "value": 137.23,
+      "number_format": "#\\ ##0.00",
+      "rendered": "137.23"
+    },
+    {
+      "row": 5,
+      "column": 1,
+      "value": 24.444400000000005,
+      "number_format": "0.00",
+      "rendered": "24.44"
+    },
+    {
+      "row": 5,
+      "column": 2,
+      "value": -0.2,
+      "number_format": "0.00",
+      "rendered": "-0.20"
+    },
+    {
+      "row": 5,
+      "column": 3,
+      "value": 21.84,
+      "number_format": "0.00",
+      "rendered": "21.84"
+    },
+    {
+      "row": 5,
+      "column": 4,
+      "value": 27.62,
+      "number_format": "0.00",
+      "rendered": "27.62"
+    },
+    {
+      "row": 5,
+      "column": 5,
+      "value": 32.95,
+      "number_format": "0.00",
+      "rendered": "32.95"
+    },
+    {
+      "row": 5,
+      "column": 6,
+      "value": 134.04,
+      "number_format": "#\\ ##0.00",
+      "rendered": "134.04"
+    }
+  ]
+}

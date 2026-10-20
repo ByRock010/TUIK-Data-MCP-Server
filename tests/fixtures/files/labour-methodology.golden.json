@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "sha256": "dbd0c117cd69332118db6f6a2520eab3d2d5ec22645048412c22153dafbd4c36",
+  "format": "pdf",
+  "title": "Metodolojik açıklama dokümanı",
+  "page_count": 10,
+  "page_samples": [
+    {
+      "page": 1,
+      "text_prefix": "HANEHALKI İŞGÜCÜ ARAŞTIRMASI Metodolojik Açıklama Dokümanı İŞGÜCÜ İSTATİSTİKLERİ (Aylık, Çeyreklik ve Yıllık Göstergeler) 2026",
+      "raw_chars": 177,
+      "deduplicated_chars": 177
+    },
+    {
+      "page": 2,
+      "text_prefix": "",
+      "raw_chars": 14,
+      "deduplicated_chars": 14
+    },
+    {
+      "page": 3,
+      "text_prefix": "1 AMAÇ Türkiye İstatistik Kurumu (TÜİK), Hanehalkı İşgücü Araştırması (HİA) ile nüfusun işgücü açısından durumunu açıklıkla ortaya koymayı, istihdamda olanlara ",
+      "raw_chars": 2620,
+      "deduplicated_chars": 2620
+    }
+  ]
+}

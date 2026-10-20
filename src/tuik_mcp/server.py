@@ -84,7 +84,7 @@ async def search_tuik_datasets(
 async def get_tuik_resource(
     resource_id: Annotated[str, Field(max_length=200)], ctx: Context
 ) -> dict[str, Any]:
-    """Inspect a returned resource ID: metadata, available formats, official download links."""
+    """Inspect metadata, downloads and a bulletin's related datasets with reusable flow: IDs."""
     return await respond(service(ctx).resource(resource_id))
 
 
@@ -98,6 +98,8 @@ async def get_tuik_data(
     """Get public CSV rows or verified download links. Filters are exact CSV column/string pairs.
 
     Call with empty filters first to learn column names. XLS/PDF files remain downloads.
+    Bulletins with downloadable dataflows return related_datasets; choose a flow: ID and call
+    this tool again to retrieve CSV rows. Downloadability is advertised, not verified.
     Non-CSV filters return unsupported_filters; unavailable exports return not_structured.
     """
     return await respond(service(ctx).data(resource_id, filters, limit))
