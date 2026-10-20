@@ -54,3 +54,12 @@ loop responsive but is not a hard CPU or memory sandbox; parser cost limits,
 parsed-result caching and cancellation policy remain the separate #9 scope.
 Spreadsheet heuristics and PDF extraction remain #5 and #7, with real fixtures
 from #4; this foundation does not claim those formats are implemented.
+
+## Update — spreadsheet parser (#5)
+
+`xlrd` and `openpyxl` are runtime dependencies since `parsers/spreadsheet.py`
+registers the `xls` and `xlsx` formats. The parser keeps source column labels
+(header rows joined with ` / `, duplicates suffixed with `[column N]`, blank
+columns named `column_N`), renders numbers with each cell's number-format
+precision, forward-fills row labels, and adds `Bölüm / Section` columns for
+section rows. Unrecognized layouts return `layout: "raw"` with a warning.

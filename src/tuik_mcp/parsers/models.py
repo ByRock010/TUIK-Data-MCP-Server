@@ -15,6 +15,8 @@ class ParsedTable(BaseModel):
     notes: list[str] = Field(default_factory=list)
     source_note: str | None = None
     extraction: Literal["csv", "xls", "xlsx", "pdf"]
+    # "raw" when no header/data layout was recognized and rows mirror the source grid.
+    layout: Literal["table", "raw"] = "table"
     warnings: list[str] = Field(default_factory=list)
 
 

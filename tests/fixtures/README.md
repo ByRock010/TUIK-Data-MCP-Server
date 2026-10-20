@@ -66,6 +66,7 @@ exact publication title from a fresh search. Ambiguous matches fail; the housing
 selection deliberately uses a unique title. The manifest's opaque download URLs
 are historical provenance, not permanent file identities. Review new content
 and goldens before replacing committed snapshots. No golden generator is run in
-CI, and tests never download files. CI installs the optional `fixtures` extra to
-check all source observations; base installs still check hashes/provenance and
-skip reader-dependent checks.
+CI, and tests never download files. Spreadsheet readers are runtime dependencies,
+so every install checks the XLS/XLSX observations; `tests/test_spreadsheet_parser.py`
+compares the parser with these goldens. CI installs the optional `fixtures` extra
+(pdfplumber) for the PDF checks, which base installs skip.
