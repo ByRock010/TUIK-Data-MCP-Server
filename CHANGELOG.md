@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows
   `develop`, with offline tests and documented PR-body closing directives.
 - A 12-file, 2.64 MB official XLS/XLSX/PDF fixture corpus with provenance, SHA-256,
   reviewed golden source observations and a paced refresh script (#4).
+- Shared parser models and registry, with CSV parsing offloaded from the MCP event
+  loop and parsing library decisions recorded in ADR 0001 (#3).
 
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
@@ -24,6 +26,8 @@ All notable changes to this project are documented here. The format follows
 
 - Production download verification recognizes XLSX archives served with XLS media
   types; interrupted fixture refreshes retain unprocessed resume entries (#4).
+- Parser failures are distinct from invalid caller input; the CSV adapter keeps
+  its existing source-error codes (#3).
 
 - TÜİK's download throttle page is no longer reported as `unsupported_download`.
   Table/document downloads run one at a time at least 6 seconds apart
