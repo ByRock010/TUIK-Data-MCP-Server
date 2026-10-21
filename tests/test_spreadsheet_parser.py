@@ -184,3 +184,43 @@ def test_unreadable_workbooks_are_parse_errors(fmt):
     with pytest.raises(ParseError) as error:
         parse_table(b"not a workbook", fmt)
     assert not isinstance(error.value, ValueError)
+
+
+def titled(*rows):
+    return workbook(Tablo=[["Örnek tablo"], ["Sample table"], ["[2025=100]"], *rows])
+
+
+def test_year_range_measurements_are_data_not_headers():
+    # Review regression: 2000 and 2101 are counts, not header years.
+    (table,) = parse_table(titled(["Yıl", "Kişi sayısı"], [2024, 2000], [2025, 2101]), "xlsx")
+    assert (table.layout, table.columns, table.total_rows) == ("table", ["Yıl", "Kişi sayısı"], 2)
+    assert table.rows == [
+        {"Yıl": "2024", "Kişi sayısı": "2000"},
+        {"Yıl": "2025", "Kişi sayısı": "2101"},
+    ]
+    # Years with an empty row-label column stay header labels (population layout).
+    (years,) = parse_table(
+        titled(["İl", "Nüfus", None], [None, 2024, 2025], ["Adana", 10, 11]), "xlsx"
+    )
+    assert years.columns == ["İl", "Nüfus / 2024", "2025"] and years.total_rows == 1
+
+
+@pytest.mark.parametrize(
+    "value,number_format,expected",
+    [
+        (-1.234, "0.0;[Red]-0.00", "-1.23"),
+        (1.234, "0.0;[Red]-0.00", "1.2"),
+        (-1.234, "0.0;(0.000)", "-1.234"),
+        (0, "0.0;-0.0;0.000", "0.000"),
+        (-0.004, "0.0;-0.00", "0.00"),
+    ],
+)
+def test_number_format_section_follows_the_sign(value, number_format, expected):
+    assert render(Cell(value, number_format)) == expected
+
+
+def test_generated_labels_never_overwrite_cells():
+    # Review regression: "A [column 1]" is also a literal source header.
+    (table,) = parse_table(titled(["A", "A", "A [column 1]"], [1.5, 2.5, 3.5]), "xlsx")
+    assert len(set(table.columns)) == len(table.columns) == 3
+    assert sorted(table.rows[0].values()) == ["1.5", "2.5", "3.5"]

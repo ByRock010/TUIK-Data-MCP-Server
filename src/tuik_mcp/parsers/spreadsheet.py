@@ -72,20 +72,19 @@ def render(cell: Cell) -> str:
     if isinstance(value, date):
         return value.isoformat()
     number = float(value)
-    section = number_format_section(cell.number_format)
+    section = number_format_section(cell.number_format, number)
     if not section or section.lower() == "general" or not re.search(r"[0#?]", section):
         return render_general(number)
     if "E+" in section.upper():
         return render_general(number)
-    if "%" in section:
-        number *= 100
+    # Sections format the magnitude; the sign is always rendered as "-", never "(...)".
+    magnitude = abs(number) * (100 if "%" in section else 1)
     match = DECIMALS.search(section)
     decimals = len(match.group(1)) if match else 0
     quantum = Decimal(1).scaleb(-decimals)
-    rendered = Decimal(repr(number)).quantize(quantum, rounding=ROUND_HALF_UP)
-    if rendered == 0:
-        rendered = abs(rendered)
-    return f"{rendered:f}" + ("%" if "%" in section else "")
+    rendered = Decimal(repr(magnitude)).quantize(quantum, rounding=ROUND_HALF_UP)
+    sign = "-" if number < 0 and rendered != 0 else ""
+    return f"{sign}{rendered:f}" + ("%" if "%" in section else "")
 
 
 def render_general(number: float) -> str:
@@ -94,10 +93,20 @@ def render_general(number: float) -> str:
     return format(number, ".10g")
 
 
-def number_format_section(number_format: str) -> str:
-    """First (positive) section of an Excel number format without literals or colors."""
+def number_format_section(number_format: str, value: float = 0.0) -> str:
+    """Section of an Excel number format that applies to `value`, without literals/colors.
+
+    Excel sections are positive;negative;zero; with two sections zero uses the first.
+    """
     cleaned = re.sub(r'"[^"]*"|\\.|\[[^\]]*\]|_.|\*.', "", number_format or "")
-    return cleaned.split(";")[0].strip()
+    sections = cleaned.split(";")
+    if value < 0 and len(sections) > 1:
+        index = 1
+    elif value == 0 and len(sections) > 2:
+        index = 2
+    else:
+        index = 0
+    return sections[index].strip()
 
 
 def header_text(cell: Cell) -> str:
@@ -230,16 +239,7 @@ class TableLayout:
                 r += 1
             else:
                 break
-        first_data = next(
-            (
-                row
-                for row in range(r, footer_start)
-                if any(
-                    (n := cell.number) is not None and not year_like(n) for cell in self.grid[row]
-                )
-            ),
-            None,
-        )
+        first_data = next((row for row in range(r, footer_start) if self.data_row(row)), None)
         if first_data is None:
             return None
         pre_data = []
@@ -260,6 +260,21 @@ class TableLayout:
         return Layout(
             self.blocks, title_rows, annotation_rows, header_rows, first_data, footer_start
         )
+
+    def data_row(self, r: int) -> bool:
+        """A row holding measurements rather than header labels.
+
+        Any number outside 1900–2100 is a measurement. Year-range numbers are header
+        labels (the population table's "2024 / 2025" row) only when the table's first
+        column, which holds row labels, is empty; a filled label column next to
+        numbers marks data whose values happen to fall in that range.
+        """
+        row = self.grid[r]
+        numbers = [c for c, cell in enumerate(row) if cell.number is not None]
+        if any(not year_like(row[c].number) for c in numbers):
+            return True
+        label = self.blocks[0][0] if self.blocks else 0
+        return not row[label].empty and any(c > label for c in numbers)
 
     def annotation(self, r: int) -> bool:
         """Parenthesised notes above the header, e.g. "(Bin kişi - Thousand persons)"."""
@@ -283,6 +298,22 @@ class TableLayout:
             else f"column_{c + 1}"
             for c, label in enumerate(labels)
         ]
+
+
+def unique_labels(labels: list[str]) -> list[str]:
+    """Make every label distinct so no cell is overwritten when rows become dicts."""
+    taken = set(labels)
+    seen: set[str] = set()
+    result = []
+    for label in labels:
+        candidate, n = label, 2
+        # A generated name must not reuse another source label either.
+        while candidate in seen or (candidate != label and candidate in taken):
+            candidate = f"{label} ({n})"
+            n += 1
+        seen.add(candidate)
+        result.append(candidate)
+    return result
 
 
 def label_columns(layout: TableLayout, data_rows: list[int]) -> set[int]:
@@ -345,7 +376,9 @@ def parse_sheet(
         else f"{SECTION_LABEL} [column {table.blocks[b][0] + 1}]"
         for b in section_blocks
     }
-    all_columns = columns + list(section_columns.values())
+    all_columns = unique_labels(columns + list(section_columns.values()))
+    columns = all_columns[: len(columns)]
+    section_columns = dict(zip(section_columns, all_columns[len(columns) :], strict=True))
     unknown = set(filters) - set(all_columns)
     if unknown:
         raise InvalidFiltersError("Use exact column names returned by get_tuik_data")
