@@ -132,9 +132,24 @@ the existing download behavior. If no related dataset is downloadable, existing
 file downloads remain usable; with no files the response is `not_structured`.
 
 The third example is a public foreign-trade CSV verified during development.
-For other resources, use the ID returned by search. `press:` and `flow:` IDs are
-reusable across server restarts. Other IDs are bounded in-memory search handles:
-search again after a restart, expiration (one hour), or cache eviction.
+For other resources, use the ID returned by search. These IDs are reusable across
+server restarts:
+
+| ID | Resource | Resolved by |
+| --- | --- | --- |
+| `press:58298` / `press:58298:metadata` | Bulletin / its metadata page | Bulletin detail |
+| `press:58298:file:<slug>~<digest>` | One file of a bulletin (`download_links[].resource_id`) | Bulletin's current file list |
+| `table:`, `report:`, `publication:<slug>~<digest>` | Downloadable search result | Fresh portal search for the slug |
+| `flow:DF_…+V1.0` | Dataset with public exports | Export catalog |
+
+TÜİK's download URLs change over time, so these file IDs are derived from the exact
+title instead: the slug keeps them readable and is the search text, the digest pins
+the case-sensitive title, and `.2`, `.3`, … separate later files with the same title.
+An ID therefore names "the current file with this title"; it follows TÜİK updates
+and fails with `not_found` if TÜİK removes or renames the file. See
+[ADR 0003](docs/adr/0003-resource-identities.md). Remaining `resource:` and
+`classification:` IDs are bounded in-memory search handles: search again after a
+restart, expiration (one hour), or cache eviction.
 
 `get_tuik_data` returns one of:
 
@@ -324,8 +339,9 @@ for host prerequisites and production security configuration.
 ## Future roadmap
 
 Dataset discovery now searches public export availability and returns catalog-backed
-identities. The next step is automated adapter contract monitoring, followed by
-stable identities for remaining table/publication search handles.
+identities, and downloadable tables, reports, publications and bulletin files have
+title-derived stable IDs. The plan for the next phases is tracked in the roadmap
+issue (#25).
 Later phases may add a PostgreSQL canonical catalog, OpenSearch Turkish full-text
 search, PDF/DOCX/XLSX ingestion, automatic synchronization, revision/version
 tracking, semantic/hybrid search, dataset/document linking, and richer citations

@@ -7,6 +7,7 @@ from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.classification import ClassificationClient
 from tuik_mcp.clients.tuik_portal import TuikPortal, normalize_result
 from tuik_mcp.config import CLASSIFICATION, PORTAL
+from tuik_mcp.identities import FILE_ID, KIND_TYPES, SEARCH_ID, key_parts
 from tuik_mcp.models.common import SearchInput, now
 from tuik_mcp.models.dataset import (
     DataResponse,
@@ -15,7 +16,7 @@ from tuik_mcp.models.dataset import (
     DownloadLink,
     TuikResource,
 )
-from tuik_mcp.models.search import SearchResponse, ThemesResponse
+from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
@@ -175,7 +176,9 @@ class CatalogService:
         cached = self.cache.get("metadata:" + resource_id)
         if cached is not None:
             return cached
-        if resource_id.startswith("press:"):
+        if (match := FILE_ID.fullmatch(resource_id)) is not None:
+            result = await self._bulletin_file(resource_id, match[1])
+        elif resource_id.startswith("press:"):
             result = await self.portal.press(resource_id)
             if result.related_datasets:
                 try:
@@ -206,6 +209,8 @@ class CatalogService:
                 )
         else:
             record = self.cache.get("record:" + resource_id)
+            if record is None and SEARCH_ID.fullmatch(resource_id):
+                record = await self._find_search_record(resource_id)
             if record is None:
                 raise SourceError(
                     "resource_expired",
@@ -223,6 +228,59 @@ class CatalogService:
             )
         self.cache.set("metadata:" + resource_id, result, 3600)
         return result
+
+    async def _bulletin_file(self, resource_id: str, number: str) -> TuikResource:
+        bulletin = await self.resource(f"press:{number}")
+        link = next(
+            (link for link in bulletin.download_links if link.resource_id == resource_id), None
+        )
+        if link is None:
+            raise SourceError(
+                "not_found",
+                "The bulletin no longer lists a file with this ID; inspect the bulletin again",
+                bulletin.source_url,
+            )
+        return TuikResource(
+            id=resource_id,
+            title=link.title,
+            description=f"File of bulletin {bulletin.id}: {bulletin.title}",
+            resource_type="table" if link.format in {"xls", "xlsx", "csv"} else "publication",
+            publication_date=bulletin.publication_date,
+            source_url=bulletin.source_url,
+            available_formats=[link.format] if link.format else [],
+            download_links=[link],
+            notes=(
+                "Resolved from the bulletin's current file list. The download URL changes "
+                "over time; this ID does not."
+            ),
+        )
+
+    async def _find_search_record(self, resource_id: str) -> TuikSearchResult:
+        kind, key = resource_id.split(":", 1)
+        text, _, ordinal = key_parts(key)
+        base_id = resource_id.rsplit(".", 1)[0] if ordinal > 1 else resource_id
+        matches = []
+        # The slug is the search text; the digest picks the exact title among the hits.
+        for page in range(1, 6):
+            data = await self.portal.search_page(text, page, types=[KIND_TYPES[kind]])
+            for item in data.data:
+                try:
+                    result = normalize_result(item)
+                except ValueError:
+                    continue
+                if result.id == base_id:
+                    matches.append(result)
+            if len(matches) >= ordinal or not data.data or page * 10 >= data.total:
+                break
+        if len(matches) < ordinal:
+            raise SourceError(
+                "not_found",
+                f"No current TÜİK {kind} matches this ID; search again",
+                f"{PORTAL}/tr/search?" + urlencode({"q": text}),
+            )
+        record = matches[ordinal - 1].model_copy(update={"id": resource_id})
+        self.remember(record)
+        return record
 
     async def data(
         self, resource_id: str, filters: dict[str, str] | None = None, limit: int = 100
