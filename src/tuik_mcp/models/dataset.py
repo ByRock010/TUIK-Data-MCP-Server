@@ -12,6 +12,8 @@ class DownloadLink(BaseModel):
     format: str | None = None
     verified: bool = False
     size_bytes: int | None = None
+    # Reusable ID of a bulletin file; the download URL itself changes over time.
+    resource_id: str | None = None
 
 
 class MetadataSection(BaseModel):

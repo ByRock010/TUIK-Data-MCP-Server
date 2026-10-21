@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Stable, title-derived IDs for downloadable tables (`table:`), reports
+  (`report:`), publications (`publication:`) and bulletin files
+  (`press:<id>:file:<key>`, in `download_links[].resource_id`). They resolve in a
+  fresh server session by re-reading the bulletin or searching for the title;
+  download URLs change over time (ADR 0003, #27).
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
 - Weekly, optional live contract checks with JSON/JUnit/log artifacts, deduplicated

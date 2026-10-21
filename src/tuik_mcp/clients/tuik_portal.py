@@ -4,12 +4,13 @@ import re
 import time
 import zipfile
 from io import BytesIO
-from urllib.parse import quote, unquote, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 import httpx
 from pydantic import BaseModel, Field, ValidationError
 
 from tuik_mcp.config import PORTAL
+from tuik_mcp.identities import file_keys, search_id
 from tuik_mcp.models.dataset import DownloadLink, MetadataSection, RelatedDataset, TuikResource
 from tuik_mcp.models.search import Theme, TuikSearchResult
 from tuik_mcp.parsers.errors import InvalidFiltersError, ParseError
@@ -80,6 +81,7 @@ def envelope(payload, url):
 
 def normalize_result(item: SearchItem) -> TuikSearchResult:
     url = official_url(item.url)
+    title = plain_text(item.title) or item.title
     kind = {
         1: "bulletin",
         2: "table",
@@ -90,9 +92,11 @@ def normalize_result(item: SearchItem) -> TuikSearchResult:
     }.get(item.type, "unknown")
     if item.icon == "dataflow":
         kind = "dataset"
+    # Download URLs change over time; downloadable tables/reports/publications get title IDs.
+    stable = search_id(item.type, title) if TuikPortal.is_download(url) else None
     return TuikSearchResult(
-        id=resource_id(url),
-        title=plain_text(item.title) or item.title,
+        id=stable or resource_id(url),
+        title=title,
         description=plain_text(item.content),
         resource_type=kind,
         publication_date=item.date,
@@ -144,7 +148,9 @@ class TuikPortal:
         self._download_slot = asyncio.Lock()
         self._next_download = 0.0
 
-    async def search_page(self, query: str, page: int) -> SearchPage:
+    async def search_page(
+        self, query: str, page: int, types: list[int] | None = None
+    ) -> SearchPage:
         url = f"{PORTAL}/api/tr/data/search"
         payload = await self.http.json(
             "POST",
@@ -152,7 +158,7 @@ class TuikPortal:
             json={
                 "text": query,
                 "page": page,
-                "typeIds": [],
+                "typeIds": types or [],
                 "categoryIds": [],
                 "subCategoryIds": [],
                 "years": [],
@@ -267,6 +273,15 @@ class TuikPortal:
                         )
                     )
             except (ValueError, KeyError):
+                continue
+        # The same title can appear as a bulletin table (t=t) and a longer statistical
+        # table (t=i); these are different files, so the list parameter is the discriminator.
+        lists = [parse_qs(urlsplit(link.source_url).query).get("t", [""])[0] for link in links]
+        keys = file_keys([(link.title, kind) for link, kind in zip(links, lists, strict=True)])
+        for link, key in zip(links, keys, strict=True):
+            try:
+                link.resource_id = validate_id(f"press:{number}:file:{key}")
+            except ValueError:
                 continue
         related = {}
         for entry in press.tables + press.statisticalTables:
