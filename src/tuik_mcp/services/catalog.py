@@ -16,6 +16,7 @@ from tuik_mcp.models.dataset import (
     TuikResource,
 )
 from tuik_mcp.models.search import SearchResponse, ThemesResponse
+from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 
@@ -296,9 +297,10 @@ class CatalogService:
                     "this MVP; limit does not truncate the file."
                 ),
             )
-        columns, rows, total = await asyncio.to_thread(
-            self.portal.csv_rows, body, verified.source_url, limit, filters
+        (table,) = await parse_source_in_thread(
+            body, "csv", verified.source_url, limit=limit, filters=filters
         )
+        columns, rows, total = table.columns, table.rows, table.total_rows
         base["source_url"] = verified.source_url
         return DataResponse(
             **base,

@@ -34,6 +34,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Parser errors are translated at one service boundary into source error codes
+  (`parse_failed`, `invalid_filters`, `unsupported_download`; CSV keeps
+  `malformed_response`), so file problems are never reported as `invalid_input` (#39).
 - Bulletin dataflows retain category paths at every depth. Catalog outages preserve
   bulletin metadata without caching unconfirmed availability, and unavailable
   related datasets no longer prevent existing file downloads (#26).

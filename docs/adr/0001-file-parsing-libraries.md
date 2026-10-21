@@ -52,3 +52,15 @@ loop responsive but is not a hard CPU or memory sandbox; parser cost limits,
 parsed-result caching and cancellation policy remain the separate #9 scope.
 Spreadsheet heuristics and PDF extraction remain #5 and #7, with real fixtures
 from #4; this foundation does not claim those formats are implemented.
+
+## Update — parser error boundary (#39)
+
+`services/parsing.py` is now the only place where the service calls parsers. It
+runs them in a worker thread and translates parser errors into `SourceError`s that
+cite the file's URL: `InvalidFiltersError` → `invalid_filters`,
+`UnsupportedFormatError` → `unsupported_download`, other `ParseError`s →
+`parse_failed` (`malformed_response` for CSV, the code CSV responses always used).
+`TuikPortal.csv_rows` was removed. As a safety net, `respond()` reports an
+untranslated `ParseError` as `parse_failed`. Caller input errors stay
+`ValueError` → `invalid_input`.
+
