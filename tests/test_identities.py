@@ -220,3 +220,21 @@ async def test_resolution_is_bounded_to_five_search_pages():
         assert error["code"] == "not_found" and len(requests) == 5
     finally:
         await http.close()
+
+
+@pytest.mark.parametrize("type_id,kind", [(2, "table"), (4, "report"), (6, "publication")])
+async def test_each_search_kind_resolves_with_its_type_filter(type_id, kind):
+    title = "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması"
+    items = [
+        {"title": title, "url": DOWNLOAD + f"type{other}", "type": other} for other in (2, 4, 6)
+    ]
+    requests = []
+    http, fresh = service(search_handler(items, requests))
+    try:
+        resource_id = search_id(type_id, title)
+        assert resource_id.startswith(f"{kind}:")
+        resolved = await fresh().resource(resource_id)
+        assert requests[0]["typeIds"] == [type_id]
+        assert resolved.download_links[0].source_url.endswith(f"type{type_id}")
+    finally:
+        await http.close()
