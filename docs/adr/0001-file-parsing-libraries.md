@@ -20,13 +20,15 @@ fail explicitly. Parsing has no network access and source text stays data.
 
 Move the existing UTF-8/BOM CSV implementation to `parsers/csv.py`, preserving
 delimiter detection, validation, exact string filters, errors and row limits.
-Keep `TuikPortal.csv_rows` as a compatibility/error translation wrapper. The
-asynchronous service invokes it through `asyncio.to_thread` so parsing does not
-block the MCP event loop. New async callers must also offload registry calls.
+The service calls parsers only through `services/parsing.py` (#39), which runs
+them via `asyncio.to_thread` so parsing does not block the MCP event loop.
 Parser failures derive from `Exception`, not `ValueError`, so malformed upstream
 files and unsupported formats cannot be mistaken for invalid MCP caller input.
-Service/adapter boundaries must translate them to `SourceError`; the existing
-CSV wrapper preserves its `malformed_response` and `invalid_filters` codes.
+That boundary translates them to `SourceError`s citing the file URL:
+`InvalidFiltersError` → `invalid_filters`, `UnsupportedFormatError` →
+`unsupported_download`, other `ParseError`s → `parse_failed` (`malformed_response`
+for CSV, as before). `respond()` reports an untranslated `ParseError` as
+`parse_failed`; caller input errors stay `invalid_input`.
 
 For later ingestion features choose:
 
@@ -52,15 +54,3 @@ loop responsive but is not a hard CPU or memory sandbox; parser cost limits,
 parsed-result caching and cancellation policy remain the separate #9 scope.
 Spreadsheet heuristics and PDF extraction remain #5 and #7, with real fixtures
 from #4; this foundation does not claim those formats are implemented.
-
-## Update — parser error boundary (#39)
-
-`services/parsing.py` is now the only place where the service calls parsers. It
-runs them in a worker thread and translates parser errors into `SourceError`s that
-cite the file's URL: `InvalidFiltersError` → `invalid_filters`,
-`UnsupportedFormatError` → `unsupported_download`, other `ParseError`s →
-`parse_failed` (`malformed_response` for CSV, the code CSV responses always used).
-`TuikPortal.csv_rows` was removed. As a safety net, `respond()` reports an
-untranslated `ParseError` as `parse_failed`. Caller input errors stay
-`ValueError` → `invalid_input`.
-
