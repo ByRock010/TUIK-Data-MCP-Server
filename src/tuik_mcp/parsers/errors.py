@@ -8,3 +8,7 @@ class InvalidFiltersError(ParseError):
 
 class UnsupportedFormatError(ParseError):
     """No parser has been registered for this file format."""
+
+
+class ParseLimitError(ParseError):
+    """The file exceeds a configured parsing budget."""

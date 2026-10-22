@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Configurable spreadsheet input budgets, XLSX archive/grid preflight and a byte-bounded
+  one-hour file/parsed-table cache. Worker cancellation retains the parsing slot until
+  the worker finishes; parser budget failures report `parse_limit_exceeded` (#9).
+
 - Stable, title-derived IDs for downloadable tables (`table:`), reports
   (`report:`), publications (`publication:`) and bulletin files
   (`press:<id>:file:<key>`, in `download_links[].resource_id`). They resolve in a
@@ -43,6 +47,9 @@ All notable changes to this project are documented here. The format follows
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed
+
+- XLSX preflight counts optional cell coordinates within each row instead of
+  accumulating columns across the worksheet, preserving correct cell-budget checks (#9).
 
 - Parser errors are translated at one service boundary into source error codes
   (`parse_failed`, `invalid_filters`, `unsupported_download`; CSV keeps

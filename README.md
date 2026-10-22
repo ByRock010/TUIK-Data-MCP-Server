@@ -202,6 +202,16 @@ including concurrent calls, and retain its retrieval timestamp. Large files are 
 Cache hits retain the
 original source retrieval timestamp where applicable. Caches are process-local.
 
+File parsing has configurable sheet/cell limits and an XLSX uncompressed-size
+preflight (see `.env.example`). XLSX dimensions are checked against actual XML
+coordinates, then rows are counted again during read-only loading. File parsing
+services share a 32 MiB payload-byte cache of one-hour downloads and parsed results;
+keys include stable resource identity and content SHA-256. Limits and cache wiring
+for each MCP file-reading path ship with that tool integration (#6, #7).
+Workers run off the event loop, one at a time; cancellation waits for the active
+worker to finish. Input budgets limit ordinary workloads; they are not a hard CPU
+or process-memory sandbox for malicious library inputs.
+
 ## Tests and live verification
 
 ```bash

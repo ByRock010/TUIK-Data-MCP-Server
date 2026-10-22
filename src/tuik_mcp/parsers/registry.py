@@ -1,5 +1,6 @@
 from .csv import parse_csv
 from .errors import UnsupportedFormatError
+from .limits import ParseLimits
 from .models import DocumentPage, ParsedTable
 from .spreadsheet import parse_spreadsheet
 
@@ -11,6 +12,7 @@ def parse_table(
     limit: int | None = None,
     filters: dict[str, str] | None = None,
     sheet: str | None = None,
+    budgets: ParseLimits | None = None,
 ) -> list[ParsedTable]:
     """Parse locally; async callers must offload this synchronous function to a thread.
 
@@ -24,7 +26,9 @@ def parse_table(
     if fmt == "csv":
         return parse_csv(body, limit=limit, filters=filters)
     if fmt in {"xls", "xlsx"}:
-        return parse_spreadsheet(body, fmt, limit=limit, filters=filters, sheet=sheet)
+        return parse_spreadsheet(
+            body, fmt, limit=limit, filters=filters, sheet=sheet, budgets=budgets
+        )
     raise UnsupportedFormatError(f"No table parser for format: {fmt}")
 
 
