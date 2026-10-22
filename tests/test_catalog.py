@@ -92,10 +92,10 @@ async def test_cache_and_data_download(catalog):
     await service.search("İŞSİZLİK")
     assert len(calls) == 1
     data = await service.data(result.results[0].id)
-    assert data.status == "download_available"
+    assert data.status == "ok"
     assert data.download_links[0].verified
     assert data.download_links[0].format == "xls"
-    assert data.source_url and data.rows == []
+    assert data.source_url and data.rows
     before = len(calls)
     await service.data(result.results[0].id)
     assert len(calls) == before

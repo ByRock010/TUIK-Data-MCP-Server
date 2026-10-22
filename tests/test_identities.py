@@ -14,7 +14,7 @@ from tuik_mcp.utils.normalization import plain_text as plain
 from tuik_mcp.utils.normalization import validate_id
 
 FIXTURES = Path(__file__).parent / "fixtures"
-XLS = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"test fixture"
+XLS = (FIXTURES / "files/labour-basic.xls").read_bytes()
 DOWNLOAD = f"{PORTAL}/api/tr/data/downloads?t=i&p="
 
 
@@ -138,7 +138,7 @@ async def test_bulletin_files_resolve_in_a_fresh_session():
         )
         assert resolved.source_url.endswith("/tr/press/57987")
         data = await fresh().data(link.resource_id)
-        assert data.status == "download_available" and data.download_links[0].verified
+        assert data.status == "ok" and data.download_links[0].verified
         missing = link.resource_id.split("~")[0] + "~0000000000"
         error = await respond(fresh().resource(missing))
         assert error["status"] == "error" and error["code"] == "not_found"
@@ -204,7 +204,7 @@ async def test_search_kinds_resolve_in_a_fresh_session():
         assert requests[0]["typeIds"] == [2]
         assert requests[0]["text"] == "cinsiyete göre genç işsizlik oranı"
         data = await fresh().data(lower)
-        assert data.status == "download_available" and data.resource_id == lower
+        assert data.status == "ok" and data.resource_id == lower
         error = await respond(fresh().resource(lower + ".3"))
         assert error["code"] == "not_found" and "/tr/search?" in error["source_url"]
     finally:

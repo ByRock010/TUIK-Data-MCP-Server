@@ -74,3 +74,37 @@ async def test_live_back_to_back_bulletin_downloads():
             assert verified.verified and body
     finally:
         await http.close()
+
+
+@pytest.mark.live
+async def test_live_cpi_spreadsheet_and_xls_only_bulletin_rows():
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        resource = await service.resource("press:58298")
+        link = next(
+            link
+            for link in resource.download_links
+            if link.title == "Tüketici fiyat endeksi ve değişim oranları"
+        )
+        data = await service.data(link.resource_id, limit=2)
+        assert data.status == "ok" and len(data.rows) == 2
+        assert data.unit == "2025=100" and data.sheet and data.table_title
+        assert data.extraction == "xls" and data.total_rows >= 22
+        before = data.retrieved_at
+        assert (await service.data(link.resource_id, limit=1)).retrieved_at == before
+        # #6's old press:54072 example advertises a first file that now returns 404.
+        # This current XLS-only population bulletin exercises the same direct-bulletin path.
+        population = await service.data("press:53899", limit=2)
+        assert population.status == "ok" and population.rows and population.extraction == "xls"
+        assert population.total_rows == 82
+        labour = await service.resource("press:57987")
+        file = next(
+            link
+            for link in labour.download_links
+            if link.title == "Temel işgücü göstergeleri (15+ yaş)"
+        )
+        rows = await service.data(file.resource_id, limit=2)
+        assert rows.status == "ok" and rows.rows and rows.unit == "15+ yaş - age"
+    finally:
+        await http.close()

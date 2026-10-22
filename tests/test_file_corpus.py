@@ -120,7 +120,7 @@ async def test_data_response_verifies_mislabeled_xlsx(catalog, monkeypatch):
 
     monkeypatch.setattr(service.portal, "_fetch_file", fetch_file)
     data = await service.data("press:57987")
-    assert data.status == "download_available"
+    assert data.status == "ok"
     assert data.download_links[0].format == "xlsx" and data.download_links[0].verified
 
 

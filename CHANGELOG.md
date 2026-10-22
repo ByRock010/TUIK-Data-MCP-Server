@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `get_tuik_data` reads verified XLS/XLSX files into bounded rows with sheet selection,
+  exact filters, units, titles, source notes, layout warnings and file provenance.
+  Bulletin dataflow CSV choices still take precedence; file IDs select Excel explicitly (#6).
+
 - Configurable spreadsheet input budgets, XLSX archive/grid preflight and a byte-bounded
   one-hour file/parsed-table cache. Worker cancellation retains the parsing slot until
   the worker finishes; parser budget failures report `parse_limit_exceeded` (#9).

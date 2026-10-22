@@ -42,7 +42,7 @@ async def catalog():
         if path.endswith("/downloads"):
             return httpx.Response(
                 200,
-                content=b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"test fixture",
+                content=(FIXTURES / "files/labour-basic.xls").read_bytes(),
                 headers={"content-type": "application/vnd.ms-excel"},
             )
         if path.endswith("/statistical-themes"):
