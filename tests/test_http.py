@@ -7,6 +7,7 @@ from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.tuik_portal import TuikPortal
 from tuik_mcp.config import PORTAL, Settings
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.services.parsing import parse_source
 
 
 async def test_timeout_retries(monkeypatch):
@@ -134,4 +135,4 @@ async def test_unapproved_result_is_omitted():
 @pytest.mark.parametrize("body", [b"a;a\n1;2\n", b"a;b\n1;2;3\n", b"a;b\n1\n", b"\xff\xff"])
 def test_malformed_csv(body):
     with pytest.raises(SourceError):
-        TuikPortal.csv_rows(body, PORTAL, 10, {})
+        parse_source(body, "csv", PORTAL, limit=10)

@@ -1,0 +1,74 @@
+[
+  {
+    "key": "cpi-index",
+    "resource_id": "press:58298",
+    "file_title": "Tüketici fiyat endeksi ve değişim oranları",
+    "theme_query": "Tüketici Fiyat Endeksi"
+  },
+  {
+    "key": "cpi-weights",
+    "resource_id": "press:58298",
+    "file_title": "Ana harcama gruplarına göre ağırlıklar, tüketici fiyat endeksi (TÜFE) ve değişim oranları",
+    "theme_query": "Tüketici Fiyat Endeksi"
+  },
+  {
+    "key": "cpi-basket",
+    "resource_id": "press:58298",
+    "file_title": "Tüketici fiyat endeksi (TÜFE) mal ve hizmet sepeti ve ağırlıklar",
+    "theme_query": "Tüketici Fiyat Endeksi"
+  },
+  {
+    "key": "labour-basic",
+    "resource_id": "press:57987",
+    "file_title": "Temel işgücü göstergeleri (15+ yaş)",
+    "theme_query": "İşgücü İstatistikleri"
+  },
+  {
+    "key": "labour-adjusted",
+    "resource_id": "press:57987",
+    "file_title": "Mevsim etkisinden arındırılmış temel işgücü göstergeleri (15+ yaş)",
+    "theme_query": "İşgücü İstatistikleri"
+  },
+  {
+    "key": "foreign-trade",
+    "resource_id": "press:58239",
+    "file_title": "Genel ticaret sistemine göre yıllara ve aylara göre dış ticaret, 2013-2026",
+    "theme_query": "Dış Ticaret İstatistikleri"
+  },
+  {
+    "key": "population",
+    "resource_id": "press:53899",
+    "file_title": "İllere göre il/ilçe merkezi, belde/köy nüfusu ve yıllık nüfus artış hızı",
+    "theme_query": "Adrese Dayalı Nüfus Kayıt Sistemi"
+  },
+  {
+    "key": "gdp",
+    "resource_id": "press:58211",
+    "file_title": "Gayrisafi yurtiçi hasıla, iktisadi faaliyet kollarına (A10) göre zincirlenmiş hacim, endeks ve değişim oranları (2009=100)",
+    "theme_query": "Dönemsel Gayrisafi Yurt İçi Hasıla"
+  },
+  {
+    "key": "housing",
+    "resource_id": "press:58350",
+    "file_title": "Yabancılara Yapılan Konut Satış Sayıları",
+    "theme_query": "Konut Satış İstatistikleri"
+  },
+  {
+    "key": "industry",
+    "resource_id": "press:58196",
+    "file_title": "Bölümlerin Üst Grup Endeks Değişimine Etkisi (2021=100)",
+    "theme_query": "Sanayi Üretim Endeksi"
+  },
+  {
+    "key": "labour-methodology",
+    "resource_id": "press:57987",
+    "file_title": "Metodolojik açıklama dokümanı",
+    "theme_query": "İşgücü İstatistikleri"
+  },
+  {
+    "key": "ict-publication",
+    "query": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması",
+    "title": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026",
+    "theme_query": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması"
+  }
+]

@@ -8,9 +8,19 @@ version = "0.1.0"
 description = "MCP access to public TÜİK statistical resources"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["mcp>=1.26,<2", "httpx>=0.28,<1", "pydantic>=2.11,<3", "beautifulsoup4>=4.13,<5"]
+dependencies = [
+  "mcp>=1.26,<2",
+  "httpx>=0.28,<1",
+  "pydantic>=2.11,<3",
+  "beautifulsoup4>=4.13,<5",
+  "xlrd>=2,<3",
+  "openpyxl>=3.1,<4",
+  "pdfplumber>=0.11,<1",
+]
 
 [project.optional-dependencies]
+search = ["opensearch-py>=3,<4"]
+fixtures = []  # Compatibility extra; all corpus readers are now runtime dependencies.
 dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 
 [project.scripts]

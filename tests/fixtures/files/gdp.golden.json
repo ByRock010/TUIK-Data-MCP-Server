@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "sha256": "c7a8caa8ceff2f55f333b2da20db83c5b627dd65ed1342530800595b61cef283",
+  "format": "xls",
+  "sheet": "T2",
+  "sheets": [
+    "T2"
+  ],
+  "title": "Gayrisafi yurt içi hasıla, iktisadi faaliyet kollarına göre A10 düzeyinde zincirlenmiş hacim, endeks ve değişim oranları, II. Çeyrek: Nisan-Haziran, 2026",
+  "title_en": "Gross domestic product in chain linked volume, index and percentage change, by kind of economic activity A10 level, Quarter II: April-June, 2026",
+  "unit": "2009=100",
+  "columns": [
+    "İktisadi faaliyet kolları Kind of economic activity (NACE Rev.2)",
+    "Yıl Year",
+    "Hacim (Bin TL) Volume (Thousand TRY) / Yıllık Annual",
+    "Çeyrek Quarter / I [column 4]",
+    "II [column 5]",
+    "III [column 6]",
+    "IV [column 7]",
+    "column_8",
+    "Endeks Index / Yıllık Annual",
+    "Çeyrek Quarter / I [column 10]",
+    "II [column 11]",
+    "III [column 12]",
+    "IV [column 13]",
+    "column_14",
+    "Bir önceki yılın aynı çeyreğine göre değişim oranı Percentage change compared to same period in previous year (%) / Yıllık Annual",
+    "Çeyrek Quarter / I [column 16]",
+    "II [column 17]",
+    "III [column 18]",
+    "IV [column 19]",
+    "column_20",
+    "column_21",
+    "column_22",
+    "column_23",
+    "column_24",
+    "column_25"
+  ],
+  "header_rows": [
+    3,
+    4,
+    5
+  ],
+  "first_row_indices": [
+    7,
+    8
+  ],
+  "first_rows": [
+    {
+      "İktisadi faaliyet kolları Kind of economic activity (NACE Rev.2)": "Gayrisafi yurt içi hasıla (alıcı fiyatlarıyla)",
+      "Yıl Year": "2024(r)",
+      "Hacim (Bin TL) Volume (Thousand TRY) / Yıllık Annual": "2340489333",
+      "Çeyrek Quarter / I [column 4]": "525475817",
+      "II [column 5]": "552501309",
+      "III [column 6]": "624730298",
+      "IV [column 7]": "637781909",
+      "column_8": "",
+      "Endeks Index / Yıllık Annual": "230.9",
+      "Çeyrek Quarter / I [column 10]": "207.4",
+      "II [column 11]": "218.1",
+      "III [column 12]": "246.6",
+      "IV [column 13]": "251.7",
+      "column_14": "",
+      "Bir önceki yılın aynı çeyreğine göre değişim oranı Percentage change compared to same period in previous year (%) / Yıllık Annual": "3.5",
+      "Çeyrek Quarter / I [column 16]": "5.4",
+      "II [column 17]": "2.4",
+      "III [column 18]": "3.0",
+      "IV [column 19]": "3.3",
+      "column_20": "",
+      "column_21": "",
+      "column_22": "",
+      "column_23": "",
+      "column_24": "",
+      "column_25": ""
+    },
+    {
+      "İktisadi faaliyet kolları Kind of economic activity (NACE Rev.2)": "Gross domestic product (purchaser's price)",
+      "Yıl Year": "2025(r)",
+      "Hacim (Bin TL) Volume (Thousand TRY) / Yıllık Annual": "2427965111",
+      "Çeyrek Quarter / I [column 4]": "539021478",
+      "II [column 5]": "579269267",
+      "III [column 6]": "649308680",
+      "IV [column 7]": "660365687",
+      "column_8": "",
+      "Endeks Index / Yıllık Annual": "239.6",
+      "Çeyrek Quarter / I [column 10]": "212.7",
+      "II [column 11]": "228.6",
+      "III [column 12]": "256.3",
+      "IV [column 13]": "260.6",
+      "column_14": "",
+      "Bir önceki yılın aynı çeyreğine göre değişim oranı Percentage change compared to same period in previous year (%) / Yıllık Annual": "3.7",
+      "Çeyrek Quarter / I [column 16]": "2.6",
+      "II [column 17]": "4.8",
+      "III [column 18]": "3.9",
+      "IV [column 19]": "3.5",
+      "column_20": "",
+      "column_21": "",
+      "column_22": "",
+      "column_23": "",
+      "column_24": "",
+      "column_25": ""
+    }
+  ],
+  "notes": [
+    "TÜİK, Dönemsel Gayrisafi Yurt İçi Hasıla, II. Çeyrek: Nisan-Haziran, 2026",
+    "TurkStat, Quarterly Gross Domestic Product, Quarter II: April-June, 2026",
+    "(r) İlgili çeyrekler revize edilmiştir.",
+    "(r) Figures were revised for the quarters."
+  ],
+  "source_note": "TÜİK, Dönemsel Gayrisafi Yurt İçi Hasıla, II. Çeyrek: Nisan-Haziran, 2026",
+  "source_shape": [
+    72,
+    25
+  ],
+  "last_nonempty_row": 68,
+  "merged_ranges": [
+    [
+      0,
+      1,
+      0,
+      19
+    ],
+    [
+      1,
+      2,
+      0,
+      19
+    ],
+    [
+      2,
+      3,
+      0,
+      19
+    ],
+    [
+      3,
+      4,
+      2,
+      7
+    ],
+    [
+      3,
+      4,
+      8,
+      13
+    ],
+    [
+      3,
+      4,
+      14,
+      19
+    ],
+    [
+      3,
+      6,
+      0,
+      1
+    ],
+    [
+      3,
+      6,
+      1,
+      2
+    ],
+    [
+      4,
+      5,
+      3,
+      7
+    ],
+    [
+      4,
+      5,
+      9,
+      13
+    ],
+    [
+      4,
+      5,
+      15,
+      19
+    ],
+    [
+      47,
+      49,
+      0,
+      1
+    ],
+    [
+      49,
+      51,
+      0,
+      1
+    ]
+  ],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "İktisadi faaliyet kolları \nKind of economic activity\n(NACE Rev.2)",
+        "Yıl\nYear",
+        "Hacim (Bin TL)\nVolume (Thousand TRY)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Endeks\nIndex",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Bir önceki yılın aynı çeyreğine göre değişim oranı\nPercentage change compared to same period in previous year\n    (%)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "",
+        "",
+        "",
+        "Çeyrek\nQuarter",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Çeyrek\nQuarter",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Çeyrek \n Quarter",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "",
+        "",
+        "Yıllık\nAnnual",
+        "I",
+        "II",
+        "III",
+        "IV",
+        "",
+        "Yıllık\nAnnual",
+        "I",
+        "II",
+        "III",
+        "IV",
+        "",
+        "Yıllık\nAnnual",
+        "I",
+        "II",
+        "III",
+        "IV",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 7,
+      "values": [
+        "Gayrisafi yurt içi hasıla (alıcı fiyatlarıyla)",
+        "2024(r)",
+        2340489333.3518443,
+        525475817.3145519,
+        552501309.3486152,
+        624730298.0691394,
+        637781908.6195377,
+        "",
+        230.9290263909013,
+        207.38845873846242,
+        218.0545540275591,
+        246.56102026903136,
+        251.71207252855234,
+        "",
+        3.4756778638417956,
+        5.4310134688580405,
+        2.4200768906881507,
+        2.964050504773013,
+        3.3222848911837133,
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "row": 8,
+      "values": [
+        "Gross domestic product (purchaser's price)",
+        "2025(r)",
+        2427965110.90384,
+        539021478.1168686,
+        579269266.5671076,
+        649308679.5418117,
+        660365686.6780522,
+        "",
+        239.55999763909742,
+        212.73449679353976,
+        228.61900858132057,
+        256.26131947205295,
+        260.6251657094764,
+        "",
+        3.737499517962803,
+        2.5777895682320633,
+        4.844867652902238,
+        3.9342387504875234,
+        3.5409875622524964,
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 7,
+      "column": 2,
+      "value": 2340489333.3518443,
+      "number_format": "###\\ ###\\ ###\\ ###\\ ###",
+      "rendered": "2340489333"
+    },
+    {
+      "row": 7,
+      "column": 3,
+      "value": 525475817.3145519,
+      "number_format": "###\\ ###\\ ###\\ ###\\ ###",
+      "rendered": "525475817"
+    },
+    {
+      "row": 7,
+      "column": 4,
+      "value": 552501309.3486152,
+      "number_format": "###\\ ###\\ ###\\ ###\\ ###",
+      "rendered": "552501309"
+    },
+    {
+      "row": 7,
+      "column": 5,
+      "value": 624730298.0691394,
+      "number_format": "###\\ ###\\ ###\\ ###\\ ###",
+      "rendered": "624730298"
+    },
+    {
+      "row": 7,
+      "column": 6,
+      "value": 637781908.6195377,
+      "number_format": "###\\ ###\\ ###\\ ###\\ ###",
+      "rendered": "637781909"
+    },
+    {
+      "row": 7,
+      "column": 8,
+      "value": 230.9290263909013,
+      "number_format": "#,##0.0",
+      "rendered": "230.9"
+    },
+    {
+      "row": 7,
+      "column": 9,
+      "value": 207.38845873846242,
+      "number_format": "#,##0.0",
+      "rendered": "207.4"
+    },
+    {
+      "row": 7,
+      "column": 10,
+      "value": 218.0545540275591,
+      "number_format": "#,##0.0",
+      "rendered": "218.1"
+    },
+    {
+      "row": 7,
+      "column": 11,
+      "value": 246.56102026903136,
+      "number_format": "#,##0.0",
+      "rendered": "246.6"
+    },
+    {
+      "row": 7,
+      "column": 12,
+      "value": 251.71207252855234,
+      "number_format": "#,##0.0",
+      "rendered": "251.7"
+    },
+    {
+      "row": 7,
+      "column": 14,
+      "value": 3.4756778638417956,
+      "number_format": "#,##0.0",
+      "rendered": "3.5"
+    },
+    {
+      "row": 7,
+      "column": 15,
+      "value": 5.4310134688580405,
+      "number_format": "#,##0.0",
+      "rendered": "5.4"
+    }
+  ]
+}

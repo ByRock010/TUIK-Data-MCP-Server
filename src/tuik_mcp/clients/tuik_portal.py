@@ -1,13 +1,19 @@
-import csv
-import io
-from urllib.parse import quote, urlsplit
+import asyncio
+import math
+import re
+import time
+import zipfile
+from io import BytesIO
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
+import httpx
 from pydantic import BaseModel, Field, ValidationError
 
 from tuik_mcp.config import PORTAL
-from tuik_mcp.models.dataset import DownloadLink, MetadataSection, TuikResource
+from tuik_mcp.identities import file_keys, search_id
+from tuik_mcp.models.dataset import DownloadLink, MetadataSection, RelatedDataset, TuikResource
 from tuik_mcp.models.search import Theme, TuikSearchResult
-from tuik_mcp.utils.normalization import official_url, plain_text, resource_id
+from tuik_mcp.utils.normalization import official_url, plain_text, resource_id, validate_id
 
 from .base import HttpClient, SourceError
 
@@ -73,6 +79,7 @@ def envelope(payload, url):
 
 def normalize_result(item: SearchItem) -> TuikSearchResult:
     url = official_url(item.url)
+    title = plain_text(item.title) or item.title
     kind = {
         1: "bulletin",
         2: "table",
@@ -83,9 +90,11 @@ def normalize_result(item: SearchItem) -> TuikSearchResult:
     }.get(item.type, "unknown")
     if item.icon == "dataflow":
         kind = "dataset"
+    # Download URLs change over time; downloadable tables/reports/publications get title IDs.
+    stable = search_id(item.type, title) if TuikPortal.is_download(url) else None
     return TuikSearchResult(
-        id=resource_id(url),
-        title=plain_text(item.title) or item.title,
+        id=stable or resource_id(url),
+        title=title,
         description=plain_text(item.content),
         resource_type=kind,
         publication_date=item.date,
@@ -93,11 +102,53 @@ def normalize_result(item: SearchItem) -> TuikSearchResult:
     )
 
 
+THROTTLE_MARKER = b"tekrar dosya indirebilirsiniz"
+COUNTDOWN = re.compile(rb"\blet\s+time\s*=\s*(\d{1,3})\s*;")
+
+
+def file_format(body: bytes, mime: str) -> str | None:
+    if body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return "xls"
+    if body.startswith(b"PK\x03\x04"):
+        # Official XLS links sometimes serve OOXML with an XLS media type.
+        # Inspect directory names only; never extract or decompress entries.
+        try:
+            with zipfile.ZipFile(BytesIO(body)) as archive:
+                if {"[Content_Types].xml", "xl/workbook.xml"} <= set(archive.namelist()):
+                    return "xlsx"
+        except zipfile.BadZipFile:
+            pass
+        return "zip"
+    if body.startswith(b"%PDF-"):
+        return "pdf"
+    if mime in {"text/csv", "application/csv"} and body:
+        return "csv"
+    return None
+
+
+def throttle_wait(body: bytes, default: float) -> float | None:
+    """Seconds to wait when TÜİK returned its download throttle page instead of a file."""
+    if (
+        len(body) > 64 * 1024
+        or not body.lstrip()[:15].lower().startswith((b"<!doctype html", b"<html"))
+        or THROTTLE_MARKER not in body
+    ):
+        return None
+    match = COUNTDOWN.search(body)
+    wait = int(match.group(1)) + 1.0 if match else default
+    # The page reloads when its countdown ends; bound it so a changed page cannot stall calls.
+    return min(60.0, max(1.0, wait))
+
+
 class TuikPortal:
     def __init__(self, http: HttpClient):
         self.http = http
+        self._download_slot = asyncio.Lock()
+        self._next_download = 0.0
 
-    async def search_page(self, query: str, page: int) -> SearchPage:
+    async def search_page(
+        self, query: str, page: int, types: list[int] | None = None
+    ) -> SearchPage:
         url = f"{PORTAL}/api/tr/data/search"
         payload = await self.http.json(
             "POST",
@@ -105,7 +156,7 @@ class TuikPortal:
             json={
                 "text": query,
                 "page": page,
-                "typeIds": [],
+                "typeIds": types or [],
                 "categoryIds": [],
                 "subCategoryIds": [],
                 "years": [],
@@ -166,6 +217,34 @@ class TuikPortal:
             notes="\n".join(flow.footnotes) or None,
         )
 
+    @staticmethod
+    def related_dataset(entry: dict) -> RelatedDataset | None:
+        if entry.get("type") != "dataflow":
+            return None
+        if not isinstance(entry.get("url"), str):
+            return None
+        try:
+            url = official_url(entry["url"])
+            parsed = urlsplit(url)
+            if parsed.hostname != "databrowser2.tuik.gov.tr" or parsed.scheme != "https":
+                return None
+            match = re.fullmatch(
+                r"/tr/tuik/(?:categories/((?:[0-9_]+/)+))?"
+                r"TR,([A-Z0-9_]{1,150}),([0-9]+(?:\.[0-9]+){1,3})",
+                unquote(parsed.fragment),
+            )
+            if match is None:
+                return None
+            title = entry.get("title")
+            return RelatedDataset(
+                id=validate_id(f"flow:{match[2]}+V{match[3]}"),
+                title=(plain_text(title) if isinstance(title, str) else None) or match[2],
+                category_path=match[1].strip("/").split("/") if match[1] else [],
+                source_url=url,
+            )
+        except (ValueError, KeyError, TypeError):
+            return None
+
     async def press(self, resource_id: str) -> TuikResource:
         number = resource_id.split(":")[1]
         url = f"{PORTAL}/api/tr/press/{number}"
@@ -177,18 +256,38 @@ class TuikPortal:
             raise SourceError("malformed_response", "Bulletin identifier mismatch", url)
         links = []
         for entry in press.tables + press.statisticalTables + press.reports:
+            if not isinstance(entry.get("url"), str):
+                continue
             try:
                 link = official_url(entry["url"])
                 if self.is_download(link):
+                    title = entry.get("title")
                     links.append(
                         DownloadLink(
-                            title=plain_text(entry.get("title")) or press.title,
+                            title=(plain_text(title) if isinstance(title, str) else None)
+                            or press.title,
                             source_url=link,
                             format=entry.get("type"),
                         )
                     )
             except (ValueError, KeyError):
                 continue
+        # The same title can appear as a bulletin table (t=t) and a longer statistical
+        # table (t=i); these are different files, so the list parameter is the discriminator.
+        lists = [parse_qs(urlsplit(link.source_url).query).get("t", [""])[0] for link in links]
+        keys = file_keys([(link.title, kind) for link, kind in zip(links, lists, strict=True)])
+        for link, key in zip(links, keys, strict=True):
+            try:
+                link.resource_id = validate_id(f"press:{number}:file:{key}")
+            except ValueError:
+                continue
+        related = {}
+        for entry in press.tables + press.statisticalTables:
+            dataset = self.related_dataset(entry)
+            if dataset is not None:
+                existing = related.get(dataset.id)
+                if existing is None or (not existing.category_path and dataset.category_path):
+                    related[dataset.id] = dataset
         sections = []
         try:
             for metadata in press.metadatas:
@@ -210,6 +309,7 @@ class TuikPortal:
             available_formats=sorted({link.format for link in links if link.format}),
             download_links=links,
             metadata=sections,
+            related_datasets=list(related.values()),
         )
 
     @staticmethod
@@ -219,55 +319,43 @@ class TuikPortal:
             parsed.hostname == "veriportali.tuik.gov.tr" and parsed.path == "/api/tr/data/downloads"
         )
 
-    async def download(self, link: DownloadLink) -> tuple[bytes, DownloadLink]:
-        response = await self.http.request("GET", link.source_url)
-        body = response.content
-        mime = response.headers.get("content-type", "").split(";")[0]
-        fmt = link.format
-        if body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
-            fmt = "xls"
-        elif body.startswith(b"PK\x03\x04"):
-            # ZIP payloads are offered as downloads, never decompressed.
-            fmt = "xlsx" if "spreadsheetml" in mime else "zip"
-        elif body.startswith(b"%PDF-"):
-            fmt = "pdf"
-        elif mime in {"text/csv", "application/csv"} and body:
-            fmt = "csv"
-        else:
-            raise SourceError(
-                "unsupported_download",
-                "The source did not return a recognized table/document file",
-                link.source_url,
-            )
-        return body, link.model_copy(
-            update={"format": fmt, "verified": True, "size_bytes": len(body)}
-        )
-
-    @staticmethod
-    def csv_rows(body: bytes, source_url: str, limit: int, filters: dict[str, str]):
-        try:
-            text = body.decode("utf-8-sig")
-            dialect = csv.Sniffer().sniff(text[:8192], delimiters=";,\t")
-            reader = csv.DictReader(io.StringIO(text), dialect=dialect, strict=True)
-            columns = reader.fieldnames
-            if not columns or len(columns) != len(set(columns)) or any(not c for c in columns):
-                raise ValueError("Missing or duplicate CSV columns")
-            if set(filters) - set(columns):
-                raise SourceError(
-                    "invalid_filters",
-                    "Use exact column names returned by get_tuik_data",
-                    source_url,
+    async def _fetch_file(self, url: str) -> httpx.Response:
+        if not self.is_download(url):
+            return await self.http.request("GET", url)
+        # One download at a time, spaced apart; dataflow exports are not throttled upstream.
+        async with self._download_slot:
+            await asyncio.sleep(max(0, self._next_download - time.monotonic()))
+            try:
+                return await self.http.request("GET", url)
+            finally:
+                self._next_download = (
+                    time.monotonic() + self.http.settings.download_interval_seconds
                 )
-            rows, total = [], 0
-            for row in reader:
-                if None in row or any(v is None for v in row.values()):
-                    raise ValueError("CSV row width mismatch")
-                if all(row[key] == value for key, value in filters.items()):
-                    total += 1
-                    if len(rows) < limit:
-                        rows.append(row)
-            return columns, rows, total
-        except (UnicodeError, csv.Error, ValueError) as exc:
-            raise SourceError(
-                "malformed_response", "TÜİK returned unsupported or malformed CSV", source_url
-            ) from exc
+
+    async def download(self, link: DownloadLink) -> tuple[bytes, DownloadLink]:
+        attempts = self.http.settings.attempts
+        for attempt in range(1, attempts + 1):
+            response = await self._fetch_file(link.source_url)
+            body = response.content
+            fmt = file_format(body, response.headers.get("content-type", "").split(";")[0])
+            if fmt is not None:
+                return body, link.model_copy(
+                    update={"format": fmt, "verified": True, "size_bytes": len(body)}
+                )
+            wait = throttle_wait(body, self.http.settings.download_interval_seconds)
+            if wait is None:
+                raise SourceError(
+                    "unsupported_download",
+                    "The source did not return a recognized table/document file",
+                    link.source_url,
+                )
+            if attempt == attempts:
+                raise SourceError(
+                    "download_throttled",
+                    f"TÜİK is limiting file downloads; retry in about {math.ceil(wait)} seconds",
+                    link.source_url,
+                )
+            if self.is_download(link.source_url):
+                self._next_download = max(self._next_download, time.monotonic() + wait)
+            else:
+                await asyncio.sleep(wait)

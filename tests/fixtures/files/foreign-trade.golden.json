@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "sha256": "d7cbebde7454cac77636b7a463875b17d4ce9668e568cdf9a58060ca4bc81e73",
+  "format": "xls",
+  "sheet": "t01",
+  "sheets": [
+    "t01"
+  ],
+  "title": "Genel ticaret sistemine göre yıllara ve aylara göre dış ticaret, 2013-2026",
+  "title_en": "Foreign trade according to general trade system by months and years, 2013-2026",
+  "unit": null,
+  "columns": [
+    "Aylar / Months",
+    "Yıl / Year",
+    "İhracat (FOB) / Exports / Değer / Value",
+    "Değişim / Change / (%) [column 4]",
+    "column_5",
+    "İthalat (CIF) / Imports / Değer / Value",
+    "Değişim / Change / (%) [column 7]",
+    "column_8",
+    "Dış ticaret dengesi / Balance / Değer / Value",
+    "Değişim / Change / (%) [column 10]",
+    "column_11",
+    "Dış ticaret hacmi / Volume of trade / Değer / Value",
+    "Değişim / Change / (%) [column 13]",
+    "column_14",
+    "Karşılama / oranı (%) / Proportion of / imports covered / by exports (%)",
+    "column_16"
+  ],
+  "header_rows": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "first_row_indices": [
+    9,
+    10
+  ],
+  "first_rows": [
+    {
+      "Aylar / Months": "",
+      "Yıl / Year": "2013",
+      "İhracat (FOB) / Exports / Değer / Value": "161480915",
+      "Değişim / Change / (%) [column 4]": "-",
+      "column_5": "",
+      "İthalat (CIF) / Imports / Değer / Value": "260822803",
+      "Değişim / Change / (%) [column 7]": "-",
+      "column_8": "",
+      "Dış ticaret dengesi / Balance / Değer / Value": "-99341888",
+      "Değişim / Change / (%) [column 10]": "-",
+      "column_11": "",
+      "Dış ticaret hacmi / Volume of trade / Değer / Value": "422303718",
+      "Değişim / Change / (%) [column 13]": "-",
+      "column_14": "",
+      "Karşılama / oranı (%) / Proportion of / imports covered / by exports (%)": "61.9",
+      "column_16": ""
+    },
+    {
+      "Aylar / Months": "",
+      "Yıl / Year": "2014",
+      "İhracat (FOB) / Exports / Değer / Value": "166504862",
+      "Değişim / Change / (%) [column 4]": "3.1",
+      "column_5": "",
+      "İthalat (CIF) / Imports / Değer / Value": "251142429",
+      "Değişim / Change / (%) [column 7]": "-3.7",
+      "column_8": "",
+      "Dış ticaret dengesi / Balance / Değer / Value": "-84637567",
+      "Değişim / Change / (%) [column 10]": "-14.8",
+      "column_11": "",
+      "Dış ticaret hacmi / Volume of trade / Değer / Value": "417647291",
+      "Değişim / Change / (%) [column 13]": "-1.1",
+      "column_14": "",
+      "Karşılama / oranı (%) / Proportion of / imports covered / by exports (%)": "66.3",
+      "column_16": ""
+    }
+  ],
+  "notes": [
+    "TÜİK, Dış Ticaret İstatistikleri, Ağustos 2026",
+    "TurkStat, Foreign Trade Statistics, August 2026",
+    "(r) Revize edilmiştir.",
+    "(r) Data revised."
+  ],
+  "source_note": "TÜİK, Dış Ticaret İstatistikleri, Ağustos 2026",
+  "source_shape": [
+    69,
+    16
+  ],
+  "last_nonempty_row": 64,
+  "merged_ranges": [
+    [
+      3,
+      4,
+      2,
+      4
+    ],
+    [
+      3,
+      4,
+      5,
+      7
+    ],
+    [
+      3,
+      4,
+      8,
+      10
+    ],
+    [
+      3,
+      4,
+      11,
+      13
+    ],
+    [
+      4,
+      5,
+      2,
+      4
+    ],
+    [
+      4,
+      5,
+      5,
+      7
+    ],
+    [
+      4,
+      5,
+      8,
+      10
+    ],
+    [
+      4,
+      5,
+      11,
+      13
+    ],
+    [
+      61,
+      62,
+      0,
+      3
+    ]
+  ],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "",
+        "",
+        "İhracat (FOB)",
+        "",
+        "",
+        "İthalat (CIF)",
+        "",
+        "",
+        "Dış ticaret dengesi",
+        "",
+        "",
+        "Dış ticaret hacmi",
+        "",
+        "",
+        "Karşılama",
+        ""
+      ]
+    },
+    {
+      "row": 4,
+      "values": [
+        "",
+        "",
+        "Exports",
+        "",
+        "",
+        "Imports",
+        "",
+        "",
+        "Balance",
+        "",
+        "",
+        "Volume of trade",
+        "",
+        "",
+        "oranı (%)",
+        ""
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "",
+        "",
+        "",
+        "Değişim",
+        "",
+        "",
+        "Değişim",
+        "",
+        "",
+        "Değişim",
+        "",
+        "",
+        "Değişim",
+        "",
+        "Proportion of",
+        ""
+      ]
+    },
+    {
+      "row": 6,
+      "values": [
+        "Aylar",
+        "Yıl",
+        "Değer",
+        "Change",
+        "",
+        "Değer",
+        "Change",
+        "",
+        "Değer",
+        "Change",
+        "",
+        "Değer",
+        "Change",
+        "",
+        "imports covered",
+        ""
+      ]
+    },
+    {
+      "row": 7,
+      "values": [
+        "Months",
+        "Year",
+        "Value",
+        "(%)",
+        "",
+        "Value",
+        "(%)",
+        "",
+        "Value",
+        "(%)",
+        "",
+        "Value",
+        "(%)",
+        "",
+        "by exports (%)",
+        ""
+      ]
+    },
+    {
+      "row": 9,
+      "values": [
+        "",
+        2013.0,
+        161480914.702,
+        "-",
+        "",
+        260822803.002,
+        "-",
+        "",
+        -99341888.30000001,
+        "-",
+        "",
+        422303717.704,
+        "-",
+        "",
+        61.91211536851774,
+        ""
+      ]
+    },
+    {
+      "row": 10,
+      "values": [
+        "",
+        2014.0,
+        166504861.795,
+        3.1111708168555197,
+        "",
+        251142429.205,
+        -3.7114752566039186,
+        "",
+        -84637567.41000003,
+        -14.801732825527523,
+        "",
+        417647291.0,
+        -1.1026250797213635,
+        "",
+        66.29897716689165,
+        ""
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 9,
+      "column": 1,
+      "value": 2013.0,
+      "number_format": "0",
+      "rendered": "2013"
+    },
+    {
+      "row": 9,
+      "column": 2,
+      "value": 161480914.702,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "161480915"
+    },
+    {
+      "row": 9,
+      "column": 5,
+      "value": 260822803.002,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "260822803"
+    },
+    {
+      "row": 9,
+      "column": 8,
+      "value": -99341888.30000001,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "-99341888"
+    },
+    {
+      "row": 9,
+      "column": 11,
+      "value": 422303717.704,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "422303718"
+    },
+    {
+      "row": 9,
+      "column": 14,
+      "value": 61.91211536851774,
+      "number_format": "0.0",
+      "rendered": "61.9"
+    },
+    {
+      "row": 10,
+      "column": 1,
+      "value": 2014.0,
+      "number_format": "0",
+      "rendered": "2014"
+    },
+    {
+      "row": 10,
+      "column": 2,
+      "value": 166504861.795,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "166504862"
+    },
+    {
+      "row": 10,
+      "column": 3,
+      "value": 3.1111708168555197,
+      "number_format": "0.0",
+      "rendered": "3.1"
+    },
+    {
+      "row": 10,
+      "column": 5,
+      "value": 251142429.205,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "251142429"
+    },
+    {
+      "row": 10,
+      "column": 6,
+      "value": -3.7114752566039186,
+      "number_format": "0.0",
+      "rendered": "-3.7"
+    },
+    {
+      "row": 10,
+      "column": 8,
+      "value": -84637567.41000003,
+      "number_format": "#\\ ###\\ ###",
+      "rendered": "-84637567"
+    }
+  ]
+}

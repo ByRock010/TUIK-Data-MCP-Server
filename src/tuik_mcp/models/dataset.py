@@ -12,11 +12,21 @@ class DownloadLink(BaseModel):
     format: str | None = None
     verified: bool = False
     size_bytes: int | None = None
+    # Reusable ID of a bulletin file; the download URL itself changes over time.
+    resource_id: str | None = None
 
 
 class MetadataSection(BaseModel):
     title: str
     content: str
+
+
+class RelatedDataset(Provenance):
+    id: str
+    title: str
+    available_formats: list[str] = Field(default_factory=list)
+    category_path: list[str] = Field(default_factory=list)
+    downloadable: bool = False
 
 
 class TuikResource(TuikSearchResult):
@@ -25,6 +35,7 @@ class TuikResource(TuikSearchResult):
     download_links: list[DownloadLink] = Field(default_factory=list)
     dimensions: list[str] = Field(default_factory=list)
     metadata: list[MetadataSection] = Field(default_factory=list)
+    related_datasets: list[RelatedDataset] = Field(default_factory=list)
     notes: str | None = None
 
 
@@ -49,7 +60,9 @@ class DatasetSearchResponse(Provenance):
 
 class DataResponse(Provenance):
     resource_id: str
-    status: Literal["ok", "not_structured", "download_available", "unsupported_filters"]
+    status: Literal[
+        "ok", "not_structured", "download_available", "unsupported_filters", "related_datasets"
+    ]
     message: str | None = None
     columns: list[str] = Field(default_factory=list)
     rows: list[dict[str, str]] = Field(default_factory=list)
@@ -57,4 +70,37 @@ class DataResponse(Provenance):
     notes: str | None = None
     download_links: list[DownloadLink] = Field(default_factory=list)
     total_rows: int | None = None
+    related_datasets: list[RelatedDataset] = Field(default_factory=list)
     truncated: bool = False
+    format: str | None = None
+    extraction: str | None = None
+    sheet: str | None = None
+    sheets: list[str] = Field(default_factory=list)
+    table_title: str | None = None
+    table_title_en: str | None = None
+    columns_en: list[str] = Field(default_factory=list)
+    table_notes: list[str] = Field(default_factory=list)
+    source_note: str | None = None
+    layout: Literal["table", "raw"] | None = None
+    warnings: list[str] = Field(default_factory=list)
+
+
+class DocumentResponse(Provenance):
+    resource_id: str
+    status: Literal["ok", "no_text_layer", "not_document", "document_choices"]
+    title: str
+    resolved_resource_id: str | None = None
+    format: str | None = None
+    extraction: str | None = None
+    page_count: int | None = None
+    page_start: int | None = None
+    page_end: int | None = None
+    offset: int = 0
+    text: str = ""
+    next_page: int | None = None
+    next_offset: int | None = None
+    truncated: bool = False
+    has_more: bool = False
+    download_links: list[DownloadLink] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+    message: str | None = None

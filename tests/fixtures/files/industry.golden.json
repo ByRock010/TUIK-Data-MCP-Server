@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "sha256": "0de035d36403e39fa88c06e603f4f1bc8999fb81e12b3f688b662a14d301a1e4",
+  "format": "xls",
+  "sheet": "s2",
+  "sheets": [
+    "s2"
+  ],
+  "title": "Bölümlerin üst grup endeks değişimine etkisi, Ağustos 2026",
+  "title_en": "Influence of divisions on upper index change, August 2026",
+  "unit": "2021=100",
+  "columns": [
+    "İktisadi faaliyet (NACE Rev. 2) Economic activity (NACE Rev. 2)",
+    "Etki edilen üst endeks Influenced upper index",
+    "Bir önceki yılın aynı ayına göre değişim (%)(1) Change compared to the same month of the previous year (%)(1)",
+    "Bir önceki yılın aynı ayına göre değişime etki Contribution to change over the same month of the previous year",
+    "Bir önceki aya göre değişim (%)(2) Change compared to the previous month (%)(2)",
+    "Bir önceki aya göre değişime etki Contribution to change over the previous month"
+  ],
+  "header_rows": [
+    3
+  ],
+  "first_row_indices": [
+    5,
+    6
+  ],
+  "first_rows": [
+    {
+      "İktisadi faaliyet (NACE Rev. 2) Economic activity (NACE Rev. 2)": "Toplam sanayi\nTotal industry",
+      "Etki edilen üst endeks Influenced upper index": "Toplam sanayi\nTotal industry",
+      "Bir önceki yılın aynı ayına göre değişim (%)(1) Change compared to the same month of the previous year (%)(1)": "-1.9",
+      "Bir önceki yılın aynı ayına göre değişime etki Contribution to change over the same month of the previous year": "-1.9",
+      "Bir önceki aya göre değişim (%)(2) Change compared to the previous month (%)(2)": "-1.0",
+      "Bir önceki aya göre değişime etki Contribution to change over the previous month": "-1.0"
+    },
+    {
+      "İktisadi faaliyet (NACE Rev. 2) Economic activity (NACE Rev. 2)": "B-Madencilik ve taş ocakçılığı\nB-Mining and quarrying",
+      "Etki edilen üst endeks Influenced upper index": "Toplam sanayi\nTotal industry",
+      "Bir önceki yılın aynı ayına göre değişim (%)(1) Change compared to the same month of the previous year (%)(1)": "1.7",
+      "Bir önceki yılın aynı ayına göre değişime etki Contribution to change over the same month of the previous year": "0.1",
+      "Bir önceki aya göre değişim (%)(2) Change compared to the previous month (%)(2)": "4.1",
+      "Bir önceki aya göre değişime etki Contribution to change over the previous month": "0.2"
+    }
+  ],
+  "notes": [
+    "TÜİK, Sanayi Üretim Endeksi, Ağustos 2026",
+    "TurkStat, Industrial Production Index, August 2026",
+    "(1) Yıllık değişimler takvim etkisinden arındırılmış endekslerden hesaplanmaktadır.",
+    "(1) Annual changes are calculated from calendar adjusted indices.",
+    "(2) Aylık değişimler mevsim ve takvim etkisinden arındırılmış endekslerden hesaplanmaktadır.",
+    "(2) Monthly changes are calculated from seasonally and calendar adjusted indices."
+  ],
+  "source_note": "TÜİK, Sanayi Üretim Endeksi, Ağustos 2026",
+  "source_shape": [
+    58,
+    6
+  ],
+  "last_nonempty_row": 53,
+  "merged_ranges": [],
+  "raw_rows": [
+    {
+      "row": 3,
+      "values": [
+        "İktisadi faaliyet (NACE Rev. 2)\nEconomic activity (NACE Rev. 2)",
+        "Etki edilen üst endeks\nInfluenced upper index",
+        "Bir önceki yılın \naynı ayına göre \ndeğişim (%)(1)\nChange compared to \nthe same month of the \nprevious year (%)(1)",
+        "Bir önceki yılın aynı ayına göre değişime etki\nContribution to change over the same month of the previous year",
+        "Bir önceki aya göre değişim (%)(2)\nChange compared to the previous month (%)(2)",
+        "Bir önceki aya göre değişime etki\nContribution to change over the previous month"
+      ]
+    },
+    {
+      "row": 5,
+      "values": [
+        "Toplam sanayi\nTotal industry",
+        "Toplam sanayi\nTotal industry",
+        -1.86175526334323,
+        -1.86175526334323,
+        -1.02977401375473,
+        -1.02977401375473
+      ]
+    },
+    {
+      "row": 6,
+      "values": [
+        "B-Madencilik ve taş ocakçılığı\nB-Mining and quarrying",
+        "Toplam sanayi\nTotal industry",
+        1.72792923287216,
+        0.0860308037738997,
+        4.13851736847224,
+        0.187752296266425
+      ]
+    }
+  ],
+  "numeric_samples": [
+    {
+      "row": 5,
+      "column": 2,
+      "value": -1.86175526334323,
+      "number_format": "0.0",
+      "rendered": "-1.9"
+    },
+    {
+      "row": 5,
+      "column": 3,
+      "value": -1.86175526334323,
+      "number_format": "0.0",
+      "rendered": "-1.9"
+    },
+    {
+      "row": 5,
+      "column": 4,
+      "value": -1.02977401375473,
+      "number_format": "0.0",
+      "rendered": "-1.0"
+    },
+    {
+      "row": 5,
+      "column": 5,
+      "value": -1.02977401375473,
+      "number_format": "0.0",
+      "rendered": "-1.0"
+    },
+    {
+      "row": 6,
+      "column": 2,
+      "value": 1.72792923287216,
+      "number_format": "0.0",
+      "rendered": "1.7"
+    },
+    {
+      "row": 6,
+      "column": 3,
+      "value": 0.0860308037738997,
+      "number_format": "0.0",
+      "rendered": "0.1"
+    },
+    {
+      "row": 6,
+      "column": 4,
+      "value": 4.13851736847224,
+      "number_format": "0.0",
+      "rendered": "4.1"
+    },
+    {
+      "row": 6,
+      "column": 5,
+      "value": 0.187752296266425,
+      "number_format": "0.0",
+      "rendered": "0.2"
+    }
+  ]
+}

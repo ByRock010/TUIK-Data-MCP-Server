@@ -16,8 +16,12 @@ async def test_stdio_discovery_and_input_validation():
                 "get_tuik_resource",
                 "get_tuik_data",
                 "list_tuik_themes",
+                "read_tuik_document",
                 "search_tuik_classifications",
             }
+            document_tool = next(t for t in tools.tools if t.name == "read_tuik_document")
+            assert document_tool.inputSchema["properties"]["max_chars"]["maximum"] == 20000
+            assert "offset" in document_tool.inputSchema["properties"]
             assert all("ctx" not in t.inputSchema["properties"] for t in tools.tools)
             dataset_tool = next(t for t in tools.tools if t.name == "search_tuik_datasets")
             assert dataset_tool.inputSchema["properties"]["downloadable_only"]["default"] is True

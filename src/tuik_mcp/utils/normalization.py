@@ -7,9 +7,13 @@ from bs4 import BeautifulSoup
 
 from tuik_mcp.config import ALLOWED_HOSTS, PORTAL
 
+# Title-derived key of a file whose download URL changes over time (ADR 0003):
+# readable slug, "~", 10 hex digits of the exact title's digest, optional ".N" ordinal.
+FILE_KEY = r"[a-z0-9çğıöşü]+(?:-[a-z0-9çğıöşü]+)*~[0-9a-f]{10}(?:\.(?:[2-9]|[1-9][0-9]))?"
 ID_PATTERN = re.compile(
-    r"(?:press:[1-9][0-9]{0,9}(?::metadata)?|classification:[1-9][0-9]{0,9}"
-    r"|flow:[A-Z0-9_]{1,150}\+V[0-9]+(?:\.[0-9]+){1,3}|resource:[a-f0-9]{64})\Z"
+    rf"(?:press:[1-9][0-9]{{0,9}}(?::metadata|:file:{FILE_KEY})?|classification:[1-9][0-9]{{0,9}}"
+    rf"|flow:[A-Z0-9_]{{1,150}}\+V[0-9]+(?:\.[0-9]+){{1,3}}|resource:[a-f0-9]{{64}}"
+    rf"|(?:table|report|publication):{FILE_KEY})\Z"
 )
 
 

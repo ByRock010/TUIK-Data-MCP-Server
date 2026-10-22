@@ -42,7 +42,7 @@ async def catalog():
         if path.endswith("/downloads"):
             return httpx.Response(
                 200,
-                content=b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"test fixture",
+                content=(FIXTURES / "files/labour-basic.xls").read_bytes(),
                 headers={"content-type": "application/vnd.ms-excel"},
             )
         if path.endswith("/statistical-themes"):
@@ -51,6 +51,9 @@ async def catalog():
             return httpx.Response(200, json=fixture("classifications"))
         raise AssertionError(f"Unexpected request: {request.url}")
 
-    http = HttpClient(Settings(min_interval_seconds=0, attempts=1), httpx.MockTransport(handler))
+    http = HttpClient(
+        Settings(min_interval_seconds=0, download_interval_seconds=0, attempts=1),
+        httpx.MockTransport(handler),
+    )
     yield CatalogService(http), calls
     await http.close()

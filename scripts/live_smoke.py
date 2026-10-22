@@ -1,8 +1,12 @@
 """Exercise the installed server through a real MCP stdio session (network required)."""
 
+import argparse
 import asyncio
 import json
 import sys
+import traceback
+from datetime import UTC, datetime
+from pathlib import Path
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -52,7 +56,8 @@ async def run():
                         "source_url": detail["source_url"],
                     }
                     download = await call("get_tuik_data", {"resource_id": table["id"]})
-                    assert download["status"] == "download_available"
+                    assert download["status"] == "ok" and download["rows"]
+                    assert download["extraction"] in {"xls", "xlsx"}
                     assert download["download_links"][0]["verified"]
                     report["download"] = download
             datasets = await call(
@@ -75,8 +80,78 @@ async def run():
             )
             assert classifications["results"]
             report["classifications"] = classifications
+            methodology = await call("get_tuik_resource", {"resource_id": "press:57987"})
+            pdf = next(link for link in methodology["download_links"] if link["format"] == "pdf")
+            page = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": pdf["resource_id"],
+                    "page": 3,
+                    "max_chars": 120,
+                },
+            )
+            assert page["status"] == "ok" and page["text"] and page["page_count"] >= 3
+            assert page["truncated"] and page["next_page"] == 3 and page["next_offset"] == 120
+            continuation = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": pdf["resource_id"],
+                    "page": page["next_page"],
+                    "offset": page["next_offset"],
+                    "max_chars": 120,
+                },
+            )
+            assert continuation["offset"] == 120 and continuation["text"]
+            report["methodology"] = page
+            report["methodology_continuation"] = continuation
+            publications = await call(
+                "search_tuik",
+                {
+                    "query": (
+                        "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026"
+                    ),
+                },
+            )
+            publication = next(
+                r for r in publications["results"] if r["resource_type"] == "publication"
+            )
+            document = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": publication["id"],
+                    "page": 1,
+                    "max_chars": 400,
+                },
+            )
+            assert document["status"] == "ok" and document["text"] and document["page_count"]
+            report["publication"] = document
             return report
 
 
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, help="Write a JSON report on success or failure")
+    args = parser.parse_args(argv)
+    checked_at = datetime.now(UTC).isoformat()
+    try:
+        report = {"status": "ok", "checked_at": checked_at, **asyncio.run(run())}
+        exit_code = 0
+    except Exception as exc:
+        traceback.print_exc(file=sys.stderr)
+        report = {
+            "status": "error",
+            "checked_at": checked_at,
+            "error_type": type(exc).__name__,
+            "message": str(exc),
+        }
+        exit_code = 1
+    output = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(output, encoding="utf-8")
+    print(output, end="")
+    return exit_code
+
+
 if __name__ == "__main__":
-    print(json.dumps(asyncio.run(run()), ensure_ascii=False, indent=2))
+    sys.exit(main())
