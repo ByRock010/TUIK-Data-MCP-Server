@@ -31,6 +31,15 @@ class Settings(BaseModel):
     # TÜİK serves a "wait" page instead of a file to back-to-back table/document downloads.
     download_interval_seconds: float = Field(default=6, ge=0, le=60)
     max_response_bytes: int = Field(default=10 * 1024 * 1024, ge=1024, le=50 * 1024 * 1024)
+    parse_max_sheets: int = Field(default=16, ge=1, le=128)
+    parse_max_cells: int = Field(default=200_000, ge=1, le=2_000_000)
+    parse_max_uncompressed_bytes: int = Field(
+        default=50 * 1024 * 1024, ge=1024, le=200 * 1024 * 1024
+    )
+    parse_max_pdf_pages: int = Field(default=1000, ge=1, le=5000)
+    parse_max_pdf_pages_per_call: int = Field(default=5, ge=1, le=20)
+    parse_max_pdf_chars_per_page: int = Field(default=200_000, ge=1000, le=1_000_000)
+    parse_cache_bytes: int = Field(default=32 * 1024 * 1024, ge=1024, le=256 * 1024 * 1024)
 
     @field_validator("opensearch_url", mode="before")
     @classmethod

@@ -9,13 +9,17 @@ returned as strings rendered with each cell's number format, like CSV values.
 
 import io
 import re
+import sys
+import zipfile
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal
+from xml.etree.ElementTree import iterparse
 
 from tuik_mcp.utils.normalization import turkish_casefold
 
-from .errors import InvalidFiltersError, ParseError
+from .errors import InvalidFiltersError, ParseError, ParseLimitError
+from .limits import ParseLimits
 from .models import ParsedTable
 
 SECTION_LABEL = "Bölüm / Section"
@@ -117,56 +121,116 @@ def header_text(cell: Cell) -> str:
     return str(cell.value)
 
 
-def read_xls(body: bytes) -> list[Sheet]:
+def read_xls(body: bytes, limits: ParseLimits) -> list[Sheet]:
     import xlrd
 
-    book = xlrd.open_workbook(file_contents=body, formatting_info=True)
-    sheets = []
-    for sheet in book.sheets():
-        rows = []
-        for r in range(sheet.nrows):
-            row = []
-            for c in range(sheet.ncols):
-                cell = sheet.cell(r, c)
-                fmt = book.format_map[book.xf_list[cell.xf_index].format_key].format_str
-                if cell.ctype == xlrd.XL_CELL_DATE:
-                    value = xlrd.xldate.xldate_as_datetime(cell.value, book.datemode)
-                elif cell.ctype == xlrd.XL_CELL_BOOLEAN:
-                    value = bool(cell.value)
-                elif cell.ctype in (xlrd.XL_CELL_NUMBER, xlrd.XL_CELL_TEXT):
-                    value = cell.value
-                else:
-                    value = None
-                row.append(Cell(value, fmt))
-            rows.append(row)
-        sheets.append(Sheet(sheet.name, rows))
-    return sheets
+    book = xlrd.open_workbook(
+        file_contents=body,
+        formatting_info=True,
+        on_demand=True,
+        ragged_rows=True,
+        logfile=sys.stderr,
+    )
+    try:
+        limits.check(book.nsheets, limits.max_sheets, "Workbook sheets")
+        sheets, cells = [], 0
+        for index in range(book.nsheets):
+            sheet = book.sheet_by_index(index)
+            cells += sheet.nrows * sheet.ncols
+            limits.check(cells, limits.max_cells, "Workbook cells")
+            rows = []
+            for r in range(sheet.nrows):
+                row = []
+                for c in range(sheet.row_len(r)):
+                    cell = sheet.cell(r, c)
+                    fmt = book.format_map[book.xf_list[cell.xf_index].format_key].format_str
+                    if cell.ctype == xlrd.XL_CELL_DATE:
+                        value = xlrd.xldate.xldate_as_datetime(cell.value, book.datemode)
+                    elif cell.ctype == xlrd.XL_CELL_BOOLEAN:
+                        value = bool(cell.value)
+                    elif cell.ctype in (xlrd.XL_CELL_NUMBER, xlrd.XL_CELL_TEXT):
+                        value = cell.value
+                    else:
+                        value = None
+                    row.append(Cell(value, fmt))
+                rows.append(row)
+            sheets.append(Sheet(sheet.name, rows))
+            book.unload_sheet(index)
+        return sheets
+    finally:
+        book.release_resources()
 
 
-def read_xlsx(body: bytes) -> list[Sheet]:
+def check_xlsx(body: bytes, limits: ParseLimits) -> None:
+    # Inspect before openpyxl inflates shared strings or creates workbook objects.
+    from openpyxl.utils.cell import column_index_from_string, coordinate_from_string
+
+    with zipfile.ZipFile(io.BytesIO(body)) as archive:
+        members = archive.infolist()
+        limits.check(len(members), 4096, "XLSX archive members")
+        limits.check(
+            sum(m.file_size for m in members),
+            limits.max_uncompressed_bytes,
+            "XLSX uncompressed bytes",
+        )
+        sheets = [m for m in members if re.fullmatch(r"xl/worksheets/[^/]+\.xml", m.filename)]
+        limits.check(len(sheets), limits.max_sheets, "Workbook sheets")
+        cells = 0
+        for member in sheets:
+            max_row = max_col = row_number = 0
+            with archive.open(member) as stream:
+                for event, element in iterparse(stream, events=("start", "end")):
+                    tag = element.tag.rsplit("}", 1)[-1]
+                    if event == "start" and tag == "row":
+                        row_number = int(element.get("r", row_number + 1))
+                        max_row = max(max_row, row_number)
+                    if event == "start" and tag == "c":
+                        coordinate = element.get("r")
+                        if coordinate:
+                            col, row = coordinate_from_string(coordinate)
+                            max_col = max(max_col, column_index_from_string(col))
+                            max_row = max(max_row, row)
+                        else:
+                            # A conservative bound for cells lacking a coordinate.
+                            max_col += 1
+                    limits.check(
+                        cells + max_row * max(1, max_col), limits.max_cells, "Workbook cells"
+                    )
+                    if event == "end":
+                        element.clear()
+            cells += max_row * max_col
+
+
+def read_xlsx(body: bytes, limits: ParseLimits) -> list[Sheet]:
     from openpyxl import load_workbook
 
-    book = load_workbook(io.BytesIO(body), read_only=True, data_only=True)
+    check_xlsx(body, limits)
+    book = load_workbook(io.BytesIO(body), read_only=True, data_only=True, keep_links=False)
     try:
-        return [
-            Sheet(
-                sheet.title,
-                [
-                    [Cell(cell.value, getattr(cell, "number_format", "General")) for cell in row]
-                    for row in sheet.iter_rows()
-                ],
-            )
-            for sheet in book.worksheets
-        ]
+        limits.check(len(book.worksheets), limits.max_sheets, "Workbook sheets")
+        sheets, count = [], 0
+        for sheet in book.worksheets:
+            # Dimensions are publisher-controlled. Ignore them and also count actual rows.
+            sheet.reset_dimensions()
+            rows, width = [], 0
+            for row in sheet.iter_rows():
+                width = max(width, len(row))
+                limits.check(count + (len(rows) + 1) * width, limits.max_cells, "Workbook cells")
+                rows.append([Cell(c.value, getattr(c, "number_format", "General")) for c in row])
+            count += len(rows) * width
+            sheets.append(Sheet(sheet.title, rows))
+        return sheets
     finally:
         book.close()
 
 
-def load_sheets(body: bytes, fmt: str) -> list[Sheet]:
+def load_sheets(body: bytes, fmt: str, limits: ParseLimits | None = None) -> list[Sheet]:
+    limits = limits or ParseLimits()
     try:
-        return read_xls(body) if fmt == "xls" else read_xlsx(body)
+        return read_xls(body, limits) if fmt == "xls" else read_xlsx(body, limits)
+    except ParseLimitError:
+        raise
     except Exception as exc:
-        # Library errors on untrusted files vary widely; all of them mean "unreadable".
         raise ParseError(f"TÜİK returned an unreadable {fmt.upper()} workbook") from exc
 
 
@@ -475,9 +539,10 @@ def parse_spreadsheet(
     limit: int | None = None,
     filters: dict[str, str] | None = None,
     sheet: str | None = None,
+    budgets: ParseLimits | None = None,
 ) -> list[ParsedTable]:
     """Parse every sheet, or only the named one, of an XLS/XLSX workbook."""
-    sheets = load_sheets(body, fmt)
+    sheets = load_sheets(body, fmt, budgets)
     if sheet is not None:
         names = [s.name for s in sheets]
         sheets = [s for s in sheets if s.name == sheet]

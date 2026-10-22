@@ -34,3 +34,39 @@ class MemoryTTLCache:
         self._items.move_to_end(key)
         while len(self._items) > self.max_entries:
             self._items.popitem(last=False)
+
+
+class BytesTTLCache:
+    """LRU cache with an exact payload-byte budget; values are immutable bytes."""
+
+    def __init__(self, max_bytes: int, max_entries: int = 256):
+        self.max_bytes, self.max_entries = max_bytes, max_entries
+        self._items: OrderedDict[str, tuple[float, bytes]] = OrderedDict()
+        self.size_bytes = 0
+
+    def _remove(self, key: str) -> None:
+        _, value = self._items.pop(key)
+        self.size_bytes -= len(value)
+
+    def get(self, key: str) -> bytes | None:
+        item = self._items.get(key)
+        if item is None:
+            return None
+        if item[0] <= time.monotonic():
+            self._remove(key)
+            return None
+        self._items.move_to_end(key)
+        return item[1]
+
+    def set(self, key: str, value: bytes, ttl: float = 3600) -> None:
+        for old in list(self._items):
+            if self._items[old][0] <= time.monotonic():
+                self._remove(old)
+        if key in self._items:
+            self._remove(key)
+        if len(value) > self.max_bytes:
+            return
+        self._items[key] = (time.monotonic() + ttl, value)
+        self.size_bytes += len(value)
+        while self.size_bytes > self.max_bytes or len(self._items) > self.max_entries:
+            self._remove(next(iter(self._items)))

@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Configurable spreadsheet input budgets, XLSX archive/grid preflight and a byte-bounded
+  one-hour file/parsed-table cache. Worker cancellation retains the parsing slot until
+  the worker finishes; parser budget failures report `parse_limit_exceeded` (#9).
+
 - Stable, title-derived IDs for downloadable tables (`table:`), reports
   (`report:`), publications (`publication:`) and bulletin files
   (`press:<id>:file:<key>`, in `download_links[].resource_id`). They resolve in a
