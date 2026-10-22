@@ -13,8 +13,6 @@ from tuik_mcp.config import PORTAL
 from tuik_mcp.identities import file_keys, search_id
 from tuik_mcp.models.dataset import DownloadLink, MetadataSection, RelatedDataset, TuikResource
 from tuik_mcp.models.search import Theme, TuikSearchResult
-from tuik_mcp.parsers.errors import InvalidFiltersError, ParseError
-from tuik_mcp.parsers.registry import parse_table
 from tuik_mcp.utils.normalization import official_url, plain_text, resource_id, validate_id
 
 from .base import HttpClient, SourceError
@@ -361,13 +359,3 @@ class TuikPortal:
                 self._next_download = max(self._next_download, time.monotonic() + wait)
             else:
                 await asyncio.sleep(wait)
-
-    @staticmethod
-    def csv_rows(body: bytes, source_url: str, limit: int, filters: dict[str, str]):
-        try:
-            table = parse_table(body, "csv", limit=limit, filters=filters)[0]
-        except InvalidFiltersError as exc:
-            raise SourceError("invalid_filters", str(exc), source_url) from exc
-        except ParseError as exc:
-            raise SourceError("malformed_response", str(exc), source_url) from exc
-        return table.columns, table.rows, table.total_rows

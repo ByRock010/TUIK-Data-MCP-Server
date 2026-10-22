@@ -6,9 +6,10 @@ import pytest
 from pydantic import ValidationError
 
 from tuik_mcp.clients.base import SourceError
-from tuik_mcp.clients.tuik_portal import TuikPortal
 from tuik_mcp.parsers import DocumentChunk, DocumentPage, ParsedTable, parse_document, parse_table
 from tuik_mcp.parsers.errors import InvalidFiltersError, ParseError, UnsupportedFormatError
+from tuik_mcp.services import parsing
+from tuik_mcp.services.parsing import parse_source
 
 
 def test_real_csv_fixture_and_bounded_filtering():
@@ -42,7 +43,7 @@ def test_malformed_csv_is_explicit(body):
     with pytest.raises(ParseError):
         parse_table(body, "csv")
     with pytest.raises(SourceError) as error:
-        TuikPortal.csv_rows(body, "https://veriportali.tuik.gov.tr/test", 10, {})
+        parse_source(body, "csv", "https://veriportali.tuik.gov.tr/test", limit=10)
     assert error.value.code == "malformed_response"
 
 
@@ -51,7 +52,7 @@ def test_unknown_filter_keeps_adapter_error_and_source():
     with pytest.raises(InvalidFiltersError):
         parse_table(body, "csv", filters={"unknown": "1"})
     with pytest.raises(SourceError) as error:
-        TuikPortal.csv_rows(body, "https://veriportali.tuik.gov.tr/test", 10, {"unknown": "1"})
+        parse_source(body, "csv", "https://veriportali.tuik.gov.tr/test", filters={"unknown": "1"})
     assert error.value.code == "invalid_filters"
     assert error.value.source_url.endswith("/test")
 
@@ -94,15 +95,15 @@ async def test_service_offloads_csv_parsing_and_keeps_loop_responsive(catalog, m
     service, _ = catalog
     loop_thread = threading.get_ident()
     started, release = threading.Event(), threading.Event()
-    original = service.portal.csv_rows
+    original = parsing.parse_source
 
-    def parse(*args):
+    def parse(*args, **kwargs):
         assert threading.get_ident() != loop_thread
         started.set()
         assert release.wait(timeout=5)
-        return original(*args)
+        return original(*args, **kwargs)
 
-    monkeypatch.setattr(service.portal, "csv_rows", parse)
+    monkeypatch.setattr(parsing, "parse_source", parse)
     task = asyncio.create_task(service.data("flow:DF_ALTINSIZ_DTH+V1.0", limit=1))
     try:
         assert await asyncio.to_thread(started.wait, 3)

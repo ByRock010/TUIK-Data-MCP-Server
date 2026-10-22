@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, ValidationError
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.config import CLASSIFICATION, PORTAL, Settings
 from tuik_mcp.models.common import ErrorResponse
+from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.services.catalog import CatalogService
 
 
@@ -42,6 +43,9 @@ async def respond(operation: Awaitable[BaseModel], source_url: str = PORTAL) -> 
         result = await operation
     except SourceError as exc:
         result = ErrorResponse(code=exc.code, message=str(exc), source_url=exc.source_url)
+    except ParseError as exc:
+        # Safety net: services translate parser errors; never report them as caller input.
+        result = ErrorResponse(code="parse_failed", message=str(exc), source_url=source_url)
     except (ValueError, ValidationError) as exc:
         result = ErrorResponse(code="invalid_input", message=str(exc), source_url=source_url)
     return result.model_dump(mode="json")
