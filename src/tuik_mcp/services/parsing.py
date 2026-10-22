@@ -16,6 +16,8 @@ from tuik_mcp.parsers.errors import (
     UnsupportedFormatError,
 )
 from tuik_mcp.parsers.limits import ParseLimits
+from tuik_mcp.parsers.models import ParsedDocument
+from tuik_mcp.parsers.pdf import parse_pdf
 
 
 def parse_source(
@@ -63,3 +65,18 @@ async def parse_source_in_thread(
         sheet=sheet,
         budgets=budgets,
     )
+
+
+def parse_document_source(
+    body: bytes,
+    source_url: str,
+    *,
+    page: int = 1,
+    budgets: ParseLimits | None = None,
+) -> ParsedDocument:
+    try:
+        return parse_pdf(body, page=page, budgets=budgets)
+    except ParseLimitError as exc:
+        raise SourceError("parse_limit_exceeded", str(exc), source_url) from exc
+    except ParseError as exc:
+        raise SourceError("parse_failed", str(exc), source_url) from exc

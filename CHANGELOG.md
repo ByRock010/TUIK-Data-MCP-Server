@@ -8,6 +8,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `read_tuik_document` reads PDF publication, report and methodology pages with
+  glyph deduplication, Turkish text normalization, page provenance and bounded
+  character output. Same-page `next_offset` continuation prevents skipped text;
+  blank/scanned pages are explicit and OCR stays out of scope (#7).
+- Shared parsed PDF page caching and configurable PDF page/glyph budgets complete
+  the file-reading cache/limit paths. Repeated cancellation retains the worker slot (#9).
+
 - `get_tuik_data` reads verified XLS/XLSX files into bounded rows with sheet selection,
   exact filters, units, titles, source notes, layout warnings and file provenance.
   Bulletin dataflow CSV choices still take precedence; file IDs select Excel explicitly (#6).

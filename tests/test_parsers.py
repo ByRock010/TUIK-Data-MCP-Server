@@ -62,7 +62,7 @@ def test_unimplemented_parsers_are_explicit(fmt):
     with pytest.raises(UnsupportedFormatError):
         parse_table(b"arbitrary", fmt)
     with pytest.raises(UnsupportedFormatError):
-        parse_document(b"arbitrary", fmt)
+        parse_document(b"arbitrary", "zip" if fmt == "pdf" else fmt)
 
 
 @pytest.mark.parametrize("body,fmt", [(b"a;b\n1\n", "csv"), (b"arbitrary", "xlsx")])

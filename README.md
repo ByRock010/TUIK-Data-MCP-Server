@@ -13,6 +13,7 @@ verifies official table downloads. Runtime results always come from TÜİK.
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None)` | CSV/XLS/XLSX rows, verified download, or an explicit unsupported response |
+| `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
 
@@ -160,7 +161,7 @@ restart, expiration (one hour), or cache eviction.
   No table is selected automatically; existing file downloads remain in the response.
 - `download_available`: an actual file has been downloaded within the size bound
   and its signature/media type checked. `download_links` includes its official URL,
-  format, verification flag and byte count. PDF and ZIP remain downloads; XLS/XLSX return parsed rows.
+  format, verification flag and byte count. PDF and ZIP remain downloads in this tool; read PDF pages with `read_tuik_document`.
 - `not_structured`: no supported public export is advertised.
 - `unsupported_filters`: filters were requested for a resource without CSV/Excel rows; none applied.
 - `error`: a structured `code`, `message`, and source URL, for example an upstream
@@ -186,6 +187,36 @@ source snapshot for citation. Passing `sheet` for a CSV is an input error.
 When a bulletin offers dataflow CSV choices, choose a `flow:` ID for CSV or an
 explicit file ID for Excel; no related table is selected automatically.
 
+## Read PDF documents
+
+Search for a publication/report, then pass its returned ID to `read_tuik_document`.
+For an attachment, inspect the bulletin and choose the PDF's
+`download_links[].resource_id`. A bulletin with one PDF selects it; multiple PDFs
+return `document_choices` with file IDs. Resources without a PDF return `not_document`.
+
+```json
+{"resource_id": "press:57987", "page": 3, "max_chars": 120}
+```
+
+The response includes `title`, `resolved_resource_id`, `page_count`, `page_start`,
+`page_end`, `text`, `offset`, `truncated`, `has_more`, `next_page`, `next_offset`,
+the verified file URL and its retrieval timestamp. Page numbers are physical PDF
+pages starting at one, including covers. Cite the file URL and `page_start`.
+
+Always pass **both** returned `next_page` and `next_offset` to continue. If the
+character cap cuts a page, the next call stays on that page; only after the rest
+of the text is read does it advance. This avoids silently skipping text. Offsets
+count characters in the normalized extracted text. `truncated` applies to the
+current page; `has_more` also accounts for later pages.
+
+PDF text is deduplicated and whitespace/line-end hyphenation normalized. Layout
+and tables are not reconstructed. `no_text_layer` means no extractable text on
+the requested page, which may be blank or scanned; OCR is not performed. Source
+text remains untrusted data. PDF table extraction is a later stretch goal.
+
+See [file reading design](docs/FILE_READING_DESIGN.md) for the scope decisions,
+limits, cache policy, research sources and verification strategy.
+
 ## Configuration and reliability
 
 Optional process environment variables are listed in `.env.example`. A `.env`
@@ -209,8 +240,10 @@ used. See [source research](docs/TUIK_SOURCES.md).
 
 The replaceable `Cache` interface has a bounded in-memory TTL implementation:
 search 10 minutes, metadata/catalog/search handles one hour, themes six hours,
-small downloads 10 minutes. Dataset discovery and detail share one catalog fetch,
-including concurrent calls, and retain its retrieval timestamp. Large files are not cached.
+small CSV downloads 10 minutes. Dataset discovery and detail share one catalog fetch,
+including concurrent calls, and retain its retrieval timestamp. CSV bodies larger than
+256 KiB are not cached by this general cache; Excel/PDF files use the separate
+byte-bounded file cache below.
 Cache hits retain the
 original source retrieval timestamp where applicable. Caches are process-local.
 
@@ -218,7 +251,7 @@ File parsing has configurable sheet/cell limits and an XLSX uncompressed-size
 preflight (see `.env.example`). XLSX dimensions are checked against actual XML
 coordinates, then rows are counted again during read-only loading. File parsing
 services share a 32 MiB payload-byte cache of one-hour downloads and parsed results;
-keys include stable resource identity and content SHA-256. Excel reading uses these limits and caches; PDF wiring follows in #7.
+keys include stable resource identity and content SHA-256. Excel and PDF reading share these limits and caches.
 Workers run off the event loop, one at a time; cancellation waits for the active
 worker to finish. Input budgets limit ordinary workloads; they are not a hard CPU
 or process-memory sandbox for malicious library inputs.
@@ -238,9 +271,9 @@ or process-memory sandbox for malicious library inputs.
 ```
 
 Offline tests use reduced real response fixtures and mocked HTTP, plus an actual
-stdio subprocess for tool discovery and validation. Live checks exercise all six
-tools, eight Turkish queries, bulletin detail, an XLS download, and dataset
-discovery followed by CSV retrieval using the returned ID.
+stdio subprocess for tool discovery and validation. Live checks exercise all seven
+tools, eight Turkish queries, bulletin detail, Excel rows, dataset discovery and
+CSV retrieval, plus publication/methodology PDF pages and same-page continuation.
 See [the verification report](docs/VERIFICATION.md) for results and limitations of
 the development run.
 
@@ -270,7 +303,8 @@ src/tuik_mcp/
   server.py, config.py, cache.py
   clients/{base,tuik_portal,classification}.py
   models/{common,search,dataset}.py
-  services/catalog.py
+  services/{catalog,files,parsing}.py
+  parsers/{csv,spreadsheet,pdf,registry,models,limits}.py
   utils/normalization.py
 tests/                 # unit, protocol and opt-in live tests; response fixtures
 scripts/live_smoke.py   # real MCP client workflow
@@ -295,7 +329,7 @@ pyproject.toml, README.md, .env.example, Dockerfile
   unverified TÜİK subdomains are excluded from the allowlist.
 - Download links listed in metadata are advertised, not necessarily verified.
   `get_tuik_data` verifies one selected file (preferring CSV); other links retain
-  `verified: false`. Excel tables are parsed on demand; PDF documents remain downloads.
+  `verified: false`. Excel tables and PDF text pages are parsed on demand; OCR and PDF table extraction are not implemented.
 - Transport is local stdio. HTTP transport can be added to the SDK entrypoint
   later with explicit deployment constraints.
 
@@ -311,7 +345,7 @@ Use `-i` without `-t` for MCP stdio. A client can launch `docker` with arguments
 
 ## Local OpenSearch development stack
 
-OpenSearch is optional. The base install and all six MCP tools continue to work
+OpenSearch is optional. The base install and all seven MCP tools continue to work
 without it. This issue provides infrastructure and settings; indexing and routing
 MCP searches to the index follow in #14–#18. Setting a URL alone does not yet change
 search behavior.
@@ -363,7 +397,8 @@ Dataset discovery now searches public export availability and returns catalog-ba
 identities, and downloadable tables, reports, publications and bulletin files have
 title-derived stable IDs. The plan for the next phases is tracked in the roadmap
 issue (#25).
-Later phases may add a PostgreSQL canonical catalog, OpenSearch Turkish full-text
-search, PDF/DOCX/XLSX ingestion, automatic synchronization, revision/version
-tracking, semantic/hybrid search, dataset/document linking, and richer citations
-and provenance. None of those services is part of this MVP.
+Next comes OpenSearch Turkish lexical search and measured relevance (v0.3.0).
+Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
+stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
+current roadmap. Excel/PDF reading is implemented;
+v0.2.0 release closure remains issue #10.

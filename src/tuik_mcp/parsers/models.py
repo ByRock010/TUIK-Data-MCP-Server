@@ -28,3 +28,8 @@ class DocumentPage(BaseModel):
 
 class DocumentChunk(DocumentPage):
     """A text passage retaining its one-based source page for citation."""
+
+
+class ParsedDocument(BaseModel):
+    page_count: int = Field(ge=1)
+    pages: list[DocumentPage]
