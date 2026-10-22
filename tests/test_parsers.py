@@ -57,7 +57,7 @@ def test_unknown_filter_keeps_adapter_error_and_source():
     assert error.value.source_url.endswith("/test")
 
 
-@pytest.mark.parametrize("fmt", ["xls", "xlsx", "pdf", "zip", "CSV"])
+@pytest.mark.parametrize("fmt", ["pdf", "zip", "CSV", "XLS"])
 def test_unimplemented_parsers_are_explicit(fmt):
     with pytest.raises(UnsupportedFormatError):
         parse_table(b"arbitrary", fmt)

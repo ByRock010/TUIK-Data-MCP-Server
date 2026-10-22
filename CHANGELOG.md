@@ -13,6 +13,11 @@ All notable changes to this project are documented here. The format follows
   (`press:<id>:file:<key>`, in `download_links[].resource_id`). They resolve in a
   fresh server session by re-reading the bulletin or searching for the title;
   download URLs change over time (ADR 0003, #27).
+- XLS/XLSX table parser for TÜİK spreadsheets: title, English title and unit
+  rows, multi-row bilingual headers, section rows, forward-filled row labels,
+  number-format precision, footnotes and source lines; raw-grid fallback with a
+  warning for unrecognized layouts. `xlrd` and `openpyxl` become runtime
+  dependencies (#5).
 - Automatically close explicitly completed issues when their PR is merged into
   `develop`, with offline tests and documented PR-body closing directives.
 - Weekly, optional live contract checks with JSON/JUnit/log artifacts, deduplicated
