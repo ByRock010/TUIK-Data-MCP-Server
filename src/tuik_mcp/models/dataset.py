@@ -83,3 +83,24 @@ class DataResponse(Provenance):
     source_note: str | None = None
     layout: Literal["table", "raw"] | None = None
     warnings: list[str] = Field(default_factory=list)
+
+
+class DocumentResponse(Provenance):
+    resource_id: str
+    status: Literal["ok", "no_text_layer", "not_document", "document_choices"]
+    title: str
+    resolved_resource_id: str | None = None
+    format: str | None = None
+    extraction: str | None = None
+    page_count: int | None = None
+    page_start: int | None = None
+    page_end: int | None = None
+    offset: int = 0
+    text: str = ""
+    next_page: int | None = None
+    next_offset: int | None = None
+    truncated: bool = False
+    has_more: bool = False
+    download_links: list[DownloadLink] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+    message: str | None = None

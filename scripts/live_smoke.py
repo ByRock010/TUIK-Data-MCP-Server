@@ -80,6 +80,51 @@ async def run():
             )
             assert classifications["results"]
             report["classifications"] = classifications
+            methodology = await call("get_tuik_resource", {"resource_id": "press:57987"})
+            pdf = next(link for link in methodology["download_links"] if link["format"] == "pdf")
+            page = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": pdf["resource_id"],
+                    "page": 3,
+                    "max_chars": 120,
+                },
+            )
+            assert page["status"] == "ok" and page["text"] and page["page_count"] >= 3
+            assert page["truncated"] and page["next_page"] == 3 and page["next_offset"] == 120
+            continuation = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": pdf["resource_id"],
+                    "page": page["next_page"],
+                    "offset": page["next_offset"],
+                    "max_chars": 120,
+                },
+            )
+            assert continuation["offset"] == 120 and continuation["text"]
+            report["methodology"] = page
+            report["methodology_continuation"] = continuation
+            publications = await call(
+                "search_tuik",
+                {
+                    "query": (
+                        "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026"
+                    ),
+                },
+            )
+            publication = next(
+                r for r in publications["results"] if r["resource_type"] == "publication"
+            )
+            document = await call(
+                "read_tuik_document",
+                {
+                    "resource_id": publication["id"],
+                    "page": 1,
+                    "max_chars": 400,
+                },
+            )
+            assert document["status"] == "ok" and document["text"] and document["page_count"]
+            report["publication"] = document
             return report
 
 

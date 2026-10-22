@@ -63,3 +63,14 @@ registers the `xls` and `xlsx` formats. The parser keeps source column labels
 columns named `column_N`), renders numbers with each cell's number-format
 precision, forward-fills row labels, and adds `Bölüm / Section` columns for
 section rows. Unrecognized layouts return `layout: "raw"` with a warning.
+
+
+## Update — bounded file reading (#6, #7, #9)
+
+Excel rows are now served through `get_tuik_data`. `pdfplumber` is a runtime
+requirement for `read_tuik_document`; the `fixtures` extra is retained as an empty
+compatibility extra. PDF text is read on requested physical pages only, with
+glyph deduplication and character-offset continuation. Shared byte-bounded,
+one-hour caches key parsed output by stable ID and content hash. Configurable
+input budgets and worker lifecycle details are in
+[`FILE_READING_DESIGN.md`](../FILE_READING_DESIGN.md).

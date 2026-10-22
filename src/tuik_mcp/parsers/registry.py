@@ -2,6 +2,7 @@ from .csv import parse_csv
 from .errors import UnsupportedFormatError
 from .limits import ParseLimits
 from .models import DocumentPage, ParsedTable
+from .pdf import parse_pdf
 from .spreadsheet import parse_spreadsheet
 
 
@@ -32,6 +33,14 @@ def parse_table(
     raise UnsupportedFormatError(f"No table parser for format: {fmt}")
 
 
-def parse_document(body: bytes, fmt: str) -> list[DocumentPage]:
-    """Document parsing is introduced by the PDF ingestion feature (#7)."""
+def parse_document(
+    body: bytes,
+    fmt: str,
+    *,
+    page: int = 1,
+    pages: int = 1,
+    budgets: ParseLimits | None = None,
+) -> list[DocumentPage]:
+    if fmt == "pdf":
+        return parse_pdf(body, page=page, pages=pages, budgets=budgets).pages
     raise UnsupportedFormatError(f"No document parser for format: {fmt}")

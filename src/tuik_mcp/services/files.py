@@ -12,8 +12,8 @@ from tuik_mcp.clients.tuik_portal import TuikPortal
 from tuik_mcp.models.common import now
 from tuik_mcp.models.dataset import DownloadLink
 from tuik_mcp.parsers.limits import ParseLimits
-from tuik_mcp.parsers.models import ParsedTable
-from tuik_mcp.services.parsing import parse_source
+from tuik_mcp.parsers.models import ParsedDocument, ParsedTable
+from tuik_mcp.services.parsing import parse_document_source, parse_source
 
 TABLES = TypeAdapter(list[ParsedTable])
 
@@ -24,10 +24,15 @@ async def finish_worker(function, *args, **kwargs):
     try:
         return await asyncio.shield(task)
     except asyncio.CancelledError:
-        try:
-            await task
-        except Exception:
-            pass
+        while not task.done():
+            try:
+                await asyncio.shield(task)
+            except asyncio.CancelledError:
+                continue
+            except Exception:
+                break
+        if not task.cancelled():
+            task.exception()  # Consume failures from a worker whose caller was cancelled.
         raise
 
 
@@ -80,3 +85,20 @@ class FileStore:
             payload = await finish_worker(TABLES.dump_json, tables)
             self.cache.set(key, payload)
             return tables
+
+    async def document(self, resource_id: str, file: DownloadedFile, page: int) -> ParsedDocument:
+        key = f"pdf:{resource_id}:{file.digest}:{page}"
+        async with self._parse_lock:
+            cached = self.cache.get(key)
+            if cached is not None:
+                return await finish_worker(ParsedDocument.model_validate_json, cached)
+            document = await finish_worker(
+                parse_document_source,
+                file.body,
+                file.link.source_url,
+                page=page,
+                budgets=self.limits,
+            )
+            payload = await finish_worker(lambda: document.model_dump_json().encode())
+            self.cache.set(key, payload)
+            return document

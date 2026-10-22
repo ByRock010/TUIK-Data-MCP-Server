@@ -194,6 +194,44 @@ async def test_cancelled_worker_finishes_before_parse_slot_is_released():
     task.cancel()
     await asyncio.sleep(0)
     assert not task.done()
+    task.cancel()
+    await asyncio.sleep(0)
+    assert not task.done()
     release.set()
     with pytest.raises(asyncio.CancelledError):
         await task
+
+
+async def test_same_stable_id_refreshes_after_expiry_and_cannot_reuse_old_parsed_content(
+    monkeypatch,
+):
+    from types import SimpleNamespace
+
+    clock = [100.0]
+    monkeypatch.setattr("tuik_mcp.cache.time", SimpleNamespace(monotonic=lambda: clock[0]))
+    body = [(FILES / "cpi-index.xls").read_bytes()]
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(
+            200, content=body[0], headers={"content-type": "application/vnd.ms-excel"}
+        )
+
+    http = HttpClient(
+        Settings(min_interval_seconds=0, download_interval_seconds=0), httpx.MockTransport(handler)
+    )
+    store = FileStore(TuikPortal(http))
+    link = DownloadLink(title="Current table", source_url=URL)
+    try:
+        first = await store.download("stable-table", link)
+        original = await store.tables("stable-table", first)
+        body[0] = (FILES / "cpi-weights.xls").read_bytes()
+        assert (await store.download("stable-table", link)).digest == first.digest
+        clock[0] += 3601
+        changed = await store.download("stable-table", link)
+        current = await store.tables("stable-table", changed)
+        assert len(calls) == 2 and changed.digest != first.digest
+        assert current[0].title != original[0].title
+    finally:
+        await http.close()

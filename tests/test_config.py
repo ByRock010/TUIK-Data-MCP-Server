@@ -33,3 +33,24 @@ def test_invalid_search_url(url):
 def test_invalid_search_alias(alias):
     with pytest.raises(ValidationError):
         Settings(opensearch_index=alias)
+
+
+def test_file_budgets_are_validated_and_read_from_environment(monkeypatch):
+    from tuik_mcp.parsers.limits import ParseLimits
+
+    monkeypatch.setenv("TUIK_PARSE_MAX_CELLS", "12345")
+    monkeypatch.setenv("TUIK_PARSE_CACHE_BYTES", "65536")
+    settings = Settings.from_env()
+    assert settings.parse_cache_bytes == 65536
+    assert ParseLimits.from_settings(settings).max_cells == 12345
+    for key in [
+        "parse_max_cells",
+        "parse_max_sheets",
+        "parse_max_pdf_pages",
+        "parse_max_pdf_pages_per_call",
+        "parse_max_pdf_chars_per_page",
+        "parse_max_uncompressed_bytes",
+        "parse_cache_bytes",
+    ]:
+        with pytest.raises(ValidationError):
+            Settings(**{key: 0})
