@@ -1,5 +1,6 @@
 import asyncio
 import io
+import re
 import threading
 import zipfile
 from pathlib import Path
@@ -77,6 +78,47 @@ def test_forged_xlsx_dimensions_do_not_hide_data_or_allocate_huge_grid():
     )
     with pytest.raises(ParseLimitError, match="cells"):
         parse_table(sparse, "xlsx")
+
+
+@pytest.mark.parametrize("omit_row_coordinates", [False, True])
+def test_xlsx_optional_coordinates_use_per_row_width(omit_row_coordinates):
+    book = Workbook()
+    for row in range(1000):
+        book.active.append([row + column + 0.5 for column in range(10)])
+    output = io.BytesIO()
+    book.save(output)
+    original = output.getvalue()
+
+    def omit_coordinates(name, body):
+        if not name.startswith("xl/worksheets/"):
+            return body
+        body = re.sub(rb'(<c\b[^>]*?) r="[A-Z]+[0-9]+"', rb"\1", body)
+        if omit_row_coordinates:
+            body = re.sub(rb'(<row\b[^>]*?) r="[0-9]+"', rb"\1", body)
+        return body
+
+    implicit = rewrite(original, omit_coordinates)
+    budgets = ParseLimits(max_cells=10_000)
+    assert parse_table(implicit, "xlsx", budgets=budgets) == parse_table(
+        original, "xlsx", budgets=budgets
+    )
+    with pytest.raises(ParseLimitError, match="cells"):
+        parse_table(implicit, "xlsx", budgets=ParseLimits(max_cells=9999))
+
+
+def test_xlsx_implicit_cell_follows_explicit_sparse_column():
+    body = rewrite(
+        workbook(),
+        lambda name, data: (
+            data.replace(b'r="A2"', b'r="D2"').replace(b' r="B2"', b"")
+            if name.startswith("xl/worksheets/")
+            else data
+        ),
+    )
+    # Row 2 has an explicit D2 followed by implicit E2: two rows x five columns.
+    assert parse_table(body, "xlsx", budgets=ParseLimits(max_cells=10))
+    with pytest.raises(ParseLimitError, match="cells"):
+        parse_table(body, "xlsx", budgets=ParseLimits(max_cells=9))
 
 
 def test_byte_cache_eviction_expiry_and_oversize(monkeypatch):

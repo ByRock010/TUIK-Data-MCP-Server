@@ -48,6 +48,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- XLSX preflight counts optional cell coordinates within each row instead of
+  accumulating columns across the worksheet, preserving correct cell-budget checks (#9).
+
 - Parser errors are translated at one service boundary into source error codes
   (`parse_failed`, `invalid_filters`, `unsupported_download`; CSV keeps
   `malformed_response`), so file problems are never reported as `invalid_input` (#39).

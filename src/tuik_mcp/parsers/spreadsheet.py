@@ -135,6 +135,8 @@ def read_xls(body: bytes, limits: ParseLimits) -> list[Sheet]:
         limits.check(book.nsheets, limits.max_sheets, "Workbook sheets")
         sheets, cells = [], 0
         for index in range(book.nsheets):
+            # xlrd materializes this sheet before its dimensions are available;
+            # this check bounds our grid, not the library's initial allocation.
             sheet = book.sheet_by_index(index)
             cells += sheet.nrows * sheet.ncols
             limits.check(cells, limits.max_cells, "Workbook cells")
@@ -177,22 +179,23 @@ def check_xlsx(body: bytes, limits: ParseLimits) -> None:
         limits.check(len(sheets), limits.max_sheets, "Workbook sheets")
         cells = 0
         for member in sheets:
-            max_row = max_col = row_number = 0
+            max_row = max_col = row_number = col_in_row = 0
             with archive.open(member) as stream:
                 for event, element in iterparse(stream, events=("start", "end")):
                     tag = element.tag.rsplit("}", 1)[-1]
                     if event == "start" and tag == "row":
                         row_number = int(element.get("r", row_number + 1))
+                        col_in_row = 0
                         max_row = max(max_row, row_number)
                     if event == "start" and tag == "c":
                         coordinate = element.get("r")
                         if coordinate:
                             col, row = coordinate_from_string(coordinate)
-                            max_col = max(max_col, column_index_from_string(col))
+                            col_in_row = column_index_from_string(col)
                             max_row = max(max_row, row)
                         else:
-                            # A conservative bound for cells lacking a coordinate.
-                            max_col += 1
+                            col_in_row += 1
+                        max_col = max(max_col, col_in_row)
                     limits.check(
                         cells + max_row * max(1, max_col), limits.max_cells, "Workbook cells"
                     )
