@@ -17,6 +17,7 @@ from tuik_mcp.models.dataset import (
     TuikResource,
 )
 from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
+from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
@@ -27,6 +28,7 @@ class CatalogService:
         self.classifications = ClassificationClient(http)
         self.cache = cache if cache is not None else MemoryTTLCache()
         self._dataset_lock = asyncio.Lock()
+        self.files = FileStore(self.portal)
 
     def remember(self, result):
         self.cache.set("record:" + result.id, result, 3600)
@@ -283,11 +285,19 @@ class CatalogService:
         return record
 
     async def data(
-        self, resource_id: str, filters: dict[str, str] | None = None, limit: int = 100
+        self,
+        resource_id: str,
+        filters: dict[str, str] | None = None,
+        limit: int = 100,
+        sheet: str | None = None,
     ) -> DataResponse:
         validate_id(resource_id)
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 1000:
             raise ValueError("Data limit must be an integer between 1 and 1000")
+        if sheet is not None and (not isinstance(sheet, str) or not 1 <= len(sheet) <= 200):
+            raise ValueError("Sheet must be a non-empty name of at most 200 characters")
+        if filters is not None and not isinstance(filters, dict):
+            raise ValueError("Filters must be an object of exact column/string pairs")
         filters = filters or {}
         if len(filters) > 20 or any(
             not isinstance(k, str) or not isinstance(v, str) or len(k) > 200 or len(v) > 200
@@ -316,7 +326,11 @@ class CatalogService:
                     "advertised CSV export in the current catalog."
                 ),
             )
-        if filters and csv_link is None:
+        if (
+            filters
+            and csv_link is None
+            and not any(link.format in {None, "xls", "xlsx"} for link in resource.download_links)
+        ):
             return DataResponse(
                 **base,
                 status="unsupported_filters",
@@ -334,8 +348,14 @@ class CatalogService:
                 ),
             )
         link = csv_link or resource.download_links[0]
-        cached = self.cache.get("download:" + link.source_url)
-        if cached is None:
+        if csv_link is not None and sheet is not None:
+            raise ValueError("sheet applies only to XLS/XLSX files; omit it for CSV")
+        file = None
+        cached = self.cache.get("download:" + link.source_url) if csv_link is not None else None
+        if csv_link is None:
+            file = await self.files.download(link.resource_id or resource_id, link)
+            body, verified = file.body, file.link
+        elif cached is None:
             body, verified = await self.portal.download(link)
             # Avoid retaining large response bodies in the in-memory cache.
             if len(body) <= 256 * 1024:
@@ -346,13 +366,68 @@ class CatalogService:
             verified if item.source_url == link.source_url else item
             for item in resource.download_links
         ]
+        if verified.format in {"xls", "xlsx"}:
+            assert file is not None
+            tables = await self.files.tables(link.resource_id or resource_id, file)
+            if not tables:
+                raise SourceError(
+                    "parse_failed", "Workbook contains no worksheets", verified.source_url
+                )
+            names = [table.sheet for table in tables]
+            table = next((t for t in tables if t.sheet == sheet), None) if sheet else tables[0]
+            if table is None:
+                raise ValueError(f"Workbook has no sheet named {sheet!r}; sheets: {names}")
+            if set(filters) - set(table.columns):
+                raise SourceError(
+                    "invalid_filters",
+                    "Use exact column names returned by get_tuik_data",
+                    verified.source_url,
+                )
+            rows, total = [], 0
+            for row in table.rows:
+                if all(row[key] == value for key, value in filters.items()):
+                    total += 1
+                    if len(rows) < limit:
+                        rows.append(row)
+            base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
+            return DataResponse(
+                **base,
+                status="ok",
+                format=verified.format,
+                extraction=table.extraction,
+                sheet=table.sheet,
+                sheets=names,
+                table_title=table.title,
+                table_title_en=table.title_en,
+                unit=table.unit,
+                columns=table.columns,
+                columns_en=table.columns_en,
+                rows=rows,
+                total_rows=total,
+                truncated=total > limit,
+                table_notes=table.notes,
+                source_note=table.source_note,
+                layout=table.layout,
+                warnings=table.warnings,
+                message=(
+                    "Spreadsheet values preserve source precision. Exact filters apply locally."
+                ),
+            )
+        if sheet is not None:
+            raise ValueError("sheet applies only to XLS/XLSX files")
+        if filters and verified.format != "csv":
+            return DataResponse(
+                **base,
+                status="unsupported_filters",
+                message="Exact filters apply only to CSV/XLS/XLSX rows; no filters were applied.",
+            )
         if verified.format != "csv":
             return DataResponse(
                 **base,
                 status="download_available",
                 message=(
-                    "Official download verified. Spreadsheet/PDF ingestion is outside "
-                    "this MVP; limit does not truncate the file."
+                    "Official download verified. This format has no table parser; "
+                    "limit does not truncate the file."
                 ),
             )
         (table,) = await parse_source_in_thread(

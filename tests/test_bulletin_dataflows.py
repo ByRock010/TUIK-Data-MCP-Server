@@ -97,7 +97,7 @@ async def test_existing_bulletin_keeps_download_links_and_unavailable_dataset_re
     assert all(not item.downloadable for item in resource.related_datasets)
     assert resource.download_links
     data = await service.data(resource.id)
-    assert data.status == "download_available"
+    assert data.status == "ok"
     assert data.download_links[0].verified and data.download_links[0].format == "xls"
     assert data.related_datasets == resource.related_datasets
 
@@ -152,7 +152,7 @@ async def test_catalog_timeout_preserves_metadata_and_xls_fallback(catalog, monk
     assert resource.title and resource.metadata and resource.download_links
     assert "timeout" in resource.notes and "unconfirmed" in resource.notes
     data = await service.data(resource.id)
-    assert data.status == "download_available" and data.download_links[0].verified
+    assert data.status == "ok" and data.download_links[0].verified
     assert all(not item.downloadable for item in data.related_datasets)
     monkeypatch.setattr(service.portal, "flows", original)
     recovered = await service.resource(resource.id)

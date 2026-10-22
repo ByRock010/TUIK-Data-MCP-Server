@@ -2,7 +2,7 @@
 
 A locally runnable Python MCP server for publicly accessible Türkiye İstatistik
 Kurumu (TÜİK) statistical resources. It searches the current data portal, retrieves
-bulletin and dataset metadata, returns bounded rows from public CSV exports, and
+bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
 ## Implemented tools
@@ -12,7 +12,7 @@ verifies official table downloads. Runtime results always come from TÜİK.
 | `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
-| `get_tuik_data(resource_id, filters={}, limit=100)` | CSV rows, verified download, or an explicit unsupported response |
+| `get_tuik_data(resource_id, filters={}, limit=100, sheet=None)` | CSV/XLS/XLSX rows, verified download, or an explicit unsupported response |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
 
@@ -127,8 +127,8 @@ For example, inspect `press:58347` and call `get_tuik_data` with a returned
 `status: related_datasets` when at least one related table is downloadable;
 filters on the bulletin
 return `unsupported_filters` with the same choices. Apply filters to the chosen
-`flow:` ID after inspecting its exact column names. Plain XLS-only bulletins keep
-the existing download behavior. If no related dataset is downloadable, existing
+`flow:` ID after inspecting its exact column names. Without CSV choices, the first linked file is read when it is Excel; use an
+explicit file ID to choose a particular table. If no related dataset is downloadable, existing
 file downloads remain usable; with no files the response is `not_structured`.
 
 The third example is a public foreign-trade CSV verified during development.
@@ -153,26 +153,38 @@ restart, expiration (one hour), or cache eviction.
 
 `get_tuik_data` returns one of:
 
-- `ok`: CSV `columns`, string-valued `rows`, `total_rows` after filtering, and
+- `ok`: CSV/Excel `columns`, string-valued `rows`, `total_rows` after filtering, and
   `truncated`. Turkish decimal text, labels and missing-value markers are retained.
 - `related_datasets`: the bulletin links dataflow tables. Choose a returned `flow:`
   ID marked `downloadable: true` and call this tool again to retrieve CSV rows.
   No table is selected automatically; existing file downloads remain in the response.
 - `download_available`: an actual file has been downloaded within the size bound
   and its signature/media type checked. `download_links` includes its official URL,
-  format, verification flag and byte count. XLS, XLSX, ZIP and PDF are not ingested.
+  format, verification flag and byte count. PDF and ZIP remain downloads; XLS/XLSX return parsed rows.
 - `not_structured`: no supported public export is advertised.
-- `unsupported_filters`: filters were requested for a non-CSV resource; none applied.
+- `unsupported_filters`: filters were requested for a resource without CSV/Excel rows; none applied.
 - `error`: a structured `code`, `message`, and source URL, for example an upstream
   timeout, unavailable resource, oversized export or `download_throttled` (TÜİK kept
   limiting file downloads; the message says when to retry). MCP schema validation
   failures are standard MCP tool errors before execution.
 
-CSV filters are **local exact string equality**, not a universal query language.
+CSV/Excel filters are **local exact string equality**, not a universal query language.
 Call without filters to inspect the exact column labels, then use those labels as
 keys. A limit bounds returned rows (1–1000), not the full upstream file download.
 An unsupported filter column is an error. File download URLs can expire or change;
 repeat the search/detail request if necessary.
+
+For Excel, select `download_links[].resource_id` from bulletin metadata and call
+`get_tuik_data` with that file ID. The first worksheet is the default; `sheets`
+lists available names and optional `sheet` chooses one. Results include `format`,
+`extraction`, `sheet`, `table_title`, `table_title_en`, `unit`, `table_notes`,
+`source_note`, `layout` and `warnings`. Existing `notes` retains resource metadata.
+Column labels remain as published (often bilingual); `columns_en` can be empty.
+Unrecognized layouts return a raw grid with explicit warnings. Exact filters use
+these returned column labels. File URL, sheet and retrieval time identify the
+source snapshot for citation. Passing `sheet` for a CSV is an input error.
+When a bulletin offers dataflow CSV choices, choose a `flow:` ID for CSV or an
+explicit file ID for Excel; no related table is selected automatically.
 
 ## Configuration and reliability
 
@@ -206,8 +218,7 @@ File parsing has configurable sheet/cell limits and an XLSX uncompressed-size
 preflight (see `.env.example`). XLSX dimensions are checked against actual XML
 coordinates, then rows are counted again during read-only loading. File parsing
 services share a 32 MiB payload-byte cache of one-hour downloads and parsed results;
-keys include stable resource identity and content SHA-256. Limits and cache wiring
-for each MCP file-reading path ship with that tool integration (#6, #7).
+keys include stable resource identity and content SHA-256. Excel reading uses these limits and caches; PDF wiring follows in #7.
 Workers run off the event loop, one at a time; cancellation waits for the active
 worker to finish. Input budgets limit ordinary workloads; they are not a hard CPU
 or process-memory sandbox for malicious library inputs.
@@ -284,7 +295,7 @@ pyproject.toml, README.md, .env.example, Dockerfile
   unverified TÜİK subdomains are excluded from the allowlist.
 - Download links listed in metadata are advertised, not necessarily verified.
   `get_tuik_data` verifies one selected file (preferring CSV); other links retain
-  `verified: false`. No spreadsheet or document ingestion is implemented.
+  `verified: false`. Excel tables are parsed on demand; PDF documents remain downloads.
 - Transport is local stdio. HTTP transport can be added to the SDK entrypoint
   later with explicit deployment constraints.
 

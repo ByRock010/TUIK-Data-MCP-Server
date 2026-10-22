@@ -72,3 +72,14 @@ class DataResponse(Provenance):
     total_rows: int | None = None
     related_datasets: list[RelatedDataset] = Field(default_factory=list)
     truncated: bool = False
+    format: str | None = None
+    extraction: str | None = None
+    sheet: str | None = None
+    sheets: list[str] = Field(default_factory=list)
+    table_title: str | None = None
+    table_title_en: str | None = None
+    columns_en: list[str] = Field(default_factory=list)
+    table_notes: list[str] = Field(default_factory=list)
+    source_note: str | None = None
+    layout: Literal["table", "raw"] | None = None
+    warnings: list[str] = Field(default_factory=list)

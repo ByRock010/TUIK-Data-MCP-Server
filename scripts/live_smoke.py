@@ -56,7 +56,8 @@ async def run():
                         "source_url": detail["source_url"],
                     }
                     download = await call("get_tuik_data", {"resource_id": table["id"]})
-                    assert download["status"] == "download_available"
+                    assert download["status"] == "ok" and download["rows"]
+                    assert download["extraction"] in {"xls", "xlsx"}
                     assert download["download_links"][0]["verified"]
                     report["download"] = download
             datasets = await call(
