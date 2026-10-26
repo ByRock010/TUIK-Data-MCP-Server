@@ -1,22 +1,29 @@
 # Contributing
 
-This project follows **Git Flow**. Nobody commits directly to `master` or `develop`;
+This project uses topic branches into `develop`, then `develop` into `master`.
+Nobody commits directly to `master` or `develop`;
 every change arrives through a pull request that passes CI and gets one review.
 
 ## Branches
 
 | Branch | Purpose | Created from | Merges into |
 | --- | --- | --- | --- |
-| `master` | Released code only. Every commit is a tagged version. | — | — |
-| `develop` | Integration branch; the next release in progress. | `master` | — |
+| `master` | Released code, promoted only from `develop` | — | — |
+| `develop` | Integration branch; the next release in progress | `master` initially | `master` |
 | `feature/<issue>-<slug>` | New tools or capabilities | `develop` | `develop` |
-| `fix/<issue>-<slug>` | Non-urgent bug fixes | `develop` | `develop` |
+| `fix/<issue>-<slug>`, `bugfix/<issue>-<slug>`, `hotfix/<issue>-<slug>` | Bug fixes, including urgent fixes | `develop` | `develop` |
 | `docs/<slug>`, `chore/<slug>`, `refactor/<slug>` | Docs, tooling, cleanup | `develop` | `develop` |
-| `release/<x.y.z>` | Release stabilization: version bump, changelog, final checks | `develop` | `master` **and** `develop` |
-| `hotfix/<x.y.z>` | Urgent fix for a released version | `master` | `master` **and** `develop` |
 
 Examples: `feature/12-xlsx-ingestion`, `fix/18-csv-semicolon-delimiter`,
-`release/0.2.0`, `hotfix/0.1.1`.
+`chore/prepare-0.2.0`, `hotfix/18-parser-crash`.
+
+The required `Branch policy` check accepts topic prefixes `feature`, `fix`,
+`bugfix`, `hotfix`, `docs`, `chore`, `refactor`, `test`, `perf`, `build`, `ci`
+and `revert`, followed by `/` and a nonempty slug without spaces or nested `/`.
+Issue numbers are encouraged but not mandatory. Fork topic PRs into `develop`
+are allowed; a fork branch named `develop` cannot promote into `master`.
+Git does not record where a branch was originally created: create it from
+`develop` as below and keep it up to date with `develop` before merging.
 
 ## Day-to-day workflow
 
@@ -103,11 +110,11 @@ and [push event workflows](https://docs.github.com/en/actions/reference/workflow
 
 ## Releasing
 
-1. `git switch -c release/0.2.0 develop`
+1. `git switch -c chore/prepare-0.2.0 develop`
 2. Bump `version` in `pyproject.toml`, move `[Unreleased]` entries in
    `CHANGELOG.md` under `[0.2.0] - YYYY-MM-DD`, and refresh `docs/VERIFICATION.md`
-   with a live run if needed. Only fixes go on a release branch, no new features.
-3. Open a PR `release/0.2.0 → master`. Merge with a **merge commit** (not squash),
+   with a live run if needed. Open a PR into `develop` and merge after CI and review.
+3. Open a PR `develop → master`. Merge with a **merge commit** (not squash),
    so `master` and `develop` keep a shared history.
 4. Tag the merge commit on `master` and push the tag:
 
@@ -117,10 +124,11 @@ and [push event workflows](https://docs.github.com/en/actions/reference/workflow
    git push origin v0.2.0
    ```
 
-5. Merge `master` back into `develop` (PR `master → develop`) so the version bump
-   and release fixes are not lost.
+5. Continue new work from `develop`. Release preparation is already in `develop`;
+   there is no `master → develop` PR in this workflow.
 
-Hotfixes follow the same steps, branching from `master` and bumping the patch version.
+Hotfixes branch from `develop`, merge into `develop`, and then promote through
+`develop → master`, bumping the patch version when appropriate.
 
 ## Versioning
 
@@ -131,12 +139,40 @@ the changelog.
 
 ## Repository settings (admin)
 
-Configure branch protection on GitHub for both `master` and `develop`:
+The active GitHub branch rulesets for `master` and `develop` are stored as
+API/import payloads in [`.github/rulesets/`](.github/rulesets/). Changes to these
+files alone do not update GitHub; an administrator must apply the payload with
+the repository rulesets API or import it in Settings → Rules → Rulesets.
 
-- Require a pull request before merging, with at least 1 approval
-- Require status checks: the CI `Lint and test` jobs and `Docker build`
-- Require branches to be up to date before merging
+- Require a pull request before merging, with at least 1 approval; dismiss stale
+  approvals when reviewable changes are pushed and resolve review conversations
+- Require `Lint and test (Python 3.12)`, `Lint and test (Python 3.13)`,
+  `Docker build`, and `Branch policy`, all from the GitHub Actions app
+- Require topic branches to be up to date with `develop` before merging
+- Allow only merge commits for `develop → master`, preserving shared history;
+  `master` does not require `develop` to include its previous release merge commit
 - Block force pushes and deletions
+- No bypass actors, including administrators
+
+Bootstrap: the branch-policy workflow is introduced by its own topic PR into
+`develop`. That PR runs the new required check and still needs one teammate's
+approval. Existing PRs without the workflow must update from `develop` after
+the setup PR merges. A subsequent `develop → master` PR carries the workflow
+to `master` and runs the same check. Do not release unrelated code just to install
+the workflow. Review changes to the CI workflow and branch-policy script carefully:
+like the other CI jobs, this check runs from the PR revision with read-only access.
+
+The check validates source/target names; the rulesets enforce PRs, reviews and CI.
+It does not prove a branch's historical creation point. No signed-commit or linear
+history requirement is enabled. Weekly live TÜİK checks remain optional.
+
+Offline branch-policy regression checks (also run in CI):
+
+```bash
+node --test .github/scripts/branch-policy.test.cjs
+```
+
+See [GitHub's ruleset documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets).
 
 ## Live upstream contract monitoring
 

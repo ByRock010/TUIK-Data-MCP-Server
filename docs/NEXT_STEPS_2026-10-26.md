@@ -9,7 +9,7 @@ next implementation decisions; it does not supersede the issue acceptance criter
 
 - #6, #7 and #9 are merged into `develop`; PR #48 also promoted that code to `master`.
   The package is still 0.1.0 and #10 remains open: promotion alone did not complete
-  the documented `release/0.2.0`, version/changelog/tag process.
+  the documented `develop → master`, version/changelog/tag process.
 - #11 is the next research priority. Collect a real baseline and prepare pooled
   independent judging before implementing a new ranking system. Human grades and κ
   cannot be fabricated to close the issue.
