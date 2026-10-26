@@ -1,0 +1,6032 @@
+{
+  "status": "ok",
+  "checked_at": "2026-10-26T05:57:13.579731+00:00",
+  "index": "tuik-analysis-probe-21534a52c79f409e923932204f05cff8",
+  "tokens": {
+    "İ": {
+      "turkish": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "I": {
+      "turkish": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "i": {
+      "turkish": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "ı": {
+      "turkish": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ı",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "i",
+          "start_offset": 0,
+          "end_offset": 1,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "İSTANBUL": {
+      "turkish": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ist",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ista",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istan",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanb",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbu",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "IĞDIR": {
+      "turkish": [
+        {
+          "token": "ık",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ık",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ık",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "igdir",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "igdir",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "igd",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "igdi",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "igdir",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "igi",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "İstanbul'un": {
+      "turkish": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ist",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ista",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istan",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanb",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbu",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "İstanbul’un": {
+      "turkish": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ist",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ista",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istan",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanb",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbu",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "istanbul",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "Ankara'da": {
+      "turkish": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ank",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "anka",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "Ankara’da": {
+      "turkish": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ank",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "anka",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ankara",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "ankar",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "TÜİK'in": {
+      "turkish": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "tui",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "TÜİK’in": {
+      "turkish": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "tüik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "tui",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "tuik",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "işsizlik": {
+      "turkish": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "iss",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issi",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issiz",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizl",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizli",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "işsizliğin": {
+      "turkish": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "işsizlik",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "iss",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issiz",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizl",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizli",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizlig",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "issizlik": {
+      "turkish": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "iss",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issi",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issiz",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizl",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizli",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "issizlik",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "issizligin": {
+      "turkish": [
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "iss",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issiz",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizl",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizli",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizlig",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "issizligin",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "issizligi",
+          "start_offset": 0,
+          "end_offset": 10,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "nüfus": {
+      "turkish": [
+        {
+          "token": "nüfus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "nüfus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "nüfus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufu",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "nüfusun": {
+      "turkish": [
+        {
+          "token": "nüfu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "nüfu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "nüfu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufusu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "nufus": {
+      "turkish": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufu",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "nufusun": {
+      "turkish": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufusu",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nufusun",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "nuf",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "TÜFE": {
+      "turkish": [
+        {
+          "token": "tüf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "tüf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "tüf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "tuf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "TUFE": {
+      "turkish": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "tuf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "ÜFE": {
+      "turkish": [
+        {
+          "token": "üf",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "üf",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "üretiç",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "üf",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "ufe",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "uretici",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ufe",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "ufe",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "Yİ-ÜFE": {
+      "turkish": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "üf",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "üf",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "iç",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 4,
+          "positionLength": 2
+        },
+        {
+          "token": "üf",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 5
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "ici",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "uretici",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 4,
+          "positionLength": 2
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 5
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ]
+    },
+    "YI-UFE": {
+      "turkish": [
+        {
+          "token": "yı",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "yı",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "yı",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "ici",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "uretici",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "SYNONYM",
+          "position": 4,
+          "positionLength": 2
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 5
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 2,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ufe",
+          "start_offset": 3,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ]
+    },
+    "GSYH": {
+      "turkish": [
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "gayrisaf",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 4
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "iç",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "hasıl",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 3
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "gayrisafi",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 4
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "ici",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "hasila",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 3
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "gsy",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "gsyh",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "HİA": {
+      "turkish": [
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "hanehalkı",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "işgüç",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "araştırmas",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "hanehalki",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "isgucu",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "arastirmasi",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "hia",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "ADNKS": {
+      "turkish": [
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "adres",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "dayal",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "nüfus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "kayıt",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "siste",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 4
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "adrese",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "dayali",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "nufus",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "kayit",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "sistemi",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "SYNONYM",
+          "position": 4
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "adn",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "adnk",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "adnks",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "NACE": {
+      "turkish": [
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ekonomik",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "faaliyet",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "sınıflamas",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "ekonomik",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "faaliyet",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "siniflamasi",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "SYNONYM",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "nac",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "nace",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "enflasyon": {
+      "turkish": [
+        {
+          "token": "enflasyo",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "enflasyo",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "enflasyo",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 9
+        },
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 2,
+          "positionLength": 7
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 4,
+          "positionLength": 5
+        },
+        {
+          "token": "iç",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 5
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 6
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 7
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 8
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "enflasyon",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "enflasyon",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 9
+        },
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "uretici",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 5
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 2,
+          "positionLength": 7
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 4,
+          "positionLength": 5
+        },
+        {
+          "token": "ici",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 5
+        },
+        {
+          "token": "uretici",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 6
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 7
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "SYNONYM",
+          "position": 8
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "enf",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enfl",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enfla",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflas",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflasy",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflasyo",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflasyon",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "enflasyo",
+          "start_offset": 0,
+          "end_offset": 9,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "hayat pahalılığı": {
+      "turkish": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "pahalılık",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "pahalılık",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "pahalılık",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 3
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "pahaliligi",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "pahaliligi",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 0,
+          "end_offset": 16,
+          "type": "SYNONYM",
+          "position": 3
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "hay",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "haya",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "pah",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "paha",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahal",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahali",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahalil",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahalili",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahalilig",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "pahaliligi",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "hayat",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "pahaliligi",
+          "start_offset": 6,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ]
+    },
+    "milli gelir": {
+      "turkish": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gelir",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gelir",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "gayrisaf",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "gelir",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 4
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "iç",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "hasıl",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 4
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gelir",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "gayrisafi",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "gelir",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 4
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 2
+        },
+        {
+          "token": "ici",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 3
+        },
+        {
+          "token": "hasila",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 4
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "mil",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "mill",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gel",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "geli",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "gelir",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "milli",
+          "start_offset": 0,
+          "end_offset": 5,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "gelir",
+          "start_offset": 6,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ]
+    },
+    "dış ticaret": {
+      "turkish": [
+        {
+          "token": "dış",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "dış",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "dış",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "ithalat",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "dis",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "dis",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "ithalat",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 0,
+          "end_offset": 11,
+          "type": "SYNONYM",
+          "position": 1
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "dis",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tic",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "tica",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "ticar",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "ticare",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "dis",
+          "start_offset": 0,
+          "end_offset": 3,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ticaret",
+          "start_offset": 4,
+          "end_offset": 11,
+          "type": "<ALPHANUM>",
+          "position": 1
+        }
+      ]
+    },
+    "ihracat": {
+      "turkish": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "ihr",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ihra",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ihrac",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ihraca",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "ihracat",
+          "start_offset": 0,
+          "end_offset": 7,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "büyüme": {
+      "turkish": [
+        {
+          "token": "büy",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "büy",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "büy",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "buyume",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "buyume",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "buy",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "buyu",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "buyum",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "buyume",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "buyume",
+          "start_offset": 0,
+          "end_offset": 6,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "enflsyon": {
+      "turkish": [
+        {
+          "token": "enflsyo",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "enflsyo",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "enflsyo",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "enflsyon",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "enflsyon",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "enf",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enfl",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enfls",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflsy",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflsyo",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "enflsyon",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "enflsyo",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        }
+      ]
+    },
+    "Tüketici Fiyat Endeksi": {
+      "turkish": [
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "tüf",
+          "start_offset": 0,
+          "end_offset": 22,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "tüketiç",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "tufe",
+          "start_offset": 0,
+          "end_offset": 22,
+          "type": "SYNONYM",
+          "position": 0,
+          "positionLength": 3
+        },
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "tuk",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuke",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuket",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuketi",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuketic",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "tuketici",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiy",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "fiya",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "end",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "ende",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "endek",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "endeks",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "tuketiç",
+          "start_offset": 0,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 9,
+          "end_offset": 14,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 15,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 2
+        }
+      ]
+    },
+    "Yurt İçi Üretici Fiyat Endeksi": {
+      "turkish": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "iç",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        }
+      ],
+      "tuik_tr_index": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "iç",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        }
+      ],
+      "tuik_tr_search": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 30,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "üf",
+          "start_offset": 0,
+          "end_offset": 30,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 5
+        },
+        {
+          "token": "iç",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "üretiç",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 5
+        }
+      ],
+      "tuik_ascii_index": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ici",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "uretici",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        }
+      ],
+      "tuik_ascii_search": [
+        {
+          "token": "yi",
+          "start_offset": 0,
+          "end_offset": 30,
+          "type": "SYNONYM",
+          "position": 0
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0,
+          "positionLength": 2
+        },
+        {
+          "token": "ufe",
+          "start_offset": 0,
+          "end_offset": 30,
+          "type": "SYNONYM",
+          "position": 1,
+          "positionLength": 5
+        },
+        {
+          "token": "ici",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "uretici",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 5
+        }
+      ],
+      "probe_edge": [
+        {
+          "token": "yur",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "ici",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "ure",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "uret",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "ureti",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "uretic",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "uretici",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "fiy",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "fiya",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "end",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "ende",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "endek",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "endeks",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        }
+      ],
+      "probe_fold_then_stem": [
+        {
+          "token": "yurt",
+          "start_offset": 0,
+          "end_offset": 4,
+          "type": "<ALPHANUM>",
+          "position": 0
+        },
+        {
+          "token": "iç",
+          "start_offset": 5,
+          "end_offset": 8,
+          "type": "<ALPHANUM>",
+          "position": 1
+        },
+        {
+          "token": "uretiç",
+          "start_offset": 9,
+          "end_offset": 16,
+          "type": "<ALPHANUM>",
+          "position": 2
+        },
+        {
+          "token": "fiyat",
+          "start_offset": 17,
+          "end_offset": 22,
+          "type": "<ALPHANUM>",
+          "position": 3
+        },
+        {
+          "token": "endeksi",
+          "start_offset": 23,
+          "end_offset": 30,
+          "type": "<ALPHANUM>",
+          "position": 4
+        }
+      ]
+    }
+  },
+  "retrieval_probes": {
+    "işsizliğin": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "işsizliğin"
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "işsizliğin"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "işsizliğin",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "işsizliğin"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "işsizliğin",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "işsizliğin",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "işsizliğin",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      }
+    },
+    "issizlik": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "issizlik"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "issizlik"
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "issizlik",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "issizlik"
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "issizlik",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "issizlik",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "issizlik",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "unemployment"
+        ]
+      }
+    },
+    "issizligin": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "issizligin"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "issizligin"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "issizligin",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "issizligin"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "issizligin",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "issizligin",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "issizligin",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": []
+      }
+    },
+    "nufus": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "nufus"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "nufus"
+          }
+        },
+        "hits": [
+          "population"
+        ]
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "nufus",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "istanbul",
+          "population"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "nufus"
+          }
+        },
+        "hits": [
+          "istanbul",
+          "population"
+        ]
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "nufus",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": [
+          "population"
+        ]
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "nufus",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "nufus",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "population"
+        ]
+      }
+    },
+    "nufusun": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "nufusun"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "nufusun"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "nufusun",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "istanbul",
+          "population"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "nufusun"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "nufusun",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "nufusun",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "nufusun",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": []
+      }
+    },
+    "nüfusun": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "nüfusun"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "nüfusun"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "nüfusun",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "istanbul",
+          "population"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "nüfusun"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "nüfusun",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "nüfusun",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "nüfusun",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": []
+      }
+    },
+    "TÜFE": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "TÜFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "TÜFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "TÜFE",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "TÜFE"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "TÜFE",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "TÜFE",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "TÜFE",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "cpi"
+        ]
+      }
+    },
+    "TUFE": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "TUFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "TUFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "TUFE",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "TUFE"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "TUFE",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "TUFE",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "TUFE",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "cpi"
+        ]
+      }
+    },
+    "Yİ-ÜFE": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "Yİ-ÜFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "Yİ-ÜFE"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "Yİ-ÜFE",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "Yİ-ÜFE"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "Yİ-ÜFE",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "Yİ-ÜFE",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "Yİ-ÜFE",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "ppi"
+        ]
+      }
+    },
+    "enflasyon": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "enflasyon"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "enflasyon"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "enflasyon",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "enflasyon"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "enflasyon",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "enflasyon",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "enflasyon",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "ppi",
+          "cpi"
+        ]
+      }
+    },
+    "enflsyon": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "enflsyon"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "enflsyon"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "enflsyon",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "enflsyon"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "enflsyon",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "enflsyon",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "enflsyon",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": []
+      }
+    },
+    "İstanbul'un": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "İstanbul'un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "İstanbul'un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "İstanbul'un",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "İstanbul'un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "İstanbul'un",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "İstanbul'un",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "İstanbul'un",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      }
+    },
+    "İstanbul’un": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "İstanbul’un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "İstanbul’un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "İstanbul’un",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "İstanbul’un"
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "İstanbul’un",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "İstanbul’un",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "İstanbul’un",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "istanbul"
+        ]
+      }
+    },
+    "dış ticaret": {
+      "builtin_turkish": {
+        "query": {
+          "match": {
+            "builtin": "dış ticaret"
+          }
+        },
+        "hits": []
+      },
+      "fold_only": {
+        "query": {
+          "match": {
+            "title.ascii": "dış ticaret"
+          }
+        },
+        "hits": []
+      },
+      "fold_fuzzy": {
+        "query": {
+          "match": {
+            "title.ascii": {
+              "query": "dış ticaret",
+              "fuzziness": "AUTO",
+              "prefix_length": 1,
+              "max_expansions": 50
+            }
+          }
+        },
+        "hits": []
+      },
+      "ascii_edge": {
+        "query": {
+          "match": {
+            "title.prefix": "dış ticaret"
+          }
+        },
+        "hits": []
+      },
+      "multi_field": {
+        "query": {
+          "multi_match": {
+            "query": "dış ticaret",
+            "type": "best_fields",
+            "fields": [
+              "title^4",
+              "title.ascii"
+            ]
+          }
+        },
+        "hits": []
+      },
+      "multi_field_synonyms": {
+        "query": {
+          "dis_max": {
+            "queries": [
+              {
+                "match": {
+                  "title": {
+                    "query": "dış ticaret",
+                    "analyzer": "tuik_tr_search",
+                    "boost": 4
+                  }
+                }
+              },
+              {
+                "match": {
+                  "title.ascii": {
+                    "query": "dış ticaret",
+                    "analyzer": "tuik_ascii_search"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hits": [
+          "export",
+          "import"
+        ]
+      }
+    }
+  },
+  "script_sha256": "8d3f3b6712ffd58f79b3ae3f24192b54a785ae489112bb1c73eb7dd98f49e6ee",
+  "definition": {
+    "settings": {
+      "analysis": {
+        "char_filter": {
+          "tuik_apostrophes": {
+            "type": "mapping",
+            "mappings": [
+              "’ => '",
+              "‘ => '",
+              "ʼ => '",
+              "＇ => '"
+            ]
+          }
+        },
+        "filter": {
+          "tuik_lowercase": {
+            "type": "lowercase",
+            "language": "turkish"
+          },
+          "tuik_stemmer": {
+            "type": "stemmer",
+            "language": "turkish"
+          },
+          "tuik_tr_synonyms": {
+            "type": "synonym_graph",
+            "expand": true,
+            "lenient": false,
+            "synonyms": [
+              "tüfe, tüketici fiyat endeksi",
+              "üfe, üretici fiyat endeksi",
+              "yi üfe, yurt içi üretici fiyat endeksi",
+              "gsyh, gayrisafi yurt içi hasıla",
+              "hia, hanehalkı işgücü araştırması",
+              "adnks, adrese dayalı nüfus kayıt sistemi",
+              "nace, ekonomik faaliyet sınıflaması",
+              "enflasyon => enflasyon, tüketici fiyat endeksi, üretici fiyat endeksi, yurt içi üretici fiyat endeksi",
+              "hayat pahalılığı => hayat pahalılığı, tüketici fiyat endeksi",
+              "milli gelir => milli gelir, gayrisafi yurt içi hasıla",
+              "dış ticaret => dış ticaret, ihracat, ithalat"
+            ]
+          },
+          "tuik_ascii_synonyms": {
+            "type": "synonym_graph",
+            "expand": true,
+            "lenient": false,
+            "synonyms": [
+              "tüfe, tüketici fiyat endeksi",
+              "üfe, üretici fiyat endeksi",
+              "yi üfe, yurt içi üretici fiyat endeksi",
+              "gsyh, gayrisafi yurt içi hasıla",
+              "hia, hanehalkı işgücü araştırması",
+              "adnks, adrese dayalı nüfus kayıt sistemi",
+              "nace, ekonomik faaliyet sınıflaması",
+              "enflasyon => enflasyon, tüketici fiyat endeksi, üretici fiyat endeksi, yurt içi üretici fiyat endeksi",
+              "hayat pahalılığı => hayat pahalılığı, tüketici fiyat endeksi",
+              "milli gelir => milli gelir, gayrisafi yurt içi hasıla",
+              "dış ticaret => dış ticaret, ihracat, ithalat"
+            ]
+          },
+          "probe_edge": {
+            "type": "edge_ngram",
+            "min_gram": 3,
+            "max_gram": 20,
+            "preserve_original": true
+          }
+        },
+        "analyzer": {
+          "tuik_tr_index": {
+            "type": "custom",
+            "char_filter": [
+              "tuik_apostrophes"
+            ],
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "tuik_stemmer"
+            ]
+          },
+          "tuik_tr_search": {
+            "type": "custom",
+            "char_filter": [
+              "tuik_apostrophes"
+            ],
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "tuik_tr_synonyms",
+              "tuik_stemmer"
+            ]
+          },
+          "tuik_ascii_index": {
+            "type": "custom",
+            "char_filter": [
+              "tuik_apostrophes"
+            ],
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "asciifolding"
+            ]
+          },
+          "tuik_ascii_search": {
+            "type": "custom",
+            "char_filter": [
+              "tuik_apostrophes"
+            ],
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "asciifolding",
+              "tuik_ascii_synonyms"
+            ]
+          },
+          "probe_edge": {
+            "type": "custom",
+            "char_filter": [
+              "tuik_apostrophes"
+            ],
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "asciifolding",
+              "probe_edge"
+            ]
+          },
+          "probe_fold_then_stem": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "apostrophe",
+              "tuik_lowercase",
+              "asciifolding",
+              "tuik_stemmer"
+            ]
+          }
+        }
+      },
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "title": {
+          "type": "text",
+          "analyzer": "tuik_tr_index",
+          "fields": {
+            "ascii": {
+              "type": "text",
+              "analyzer": "tuik_ascii_index"
+            },
+            "prefix": {
+              "type": "text",
+              "analyzer": "probe_edge",
+              "search_analyzer": "tuik_ascii_index"
+            }
+          }
+        },
+        "builtin": {
+          "type": "text",
+          "analyzer": "turkish"
+        }
+      }
+    }
+  },
+  "engine": {
+    "distribution": "opensearch",
+    "number": "3.3.2",
+    "build_type": "tar",
+    "build_hash": "6564992150e26aaa62d4522a220dfff5188aeb88",
+    "build_date": "2025-10-29T22:22:22.753988939Z",
+    "build_snapshot": false,
+    "lucene_version": "10.3.1",
+    "minimum_wire_compatibility_version": "2.19.0",
+    "minimum_index_compatibility_version": "2.0.0"
+  },
+  "controlled_documents": {
+    "unemployment": "İşsizlik Oranı",
+    "population": "Adrese Dayalı Nüfus Kayıt Sistemi",
+    "cpi": "Tüketici Fiyat Endeksi",
+    "ppi": "Yurt İçi Üretici Fiyat Endeksi",
+    "gdp": "Gayrisafi Yurt İçi Hasıla",
+    "labour": "Hanehalkı İşgücü Araştırması",
+    "export": "İhracat",
+    "import": "İthalat",
+    "istanbul": "İstanbul Nüfusu"
+  },
+  "cleanup": {
+    "acknowledged": true
+  }
+}

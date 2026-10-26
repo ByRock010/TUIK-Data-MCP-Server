@@ -50,6 +50,10 @@ All notable changes to this project are documented here. The format follows
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
 
+- Packaged Turkish/ASCII analysis settings and candidate search-time synonym graphs,
+  a reproducible OpenSearch token/retrieval probe, measured ASCII-inflection limits,
+  search field design and the optional derived-index architecture ADR (#13).
+
 ### Changed
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving
