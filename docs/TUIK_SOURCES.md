@@ -204,8 +204,11 @@ The new JSON-only crawl adapter lists bulletins with empty text and `typeIds: [1
 non-archive. A recorded first-page response on 26 October reported 1,485 records;
 this is an observation, never a runtime constant. It is non-chronological. All pages
 must be visited even when early pages contain previously seen IDs. The first page
-establishes page size; repeated pages and final total/listing-row-count mismatches fail
-before committing state.
+establishes page size; repeated pages and final total/listing-row-count or
+unique-ID-count mismatches fail before committing state. Overlapping pages can
+hide unseen bulletins, so complete enumeration requires unique IDs as well as raw
+rows to match the upstream total. No source evidence currently establishes that
+stable full-list duplicates are legitimate; partial live samples cannot prove it.
 
 Crawl request starts are at least 2 seconds apart, matching the earlier #27 rate
 findings rather than #15's original 0.5-second assumption. A 429 establishes a

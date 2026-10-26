@@ -13,7 +13,14 @@ from tuik_mcp.clients.base import SourceError
 from tuik_mcp.clients.crawl import CrawlFlow, CrawlHttpClient, CrawlPress, CrawlSource, ThemeNode
 from tuik_mcp.clients.tuik_portal import SearchItem, SearchPage
 from tuik_mcp.config import Settings
-from tuik_mcp.search.crawl import CrawlState, MetadataCrawler, portal_date, state_bytes
+from tuik_mcp.search.crawl import (
+    CrawlState,
+    MetadataCrawler,
+    PressSnapshot,
+    portal_date,
+    state_bytes,
+)
+from tuik_mcp.search.documents import IndexDocument
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -164,21 +171,38 @@ async def test_repeated_pages_are_not_reported_as_a_complete_crawl():
     assert crawler.next_state is None
 
 
-async def test_overlapping_pages_deduplicate_ids_without_confusing_source_row_total():
+@pytest.mark.parametrize("has_previous_state", [False, True])
+async def test_overlapping_pages_cannot_commit_while_a_bulletin_is_unseen(has_previous_state):
     source = Source()
     original = source.listing
     first, second = await original(1), await original(2)
 
     async def overlap(page):
-        return SearchPage(data=first.data + second.data if page == 1 else first.data, total=3)
+        # Source says A/B/C exist, but unstable ordering returns [A, B], [B].
+        return SearchPage(data=first.data + second.data if page == 1 else second.data, total=3)
 
     source.listing = overlap
-    crawler = MetadataCrawler(source)
-    await collect(crawler)
+    state = CrawlState()
+    if has_previous_state:
+        state.records["press:99999"] = PressSnapshot(
+            bulletin=IndexDocument(
+                id="press:99999",
+                kind="bulletin",
+                title="Synthetic third bulletin C",
+                source_url="https://veriportali.tuik.gov.tr/tr/press/99999",
+            )
+        )
+    before = state.model_dump_json()
+    crawler = MetadataCrawler(source, state)
+    with pytest.raises(SourceError) as exc:
+        await collect(crawler)
+    assert exc.value.code == "incomplete_listing"
     assert crawler.report["listing_rows"] == 3
     assert crawler.report["listed_bulletins"] == 2
     assert crawler.report["duplicate_listing_rows"] == 1
-    assert crawler.next_state is not None and len(crawler.next_state.records) == 2
+    assert crawler.report["status"] == "error" and crawler.report["partial"]
+    assert crawler.next_state is None and state.model_dump_json() == before
+    assert not any(call.startswith("press:") for call in source.calls)
 
 
 async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(monkeypatch):
@@ -258,6 +282,7 @@ async def test_complete_listing_reconciles_removed_ids_but_count_mismatch_fails(
     smaller = MetadataCrawler(source, first.next_state)
     await collect(smaller)
     assert smaller.report["missing_from_listing"] == ["press:58058"]
+    assert any("inspect before applying index removals" in w for w in smaller.report["warnings"])
     assert set(smaller.next_state.records) == {"press:57987"}
 
     async def empty(page):
@@ -329,6 +354,19 @@ async def test_cli_commits_only_success_and_preserves_state_and_output_on_failur
     assert args.state.read_bytes() == state and args.output.read_bytes() == output
     assert json.loads(args.report.read_text())["state_committed"] is False
     source.fail = None
+    original = source.listing
+    a, b = await original(1), await original(2)
+
+    async def overlap(page):
+        return SearchPage(data=a.data + b.data if page == 1 else b.data, total=3)
+
+    source.listing = overlap
+    assert await module.run(args) == 1
+    assert args.state.read_bytes() == state and args.output.read_bytes() == output
+    report = json.loads(args.report.read_text())
+    assert report["error"]["code"] == "incomplete_listing"
+    assert report["listed_bulletins"] == 2 and report["duplicate_listing_rows"] == 1
+    source.listing = original
     args.dry_run, args.max_pages = True, 1
     assert await module.run(args) == 0
     assert args.state.read_bytes() == state

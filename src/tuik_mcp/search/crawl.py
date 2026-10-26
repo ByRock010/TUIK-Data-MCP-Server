@@ -241,6 +241,7 @@ class MetadataCrawler:
             "fetched_bulletins": 0,
             "reused_bulletins": 0,
             "counts": {},
+            "partial": True,
         }
         try:
             flows = await self.source.flows()
@@ -282,16 +283,18 @@ class MetadataCrawler:
                     break
             if not complete and page_limit is None:
                 raise ValueError("Bulletin listing exceeded 1000 pages")
-            if complete and listing_rows != report["upstream_total"]:
-                raise SourceError(
-                    "incomplete_listing",
-                    "Listing row count differs from the upstream total; "
-                    "retry before committing state",
-                    PORTAL + "/api/tr/data/search",
-                )
             report["listed_bulletins"] = len(listing)
             report["listing_rows"] = listing_rows
             report["duplicate_listing_rows"] = listing_rows - len(listing)
+            if complete and (
+                listing_rows != report["upstream_total"] or len(listing) != report["upstream_total"]
+            ):
+                raise SourceError(
+                    "incomplete_listing",
+                    "Listing row or unique bulletin count differs from the upstream total; "
+                    "retry full enumeration before committing state",
+                    PORTAL + "/api/tr/data/search",
+                )
             selected = list(listing)[:max_bulletins]
             limited = not complete or len(selected) < len(listing)
             report["partial"] = limited
@@ -377,6 +380,11 @@ class MetadataCrawler:
             report["missing_from_listing"] = (
                 sorted(set(self.state.records) - set(listing)) if complete else []
             )
+            if report["missing_from_listing"]:
+                report["warnings"].append(
+                    f"{len(report['missing_from_listing'])} previously cached bulletin(s) "
+                    "are absent from the complete listing; inspect before applying index removals."
+                )
             candidate = CrawlState(records=records) if not limited else None
             if candidate is not None:
                 await asyncio.to_thread(state_bytes, candidate)

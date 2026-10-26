@@ -71,6 +71,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Complete metadata crawls reject overlapping pages when unique bulletin IDs do
+  not match the upstream total, preserving prior output/state instead of silently
+  losing unseen bulletins. Reports retain incomplete-listing diagnostics (#15).
+
 - XLSX preflight counts optional cell coordinates within each row instead of
   accumulating columns across the worksheet, preserving correct cell-budget checks (#9).
 

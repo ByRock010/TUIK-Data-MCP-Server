@@ -25,6 +25,8 @@ Default state: `.tuik-crawl-state.json` (gitignored); override with `--state`.
 State/output/report paths must differ. `--output` is optional only for dry runs.
 Scope limits are dry-run-only and explicitly set `partial`; they never authorize a
 checkpoint. Optional `--ipv4` is a local transport diagnostic, not a requirement.
+Its custom transport does not inherit environment proxy configuration; use the
+default transport when an environment proxy is required.
 
 ## Pacing and source freshness
 
@@ -38,9 +40,12 @@ Issue #15's old 0.5-second estimate is superseded by the rate-limit measurements
 The listing is not chronological. Incremental runs still enumerate every page,
 never stopping at a known ID/date. The first page establishes observed page size;
 totals/end-of-list determine termination. Repeated pages, exhausted limits and a
-final listing-row-count/total mismatch fail before checkpointing. Duplicate IDs
-across different pages are deduplicated and reported separately. The crawler compares
-the total with listing rows instead of assuming it equals the number of unique IDs.
+final listing-row-count or unique-ID-count mismatch fail before checkpointing.
+Duplicate IDs across pages are reported, but cannot establish complete coverage:
+the same number of source rows may hide an unseen bulletin. A complete enumeration
+must match the upstream total in both raw rows and unique IDs; otherwise it raises
+`incomplete_listing` without producing replacement output or advancing state.
+Partial previews may report overlaps but are never eligible for checkpoints.
 The source does not
 provide an atomic listing snapshot; changes during enumeration may require retry.
 
@@ -66,7 +71,8 @@ temporary file, flush/fsync and replacement. One writer per state file is suppor
 concurrent writers/locking are outside this increment.
 
 Only complete enumeration can reconcile absent IDs. `missing_from_listing` reports
-them; #16 owns corresponding index deletion/rebuild behavior. A partial listing
+them with an explicit warning; #16 owns corresponding index deletion/rebuild behavior.
+A partial listing
 must not be used to remove documents from an existing index.
 
 ## Classification, relations and dates
