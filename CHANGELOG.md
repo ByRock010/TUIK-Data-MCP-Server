@@ -67,6 +67,10 @@ All notable changes to this project are documented here. The format follows
   isolated title-prefix field, versioned physical index names and opt-in real-cluster
   mapping verification (#14).
 
+- JSON-only metadata crawler with full listing enumeration, source-aware category and
+  series relations, replayable incremental snapshots, atomic JSONL/state output,
+  explicit partial dry runs and crawl-specific pacing/429 cooldown (#15).
+
 ### Changed
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving
@@ -75,6 +79,10 @@ All notable changes to this project are documented here. The format follows
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed
+
+- Complete metadata crawls reject overlapping pages when unique bulletin IDs do
+  not match the upstream total, preserving prior output/state instead of silently
+  losing unseen bulletins. Reports retain incomplete-listing diagnostics (#15).
 
 - XLSX preflight counts optional cell coordinates within each row instead of
   accumulating columns across the worksheet, preserving correct cell-budget checks (#9).

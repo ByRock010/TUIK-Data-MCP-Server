@@ -6,3 +6,4 @@ __pycache__/
 dist/
 .env
 docs/research/
+.tuik-crawl-state.json

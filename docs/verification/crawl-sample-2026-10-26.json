@@ -1,0 +1,30 @@
+{
+  "status": "ok",
+  "state_committed": false,
+  "dry_run": true,
+  "started_at": "2026-10-26T10:05:16.963220+00:00",
+  "mode": "full",
+  "warnings": [],
+  "pages": 2,
+  "upstream_total": 1485,
+  "fetched_bulletins": 3,
+  "reused_bulletins": 0,
+  "counts": {
+    "dataset": 512,
+    "bulletin": 3,
+    "metadata": 3
+  },
+  "theme_tree": "ok",
+  "theme_tree_retrieved_at": "2026-10-26T10:05:19.334025+00:00",
+  "listed_bulletins": 20,
+  "listing_rows": 20,
+  "duplicate_listing_rows": 0,
+  "partial": true,
+  "theme_coverage": {
+    "bulletins_with_theme": 3,
+    "bulletins": 3,
+    "ratio": 1.0
+  },
+  "missing_from_listing": [],
+  "finished_at": "2026-10-26T10:05:29.225641+00:00"
+}
