@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- GitHub branch ruleset payloads requiring PRs, one approval and CI for `master`
+  and `develop`, with a tested branch-policy check enforcing topic PRs into
+  `develop` and promotions only from `develop` into `master`.
+
 - Turkish search evaluation preparation: 48 categorized queries, real portal/literal
   baseline snapshots, pooled top-ten candidates, independent judge sheets, validated
   label merge and corpus-aware nDCG/MRR/pooled-recall/Cohen's κ reporting. Human
