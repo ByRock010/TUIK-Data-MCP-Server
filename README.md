@@ -349,6 +349,8 @@ The [Turkish search design](docs/SEARCH_DESIGN.md) records the packaged analyzer
 chains, candidate synonym rules and real OpenSearch token/probe evidence (#13).
 [ADR 0002](docs/adr/0002-opensearch.md) explains the optional, rebuildable index.
 Reproduce the linguistic checks with `scripts/inspect_search_analysis.py --help`.
+The [index contract](docs/SEARCH_INDEX.md) defines the shared metadata documents,
+packaged strict mapping and opt-in real-cluster verification (#14).
 
 OpenSearch is optional. The base install and all seven MCP tools continue to work
 without it. This issue provides infrastructure and settings; indexing and routing
