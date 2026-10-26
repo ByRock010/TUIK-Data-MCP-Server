@@ -1,0 +1,16 @@
+# Candidate rules, versioned with the analyzer. Search-time only.
+# Equivalence within a named statistical concept; do not merge ÜFE and Yİ-ÜFE.
+tüfe, tüketici fiyat endeksi
+üfe, üretici fiyat endeksi
+yi üfe, yurt içi üretici fiyat endeksi
+gsyh, gayrisafi yurt içi hasıla
+hia, hanehalkı işgücü araştırması
+adnks, adrese dayalı nüfus kayıt sistemi
+nace, ekonomik faaliyet sınıflaması
+# Retain the original broad query and expand directly to full phrases.
+# Synonym expansion is not recursive: RHS abbreviations alone would be insufficient.
+enflasyon => enflasyon, tüketici fiyat endeksi, üretici fiyat endeksi, yurt içi üretici fiyat endeksi
+hayat pahalılığı => hayat pahalılığı, tüketici fiyat endeksi
+milli gelir => milli gelir, gayrisafi yurt içi hasıla
+dış ticaret => dış ticaret, ihracat, ithalat
+# "büyüme" is deliberately absent: economic and population growth are different.

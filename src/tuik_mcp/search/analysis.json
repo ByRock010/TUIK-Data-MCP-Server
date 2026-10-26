@@ -1,0 +1,42 @@
+{
+  "analysis": {
+    "char_filter": {
+      "tuik_apostrophes": {
+        "type": "mapping",
+        "mappings": ["’ => '", "‘ => '", "ʼ => '", "＇ => '"]
+      }
+    },
+    "filter": {
+      "tuik_lowercase": {"type": "lowercase", "language": "turkish"},
+      "tuik_stemmer": {"type": "stemmer", "language": "turkish"},
+      "tuik_tr_synonyms": {"type": "synonym_graph", "expand": true, "lenient": false},
+      "tuik_ascii_synonyms": {"type": "synonym_graph", "expand": true, "lenient": false}
+    },
+    "analyzer": {
+      "tuik_tr_index": {
+        "type": "custom",
+        "char_filter": ["tuik_apostrophes"],
+        "tokenizer": "standard",
+        "filter": ["apostrophe", "tuik_lowercase", "tuik_stemmer"]
+      },
+      "tuik_tr_search": {
+        "type": "custom",
+        "char_filter": ["tuik_apostrophes"],
+        "tokenizer": "standard",
+        "filter": ["apostrophe", "tuik_lowercase", "tuik_tr_synonyms", "tuik_stemmer"]
+      },
+      "tuik_ascii_index": {
+        "type": "custom",
+        "char_filter": ["tuik_apostrophes"],
+        "tokenizer": "standard",
+        "filter": ["apostrophe", "tuik_lowercase", "asciifolding"]
+      },
+      "tuik_ascii_search": {
+        "type": "custom",
+        "char_filter": ["tuik_apostrophes"],
+        "tokenizer": "standard",
+        "filter": ["apostrophe", "tuik_lowercase", "asciifolding", "tuik_ascii_synonyms"]
+      }
+    }
+  }
+}
