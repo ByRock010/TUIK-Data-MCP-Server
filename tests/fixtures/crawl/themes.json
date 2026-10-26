@@ -1,0 +1,39 @@
+{
+  "isError": false,
+  "data": [
+    {
+      "id": "8",
+      "name": "İstihdam, İşsizlik ve Ücret",
+      "url": "",
+      "children": [
+        {
+          "id": "8.55",
+          "name": "İşgücü İstatistikleri",
+          "url": "",
+          "children": [
+            {
+              "id": "8.55.245",
+              "name": "Aylık İşgücü İstatistikleri",
+              "url": "",
+              "children": [
+                {
+                  "id": "8.55.245.b",
+                  "name": "Haber Bültenleri",
+                  "url": "",
+                  "children": [
+                    {
+                      "id": "8.55.245.b.bulten-57987",
+                      "name": "İşgücü İstatistikleri",
+                      "url": "/tr/press/57987",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

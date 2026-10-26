@@ -58,6 +58,10 @@ All notable changes to this project are documented here. The format follows
   isolated title-prefix field, versioned physical index names and opt-in real-cluster
   mapping verification (#14).
 
+- JSON-only metadata crawler with full listing enumeration, source-aware category and
+  series relations, replayable incremental snapshots, atomic JSONL/state output,
+  explicit partial dry runs and crawl-specific pacing/429 cooldown (#15).
+
 ### Changed
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving

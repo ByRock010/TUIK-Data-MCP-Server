@@ -351,10 +351,12 @@ chains, candidate synonym rules and real OpenSearch token/probe evidence (#13).
 Reproduce the linguistic checks with `scripts/inspect_search_analysis.py --help`.
 The [index contract](docs/SEARCH_INDEX.md) defines the shared metadata documents,
 packaged strict mapping and opt-in real-cluster verification (#14).
+The [metadata crawler](docs/METADATA_CRAWL.md) emits validated JSONL from public
+dataflows, bulletins and metadata, with bounded dry runs and incremental state (#15).
 
 OpenSearch is optional. The base install and all seven MCP tools continue to work
 without it. This issue provides infrastructure and settings; indexing and routing
-MCP searches to the index follow in #14–#18. Setting a URL alone does not yet change
+MCP searches to the index follow in #16–#18. Setting a URL alone does not yet change
 search behavior.
 
 ```bash

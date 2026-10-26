@@ -1,0 +1,195 @@
+[
+  {
+    "id": "press:58159",
+    "kind": "bulletin",
+    "title": "Hizmet, Perakende Ticaret ve İnşaat Güven Endeksleri, Ekim 2026",
+    "theme": [
+      "Kısa Dönemli Ekonomik Göstergeler"
+    ],
+    "subtheme": [
+      "Güven Endeksleri"
+    ],
+    "category_path": [
+      "theme-tree:9",
+      "theme-tree:9.58",
+      "dataflow:9",
+      "dataflow:9_3"
+    ],
+    "series_id": "series:press:54092",
+    "related_ids": [
+      "flow:DF_GUVEN_ENDEKS_SEKTOREL_EGILIM_SDMX+V1.0",
+      "flow:DF_GUVEN_ENDEKS_FAALIYET_KISITLAMA_SDMX+V1.0",
+      "flow:DF_GUVEN_ENDEKS_FAALIYET_ARTTIRMA_SDMX+V1.0",
+      "press:58159:metadata"
+    ],
+    "period": "Ekim 2026",
+    "publication_date": "2026-10-26T10:00:00+03:00",
+    "formats": [
+      "xls"
+    ],
+    "downloadable": true,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58159",
+    "parent_id": null,
+    "retrieved_at": "2026-10-26T10:05:25.061046Z",
+    "indexed_at": "2026-10-26T10:05:29.132610Z",
+    "body_characters": 1809,
+    "normalized_body_sha256": "97f66919930294a34aa8e56685adb6e5cf82f6c3d4d5e1d7b956845facdb0847"
+  },
+  {
+    "id": "press:58159:metadata",
+    "kind": "metadata",
+    "title": "Hizmet, Perakende Ticaret ve İnşaat Güven Endeksleri, Ekim 2026",
+    "theme": [
+      "Kısa Dönemli Ekonomik Göstergeler"
+    ],
+    "subtheme": [
+      "Güven Endeksleri"
+    ],
+    "category_path": [
+      "theme-tree:9",
+      "theme-tree:9.58",
+      "dataflow:9",
+      "dataflow:9_3"
+    ],
+    "series_id": "series:press:54092",
+    "related_ids": [
+      "press:58159"
+    ],
+    "period": "Ekim 2026",
+    "publication_date": "2026-10-26T10:00:00+03:00",
+    "formats": [],
+    "downloadable": false,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58159/metadata",
+    "parent_id": "press:58159",
+    "retrieved_at": "2026-10-26T10:05:25.061046Z",
+    "indexed_at": "2026-10-26T10:05:29.132723Z",
+    "body_characters": 17130,
+    "normalized_body_sha256": "6e5beaff7f263fa4b6dfa879f054a4bd276f25524442135f06f6cbbf888ac5f4"
+  },
+  {
+    "id": "press:58116",
+    "kind": "bulletin",
+    "title": "Yurt Dışı Üretici Fiyat Endeksi, Eylül 2026",
+    "theme": [
+      "Fiyat İstatistikleri"
+    ],
+    "subtheme": [
+      "Yurt Dışı Üretici Fiyat Endeksi"
+    ],
+    "category_path": [
+      "theme-tree:6",
+      "theme-tree:6.47",
+      "dataflow:6",
+      "dataflow:6_6"
+    ],
+    "series_id": "series:press:53849",
+    "related_ids": [
+      "flow:DF_YDUFE_EDO_V1+V1.0",
+      "press:58116:metadata"
+    ],
+    "period": "Eylül 2026",
+    "publication_date": "2026-10-20T10:00:00+03:00",
+    "formats": [
+      "xls"
+    ],
+    "downloadable": true,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58116",
+    "parent_id": null,
+    "retrieved_at": "2026-10-26T10:05:27.059393Z",
+    "indexed_at": "2026-10-26T10:05:29.132961Z",
+    "body_characters": 1885,
+    "normalized_body_sha256": "6640d6764ef877fbc613408a3d0aa44f14f57b34c328f7d49f86bc85aac75240"
+  },
+  {
+    "id": "press:58116:metadata",
+    "kind": "metadata",
+    "title": "Yurt Dışı Üretici Fiyat Endeksi, Eylül 2026",
+    "theme": [
+      "Fiyat İstatistikleri"
+    ],
+    "subtheme": [
+      "Yurt Dışı Üretici Fiyat Endeksi"
+    ],
+    "category_path": [
+      "theme-tree:6",
+      "theme-tree:6.47",
+      "dataflow:6",
+      "dataflow:6_6"
+    ],
+    "series_id": "series:press:53849",
+    "related_ids": [
+      "press:58116"
+    ],
+    "period": "Eylül 2026",
+    "publication_date": "2026-10-20T10:00:00+03:00",
+    "formats": [],
+    "downloadable": false,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58116/metadata",
+    "parent_id": "press:58116",
+    "retrieved_at": "2026-10-26T10:05:27.059393Z",
+    "indexed_at": "2026-10-26T10:05:29.133021Z",
+    "body_characters": 15989,
+    "normalized_body_sha256": "24e1d755e93c59f68adea5efc0848c5bfbe07250ec79afe995f00c2bd091874e"
+  },
+  {
+    "id": "press:58025",
+    "kind": "bulletin",
+    "title": "Hanehalkı Yurt İçi Turizm, II. Çeyrek: Nisan-Haziran 2026",
+    "theme": [
+      "Turizm"
+    ],
+    "subtheme": [
+      "Hanehalkı Yurt İçi Turizm İstatistikleri"
+    ],
+    "category_path": [
+      "theme-tree:14",
+      "theme-tree:14.85"
+    ],
+    "series_id": "series:press:49550",
+    "related_ids": [
+      "press:58025:metadata"
+    ],
+    "period": "II. Çeyrek: Nisan-Haziran 2026",
+    "publication_date": "2026-10-22T10:00:00+03:00",
+    "formats": [
+      "xls",
+      "pdf"
+    ],
+    "downloadable": true,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58025",
+    "parent_id": null,
+    "retrieved_at": "2026-10-26T10:05:29.112739Z",
+    "indexed_at": "2026-10-26T10:05:29.133132Z",
+    "body_characters": 2615,
+    "normalized_body_sha256": "d59bb8bbaaa690d59569e0eef8b0f72572c183dc0ccd833237683e7ba3e6249f"
+  },
+  {
+    "id": "press:58025:metadata",
+    "kind": "metadata",
+    "title": "Hanehalkı Yurt İçi Turizm, II. Çeyrek: Nisan-Haziran 2026",
+    "theme": [
+      "Turizm"
+    ],
+    "subtheme": [
+      "Hanehalkı Yurt İçi Turizm İstatistikleri"
+    ],
+    "category_path": [
+      "theme-tree:14",
+      "theme-tree:14.85"
+    ],
+    "series_id": "series:press:49550",
+    "related_ids": [
+      "press:58025"
+    ],
+    "period": "II. Çeyrek: Nisan-Haziran 2026",
+    "publication_date": "2026-10-22T10:00:00+03:00",
+    "formats": [],
+    "downloadable": false,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/58025/metadata",
+    "parent_id": "press:58025",
+    "retrieved_at": "2026-10-26T10:05:29.112739Z",
+    "indexed_at": "2026-10-26T10:05:29.133181Z",
+    "body_characters": 16762,
+    "normalized_body_sha256": "d657d2316ec4ed7f2ca8cd7ec435bbdd47585029c281adc156a3eca7b4b9c2f0"
+  }
+]

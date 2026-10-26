@@ -197,3 +197,36 @@ results as `table:`, `report:` or `publication:<key>`. With those IDs, 30 of 30
 sampled tables, reports and publications and the files of `press:58298` resolved
 in fresh server sessions.
 
+
+## Metadata crawl follow-up (#15, 2026-10-26)
+
+The new JSON-only crawl adapter lists bulletins with empty text and `typeIds: [1]`,
+non-archive. A recorded first-page response on 26 October reported 1,485 records;
+this is an observation, never a runtime constant. It is non-chronological. All pages
+must be visited even when early pages contain previously seen IDs. The first page
+establishes page size; repeated pages and final total/listing-row-count mismatches fail
+before committing state.
+
+Crawl request starts are at least 2 seconds apart, matching the earlier #27 rate
+findings rather than #15's original 0.5-second assumption. A 429 establishes a
+shared minimum 30-second cooldown; numeric Retry-After is honored up to 300 seconds.
+
+The full statistical-theme tree includes category IDs, nested children and explicit
+press URLs, so it can provide source-grounded membership without extra category
+search requests. Only numeric dotted nodes count as categories; UI folder nodes
+are excluded. Related dataflow IDs are parsed using the shared #26 helper and joined
+against the fresh catalog's named category chain. Databrowser path IDs (`8_1_4`) and
+theme-tree IDs (`8.55`) are separate namespaces. Unknown memberships stay unknown;
+no unverified facet endpoint or title-based category inference is added.
+
+The crawl follows only listed bulletin details. `previousPresses` links establish
+internal release groups and can propagate a confirmed classification; they do not
+trigger recursive history downloads. Metadata bodies use source HTML/section text,
+not attachment contents. Listing-date-based reuse requires periodic full refreshes
+to observe revisions that leave publication dates unchanged.
+
+During this session source access was intermittent: catalog/listing JSON and a
+bulletin detail were captured during reconnaissance; subsequent dry runs timed out
+at the catalog endpoint. A taxonomy request also returned 404, followed by timeouts.
+These results do not establish that the endpoint has permanently changed. Actual
+live acceptance status and raw failure evidence are in the dated #15 verification.
