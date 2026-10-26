@@ -393,6 +393,11 @@ for host prerequisites and production security configuration.
 
 ## Future roadmap
 
+The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the current issue
+dependencies and sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) provides
+the 48-query baseline snapshot, independent judging workflow and metric commands;
+human relevance judgments and baseline quality scores remain pending (#11).
+
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
 title-derived stable IDs. The plan for the next phases is tracked in the roadmap

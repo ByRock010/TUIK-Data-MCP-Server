@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Turkish search evaluation preparation: 48 categorized queries, real portal/literal
+  baseline snapshots, pooled top-ten candidates, independent judge sheets, validated
+  label merge and corpus-aware nDCG/MRR/pooled-recall/Cohen's κ reporting. Human
+  judgments and measured baseline quality remain pending (#11).
+
 - `read_tuik_document` reads PDF publication, report and methodology pages with
   glyph deduplication, Turkish text normalization, page provenance and bounded
   character output. Same-page `next_offset` continuation prevents skipped text;
