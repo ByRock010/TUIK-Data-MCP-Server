@@ -54,6 +54,10 @@ All notable changes to this project are documented here. The format follows
   a reproducible OpenSearch token/retrieval probe, measured ASCII-inflection limits,
   search field design and the optional derived-index architecture ADR (#13).
 
+- Validated metadata-only `IndexDocument` schema, packaged strict OpenSearch mapping,
+  isolated title-prefix field, versioned physical index names and opt-in real-cluster
+  mapping verification (#14).
+
 ### Changed
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving
