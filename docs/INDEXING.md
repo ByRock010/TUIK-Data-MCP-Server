@@ -35,14 +35,22 @@ and deletes the unused build, unless the alias already serves it (for example wh
 the swap response was lost). A concrete index named like the alias is refused.
 
 Previous physical indices are retained for rollback and are never deleted
-implicitly. Roll back by pointing the alias at an earlier version; remove old
-versions explicitly when no longer needed:
+implicitly. Roll back by pointing the alias at an earlier version in one atomic
+request (here from `-v2` back to `-v1`):
 
 ```bash
 curl -X POST localhost:9200/_aliases -H 'content-type: application/json' -d '{"actions": [
   {"remove": {"index": "tuik-resources-v2", "alias": "tuik-resources"}},
   {"add": {"index": "tuik-resources-v1", "alias": "tuik-resources"}}]}'
-curl -X DELETE localhost:9200/tuik-resources-v1
+```
+
+Delete only versions the alias no longer serves. Check the current target first,
+then remove an unserved version, for example the discarded `-v2` after the rollback
+above. Never delete the index listed by `_cat/aliases`:
+
+```bash
+curl 'localhost:9200/_cat/aliases/tuik-resources?v'   # must list tuik-resources-v1
+curl -X DELETE localhost:9200/tuik-resources-v2
 ```
 
 **Incremental** (default) requires the alias to serve exactly one index whose
