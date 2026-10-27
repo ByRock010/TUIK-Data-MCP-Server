@@ -1,10 +1,12 @@
 """inspect_tuik_data: observed column profiles from retained file snapshots (#51)."""
 
+import importlib.util
 import io
 import json
 from pathlib import Path
 
 import httpx
+import pydantic_core
 import pytest
 from openpyxl import Workbook
 
@@ -225,6 +227,35 @@ async def test_bulletin_with_related_datasets_requires_an_explicit_choice():
         await http.close()
 
 
+def live_smoke():
+    script = Path(__file__).parents[1] / "scripts" / "live_smoke.py"
+    spec = importlib.util.spec_from_file_location("live_smoke", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.mark.parametrize(
+    "name,kind,resource", [("data.csv", "csv", FLOW), ("files/labour-basic.xls", "xls", ID)]
+)
+async def test_live_smoke_inspect_then_query_step_runs_offline(name, kind, resource):
+    http, catalog, calls = service((FIXTURES / name).read_bytes(), kind)
+    tools = {"inspect_tuik_data": catalog.inspect, "get_tuik_data": catalog.data}
+
+    async def call(tool, arguments):
+        data = await respond(tools[tool](**arguments))
+        assert data.get("status") != "error", data
+        return data
+
+    try:
+        report = await live_smoke().inspect_then_query(call, resource)
+        assert report["format"] == kind and report["matched_rows"] >= 1
+        assert report["snapshot_id"] == report["query_snapshot_id"]
+        assert [path for path in calls if path != "/api/tr/dataflows"] == [calls[-1]]
+    finally:
+        await http.close()
+
+
 async def test_empty_tables_and_partial_scans_are_explicit():
     http, catalog, _ = service(b"a;b\n", "csv")
     try:
@@ -272,6 +303,34 @@ def test_output_and_column_budgets_shrink_values_then_columns():
         table(names, rows[:1]), max_values=5, limits=InspectLimits(), columns=["c5", "c5"]
     )
     assert [c.name for c in chosen.columns] == ["c5"] and not chosen.columns_truncated
+
+
+def rendered_bytes(profile):
+    payload = {"columns": [c.model_dump(mode="json") for c in profile.columns]}
+    return len(pydantic_core.to_json(payload, indent=2))
+
+
+def test_partial_scan_never_claims_a_complete_value_list():
+    # All observed values fit max_values, but unscanned rows may hold others.
+    profile = profile_table(
+        table(["il"], [["Ankara"], ["İzmir"]]), max_values=20, limits=InspectLimits(max_rows=1)
+    )
+    (il,) = profile.columns
+    assert not profile.complete and [v.value for v in il.values] == ["Ankara"]
+    assert not il.values_complete and not il.distinct_exact
+
+
+def test_output_budget_counts_utf8_bytes_and_omits_an_oversized_profile():
+    names = [f"c{i}" for i in range(8)]
+    rows = [["ş" * 190 + str(n)] * 8 for n in range(3)]
+    limits = InspectLimits(max_output_bytes=8192)
+    multibyte = profile_table(table(names, rows), max_values=3, limits=limits)
+    assert rendered_bytes(multibyte) <= 8192
+    assert any("limited listed values" in w for w in multibyte.warnings)
+    oversized = profile_table(table(["h" * 9000], [["1"]]), max_values=3, limits=limits)
+    assert oversized.columns == [] and oversized.columns_truncated
+    assert rendered_bytes(oversized) <= 8192
+    assert any("omitted 1 trailing" in w for w in oversized.warnings)
 
 
 def test_long_values_are_marked_truncated():

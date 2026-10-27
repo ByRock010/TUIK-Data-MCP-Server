@@ -5,11 +5,12 @@ strings only: ambiguous separators and non-ISO dates are never resolved, and
 placeholder symbols are reported without being read as zero or missing.
 """
 
-import json
 import re
 from collections import Counter
 from dataclasses import dataclass
 from datetime import date
+
+import pydantic_core
 
 from tuik_mcp.config import Settings
 from tuik_mcp.utils.normalization import turkish_casefold
@@ -155,13 +156,16 @@ def profile_column(
         distinct_count=None if overflow else len(counter),
         distinct_exact=complete and not overflow,
         values=listed,
-        values_complete=not overflow and len(listed) == len(counter),
+        # Every distinct value of the whole table is listed: needs a full scan.
+        values_complete=complete and not overflow and len(listed) == len(counter),
     )
     return profile, counter, order
 
 
 def size(profiles: list[ColumnProfile]) -> int:
-    return len(json.dumps([p.model_dump(mode="json") for p in profiles], ensure_ascii=False))
+    """UTF-8 bytes of the profiles as FastMCP renders tool results (indented JSON)."""
+    payload = {"columns": [p.model_dump(mode="json") for p in profiles]}
+    return len(pydantic_core.to_json(payload, indent=2))
 
 
 def profile_table(
@@ -209,10 +213,16 @@ def profile_table(
             f"The output budget limited listed values to {listed} per column; "
             "request fewer columns to see more values."
         )
-    dropped = 0
-    while len(profiles) > 1 and size(profiles) > limits.max_output_bytes:
-        profiles.pop()
-        dropped += 1
+    # Keep the longest prefix of columns that fits; even a single profile may not.
+    fits, high = 0, len(profiles)
+    while fits < high:
+        middle = (fits + high + 1) // 2
+        if size(profiles[:middle]) <= limits.max_output_bytes:
+            fits = middle
+        else:
+            high = middle - 1
+    dropped = len(profiles) - fits
+    del profiles[fits:]
     if dropped:
         warnings.append(f"The output budget omitted {dropped} trailing column profile(s).")
     # A caller-chosen subset is not truncation; budget-omitted columns are.

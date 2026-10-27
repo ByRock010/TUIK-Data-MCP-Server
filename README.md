@@ -232,9 +232,11 @@ Inspection and queries share the one-hour file snapshot: inspecting again or cal
 `get_tuik_data` afterwards reuses the downloaded file, and the same `snapshot_id`
 confirms both read the same version. Budgets (`TUIK_INSPECT_*` in `.env.example`)
 bound rows scanned (100,000), columns profiled (100; pass `columns` for others),
-distinct values tracked per column (10,000) and column-profile output (64 KiB);
-when output is limited, listed values shrink first, then trailing columns are
-omitted, with warnings. `max_values` (1–200) and `columns` (1–50 names) are validated.
+distinct values tracked per column (10,000) and column-profile output (64 KiB,
+measured as UTF-8 bytes of the indented JSON the MCP response carries). When output
+is limited, listed values shrink first, then trailing columns are omitted, with
+warnings; a single profile that cannot fit is omitted rather than exceeding the
+limit. `max_values` (1–200) and `columns` (1–50 names) are validated.
 
 ## Read PDF documents
 
