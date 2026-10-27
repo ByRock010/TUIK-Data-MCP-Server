@@ -17,22 +17,13 @@ import httpx
 
 from tuik_mcp.clients.crawl import CrawlHttpClient, CrawlSource
 from tuik_mcp.config import Settings
-from tuik_mcp.search.crawl import CrawlState, MetadataCrawler, error_details, state_bytes
-
-
-def atomic_write(path, payload):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = None
-    try:
-        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as file:
-            temporary = Path(file.name)
-            file.write(payload)
-            file.flush()
-            os.fsync(file.fileno())
-        temporary.replace(path)
-    finally:
-        if temporary is not None:
-            temporary.unlink(missing_ok=True)
+from tuik_mcp.search.crawl import (
+    CrawlState,
+    MetadataCrawler,
+    atomic_write,
+    error_details,
+    state_bytes,
+)
 
 
 async def run(args):

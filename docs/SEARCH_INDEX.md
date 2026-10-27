@@ -12,8 +12,8 @@ name = physical_index_name("tuik-resources", 1)  # tuik-resources-v1
 definition = index_definition()                # fresh settings + strict mapping
 ```
 
-The indexer (#16) creates a new physical index, loads validated documents, then
-atomically replaces the `tuik-resources` alias. Naming/definition helpers do not
+The [indexer](INDEXING.md) (#16) creates a new physical index, loads validated
+documents, then atomically replaces the `tuik-resources` alias. Naming/definition helpers do not
 touch aliases or make network calls. Alias changes belong to the indexer.
 
 ## Identity and contents

@@ -71,7 +71,8 @@ temporary file, flush/fsync and replacement. One writer per state file is suppor
 concurrent writers/locking are outside this increment.
 
 Only complete enumeration can reconcile absent IDs. `missing_from_listing` reports
-them with an explicit warning; #16 owns corresponding index deletion/rebuild behavior.
+them with an explicit warning. The [indexer](INDEXING.md) (#16) never deletes them
+incrementally; a full rebuild drops them.
 A partial listing
 must not be used to remove documents from an existing index.
 
@@ -122,4 +123,5 @@ Recorded fixtures test source access separately from controlled pagination,
 incremental replay, changed dates, outages, interruption, output/state preservation,
 count reconciliation and 429 cooldown. Live acceptance must retain actual scope
 and errors. See [dated evidence](verification/issue-15-2026-10-26.md).
-Bulk indexing, alias swap and indexed search remain #16–#18.
+Bulk indexing and alias swap are the [indexer](INDEXING.md) (#16); indexed search
+remains #17–#18.
