@@ -15,6 +15,7 @@ async def test_stdio_discovery_and_input_validation():
                 "search_tuik_datasets",
                 "get_tuik_resource",
                 "get_tuik_data",
+                "inspect_tuik_data",
                 "list_tuik_themes",
                 "read_tuik_document",
                 "search_tuik_classifications",
@@ -31,4 +32,14 @@ async def test_stdio_discovery_and_input_validation():
             result = await session.call_tool("search_tuik", {"query": "", "limit": 0})
             assert result.isError
             result = await session.call_tool("search_tuik_datasets", {"query": " "})
+            assert result.structuredContent["code"] == "invalid_input"
+            inspect_tool = next(t for t in tools.tools if t.name == "inspect_tuik_data")
+            properties = inspect_tool.inputSchema["properties"]
+            assert properties["max_values"]["maximum"] == 200
+            assert {"resource_id", "sheet", "columns", "max_values"} <= set(properties)
+            result = await session.call_tool(
+                "inspect_tuik_data", {"resource_id": "flow:x", "max_values": 0}
+            )
+            assert result.isError
+            result = await session.call_tool("inspect_tuik_data", {"resource_id": "invalid"})
             assert result.structuredContent["code"] == "invalid_input"

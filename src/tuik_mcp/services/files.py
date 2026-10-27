@@ -2,20 +2,24 @@
 
 import asyncio
 import hashlib
+import json
 from dataclasses import dataclass
 from datetime import datetime
 
 from pydantic import TypeAdapter
 
 from tuik_mcp.cache import BytesTTLCache, MemoryTTLCache
+from tuik_mcp.clients.base import SourceError
 from tuik_mcp.clients.tuik_portal import TuikPortal
 from tuik_mcp.models.common import now
 from tuik_mcp.models.dataset import DownloadLink
 from tuik_mcp.parsers.limits import ParseLimits
-from tuik_mcp.parsers.models import ParsedDocument, ParsedTable
+from tuik_mcp.parsers.models import ParsedDocument, ParsedTable, TableProfile
+from tuik_mcp.parsers.profile import InspectLimits, profile_table
 from tuik_mcp.services.parsing import parse_document_source, parse_source
 
 TABLES = TypeAdapter(list[ParsedTable])
+PROFILE = TypeAdapter(tuple[list[str], TableProfile])
 
 
 async def finish_worker(function, *args, **kwargs):
@@ -48,6 +52,7 @@ class FileStore:
     def __init__(self, portal: TuikPortal):
         self.portal = portal
         self.limits = ParseLimits.from_settings(portal.http.settings)
+        self.inspect = InspectLimits.from_settings(portal.http.settings)
         self.cache = BytesTTLCache(portal.http.settings.parse_cache_bytes)
         self.metadata = MemoryTTLCache(max_entries=256)
         self._download_lock = asyncio.Lock()
@@ -69,8 +74,11 @@ class FileStore:
             self.metadata.set(resource_id, (verified, retrieved_at, digest), 3600)
             return DownloadedFile(body, verified, retrieved_at, digest)
 
-    async def tables(self, resource_id: str, file: DownloadedFile) -> list[ParsedTable]:
-        key = f"tables:{resource_id}:{file.digest}:{file.link.format}"
+    async def tables(
+        self, resource_id: str, file: DownloadedFile, limit: int | None = None
+    ) -> list[ParsedTable]:
+        """Parsed tables; `limit` bounds retained CSV rows while totals stay exact."""
+        key = f"tables:{resource_id}:{file.digest}:{file.link.format}:{limit}"
         async with self._parse_lock:
             cached = self.cache.get(key)
             if cached is not None:
@@ -80,6 +88,7 @@ class FileStore:
                 file.body,
                 file.link.format or "",
                 file.link.source_url,
+                limit=limit,
                 budgets=self.limits,
             )
             payload = await finish_worker(TABLES.dump_json, tables)
@@ -102,3 +111,38 @@ class FileStore:
             payload = await finish_worker(lambda: document.model_dump_json().encode())
             self.cache.set(key, payload)
             return document
+
+    async def profile(
+        self,
+        resource_id: str,
+        file: DownloadedFile,
+        *,
+        sheet: str | None,
+        columns: list[str] | None,
+        max_values: int,
+    ) -> tuple[list[str], TableProfile]:
+        """Sheet names and the selected table's profile for one retained snapshot."""
+        key = "profile:" + json.dumps(
+            [resource_id, file.digest, file.link.format, sheet, columns, max_values],
+            ensure_ascii=False,
+        )
+        cached = self.cache.get(key)
+        if cached is not None:
+            return PROFILE.validate_json(cached)
+        csv = file.link.format == "csv"
+        tables = await self.tables(resource_id, file, self.inspect.max_rows if csv else None)
+        if not tables:
+            raise SourceError(
+                "parse_failed", "Workbook contains no worksheets", file.link.source_url
+            )
+        sheets = [] if csv else [table.sheet for table in tables]
+        table = next((t for t in tables if t.sheet == sheet), None) if sheet else tables[0]
+        if table is None:
+            raise ValueError(f"Workbook has no sheet named {sheet!r}; sheets: {sheets}")
+        async with self._parse_lock:
+            profile = await finish_worker(
+                profile_table, table, max_values=max_values, limits=self.inspect, columns=columns
+            )
+        result = (sheets, profile)
+        self.cache.set(key, PROFILE.dump_json(result))
+        return result
