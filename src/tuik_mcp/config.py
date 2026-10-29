@@ -19,11 +19,13 @@ USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research
 
 
 class Settings(BaseModel):
-    # Reserved for the optional indexed-search backend; base tools stay live-only.
+    # Optional indexed-search backend; unset keeps literal/portal search.
     opensearch_url: HttpUrl | None = None
     opensearch_index: str = Field(
         default="tuik-resources", max_length=255, pattern=r"^[a-z0-9][a-z0-9._-]*$"
     )
+    # Searches fall back quickly when the cluster does not answer.
+    opensearch_timeout_seconds: float = Field(default=5, ge=0.5, le=60)
 
     timeout_seconds: float = Field(default=20, ge=1, le=60)
     attempts: int = Field(default=3, ge=1, le=3)

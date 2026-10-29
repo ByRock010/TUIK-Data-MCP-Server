@@ -123,5 +123,5 @@ Recorded fixtures test source access separately from controlled pagination,
 incremental replay, changed dates, outages, interruption, output/state preservation,
 count reconciliation and 429 cooldown. Live acceptance must retain actual scope
 and errors. See [dated evidence](verification/issue-15-2026-10-26.md).
-Bulk indexing and alias swap are the [indexer](INDEXING.md) (#16); indexed search
-remains #17–#18.
+Bulk indexing and alias swap are the [indexer](INDEXING.md) (#16); the
+[search backend](SEARCH_BACKEND.md) (#17) queries it, and MCP exposure remains #18.
