@@ -17,8 +17,8 @@ it does not record an already published tag.
 | Explicit bulletin dataflow choices and stable file identities | #26, #27 | Merged, closed |
 | Weekly source-contract checks | #28 | Merged, closed |
 | XLSX recognition, source-error semantics, fixture resume, single smoke run | #38–#41 | Merged, closed |
-| Version, documentation, release evidence and publication | #10 | This preparation; promotion/tag still pending |
-| File-reading tracking epic | #23 | Close after #10 and the release are complete |
+| Version, documentation and release evidence | #10 | Automatically closes when the preparation PR merges into `develop` |
+| File-reading tracking epic | #23 | Automatically closes with #10 on that merge |
 
 The already merged #51 table inspection is included in this release. Existing
 OpenSearch infrastructure and the dataset backend (#12–#17), plus evaluation
@@ -77,8 +77,12 @@ remain usable without it. Known source failures remain explicit errors.
 - [ ] After that promotion is merged, verify the promoted `master` commit contains
   package version 0.2.0, the 0.2.0 changelog section and the accepted evidence.
   Create/push annotated tag `v0.2.0` at that commit, following CONTRIBUTING.
-- [ ] Confirm tag target and release contents, close #10 and epic #23, then close
-  milestone 1. Do not close #25 or other milestones as part of this release.
+- [ ] Confirm tag target and release contents, then close milestone 1.
+  #10 and epic #23 have already closed automatically on the preparation merge;
+  do not close #25 or other milestones as part of this release.
 
-The preparation PR uses **Refs #10** and **Refs #23**. It does not close the
-issues before their publication criteria are met or bypass protected-branch review.
+The preparation PR uses standalone **Closes #10** and **Closes #23** directives.
+The existing `Close issues after develop merge` workflow verifies the exact merged
+PR and pushed commit, then closes those two issues as completed. Other v0.2.0
+implementation issues are already closed. It does not close unrelated issues or
+the milestone, promote code, create a tag or bypass protected-branch review.
