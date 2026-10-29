@@ -1,13 +1,32 @@
-# MVP verification
+# Verification
+
+## Final v0.2.0 candidate — 2026-10-29
+
+The combined accepted implementation at `8e566bf` includes PRs #59 and #60.
+The final preparation changes documentation/evidence only. Both Python 3.13.5
+and 3.14.0 passed **552 offline tests** (3 optional OpenSearch skips, 6 live
+deselections); Ruff and all **28 Node tests** passed. A real eight-tool MCP smoke,
+a separate CSV/Excel typed-query/cursor smoke and the remaining **4 live tests**
+passed sequentially. Clean wheel installation verified version 0.2.0, both
+console entry points, eight tool schemas including nested queries, invalid-input
+handling and packaged search assets outside the repository.
+
+See the [final candidate acceptance report](verification/v0.2.0-final-2026-10-29.md),
+[eight-tool JSON](verification/v0.2.0-final-mcp-2026-10-29.json) and
+[query/cursor JSON](verification/v0.2.0-final-query-2026-10-29.json) for commands,
+source snapshots and limitations. Local Docker/OpenSearch runtime checks were
+unavailable; required PR CI remains a separate gate. This is candidate evidence,
+not a claim of publication. Follow the [release checklist](RELEASE_0.2.0.md) for
+reviewed promotion, annotated tag, tagged-source assets and milestone closure.
 
 ## v0.2.0 release preparation — 2026-10-29
 
 Release code on `chore/10-prepare-0.2.0` was verified at
 `26962864abdc9924d9e48575ed9c33c503a77196`, based on `develop` at `bbd717f`.
-This is prepared code and acceptance evidence; promotion/tag publication remains
-pending under [the release checklist](RELEASE_0.2.0.md). #10 and epic #23 close
-automatically when the preparation PR merges into `develop`; publication and
-milestone closure follow the remaining checklist steps.
+This historical report predates the #52 implementation. PR #59 subsequently
+merged into `develop` and automatically closed #10 and epic #23. The final
+combined-candidate evidence is linked above; promotion/tag publication and
+milestone closure follow [the release checklist](RELEASE_0.2.0.md).
 
 - Clean editable installs on Python **3.13.5** and **3.14.0** each passed
   **470 offline tests**, with **3 optional OpenSearch tests skipped** and

@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
 
 - Optional `get_tuik_data` structured queries: bounded projection, exact equality and
@@ -14,10 +16,6 @@ All notable changes to this project are documented here. The format follows
   source strings/provenance; expired, evicted or mismatched cursors require restart
   without silently downloading a newer file. `TUIK_QUERY_*` budgets bound scans,
   sorting, retained state and UTF-8 responses; legacy calls remain compatible (#52).
-
-## [0.2.0] - 2026-10-29
-
-### Added
 
 - Release acceptance smoke paths explicitly follow a bulletin's related CSV dataset
   and a bulletin Excel attachment, recording snapshot/source provenance, package and
@@ -120,6 +118,10 @@ All notable changes to this project are documented here. The format follows
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed
+
+- Numeric range operands follow the same ambiguity rules as source values:
+  integer-only columns cannot silently interpret `1.234`/`1,234` as decimal bounds.
+  Invalid operands identify the range minimum/maximum and expected notation (#52).
 
 - Live MCP smoke forwards `TUIK_*` settings to its stdio server so configured request
   and download intervals are honored, including slower release verification (#10).

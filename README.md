@@ -5,9 +5,10 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
-The v0.2.0 preparation includes eight tools, Excel/PDF reading and bounded table
-inspection. See the [release checklist](docs/RELEASE_0.2.0.md) for verification and
-the remaining reviewed promotion/tag steps.
+Version 0.2.0 includes eight tools, Excel/PDF reading, bounded table inspection,
+typed table queries and snapshot-bound pagination. See the
+[release notes](docs/releases/v0.2.0.md) for scope and upgrade details, and the
+[release checklist](docs/RELEASE_0.2.0.md) for verification and publication status.
 
 ## Implemented tools
 
@@ -547,9 +548,9 @@ cluster CI and independently judged relevance measurements; these are not v0.2.0
 release prerequisites.
 Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
 stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. The next, Unreleased increment adds
+current roadmap. Version 0.2.0 also includes
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
-(#52) to the file-reading workflow. The v0.2.0 preparation PR #59 merged into
-`develop` and automatically closed #10 and epic #23. Publication follows the
+(#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
+#52 on `develop`. Publication follows the
 [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
 reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
