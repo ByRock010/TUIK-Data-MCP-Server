@@ -15,7 +15,7 @@ ALLOWED_HOSTS = frozenset(
         "biruni.tuik.gov.tr",
     }
 )
-USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research)"
+USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.2; public statistical research)"
 
 
 class Settings(BaseModel):

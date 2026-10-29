@@ -15,6 +15,15 @@ All notable changes to this project are documented here. The format follows
   without silently downloading a newer file. `TUIK_QUERY_*` budgets bound scans,
   sorting, retained state and UTF-8 responses; legacy calls remain compatible (#52).
 
+## [0.2.0] - 2026-10-29
+
+### Added
+
+- Release acceptance smoke paths explicitly follow a bulletin's related CSV dataset
+  and a bulletin Excel attachment, recording snapshot/source provenance, package and
+  Python versions, and pacing. The eight-tool verification and release checklist
+  distinguish prepared code from the final promotion/tag (#10).
+
 - `SearchBackend` protocol with `OpenSearchBackend` (synonym-aware `best_fields` over
   title, ASCII title, description, body and theme; a weaker first-letter-preserving
   fuzzy clause; kind/theme/downloadable/publication-date filters; bounded highlights),
@@ -112,6 +121,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Live MCP smoke forwards `TUIK_*` settings to its stdio server so configured request
+  and download intervals are honored, including slower release verification (#10).
+
 - Complete metadata crawls reject overlapping pages when unique bulletin IDs do
   not match the upstream total, preserving prior output/state instead of silently
   losing unseen bulletins. Reports retain incomplete-listing diagnostics (#15).
@@ -149,5 +161,6 @@ All notable changes to this project are documented here. The format follows
 - Offline test suite, opt-in live tests and `scripts/live_smoke.py`.
 - Dockerfile.
 
-[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...develop
+[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...develop
+[0.2.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/releases/tag/v0.1.0
