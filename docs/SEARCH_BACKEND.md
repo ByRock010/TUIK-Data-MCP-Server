@@ -45,7 +45,11 @@ Highlights are source text: untrusted data, never instructions.
 
 `CatalogService.search_index` uses the index when `TUIK_OPENSEARCH_URL` is set. When
 the URL is unset, or the cluster/alias does not answer (connection error, timeout,
-HTTP error, missing alias or malformed response), it falls back explicitly:
+HTTP error, missing alias or malformed response), it falls back explicitly. An HTTP 200
+response is not trusted blindly either: searches are sent with
+`allow_partial_search_results=false`, and a response that reports `timed_out`, failed
+shards or only a lower-bound total also counts as unavailable, so an incomplete
+search is never reported as "no matches". The fallbacks are:
 
 - dataset-only searches (`kinds == ["dataset"]`) use `LiteralBackend`;
 - every other search uses `PortalBackend`.
@@ -57,9 +61,13 @@ before falling back. A backend never falls back by itself.
 
 `search_tuik_datasets` goes through this path and reports `backend` plus `warnings`.
 Index hits resolve through the live dataflow catalog, so results keep their full
-records and download links; IDs the catalog no longer lists are omitted with a
-warning. Themes resolve case-insensitively to the exact stored name before
-filtering. `downloadable_only` filters `downloadable: true`, which the crawler takes
+records and download links. The index is a snapshot, so the request's filters are
+re-applied to the live records: IDs the catalog no longer lists, and datasets that
+have since lost their CSV export (with `downloadable_only`) or moved to another
+theme, are omitted with a warning. `total` is the indexed match count minus this
+page's omissions (omissions beyond the page are unknown until the next index
+refresh), and `truncated` means `total` exceeds the returned results. Themes resolve
+case-insensitively to the exact stored name before filtering. `downloadable_only` filters `downloadable: true`, which the crawler takes
 from the same flag that determines the advertised CSV export.
 
 ## Known limits

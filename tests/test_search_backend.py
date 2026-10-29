@@ -207,7 +207,8 @@ async def test_indexed_dataset_search_resolves_through_the_live_catalog(service)
         cluster(lambda r: httpx.Response(200, json=response), requests), "tuik-resources"
     )
     found = await catalog.search_datasets("issizlik", limit=5, theme="İSTİHDAM, İŞSİZLİK VE ÜCRET")
-    assert found.backend == "opensearch" and found.total == 2
+    # The total excludes the omitted stale hit, so truncation stays consistent.
+    assert found.backend == "opensearch" and (found.total, found.truncated) == (1, False)
     assert [r.id for r in found.results] == ["flow:DF_ISSIZ+V1.0"]
     assert found.results[0].download_links  # Full catalog records, not index excerpts.
     assert found.warnings == [
@@ -367,3 +368,52 @@ async def test_configured_url_builds_the_backend_and_service_close_releases_it()
         await catalog.close()
         await http.close()
     assert catalog.index.store._client.is_closed
+
+
+COMPLETE = {"timed_out": False, "_shards": {"total": 1, "successful": 1, "failed": 0}}
+
+
+async def test_index_hits_are_rechecked_against_live_catalog_filters(service):
+    catalog, _ = service
+    # Indexed as downloadable and in THEME; since then DF_KAPALI lost its CSV export
+    # and DF_TUFE moved to another theme in the live catalog.
+    ids = ["flow:DF_KAPALI+V1.0", "flow:DF_TUFE+V1.0", "flow:DF_ISSIZ+V1.0"]
+    response = COMPLETE | {
+        "hits": {"total": {"value": 3, "relation": "eq"}, "hits": [hit(i) for i in ids]}
+    }
+    catalog.index = OpenSearchBackend(
+        cluster(lambda r: httpx.Response(200, json=response)), "tuik-resources"
+    )
+    found = await catalog.search_datasets("işsizlik", limit=3, theme=THEME)
+    assert [r.id for r in found.results] == ["flow:DF_ISSIZ+V1.0"]
+    assert all("csv" in r.available_formats and r.theme == THEME for r in found.results)
+    assert (found.total, found.truncated) == (1, False)
+    assert found.warnings == [
+        "2 indexed dataset(s) no longer match the live catalog's export or theme and were omitted."
+    ]
+    # Without filters, the record that lost its export is a valid result.
+    everything = await catalog.search_datasets("işsizlik", limit=3, downloadable_only=False)
+    assert [r.id for r in everything.results] == ids and not everything.warnings
+
+
+@pytest.mark.parametrize(
+    "incomplete",
+    [
+        {"timed_out": True},
+        {"_shards": {"total": 2, "successful": 1, "failed": 1}},
+        {"hits": {"total": {"value": 10_000, "relation": "gte"}, "hits": []}},
+    ],
+)
+async def test_incomplete_search_responses_fall_back(service, incomplete):
+    catalog, _ = service
+    requests = []
+    response = COMPLETE | {"hits": {"total": {"value": 0, "relation": "eq"}, "hits": []}}
+    response |= incomplete
+    catalog.index = OpenSearchBackend(
+        cluster(lambda r: httpx.Response(200, json=response), requests), "tuik-resources"
+    )
+    found = await catalog.search_datasets("işsizlik")
+    # An incomplete search is never reported as "no matches".
+    assert found.backend == "literal" and [r.id for r in found.results] == ["flow:DF_ISSIZ+V1.0"]
+    assert found.warnings[0].startswith("Indexed search is unavailable (")
+    assert requests[0].url.params["allow_partial_search_results"] == "false"

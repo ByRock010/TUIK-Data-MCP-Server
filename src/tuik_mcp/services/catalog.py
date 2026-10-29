@@ -126,20 +126,33 @@ class CatalogService:
         hits = await self.search_index(args.query, filters, args.limit)
         # Results resolve through the live catalog, so every returned ID is current.
         by_id = {dataset.id: dataset for dataset in datasets}
-        results = [by_id[hit.id] for hit in hits.hits if hit.id in by_id]
-        stale = len(hits.hits) - len(results)
+        resolved = [by_id[hit.id] for hit in hits.hits if hit.id in by_id]
+        # The index is a snapshot: recheck its filters against the live records.
+        results = [
+            dataset
+            for dataset in resolved
+            if (not args.downloadable_only or "csv" in dataset.available_formats)
+            and (themes is None or dataset.theme in themes)
+        ]
+        stale, changed = len(hits.hits) - len(resolved), len(resolved) - len(results)
         if stale:
             hits.warnings.append(
                 f"{stale} indexed dataset(s) are no longer in the live catalog and were omitted."
             )
-        total = hits.total if hits.total is not None else len(results)
+        if changed:
+            hits.warnings.append(
+                f"{changed} indexed dataset(s) no longer match the live catalog's export or "
+                "theme and were omitted."
+            )
+        # Indexed totals exclude this page's omissions; omissions beyond it are unknown.
+        total = hits.total - stale - changed if hits.total is not None else len(results)
         return DatasetSearchResponse(
             query=args.query,
             downloadable_only=args.downloadable_only,
             theme=args.theme,
             results=results,
             total=total,
-            truncated=total > args.limit,
+            truncated=total > len(results),
             source_url=f"{PORTAL}/api/tr/dataflows",
             retrieved_at=retrieved_at,
             backend=hits.backend,

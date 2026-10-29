@@ -103,7 +103,9 @@ class OpenSearchStore:
         return {doc["_id"]: doc["_source"] for doc in body["docs"] if doc.get("found")}
 
     async def query(self, index: str, body: dict) -> dict:
-        return (await self._request("POST", f"{index}/_search", json=body)).json()
+        # Shard failures become an error response instead of partial results.
+        params = {"allow_partial_search_results": "false"}
+        return (await self._request("POST", f"{index}/_search", json=body, params=params)).json()
 
     async def ids(self, index: str) -> set[str]:
         found, after = set(), None

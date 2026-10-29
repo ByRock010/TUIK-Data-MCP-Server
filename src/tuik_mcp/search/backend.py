@@ -144,7 +144,17 @@ class OpenSearchBackend:
         body = build_query(query, filters, limit, offset)
         try:
             response = await self.store.query(self.alias, body)
+            # HTTP 200 does not mean complete: never report a partial search as no matches.
+            if response.get("timed_out"):
+                raise BackendUnavailable("the search timed out")
+            shards = response.get("_shards") or {}
+            if shards.get("failed"):
+                raise BackendUnavailable(
+                    f"{shards['failed']} of {shards.get('total')} shards failed"
+                )
             hits = response["hits"]
+            if hits["total"].get("relation", "eq") != "eq":
+                raise BackendUnavailable("the search returned only a lower-bound total")
             return SearchHits(
                 backend="opensearch",
                 hits=[self.hit(item) for item in hits["hits"]],
