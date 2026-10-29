@@ -51,7 +51,20 @@ async def test_live_mcp_workflow():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     report = await module.run()
-    assert len(report["tools"]) == 7
+    assert set(report["tools"]) == {
+        "search_tuik",
+        "search_tuik_datasets",
+        "get_tuik_resource",
+        "get_tuik_data",
+        "inspect_tuik_data",
+        "list_tuik_themes",
+        "read_tuik_document",
+        "search_tuik_classifications",
+    }
+    for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
+        inspected = report[key]
+        assert inspected["format"] in fmt and inspected["matched_rows"] >= 1
+        assert inspected["snapshot_id"] == inspected["query_snapshot_id"]
 
 
 @pytest.mark.live

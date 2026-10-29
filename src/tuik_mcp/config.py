@@ -40,6 +40,12 @@ class Settings(BaseModel):
     parse_max_pdf_pages_per_call: int = Field(default=5, ge=1, le=20)
     parse_max_pdf_chars_per_page: int = Field(default=200_000, ge=1000, le=1_000_000)
     parse_cache_bytes: int = Field(default=32 * 1024 * 1024, ge=1024, le=256 * 1024 * 1024)
+    # inspect_tuik_data profiling budgets: rows scanned, columns profiled, tracked
+    # distinct values per column and serialized column-profile bytes per response.
+    inspect_max_rows: int = Field(default=100_000, ge=1, le=1_000_000)
+    inspect_max_columns: int = Field(default=100, ge=1, le=1000)
+    inspect_max_distinct: int = Field(default=10_000, ge=10, le=100_000)
+    inspect_max_output_bytes: int = Field(default=64 * 1024, ge=8 * 1024, le=1024 * 1024)
 
     @field_validator("opensearch_url", mode="before")
     @classmethod

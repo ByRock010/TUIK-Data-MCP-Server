@@ -12,6 +12,44 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 
+async def inspect_then_query(call, resource_id):
+    """Inspect a table, then filter rows by an observed value from the same snapshot."""
+    profile = await call("inspect_tuik_data", {"resource_id": resource_id, "max_values": 5})
+    assert profile["status"] == "ok" and profile["snapshot_id"], profile
+    column = next(c for c in profile["columns"] if c["values"] and not c["values"][0]["truncated"])
+    value = column["values"][0]
+    arguments = {
+        "resource_id": resource_id,
+        "filters": {column["name"]: value["value"]},
+        "limit": 5,
+    }
+    if profile["sheet"] is not None:
+        arguments["sheet"] = profile["sheet"]
+    rows = await call("get_tuik_data", arguments)
+    assert rows["status"] == "ok" and rows["rows"], rows
+    assert all(row[column["name"]] == value["value"] for row in rows["rows"])
+    assert rows["snapshot_id"] == profile["snapshot_id"]
+    assert (rows["source_url"], rows["retrieved_at"]) == (
+        profile["source_url"],
+        profile["retrieved_at"],
+    )
+    if profile["complete"]:
+        assert rows["total_rows"] == value["count"], (rows["total_rows"], value)
+    return {
+        "resource_id": resource_id,
+        "format": profile["format"],
+        "sheet": profile["sheet"],
+        "source_url": profile["source_url"],
+        "retrieved_at": profile["retrieved_at"],
+        "snapshot_id": profile["snapshot_id"],
+        "total_rows": profile["total_rows"],
+        "complete": profile["complete"],
+        "filter": arguments["filters"],
+        "matched_rows": rows["total_rows"],
+        "query_snapshot_id": rows["snapshot_id"],
+    }
+
+
 async def run():
     params = StdioServerParameters(command=sys.executable, args=["-m", "tuik_mcp.server"])
     async with stdio_client(params) as (read, write):
@@ -55,6 +93,7 @@ async def run():
                         "download_count": len(detail["download_links"]),
                         "source_url": detail["source_url"],
                     }
+                    report["inspect_excel"] = await inspect_then_query(call, table["id"])
                     download = await call("get_tuik_data", {"resource_id": table["id"]})
                     assert download["status"] == "ok" and download["rows"]
                     assert download["extraction"] in {"xls", "xlsx"}
@@ -69,6 +108,7 @@ async def run():
             report["datasets"] = datasets
             dataset_detail = await call("get_tuik_resource", {"resource_id": dataset["id"]})
             assert dataset_detail["available_formats"] == dataset["available_formats"]
+            report["inspect_csv"] = await inspect_then_query(call, dataset["id"])
             csv = await call("get_tuik_data", {"resource_id": dataset["id"], "limit": 2})
             assert csv["status"] == "ok" and csv["rows"]
             report["csv"] = csv

@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `inspect_tuik_data` profiles a CSV/XLS/XLSX table before querying: exact column keys,
+  most frequent observed values with counts, empty counts, uninterpreted placeholder
+  symbols and conservative inferred type hints that never resolve ambiguous separators
+  or dates. Coverage, distinct-count exactness and output budgets are explicit and
+  configurable (`TUIK_INSPECT_*`); profiles are cached per file snapshot (#51).
+
 - `tuik-mcp-index` crawls public metadata and writes it to OpenSearch: `--full`
   loads a new versioned index, verifies its document count and atomically moves the
   alias, keeping previous versions for rollback; `--incremental` upserts only new or
@@ -78,6 +84,11 @@ All notable changes to this project are documented here. The format follows
   explicit partial dry runs and crawl-specific pacing/429 cooldown (#15).
 
 ### Changed
+
+- `get_tuik_data` CSV exports now use the one-hour content-addressed file snapshot
+  shared with Excel/PDF and `inspect_tuik_data` (previously only CSVs up to 256 KiB
+  were cached for 10 minutes). `ok` responses report `snapshot_id`, and CSV
+  `retrieved_at` is the snapshot's retrieval time (#51).
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving
   the separate JSON report without duplicating upstream requests (#28).
