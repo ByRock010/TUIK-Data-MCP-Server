@@ -13,6 +13,7 @@ verifies official table downloads. Runtime results always come from TÜİK.
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None)` | CSV/XLS/XLSX rows, verified download, or an explicit unsupported response |
+| `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -174,8 +175,8 @@ restart, expiration (one hour), or cache eviction.
   failures are standard MCP tool errors before execution.
 
 CSV/Excel filters are **local exact string equality**, not a universal query language.
-Call without filters to inspect the exact column labels, then use those labels as
-keys. A limit bounds returned rows (1–1000), not the full upstream file download.
+Call `inspect_tuik_data` (or `get_tuik_data` without filters) to learn the exact column
+labels, then use those labels as keys. A limit bounds returned rows (1–1000), not the full upstream file download.
 An unsupported filter column is an error. File download URLs can expire or change;
 repeat the search/detail request if necessary.
 
@@ -190,6 +191,56 @@ these returned column labels. File URL, sheet and retrieval time identify the
 source snapshot for citation. Passing `sheet` for a CSV is an input error.
 When a bulletin offers dataflow CSV choices, choose a `flow:` ID for CSV or an
 explicit file ID for Excel; no related table is selected automatically.
+`ok` responses include `snapshot_id`, the SHA-256 of the retained file snapshot.
+
+## Inspect a table before querying
+
+`inspect_tuik_data` selects the same file as `get_tuik_data` (CSV first; bulletins with
+dataflows return `related_datasets` for an explicit choice; Excel defaults to the first
+sheet) and profiles it instead of returning rows:
+
+```json
+{"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0"}
+{"resource_id": "<bulletin Excel file ID>", "sheet": "Tablo", "columns": ["Yıllar - Years [column 1]"], "max_values": 50}
+```
+
+Each entry in `columns` has the exact `name` accepted as a `get_tuik_data` filter key,
+`label_en` when the workbook provides one, `non_empty` and `empty` counts, the most
+frequent observed `values` with counts (use them verbatim as filter values),
+`distinct_count`, and a conservative `type_hint` (`string`, `number`, `date`, `period`,
+`mixed` or `unknown`) marked `type_hint_source: "inferred"`. CSV and Excel declare no
+semantic types, so every hint comes from observed strings:
+
+- Numbers report the observed `decimal_separator` (`.` or `,`); `1.234`-style values
+  alone are `ambiguous` (thousands or decimal) and are never converted.
+- Only valid ISO dates are `date`; `01.02.2024` stays a `string`. SDMX-style periods
+  (`2024-01`, `2024-Q1`, `2024M02`) are `period`; bare years are `period` only when the
+  header names a time dimension (Yıl, Year, Dönem, Zaman, Ay...), otherwise `number`.
+- Zero-padded codes such as `01` are strings. Symbols such as `-`, `..` or `x` are
+  counted under `placeholders` without being read as zero or missing; they stay in
+  `values` because they are valid exact filter values.
+- Values longer than 200 characters are shown shortened with `truncated: true` and
+  cannot be used as filters.
+
+Coverage is explicit. `rows_examined` of `total_rows` were profiled and `complete`
+says whether that is the whole parsed table; counts and `distinct_exact` are exact
+only for complete scans without capped distinct tracking. `values_complete` says
+whether every distinct value is listed. Observed values describe this file, not an
+official code list or statistical dimension. The response keeps `unit`,
+`table_notes`, `source_note`, `layout` and warnings (including raw-layout warnings),
+plus `source_url`, `retrieved_at`, `sheet` and `snapshot_id`. Unknown sheets are
+`invalid_input`; unknown `columns` are `invalid_columns`; file problems keep their
+source error codes.
+
+Inspection and queries share the one-hour file snapshot: inspecting again or calling
+`get_tuik_data` afterwards reuses the downloaded file, and the same `snapshot_id`
+confirms both read the same version. Budgets (`TUIK_INSPECT_*` in `.env.example`)
+bound rows scanned (100,000), columns profiled (100; pass `columns` for others),
+distinct values tracked per column (10,000) and column-profile output (64 KiB,
+measured as UTF-8 bytes of the indented JSON the MCP response carries). When output
+is limited, listed values shrink first, then trailing columns are omitted, with
+warnings; a single profile that cannot fit is omitted rather than exceeding the
+limit. `max_values` (1–200) and `columns` (1–50 names) are validated.
 
 ## Read PDF documents
 
@@ -243,10 +294,9 @@ compatible agent explicitly identifies the project. No login or credentials are
 used. See [source research](docs/TUIK_SOURCES.md).
 
 The replaceable `Cache` interface has a bounded in-memory TTL implementation:
-search 10 minutes, metadata/catalog/search handles one hour, themes six hours,
-small CSV downloads 10 minutes. Dataset discovery and detail share one catalog fetch,
-including concurrent calls, and retain its retrieval timestamp. CSV bodies larger than
-256 KiB are not cached by this general cache; Excel/PDF files use the separate
+search 10 minutes, metadata/catalog/search handles one hour, themes six hours.
+Dataset discovery and detail share one catalog fetch, including concurrent calls,
+and retain its retrieval timestamp. CSV exports and Excel/PDF files use the separate
 byte-bounded file cache below.
 Cache hits retain the
 original source retrieval timestamp where applicable. Caches are process-local.
@@ -255,7 +305,8 @@ File parsing has configurable sheet/cell limits and an XLSX uncompressed-size
 preflight (see `.env.example`). XLSX dimensions are checked against actual XML
 coordinates, then rows are counted again during read-only loading. File parsing
 services share a 32 MiB payload-byte cache of one-hour downloads and parsed results;
-keys include stable resource identity and content SHA-256. Excel and PDF reading share these limits and caches.
+keys include stable resource identity and content SHA-256. CSV, Excel and PDF reading
+and `inspect_tuik_data` profiles share these limits and caches.
 Workers run off the event loop, one at a time; cancellation waits for the active
 worker to finish. Input budgets limit ordinary workloads; they are not a hard CPU
 or process-memory sandbox for malicious library inputs.
