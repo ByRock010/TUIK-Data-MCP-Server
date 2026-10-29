@@ -105,6 +105,10 @@ must appear in the title, description or major theme. Exact titles rank first,
 followed by title phrase/word matches; ties use title and ID. This is literal text
 matching, without stemming or semantic search. Optional `theme` must match the full
 major theme name, case-insensitively; use `list_tuik_themes` to discover names.
+When an OpenSearch index is configured (see below), the same tool ranks the index
+instead (`backend: "opensearch"`) with Turkish stemming, ASCII folding and
+abbreviation synonyms; results still resolve through the live catalog, and any
+fallback to literal matching is reported in `warnings`.
 
 By default only datasets advertising public exports are included. Set
 `downloadable_only: false` to also discover entries without an export.
@@ -356,9 +360,12 @@ dataflows, bulletins and metadata, with bounded dry runs and incremental state (
 The [indexer](docs/INDEXING.md) loads those documents into a versioned index behind
 the alias (#16).
 
-OpenSearch is optional. The base install and all seven MCP tools continue to work
-without it. Routing MCP searches to the index follows in #17–#18. Setting a URL
-alone does not yet change search behavior.
+OpenSearch is optional. The base install and every MCP tool work without it. With
+`TUIK_OPENSEARCH_URL` set and an index built, `search_tuik_datasets` searches the
+index through the [search backend](docs/SEARCH_BACKEND.md) (#17); if the cluster or
+alias is unavailable it falls back to literal catalog matching with a warning
+(`TUIK_OPENSEARCH_TIMEOUT_SECONDS`, default 5, bounds the wait). Other tools are
+unchanged until #18 exposes indexed search for bulletins and metadata.
 
 ```bash
 # Requires Docker Compose v2 and a running Docker daemon

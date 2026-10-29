@@ -21,9 +21,11 @@ class App:
 @asynccontextmanager
 async def lifespan(server: FastMCP) -> AsyncIterator[App]:
     http = HttpClient(Settings.from_env())
+    service = CatalogService(http)
     try:
-        yield App(CatalogService(http))
+        yield App(service)
     finally:
+        await service.close()
         await http.close()
 
 
@@ -77,9 +79,11 @@ async def search_tuik_datasets(
 
     By default only datasets advertising public CSV exports are returned; availability
     is verified when get_tuik_data downloads the file. Set downloadable_only=false to
-    include datasets without exports. All query words must occur in the title,
-    description or major theme (Turkish case-insensitive). Exact title matches rank
-    first. Optional theme matches the full major theme name, not a theme ID.
+    include datasets without exports. Optional theme matches the full major theme name
+    (case-insensitive), not a theme ID. backend reports the matcher: "opensearch" ranks
+    the metadata index with Turkish stemming, ASCII folding and abbreviations such as
+    TÜFE; "literal" requires every query word in the title, description or theme and
+    ranks exact titles first. warnings explain any fallback to literal matching.
     """
     return await respond(service(ctx).search_datasets(query, limit, downloadable_only, theme))
 

@@ -56,6 +56,9 @@ class DatasetSearchResponse(Provenance):
     results: list[TuikResource]
     total: int
     truncated: bool
+    # "opensearch" ranks by the index; "literal" requires every word in the catalog text.
+    backend: Literal["opensearch", "literal"] = "literal"
+    warnings: list[str] = Field(default_factory=list)
 
 
 class DataResponse(Provenance):

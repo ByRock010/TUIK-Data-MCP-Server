@@ -8,6 +8,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `SearchBackend` protocol with `OpenSearchBackend` (synonym-aware `best_fields` over
+  title, ASCII title, description, body and theme; a weaker first-letter-preserving
+  fuzzy clause; kind/theme/downloadable/publication-date filters; bounded highlights),
+  `LiteralBackend` (previous dataflow matching) and `PortalBackend`. With
+  `TUIK_OPENSEARCH_URL` set, `search_tuik_datasets` ranks the index and reports
+  `backend`; an unconfigured or unreachable cluster falls back to literal (datasets)
+  or portal (general) search with a warning (#17).
+
 - `tuik-mcp-index` crawls public metadata and writes it to OpenSearch: `--full`
   loads a new versioned index, verifies its document count and atomically moves the
   alias, keeping previous versions for rollback; `--incremental` upserts only new or

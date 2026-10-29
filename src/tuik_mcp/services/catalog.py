@@ -18,6 +18,15 @@ from tuik_mcp.models.dataset import (
     TuikResource,
 )
 from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
+from tuik_mcp.search.backend import (
+    BackendUnavailable,
+    LiteralBackend,
+    OpenSearchBackend,
+    PortalBackend,
+    SearchFilters,
+    SearchHits,
+)
+from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
@@ -30,6 +39,23 @@ class CatalogService:
         self.cache = cache if cache is not None else MemoryTTLCache()
         self._dataset_lock = asyncio.Lock()
         self.files = FileStore(self.portal)
+        settings = http.settings
+        self.index = (
+            OpenSearchBackend(
+                OpenSearchStore(
+                    str(settings.opensearch_url), timeout=settings.opensearch_timeout_seconds
+                ),
+                settings.opensearch_index,
+            )
+            if settings.opensearch_url is not None
+            else None
+        )
+        self.literal = LiteralBackend(self._datasets)
+        self.portal_search = PortalBackend(self.search)
+
+    async def close(self) -> None:
+        if self.index is not None:
+            await self.index.close()
 
     def remember(self, result):
         self.cache.set("record:" + result.id, result, 3600)
@@ -49,6 +75,26 @@ class CatalogService:
             self.cache.set("datasets", result, 3600)
             return result
 
+    async def search_index(
+        self, query: str, filters: SearchFilters, limit: int = 10, offset: int = 0
+    ) -> SearchHits:
+        """Indexed search, else literal dataflows (datasets only) or the live portal."""
+        if self.index is None:
+            reason = "Indexed search is not configured (TUIK_OPENSEARCH_URL)"
+        else:
+            try:
+                return await self.index.search(query, filters, limit, offset)
+            except BackendUnavailable as exc:
+                reason = f"Indexed search is unavailable ({exc})"
+        if filters.kinds == ["dataset"]:
+            hits = await self.literal.search(query, filters, limit, offset)
+            fallback = "used literal catalog matching"
+        else:
+            hits = await self.portal_search.search(query, filters, limit, offset)
+            fallback = "used live portal search"
+        hits.warnings.insert(0, f"{reason}; {fallback}.")
+        return hits
+
     async def search_datasets(
         self,
         query: str,
@@ -63,50 +109,39 @@ class CatalogService:
             theme=theme,
         )
         retrieved_at, datasets = await self._datasets()
-        normalized_query = turkish_casefold(args.query)
-        terms = normalized_query.split()
-        normalized_theme = turkish_casefold(args.theme) if args.theme is not None else None
-        matches = []
-        for dataset in datasets:
-            if args.downloadable_only and "csv" not in dataset.available_formats:
-                continue
-            if (
-                normalized_theme is not None
-                and turkish_casefold(dataset.theme or "") != normalized_theme
-            ):
-                continue
-            text = turkish_casefold(
-                " ".join(
-                    [
-                        dataset.title,
-                        dataset.description or "",
-                        dataset.theme or "",
-                    ]
-                )
+        themes = None
+        if args.theme is not None:
+            # Both backends compare exact stored names; resolve case-insensitively here.
+            wanted = turkish_casefold(args.theme)
+            themes = sorted(
+                {d.theme for d in datasets if d.theme and turkish_casefold(d.theme) == wanted}
             )
-            if all(term in text for term in terms):
-                matches.append(dataset)
-
-        def rank(dataset: TuikResource):
-            title = turkish_casefold(dataset.title)
-            return (
-                title != normalized_query,
-                normalized_query not in title,
-                -sum(term in title for term in terms),
-                title,
-                dataset.id,
+        filters = SearchFilters(
+            kinds=["dataset"],
+            themes=themes,
+            downloadable=True if args.downloadable_only else None,
+        )
+        hits = await self.search_index(args.query, filters, args.limit)
+        # Results resolve through the live catalog, so every returned ID is current.
+        by_id = {dataset.id: dataset for dataset in datasets}
+        results = [by_id[hit.id] for hit in hits.hits if hit.id in by_id]
+        stale = len(hits.hits) - len(results)
+        if stale:
+            hits.warnings.append(
+                f"{stale} indexed dataset(s) are no longer in the live catalog and were omitted."
             )
-
-        matches.sort(key=rank)
+        total = hits.total if hits.total is not None else len(results)
         return DatasetSearchResponse(
             query=args.query,
             downloadable_only=args.downloadable_only,
             theme=args.theme,
-            results=matches[: args.limit],
-            total=len(matches),
-            truncated=len(matches) > args.limit,
+            results=results,
+            total=total,
+            truncated=total > args.limit,
             source_url=f"{PORTAL}/api/tr/dataflows",
             retrieved_at=retrieved_at,
+            backend=hits.backend,
+            warnings=hits.warnings,
         )
 
     async def search(self, query: str, limit: int = 10) -> SearchResponse:
