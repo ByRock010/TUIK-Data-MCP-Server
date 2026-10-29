@@ -395,8 +395,8 @@ async def test_real_xls_xlsx_queries_paginate_without_losing_provenance(name, ki
     http, catalog, calls, _ = service((FIXTURES / "files" / name).read_bytes(), kind)
     try:
         whole = await catalog.data(FILE, query=query, limit=1000)
-        first, result, count = await pages(catalog, FILE, query, limit=37)
-        assert result == whole.rows and len(result) == whole.total_rows and count >= 1
+        first, result, count = await pages(catalog, FILE, query, limit=7)
+        assert result == whole.rows and len(result) == whole.total_rows and count >= 2
         assert first.sheet and first.table_title and first.format == kind
         assert first.source_url == URL and first.snapshot_id.startswith("sha256:")
         assert len(calls) == 1
