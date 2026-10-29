@@ -75,10 +75,19 @@ class FileStore:
             return DownloadedFile(body, verified, retrieved_at, digest)
 
     async def tables(
-        self, resource_id: str, file: DownloadedFile, limit: int | None = None
+        self,
+        resource_id: str,
+        file: DownloadedFile,
+        limit: int | None = None,
+        *,
+        scan_max_rows: int | None = None,
+        scan_max_cells: int | None = None,
     ) -> list[ParsedTable]:
         """Parsed tables; `limit` bounds retained CSV rows while totals stay exact."""
-        key = f"tables:{resource_id}:{file.digest}:{file.link.format}:{limit}"
+        key = (
+            f"tables:{resource_id}:{file.digest}:{file.link.format}:{limit}:"
+            f"{scan_max_rows}:{scan_max_cells}"
+        )
         async with self._parse_lock:
             cached = self.cache.get(key)
             if cached is not None:
@@ -90,10 +99,17 @@ class FileStore:
                 file.link.source_url,
                 limit=limit,
                 budgets=self.limits,
+                scan_max_rows=scan_max_rows,
+                scan_max_cells=scan_max_cells,
             )
             payload = await finish_worker(TABLES.dump_json, tables)
             self.cache.set(key, payload)
             return tables
+
+    async def work(self, function, *args, **kwargs):
+        """Query evaluation/serialization shares the parser's cancellation-safe slot."""
+        async with self._parse_lock:
+            return await finish_worker(function, *args, **kwargs)
 
     async def document(self, resource_id: str, file: DownloadedFile, page: int) -> ParsedDocument:
         key = f"pdf:{resource_id}:{file.digest}:{page}"

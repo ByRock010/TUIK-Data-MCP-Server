@@ -29,9 +29,20 @@ def parse_source(
     filters: dict[str, str] | None = None,
     sheet: str | None = None,
     budgets: ParseLimits | None = None,
+    scan_max_rows: int | None = None,
+    scan_max_cells: int | None = None,
 ) -> list[ParsedTable]:
     try:
-        return parse_table(body, fmt, limit=limit, filters=filters, sheet=sheet, budgets=budgets)
+        return parse_table(
+            body,
+            fmt,
+            limit=limit,
+            filters=filters,
+            sheet=sheet,
+            budgets=budgets,
+            scan_max_rows=scan_max_rows,
+            scan_max_cells=scan_max_cells,
+        )
     except ParseLimitError as exc:
         raise SourceError("parse_limit_exceeded", str(exc), source_url) from exc
     except InvalidFiltersError as exc:

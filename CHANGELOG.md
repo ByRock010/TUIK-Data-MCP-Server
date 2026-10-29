@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Optional `get_tuik_data` structured queries: bounded projection, exact equality and
+  membership, inclusive numeric/date/period ranges, stable multi-key sorting and
+  authenticated process-local cursor pagination. Complete result snapshots preserve
+  source strings/provenance; expired, evicted or mismatched cursors require restart
+  without silently downloading a newer file. `TUIK_QUERY_*` budgets bound scans,
+  sorting, retained state and UTF-8 responses; legacy calls remain compatible (#52).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added

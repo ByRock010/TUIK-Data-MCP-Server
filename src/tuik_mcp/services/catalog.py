@@ -18,6 +18,7 @@ from tuik_mcp.models.dataset import (
     InspectResponse,
     TuikResource,
 )
+from tuik_mcp.models.query import TableQuery
 from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
 from tuik_mcp.parsers.profile import UnknownColumnsError
 from tuik_mcp.search.backend import (
@@ -31,6 +32,7 @@ from tuik_mcp.search.backend import (
 from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.parsing import parse_source_in_thread
+from tuik_mcp.services.query import QueryService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 
@@ -41,6 +43,7 @@ class CatalogService:
         self.cache = cache if cache is not None else MemoryTTLCache()
         self._dataset_lock = asyncio.Lock()
         self.files = FileStore(self.portal)
+        self.queries = QueryService(self.files, http.settings)
         settings = http.settings
         self.index = (
             OpenSearchBackend(
@@ -341,6 +344,9 @@ class CatalogService:
         filters: dict[str, str] | None = None,
         limit: int = 100,
         sheet: str | None = None,
+        *,
+        query: TableQuery | dict | None = None,
+        cursor: str | None = None,
     ) -> DataResponse:
         validate_id(resource_id)
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 1000:
@@ -349,6 +355,7 @@ class CatalogService:
             raise ValueError("Sheet must be a non-empty name of at most 200 characters")
         if filters is not None and not isinstance(filters, dict):
             raise ValueError("Filters must be an object of exact column/string pairs")
+        provided_filters = filters
         filters = filters or {}
         if len(filters) > 20 or any(
             not isinstance(k, str) or not isinstance(v, str) or len(k) > 200 or len(v) > 200
@@ -356,6 +363,13 @@ class CatalogService:
         ):
             raise ValueError(
                 "Filters support at most 20 exact string column/value pairs (200 characters each)"
+            )
+        if query is not None:
+            query = TableQuery.model_validate(query)
+        if cursor is not None:
+            # Never resolve/download a newer resource when continuing an older snapshot.
+            return await self.queries.resume(
+                resource_id, cursor, query, provided_filters, sheet, limit
             )
         resource = await self.resource(resource_id)
         base = dict(
@@ -408,6 +422,23 @@ class CatalogService:
             verified if item.source_url == link.source_url else item
             for item in resource.download_links
         ]
+        if query is not None:
+            if verified.format not in {"csv", "xls", "xlsx"}:
+                raise SourceError(
+                    "unsupported_query",
+                    "Structured queries require CSV/XLS/XLSX rows.",
+                    verified.source_url,
+                )
+            return await self.queries.start(
+                resource_id,
+                link.resource_id or resource_id,
+                file,
+                base,
+                query,
+                filters,
+                sheet,
+                limit,
+            )
         if verified.format in {"xls", "xlsx"}:
             tables = await self.files.tables(link.resource_id or resource_id, file)
             if not tables:

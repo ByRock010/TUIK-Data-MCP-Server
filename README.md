@@ -16,7 +16,7 @@ the remaining reviewed promotion/tag steps.
 | `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
-| `get_tuik_data(resource_id, filters={}, limit=100, sheet=None)` | CSV/XLS/XLSX rows, verified download, or an explicit unsupported response |
+| `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
 | `list_tuik_themes()` | Current major statistical categories |
@@ -245,6 +245,44 @@ measured as UTF-8 bytes of the indented JSON the MCP response carries). When out
 is limited, listed values shrink first, then trailing columns are omitted, with
 warnings; a single profile that cannot fit is omitted rather than exceeding the
 limit. `max_values` (1–200) and `columns` (1–50 names) are validated.
+
+## Query and paginate a table
+
+After `inspect_tuik_data`, pass `query={}` to page through a complete table, or
+provide a projection, predicates and ordered sort keys. Existing calls without
+`query`/`cursor` keep their first-rows/exact-filter behavior.
+
+```json
+{
+  "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+  "limit": 10,
+  "query": {
+    "columns": ["Zaman (2015-01)", "Gözlem Değeri"],
+    "predicates": [
+      {"op": "eq", "column": "Gözlem Sıklığı (M)", "value": "Aylık"},
+      {"op": "range", "column": "Zaman (2015-01)", "value_type": "period", "period_format": "month", "minimum": "2020-01", "maximum": "2025-12"}
+    ],
+    "sort": [{"column": "Gözlem Değeri", "value_type": "number", "decimal_separator": ",", "direction": "desc"}]
+  }
+}
+```
+
+Use exact inspected source column names; formats vary between tables. Filtering
+precedes stable sorting, pagination and projection. `total_rows` is the complete
+match count. Range bounds are inclusive; numeric/date/period comparisons validate
+source values without changing returned strings. Ambiguous numeric separators
+require an explicit format; missing markers never become zero.
+
+When `has_more` is true, send `resource_id` and the returned `next_cursor` to the
+same server process. Omit `query`, `filters` and `sheet` to reuse the retained
+selection, or repeat them unchanged. `limit` may change. Page sizes can shrink to
+fit the UTF-8 response budget, so continue using the cursor rather than a row count.
+The default cursor lifetime is 15 minutes, shortened by file/query snapshot eviction
+or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
+`cursor_mismatch`; continuation never re-downloads newer source data at an old offset.
+
+The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
+missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
 
 ## Read PDF documents
 
@@ -509,8 +547,9 @@ cluster CI and independently judged relevance measurements; these are not v0.2.0
 release prerequisites.
 Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
 stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Advanced row queries and snapshot-bound cursor pagination (#52)
-are a separate, unassigned follow-up. Excel/PDF reading is implemented;
-the preparation PR automatically closes #10 and epic #23 on its merge into
-`develop`. Publication follows the [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
+current roadmap. The next, Unreleased increment adds
+[advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
+(#52) to the file-reading workflow. The v0.2.0 preparation PR #59 merged into
+`develop` and automatically closed #10 and epic #23. Publication follows the
+[v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
 reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
