@@ -1,0 +1,85 @@
+[
+  {
+    "id": "DF_ISGUCU_AYLIK_FIIL_CALISMA_SURE_C+V1.0",
+    "name": "İstihdam Edilenlerin Fiili Çalışma Süreleri",
+    "version": "1.0",
+    "description": "Türkiye’de cinsiyet düzeyinde 15+ yaş istihdam edilenlerin aylık fiili çalışma sürelerini sunmaktadır.",
+    "period": "Ağustos 2026",
+    "footnotes": [
+      "Rakamlar yuvarlamadan dolayı toplamı vermeyebilir.",
+      "Beş bin kişiden az gözlem değerlerinde örnek büyüklüğü güvenilir tahminler için yeterli değildir.",
+      "Haftalık ortalama fiili çalışma saati işbaşında olanlar için hesaplanmıştır."
+    ],
+    "updatedAt": "2026-09-30T10:00:00",
+    "downloadable": true,
+    "category": {
+      "name": "İstihdam, İşsizlik ve Ücret",
+      "child": {
+        "name": "İşgücü İstatistikleri",
+        "child": {
+          "name": "Aylık İşgücü İstatistikleri"
+        }
+      }
+    }
+  },
+  {
+    "id": "DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0",
+    "name": "İşgücüne İlişkin Tamamlayıcı Göstergeleri",
+    "version": "1.0",
+    "description": "Türkiye’de cinsiyet düzeyinde 15+ yaş grubu için aylık işgücüne ilişkin tamamlayıcı göstergeleri (işsizlik oranı, zamana bağlı eksik istihdam ve işsizlerin bütünleşik oranı, işsiz ve potansiyel işgücünün bütünleşik oranı, atıl işgücü oranı) sunmaktadır.",
+    "period": "Ağustos 2026",
+    "footnotes": [
+      "Rakamlar yuvarlamadan dolayı toplamı vermeyebilir.",
+      "2014-2020 aylık sonuçlar model ile tahmin edilmiştir.",
+      "Atıl işgücü oranı, zamana bağlı eksik istihdam, işsizler ve potansiyel işgücünün toplamının işgücü ve potansiyel işgücünün toplamına oranıdır."
+    ],
+    "updatedAt": "2026-09-30T10:00:00",
+    "downloadable": true,
+    "category": {
+      "name": "İstihdam, İşsizlik ve Ücret",
+      "child": {
+        "name": "İşgücü İstatistikleri",
+        "child": {
+          "name": "Aylık İşgücü İstatistikleri"
+        }
+      }
+    }
+  },
+  {
+    "id": "DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+    "name": "Temel İşgücü Göstergeleri",
+    "version": "1.0",
+    "description": "Türkiye’de cinsiyet düzeyinde 15+ ve 15–24 yaş grupları için aylık temel işgücü göstergelerini (nüfus, işgücü, istihdam, işsiz, işgücüne dahil olmayanlar, işgücüne katılma oranı, istihdam oranı, işsizlik oranı) sunmaktadır.",
+    "period": "Ağustos 2026",
+    "footnotes": [
+      "Rakamlar yuvarlamadan dolayı toplamı vermeyebilir.",
+      "2005-2020 aylık sonuçlar model ile tahmin edilmiştir."
+    ],
+    "updatedAt": "2026-09-30T10:00:00",
+    "downloadable": true,
+    "category": {
+      "name": "İstihdam, İşsizlik ve Ücret",
+      "child": {
+        "name": "İşgücü İstatistikleri",
+        "child": {
+          "name": "Aylık İşgücü İstatistikleri"
+        }
+      }
+    }
+  },
+  {
+    "id": "DF_SU_ATIKSU_ALICI_ORTAM_TUR_DESARJ_V1+V1.0",
+    "name": "Alıcı Ortamına Göre Deşarj Edilen Atıksu Miktarı",
+    "version": "1.0",
+    "description": "Endüstriyel sektörler, belediyeler ve köyler tarafından deşarj edilen atıksu miktarına ilişkin istatistikleri alıcı ortam bazında sunmaktadır.",
+    "period": "2024",
+    "updatedAt": "2026-06-01T22:00:00",
+    "downloadable": true,
+    "category": {
+      "name": "Çevre",
+      "child": {
+        "name": "Su ve Atıksu İstatistikleri"
+      }
+    }
+  }
+]

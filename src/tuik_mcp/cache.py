@@ -58,6 +58,12 @@ class BytesTTLCache:
         self._items.move_to_end(key)
         return item[1]
 
+    def remaining_ttl(self, key: str) -> float:
+        """Remaining retention, without extending it (even if the same bytes return later)."""
+        if self.get(key) is None:
+            return 0
+        return max(0, self._items[key][0] - time.monotonic())
+
     def set(self, key: str, value: bytes, ttl: float = 3600) -> None:
         for old in list(self._items):
             if self._items[old][0] <= time.monotonic():

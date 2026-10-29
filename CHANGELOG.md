@@ -6,7 +6,50 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
+
+- Optional `get_tuik_data` structured queries: bounded projection, exact equality and
+  membership, inclusive numeric/date/period ranges, stable multi-key sorting and
+  authenticated process-local cursor pagination. Complete result snapshots preserve
+  source strings/provenance; expired, evicted or mismatched cursors require restart
+  without silently downloading a newer file. `TUIK_QUERY_*` budgets bound scans,
+  sorting, retained state and UTF-8 responses; legacy calls remain compatible (#52).
+
+- Release acceptance smoke paths explicitly follow a bulletin's related CSV dataset
+  and a bulletin Excel attachment, recording snapshot/source provenance, package and
+  Python versions, and pacing. The eight-tool verification and release checklist
+  distinguish prepared code from the final promotion/tag (#10).
+
+- `SearchBackend` protocol with `OpenSearchBackend` (synonym-aware `best_fields` over
+  title, ASCII title, description, body and theme; a weaker first-letter-preserving
+  fuzzy clause; kind/theme/downloadable/publication-date filters; bounded highlights),
+  `LiteralBackend` (previous dataflow matching) and `PortalBackend`. With
+  `TUIK_OPENSEARCH_URL` set, `search_tuik_datasets` ranks the index and reports
+  `backend`; an unconfigured or unreachable cluster falls back to literal (datasets)
+  or portal (general) search with a warning (#17).
+
+- `inspect_tuik_data` profiles a CSV/XLS/XLSX table before querying: exact column keys,
+  most frequent observed values with counts, empty counts, uninterpreted placeholder
+  symbols and conservative inferred type hints that never resolve ambiguous separators
+  or dates. Coverage, distinct-count exactness and output budgets are explicit and
+  configurable (`TUIK_INSPECT_*`); profiles are cached per file snapshot (#51).
+
+- `tuik-mcp-index` crawls public metadata and writes it to OpenSearch: `--full`
+  loads a new versioned index, verifies its document count and atomically moves the
+  alias, keeping previous versions for rollback; `--incremental` upserts only new or
+  changed documents and reports stale IDs without deleting them. Crawl state advances
+  only after a successful write; `--dry-run` plans without writing (#16).
+
+- GitHub branch ruleset payloads requiring PRs, one approval and CI for `master`
+  and `develop`, with a tested branch-policy check enforcing topic PRs into
+  `develop` and promotions only from `develop` into `master`.
+
+- Turkish search evaluation preparation: 48 categorized queries, real portal/literal
+  baseline snapshots, pooled top-ten candidates, independent judge sheets, validated
+  label merge and corpus-aware nDCG/MRR/pooled-recall/Cohen's κ reporting. Human
+  judgments and measured baseline quality remain pending (#11).
 
 - `read_tuik_document` reads PDF publication, report and methodology pages with
   glyph deduplication, Turkish text normalization, page provenance and bounded
@@ -50,7 +93,24 @@ All notable changes to this project are documented here. The format follows
 - Git Flow process: `develop` branch, CI workflow, PR and issue templates,
   `CONTRIBUTING.md` and this changelog.
 
+- Packaged Turkish/ASCII analysis settings and candidate search-time synonym graphs,
+  a reproducible OpenSearch token/retrieval probe, measured ASCII-inflection limits,
+  search field design and the optional derived-index architecture ADR (#13).
+
+- Validated metadata-only `IndexDocument` schema, packaged strict OpenSearch mapping,
+  isolated title-prefix field, versioned physical index names and opt-in real-cluster
+  mapping verification (#14).
+
+- JSON-only metadata crawler with full listing enumeration, source-aware category and
+  series relations, replayable incremental snapshots, atomic JSONL/state output,
+  explicit partial dry runs and crawl-specific pacing/429 cooldown (#15).
+
 ### Changed
+
+- `get_tuik_data` CSV exports now use the one-hour content-addressed file snapshot
+  shared with Excel/PDF and `inspect_tuik_data` (previously only CSVs up to 256 KiB
+  were cached for 10 minutes). `ok` responses report `snapshot_id`, and CSV
+  `retrieved_at` is the snapshot's retrieval time (#51).
 
 - Weekly live contract checks run the full MCP smoke workflow once, preserving
   the separate JSON report without duplicating upstream requests (#28).
@@ -58,6 +118,17 @@ All notable changes to this project are documented here. The format follows
 - README client configuration uses a generic path instead of a developer's machine path.
 
 ### Fixed
+
+- Numeric range operands follow the same ambiguity rules as source values:
+  integer-only columns cannot silently interpret `1.234`/`1,234` as decimal bounds.
+  Invalid operands identify the range minimum/maximum and expected notation (#52).
+
+- Live MCP smoke forwards `TUIK_*` settings to its stdio server so configured request
+  and download intervals are honored, including slower release verification (#10).
+
+- Complete metadata crawls reject overlapping pages when unique bulletin IDs do
+  not match the upstream total, preserving prior output/state instead of silently
+  losing unseen bulletins. Reports retain incomplete-listing diagnostics (#15).
 
 - XLSX preflight counts optional cell coordinates within each row instead of
   accumulating columns across the worksheet, preserving correct cell-budget checks (#9).
@@ -92,5 +163,6 @@ All notable changes to this project are documented here. The format follows
 - Offline test suite, opt-in live tests and `scripts/live_smoke.py`.
 - Dockerfile.
 
-[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...develop
+[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...develop
+[0.2.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/releases/tag/v0.1.0

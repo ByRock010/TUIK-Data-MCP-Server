@@ -1,4 +1,65 @@
-# MVP verification
+# Verification
+
+## Final v0.2.0 candidate — 2026-10-29
+
+The combined accepted implementation at `8e566bf` includes PRs #59 and #60.
+The final preparation changes documentation/evidence only. Both Python 3.13.5
+and 3.14.0 passed **552 offline tests** (3 optional OpenSearch skips, 6 live
+deselections); Ruff and all **28 Node tests** passed. A real eight-tool MCP smoke,
+a separate CSV/Excel typed-query/cursor smoke and the remaining **4 live tests**
+passed sequentially. Clean wheel installation verified version 0.2.0, both
+console entry points, eight tool schemas including nested queries, invalid-input
+handling and packaged search assets outside the repository.
+
+See the [final candidate acceptance report](verification/v0.2.0-final-2026-10-29.md),
+[eight-tool JSON](verification/v0.2.0-final-mcp-2026-10-29.json) and
+[query/cursor JSON](verification/v0.2.0-final-query-2026-10-29.json) for commands,
+source snapshots and limitations. Local Docker/OpenSearch runtime checks were
+unavailable; required PR CI remains a separate gate. This is candidate evidence,
+not a claim of publication. Follow the [release checklist](RELEASE_0.2.0.md) for
+reviewed promotion, annotated tag, tagged-source assets and milestone closure.
+
+## v0.2.0 release preparation — 2026-10-29
+
+Release code on `chore/10-prepare-0.2.0` was verified at
+`26962864abdc9924d9e48575ed9c33c503a77196`, based on `develop` at `bbd717f`.
+This historical report predates the #52 implementation. PR #59 subsequently
+merged into `develop` and automatically closed #10 and epic #23. The final
+combined-candidate evidence is linked above; promotion/tag publication and
+milestone closure follow [the release checklist](RELEASE_0.2.0.md).
+
+- Clean editable installs on Python **3.13.5** and **3.14.0** each passed
+  **470 offline tests**, with **3 optional OpenSearch tests skipped** and
+  **5 live tests deselected**. Actual MCP stdio discovery/input validation is included.
+- Ruff lint/format and all **28 Node policy/automation tests** passed.
+- After the smoke, the remaining **4 live tests passed** in 49.85 seconds,
+  covering bulletin CSV selection, deep category paths, consecutive paced
+  downloads, and CPI/population/labour spreadsheet rows. The full MCP workflow
+  was excluded from that pytest command because it had just run separately.
+- The final real MCP stdio run started at **15:18:55 Istanbul** (12:18:55 UTC),
+  used installed package **0.2.0**, discovered/called **all eight tools** and
+  passed eight Turkish portal searches plus publication discovery. Requests were
+  spaced two seconds apart; file downloads retained their six-second spacing.
+- The smoke explicitly followed `press:58347` → `related_datasets` →
+  `flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0`: **2 of 4,984 rows** from its verified
+  public CSV. It separately selected the actual Excel attachment ID returned by
+  `press:57988`, returning **2 of 261 rows**, sheet `Tablo`, with source and SHA-256.
+- CSV inspection/filtering on `flow:DF_ALTINSIZ_DTH+V1.0` examined 11,564 rows;
+  `Gözlem Sıklığı (M) = Aylık` matched 8,260. Excel inspection/filtering on the
+  discovered unemployment table matched 3 rows for `Yıl Year = 2014`.
+  Each inspect/query pair retained its source URL, retrieval time and content hash.
+- The publication PDF returned page 1 of **17**. The methodology PDF returned
+  physical page 3 of **10** and continued on that same page at offset 120, then
+  offered offset 240 without changing its retrieval timestamp.
+- A wheel and source distribution were built; installing the wheel into a separate,
+  clean Python 3.13 environment verified package version 0.2.0, both console entry
+  points, all eight MCP tool schemas, invalid-ID handling and packaged search
+  analysis/mapping/synonym assets. No repository imports were used for that check.
+
+Evidence: [unaltered final live JSON](verification/v0.2.0-live-2026-10-29.json)
+and [dated commands, package checks and limitations](verification/issue-10-2026-10-29.md).
+Download URLs are public, rotating source links; reuse the stable IDs instead.
+These results are dated observations, not guarantees of future upstream availability.
 
 ## Excel/PDF development increment — 2026-10-22
 

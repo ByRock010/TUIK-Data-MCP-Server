@@ -15,15 +15,17 @@ ALLOWED_HOSTS = frozenset(
         "biruni.tuik.gov.tr",
     }
 )
-USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research)"
+USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.2; public statistical research)"
 
 
 class Settings(BaseModel):
-    # Reserved for the optional indexed-search backend; base tools stay live-only.
+    # Optional indexed-search backend; unset keeps literal/portal search.
     opensearch_url: HttpUrl | None = None
     opensearch_index: str = Field(
         default="tuik-resources", max_length=255, pattern=r"^[a-z0-9][a-z0-9._-]*$"
     )
+    # Searches fall back quickly when the cluster does not answer.
+    opensearch_timeout_seconds: float = Field(default=5, ge=0.5, le=60)
 
     timeout_seconds: float = Field(default=20, ge=1, le=60)
     attempts: int = Field(default=3, ge=1, le=3)
@@ -40,6 +42,19 @@ class Settings(BaseModel):
     parse_max_pdf_pages_per_call: int = Field(default=5, ge=1, le=20)
     parse_max_pdf_chars_per_page: int = Field(default=200_000, ge=1000, le=1_000_000)
     parse_cache_bytes: int = Field(default=32 * 1024 * 1024, ge=1024, le=256 * 1024 * 1024)
+    # inspect_tuik_data profiling budgets: rows scanned, columns profiled, tracked
+    # distinct values per column and serialized column-profile bytes per response.
+    inspect_max_rows: int = Field(default=100_000, ge=1, le=1_000_000)
+    inspect_max_columns: int = Field(default=100, ge=1, le=1000)
+    inspect_max_distinct: int = Field(default=10_000, ge=10, le=100_000)
+    inspect_max_output_bytes: int = Field(default=64 * 1024, ge=8 * 1024, le=1024 * 1024)
+    query_max_rows: int = Field(default=100_000, ge=1, le=1_000_000)
+    query_max_cells: int = Field(default=2_000_000, ge=1, le=5_000_000)
+    query_max_sort_rows: int = Field(default=50_000, ge=1, le=1_000_000)
+    query_max_snapshot_bytes: int = Field(default=8 * 1024 * 1024, ge=1024, le=64 * 1024 * 1024)
+    query_max_output_bytes: int = Field(default=64 * 1024, ge=1024, le=1024 * 1024)
+    query_cache_bytes: int = Field(default=16 * 1024 * 1024, ge=1024, le=128 * 1024 * 1024)
+    query_cursor_ttl_seconds: int = Field(default=900, ge=1, le=3600)
 
     @field_validator("opensearch_url", mode="before")
     @classmethod

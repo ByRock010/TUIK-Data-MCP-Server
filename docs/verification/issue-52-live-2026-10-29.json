@@ -1,0 +1,123 @@
+{
+  "status": "ok",
+  "checked_at": "2026-10-29T16:05:21.309037+00:00",
+  "csv": {
+    "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+    "format": "csv",
+    "query": {
+      "columns": [
+        "Gözlem Sıklığı (M)",
+        "Gözlem Değeri"
+      ],
+      "predicates": [
+        {
+          "op": "eq",
+          "column": "Gözlem Sıklığı (M)",
+          "value": "Aylık"
+        }
+      ],
+      "sort": [
+        {
+          "column": "Gözlem Değeri",
+          "value_type": "number",
+          "decimal_separator": ","
+        }
+      ]
+    },
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+    "retrieved_at": "2026-10-29T16:05:24.988050Z",
+    "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+    "sheet": null,
+    "total_rows": 8260,
+    "cursor_expires_at": "2026-10-29T16:20:25.200550Z",
+    "pages": [
+      {
+        "rows": [
+          {
+            "Gözlem Sıklığı (M)": "Aylık",
+            "Gözlem Değeri": "27,223888298482567"
+          }
+        ],
+        "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+        "retrieved_at": "2026-10-29T16:05:24.988050Z",
+        "sheet": null,
+        "total_rows": 8260,
+        "has_more": true
+      },
+      {
+        "rows": [
+          {
+            "Gözlem Sıklığı (M)": "Aylık",
+            "Gözlem Değeri": "27,690188582830356"
+          }
+        ],
+        "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+        "retrieved_at": "2026-10-29T16:05:24.988050Z",
+        "sheet": null,
+        "total_rows": 8260,
+        "has_more": true
+      }
+    ]
+  },
+  "excel": {
+    "resource_id": "press:57987:file:temel-işgücü-göstergeleri-15-yaş~8c14b63e77",
+    "format": "xls",
+    "query": {
+      "columns": [
+        "Yıllar - Years [column 1]",
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]"
+      ],
+      "predicates": [
+        {
+          "op": "eq",
+          "column": "Yıllar - Years [column 1]",
+          "value": "2005"
+        }
+      ],
+      "sort": [
+        {
+          "column": "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]",
+          "value_type": "number"
+        }
+      ]
+    },
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+    "retrieved_at": "2026-10-29T16:05:27.750836Z",
+    "snapshot_id": "sha256:d2fa2e2575098735964fa090c652b85359fdf1cd2ac20cabe5bd6952848b2c34",
+    "sheet": "Tablo",
+    "total_rows": 12,
+    "cursor_expires_at": "2026-10-29T16:20:27.805273Z",
+    "pages": [
+      {
+        "rows": [
+          {
+            "Yıllar - Years [column 1]": "2005",
+            "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "47938"
+          }
+        ],
+        "snapshot_id": "sha256:d2fa2e2575098735964fa090c652b85359fdf1cd2ac20cabe5bd6952848b2c34",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+        "retrieved_at": "2026-10-29T16:05:27.750836Z",
+        "sheet": "Tablo",
+        "total_rows": 12,
+        "has_more": true
+      },
+      {
+        "rows": [
+          {
+            "Yıllar - Years [column 1]": "2005",
+            "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "48015"
+          }
+        ],
+        "snapshot_id": "sha256:d2fa2e2575098735964fa090c652b85359fdf1cd2ac20cabe5bd6952848b2c34",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+        "retrieved_at": "2026-10-29T16:05:27.750836Z",
+        "sheet": "Tablo",
+        "total_rows": 12,
+        "has_more": true
+      }
+    ]
+  }
+}

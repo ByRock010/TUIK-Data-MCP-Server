@@ -1,6 +1,9 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
+
+from tuik_mcp.parsers.models import ColumnProfile
 
 from .common import Provenance, SearchInput
 from .search import TuikSearchResult
@@ -56,6 +59,9 @@ class DatasetSearchResponse(Provenance):
     results: list[TuikResource]
     total: int
     truncated: bool
+    # "opensearch" ranks by the index; "literal" requires every word in the catalog text.
+    backend: Literal["opensearch", "literal"] = "literal"
+    warnings: list[str] = Field(default_factory=list)
 
 
 class DataResponse(Provenance):
@@ -83,6 +89,38 @@ class DataResponse(Provenance):
     source_note: str | None = None
     layout: Literal["table", "raw"] | None = None
     warnings: list[str] = Field(default_factory=list)
+    # Content SHA-256 of the retained file snapshot the rows were read from.
+    snapshot_id: str | None = None
+    next_cursor: str | None = None
+    has_more: bool = False
+    cursor_expires_at: datetime | None = None
+
+
+class InspectResponse(Provenance):
+    resource_id: str
+    status: Literal["ok", "not_structured", "download_available", "related_datasets"]
+    message: str | None = None
+    format: str | None = None
+    extraction: str | None = None
+    snapshot_id: str | None = None
+    sheet: str | None = None
+    sheets: list[str] = Field(default_factory=list)
+    table_title: str | None = None
+    table_title_en: str | None = None
+    unit: str | None = None
+    notes: str | None = None
+    table_notes: list[str] = Field(default_factory=list)
+    source_note: str | None = None
+    layout: Literal["table", "raw"] | None = None
+    warnings: list[str] = Field(default_factory=list)
+    total_rows: int | None = None
+    rows_examined: int | None = None
+    complete: bool | None = None
+    column_count: int | None = None
+    columns: list[ColumnProfile] = Field(default_factory=list)
+    columns_truncated: bool = False
+    download_links: list[DownloadLink] = Field(default_factory=list)
+    related_datasets: list[RelatedDataset] = Field(default_factory=list)
 
 
 class DocumentResponse(Provenance):

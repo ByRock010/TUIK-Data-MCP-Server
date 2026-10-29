@@ -15,11 +15,24 @@ from tuik_mcp.models.dataset import (
     DatasetSearchResponse,
     DocumentResponse,
     DownloadLink,
+    InspectResponse,
     TuikResource,
 )
+from tuik_mcp.models.query import TableQuery
 from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
+from tuik_mcp.parsers.profile import UnknownColumnsError
+from tuik_mcp.search.backend import (
+    BackendUnavailable,
+    LiteralBackend,
+    OpenSearchBackend,
+    PortalBackend,
+    SearchFilters,
+    SearchHits,
+)
+from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.parsing import parse_source_in_thread
+from tuik_mcp.services.query import QueryService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 
@@ -30,6 +43,24 @@ class CatalogService:
         self.cache = cache if cache is not None else MemoryTTLCache()
         self._dataset_lock = asyncio.Lock()
         self.files = FileStore(self.portal)
+        self.queries = QueryService(self.files, http.settings)
+        settings = http.settings
+        self.index = (
+            OpenSearchBackend(
+                OpenSearchStore(
+                    str(settings.opensearch_url), timeout=settings.opensearch_timeout_seconds
+                ),
+                settings.opensearch_index,
+            )
+            if settings.opensearch_url is not None
+            else None
+        )
+        self.literal = LiteralBackend(self._datasets)
+        self.portal_search = PortalBackend(self.search)
+
+    async def close(self) -> None:
+        if self.index is not None:
+            await self.index.close()
 
     def remember(self, result):
         self.cache.set("record:" + result.id, result, 3600)
@@ -49,6 +80,26 @@ class CatalogService:
             self.cache.set("datasets", result, 3600)
             return result
 
+    async def search_index(
+        self, query: str, filters: SearchFilters, limit: int = 10, offset: int = 0
+    ) -> SearchHits:
+        """Indexed search, else literal dataflows (datasets only) or the live portal."""
+        if self.index is None:
+            reason = "Indexed search is not configured (TUIK_OPENSEARCH_URL)"
+        else:
+            try:
+                return await self.index.search(query, filters, limit, offset)
+            except BackendUnavailable as exc:
+                reason = f"Indexed search is unavailable ({exc})"
+        if filters.kinds == ["dataset"]:
+            hits = await self.literal.search(query, filters, limit, offset)
+            fallback = "used literal catalog matching"
+        else:
+            hits = await self.portal_search.search(query, filters, limit, offset)
+            fallback = "used live portal search"
+        hits.warnings.insert(0, f"{reason}; {fallback}.")
+        return hits
+
     async def search_datasets(
         self,
         query: str,
@@ -63,50 +114,52 @@ class CatalogService:
             theme=theme,
         )
         retrieved_at, datasets = await self._datasets()
-        normalized_query = turkish_casefold(args.query)
-        terms = normalized_query.split()
-        normalized_theme = turkish_casefold(args.theme) if args.theme is not None else None
-        matches = []
-        for dataset in datasets:
-            if args.downloadable_only and "csv" not in dataset.available_formats:
-                continue
-            if (
-                normalized_theme is not None
-                and turkish_casefold(dataset.theme or "") != normalized_theme
-            ):
-                continue
-            text = turkish_casefold(
-                " ".join(
-                    [
-                        dataset.title,
-                        dataset.description or "",
-                        dataset.theme or "",
-                    ]
-                )
+        themes = None
+        if args.theme is not None:
+            # Both backends compare exact stored names; resolve case-insensitively here.
+            wanted = turkish_casefold(args.theme)
+            themes = sorted(
+                {d.theme for d in datasets if d.theme and turkish_casefold(d.theme) == wanted}
             )
-            if all(term in text for term in terms):
-                matches.append(dataset)
-
-        def rank(dataset: TuikResource):
-            title = turkish_casefold(dataset.title)
-            return (
-                title != normalized_query,
-                normalized_query not in title,
-                -sum(term in title for term in terms),
-                title,
-                dataset.id,
+        filters = SearchFilters(
+            kinds=["dataset"],
+            themes=themes,
+            downloadable=True if args.downloadable_only else None,
+        )
+        hits = await self.search_index(args.query, filters, args.limit)
+        # Results resolve through the live catalog, so every returned ID is current.
+        by_id = {dataset.id: dataset for dataset in datasets}
+        resolved = [by_id[hit.id] for hit in hits.hits if hit.id in by_id]
+        # The index is a snapshot: recheck its filters against the live records.
+        results = [
+            dataset
+            for dataset in resolved
+            if (not args.downloadable_only or "csv" in dataset.available_formats)
+            and (themes is None or dataset.theme in themes)
+        ]
+        stale, changed = len(hits.hits) - len(resolved), len(resolved) - len(results)
+        if stale:
+            hits.warnings.append(
+                f"{stale} indexed dataset(s) are no longer in the live catalog and were omitted."
             )
-
-        matches.sort(key=rank)
+        if changed:
+            hits.warnings.append(
+                f"{changed} indexed dataset(s) no longer match the live catalog's export or "
+                "theme and were omitted."
+            )
+        # Indexed totals exclude this page's omissions; omissions beyond it are unknown.
+        total = hits.total - stale - changed if hits.total is not None else len(results)
         return DatasetSearchResponse(
             query=args.query,
             downloadable_only=args.downloadable_only,
             theme=args.theme,
-            results=matches[: args.limit],
-            total=len(matches),
-            truncated=len(matches) > args.limit,
+            results=results,
+            total=total,
+            truncated=total > len(results),
             source_url=f"{PORTAL}/api/tr/dataflows",
             retrieved_at=retrieved_at,
+            backend=hits.backend,
+            warnings=hits.warnings,
         )
 
     async def search(self, query: str, limit: int = 10) -> SearchResponse:
@@ -291,6 +344,9 @@ class CatalogService:
         filters: dict[str, str] | None = None,
         limit: int = 100,
         sheet: str | None = None,
+        *,
+        query: TableQuery | dict | None = None,
+        cursor: str | None = None,
     ) -> DataResponse:
         validate_id(resource_id)
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 1000:
@@ -299,6 +355,7 @@ class CatalogService:
             raise ValueError("Sheet must be a non-empty name of at most 200 characters")
         if filters is not None and not isinstance(filters, dict):
             raise ValueError("Filters must be an object of exact column/string pairs")
+        provided_filters = filters
         filters = filters or {}
         if len(filters) > 20 or any(
             not isinstance(k, str) or not isinstance(v, str) or len(k) > 200 or len(v) > 200
@@ -306,6 +363,13 @@ class CatalogService:
         ):
             raise ValueError(
                 "Filters support at most 20 exact string column/value pairs (200 characters each)"
+            )
+        if query is not None:
+            query = TableQuery.model_validate(query)
+        if cursor is not None:
+            # Never resolve/download a newer resource when continuing an older snapshot.
+            return await self.queries.resume(
+                resource_id, cursor, query, provided_filters, sheet, limit
             )
         resource = await self.resource(resource_id)
         base = dict(
@@ -351,24 +415,31 @@ class CatalogService:
         link = csv_link or resource.download_links[0]
         if csv_link is not None and sheet is not None:
             raise ValueError("sheet applies only to XLS/XLSX files; omit it for CSV")
-        file = None
-        cached = self.cache.get("download:" + link.source_url) if csv_link is not None else None
-        if csv_link is None:
-            file = await self.files.download(link.resource_id or resource_id, link)
-            body, verified = file.body, file.link
-        elif cached is None:
-            body, verified = await self.portal.download(link)
-            # Avoid retaining large response bodies in the in-memory cache.
-            if len(body) <= 256 * 1024:
-                self.cache.set("download:" + link.source_url, (body, verified), 600)
-        else:
-            body, verified = cached
+        # CSV exports and files share inspect_tuik_data's one-hour content snapshots.
+        file = await self.files.download(link.resource_id or resource_id, link)
+        body, verified = file.body, file.link
         base["download_links"] = [
             verified if item.source_url == link.source_url else item
             for item in resource.download_links
         ]
+        if query is not None:
+            if verified.format not in {"csv", "xls", "xlsx"}:
+                raise SourceError(
+                    "unsupported_query",
+                    "Structured queries require CSV/XLS/XLSX rows.",
+                    verified.source_url,
+                )
+            return await self.queries.start(
+                resource_id,
+                link.resource_id or resource_id,
+                file,
+                base,
+                query,
+                filters,
+                sheet,
+                limit,
+            )
         if verified.format in {"xls", "xlsx"}:
-            assert file is not None
             tables = await self.files.tables(link.resource_id or resource_id, file)
             if not tables:
                 raise SourceError(
@@ -410,6 +481,7 @@ class CatalogService:
                 source_note=table.source_note,
                 layout=table.layout,
                 warnings=table.warnings,
+                snapshot_id="sha256:" + file.digest,
                 message=(
                     "Spreadsheet values preserve source precision. Exact filters apply locally."
                 ),
@@ -435,7 +507,7 @@ class CatalogService:
             body, "csv", verified.source_url, limit=limit, filters=filters
         )
         columns, rows, total = table.columns, table.rows, table.total_rows
-        base["source_url"] = verified.source_url
+        base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
         return DataResponse(
             **base,
             status="ok",
@@ -443,9 +515,117 @@ class CatalogService:
             rows=rows,
             total_rows=total,
             truncated=total > limit,
+            snapshot_id="sha256:" + file.digest,
             message=(
                 "CSV strings are preserved as published. Exact filters are applied "
                 "locally after bounded download."
+            ),
+        )
+
+    async def inspect(
+        self,
+        resource_id: str,
+        sheet: str | None = None,
+        columns: list[str] | None = None,
+        max_values: int = 20,
+    ) -> InspectResponse:
+        """Profile the table get_tuik_data would read, from the same retained snapshot."""
+        validate_id(resource_id)
+        if isinstance(max_values, bool) or not isinstance(max_values, int):
+            raise ValueError("max_values must be an integer between 1 and 200")
+        if not 1 <= max_values <= 200:
+            raise ValueError("max_values must be an integer between 1 and 200")
+        if sheet is not None and (not isinstance(sheet, str) or not 1 <= len(sheet) <= 200):
+            raise ValueError("Sheet must be a non-empty name of at most 200 characters")
+        if columns is not None and (
+            not isinstance(columns, list)
+            or not 1 <= len(columns) <= 50
+            or any(not isinstance(c, str) or not 1 <= len(c) <= 200 for c in columns)
+        ):
+            raise ValueError("columns must list 1-50 exact column names of at most 200 characters")
+        resource = await self.resource(resource_id)
+        base = dict(
+            resource_id=resource_id,
+            source_url=resource.source_url,
+            notes=resource.notes,
+            download_links=resource.download_links,
+            related_datasets=resource.related_datasets,
+        )
+        # Same selection as get_tuik_data: CSV first, explicit related-dataset choice.
+        csv_link = next((link for link in resource.download_links if link.format == "csv"), None)
+        if csv_link is None and any(item.downloadable for item in resource.related_datasets):
+            return InspectResponse(
+                **base,
+                status="related_datasets",
+                message=(
+                    "Choose a related dataset ID and call inspect_tuik_data with that flow: ID. "
+                    "No dataset was selected automatically."
+                ),
+            )
+        if not resource.download_links:
+            return InspectResponse(
+                **base,
+                status="not_structured",
+                message="This resource has no supported public structured export.",
+            )
+        link = csv_link or resource.download_links[0]
+        if csv_link is not None and sheet is not None:
+            raise ValueError("sheet applies only to XLS/XLSX files; omit it for CSV")
+        file = await self.files.download(link.resource_id or resource_id, link)
+        verified = file.link
+        base["download_links"] = [
+            verified if item.source_url == link.source_url else item
+            for item in resource.download_links
+        ]
+        base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
+        if sheet is not None and verified.format not in {"xls", "xlsx"}:
+            raise ValueError("sheet applies only to XLS/XLSX files")
+        if verified.format not in {"csv", "xls", "xlsx"}:
+            return InspectResponse(
+                **base,
+                status="download_available",
+                format=verified.format,
+                message="Official download verified. This format has no table parser.",
+            )
+        try:
+            sheets, profile = await self.files.profile(
+                link.resource_id or resource_id,
+                file,
+                sheet=sheet,
+                columns=columns,
+                max_values=max_values,
+            )
+        except UnknownColumnsError as exc:
+            raise SourceError(
+                "invalid_columns",
+                f"Use exact column names returned by inspect_tuik_data; unknown: {exc.names}",
+                verified.source_url,
+            ) from exc
+        return InspectResponse(
+            **base,
+            status="ok",
+            format=verified.format,
+            extraction=profile.extraction,
+            snapshot_id="sha256:" + file.digest,
+            sheet=profile.sheet,
+            sheets=sheets,
+            table_title=profile.title,
+            table_title_en=profile.title_en,
+            unit=profile.unit,
+            table_notes=profile.notes,
+            source_note=profile.source_note,
+            layout=profile.layout if verified.format != "csv" else None,
+            warnings=profile.warnings,
+            total_rows=profile.total_rows,
+            rows_examined=profile.rows_examined,
+            complete=profile.complete,
+            column_count=profile.column_count,
+            columns=profile.columns,
+            columns_truncated=profile.columns_truncated,
+            message=(
+                "Observed values from the published file, not an official code list. "
+                "Use column names and values verbatim as get_tuik_data filters. Counts are "
+                "exact only when complete is true; distinct counts when distinct_exact is true."
             ),
         )
 

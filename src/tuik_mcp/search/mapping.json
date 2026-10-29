@@ -1,0 +1,33 @@
+{
+  "dynamic": "strict",
+  "_meta": {"schema_version": 1, "scope": "v0.3 metadata only"},
+  "properties": {
+    "id": {"type": "keyword"},
+    "kind": {"type": "keyword"},
+    "title": {
+      "type": "text", "analyzer": "tuik_tr_index", "search_analyzer": "tuik_tr_search",
+      "fields": {
+        "ascii": {"type": "text", "analyzer": "tuik_ascii_index", "search_analyzer": "tuik_ascii_search"},
+        "keyword": {"type": "keyword", "ignore_above": 4000},
+        "suggest": {"type": "text", "analyzer": "tuik_suggest_index", "search_analyzer": "tuik_ascii_index"}
+      }
+    },
+    "title_en": {"type": "text", "analyzer": "english"},
+    "description": {"type": "text", "analyzer": "tuik_tr_index", "search_analyzer": "tuik_tr_search"},
+    "body": {"type": "text", "analyzer": "tuik_tr_index", "search_analyzer": "tuik_tr_search"},
+    "theme": {"type": "keyword"},
+    "subtheme": {"type": "keyword"},
+    "category_path": {"type": "keyword"},
+    "series_id": {"type": "keyword"},
+    "related_ids": {"type": "keyword"},
+    "period": {"type": "keyword"},
+    "publication_date": {"type": "date", "format": "strict_date_optional_time"},
+    "updated_at": {"type": "date", "format": "strict_date_optional_time"},
+    "formats": {"type": "keyword"},
+    "downloadable": {"type": "boolean"},
+    "source_url": {"type": "keyword", "index": false, "doc_values": false},
+    "parent_id": {"type": "keyword"},
+    "retrieved_at": {"type": "date", "format": "strict_date_optional_time"},
+    "indexed_at": {"type": "date", "format": "strict_date_optional_time"}
+  }
+}

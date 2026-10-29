@@ -1,0 +1,410 @@
+{
+  "data": {
+    "id": 58058,
+    "date": "2026-10-13T10:00:00",
+    "title": "Kümes Hayvancılığı Üretimi",
+    "period": "Ağustos 2026",
+    "content": "<div style=\"text-align: justify;\">\r\n<span style=\"font-size:14pt\"><strong>Kümes Hayvancılığı Üretimi, Ağustos 2026</strong></span>\r\n<br>\r\n<br>\r\n<strong>Tavuk eti üretimi 237 bin 749 ton, tavuk yumurtası üretimi 2,04 milyar adet olarak gerçekleşti</strong>\r\n<br><br>\r\nAğustos ayında bir önceki yılın aynı ayına göre, \r\ntavuk yumurtası üretimi %21,4 arttı, \r\nkesilen tavuk sayısı %1,6 arttı, \r\ntavuk eti üretimi %3,7 arttı.\r\n\r\nOcak-Ağustos döneminde bir önceki yılın aynı dönemine göre, \r\ntavuk yumurtası üretimi %18,8 arttı, \r\nkesilen tavuk sayısı %1,4 arttı, \r\ntavuk eti üretimi %1,4 arttı.\r\n\r\n\r\n<br><br>\r\n<strong>Kümes hayvancılığı üretim miktarı, Ağustos 2026</strong>\r\n<br>\r\n<table class=\"bulten-table\">\r\n  <thead>\r\n    <tr>\r\n      <th></th>\r\n      <th class=\"text-center\" colspan=\"3\">Ağustos</th>\r\n      <th class=\"text-center\" colspan=\"3\">Ocak-Ağustos</th>\r\n   </tr>\r\n   <tr>\r\n      <td class=\"text-left\"></td>\r\n      <td class=\"text-right\">2025</td>\r\n      <td class=\"text-right\">2026</td>\r\n      <td class=\"text-right\">Değişim <br> (%)</td>\r\n      <td class=\"text-right\">2025</td>\r\n      <td class=\"text-right\">2026</td>\r\n      <td class=\"text-right\">Değişim <br> (%)</td>\r\n   </tr>\r\n   </thead>\r\n   <tbody>\r\n                                  \r\n    <tr>\r\n     <td>Tavuk eti (Ton)</td>\r\n     <td class=\"text-right\">229 230</td>\r\n     <td class=\"text-right\">237 749</td>\r\n     <td class=\"text-right\">3,7</td>\r\n     <td class=\"text-right\">1 832 889</td>\r\n     <td class=\"text-right\">1 859 144</td>\r\n     <td class=\"text-right\">1,4</td>\r\n     </tr>\r\n                                   \r\n    <tr>\r\n     <td>Kesilen tavuk (Bin adet)</td>\r\n     <td class=\"text-right\">126 656</td>\r\n     <td class=\"text-right\">128 675</td>\r\n     <td class=\"text-right\">1,6</td>\r\n     <td class=\"text-right\">984 338</td>\r\n     <td class=\"text-right\">997 668</td>\r\n     <td class=\"text-right\">1,4</td>\r\n    </tr>\r\n   <tr>\r\n     <td>Tavuk yumurtası (Bin adet)</td>\r\n    <td class=\"text-right\">1 680 373</td>\r\n     <td class=\"text-right\">2 040 054</td>\r\n     <td class=\"text-right\">21,4</td>\r\n     <td class=\"text-right\">12 736 239</td>\r\n     <td class=\"text-right\">15 128 692</td>\r\n     <td class=\"text-right\">18,8</td>\r\n    </tr>\r\n                                   \r\n           \r\n   </tbody>\r\n</table>\r\n<small>Tablodaki oranlar yuvarlanmış rakamlar üzerinden hesaplanmıştır.</small>\r\n<br>\r\n<br>\r\nBir önceki ay 251 bin 861 ton olan tavuk eti üretimi\r\nAğustos ayında %5,6 oranında azalarak 237 bin 749 ton oldu.\r\n<br><br>\r\n<strong>Tavuk eti üretim miktarı, Ağustos 2026\r\n</strong>\r\n<br> \r\n(Bin ton)\r\n<div class=\"grafik\" id=\"GRAFIK1-TR\" \n                  data-name=\"GRAFIK1\" \n                  data-width=\"12\" \n                  data-lang=\"tr\" \n                  data-options=\"{\n  'id': 'GRAFIK1',\n  'name': 'Tavuk eti üretim miktarı, Ağustos 2026',\n  'type': 'line',\n  'dataLines': null,\n  'decimalPointCount': 1,\n  'decimalPointChar': ',',\n  'textPointIsAbove': true,\n  'axesStep': null,\n  'isShowLabels': null,\n  'label': null,\n  'yAxesPosition': null,\n  'xAxesPosition': null,\n  'axesMax': 240000.0,\n  'axesMin': 120000.0,\n  'labels': [\n    '2024-08',\n    '2024-09',\n    '2024-10',\n    '2024-11',\n    '2024-12',\n    '2025-01',\n    '2025-02',\n    '2025-03',\n    '2025-04',\n    '2025-05',\n    '2025-06',\n    '2025-07',\n    '2025-08',\n    '2025-09',\n    '2025-10',\n    '2025-11',\n    '2025-12',\n    '2026-01',\n    '2026-02',\n    '2026-03',\n    '2026-04',\n    '2026-05',\n    '2026-06',\n    '2026-07',\n    '2026-08'\n  ],\n  'islegend': false,\n  'order': null,\n  'isGrid': null,\n  'fractionDigit': 0,\n  'divisorValue': 1000,\n  'isNumberFormat': true,\n  'labelPosition': null,\n  'data': [\n    {\n      'label': 'Tavuk eti üretim miktarı',\n      'color': '#317DB7',\n      'dataViews': [\n        {\n          'index': 24,\n          'value': 237749.2,\n          'backgroundColor': '#AB1419'\n        },\n        {\n          'index': 23,\n          'value': 251861.2,\n          'backgroundColor': '#317DB7'\n        },\n        {\n          'index': 12,\n          'value': 229230.2,\n          'backgroundColor': '#AB1419'\n        },\n        {\n          'index': 0,\n          'value': 214431.9,\n          'backgroundColor': '#AB1419'\n        }\n      ],\n      'data': [\n        214431.9,\n        214116.4,\n        227675.1,\n        216754.5,\n        237262.6,\n        233222.6,\n        218260.4,\n        231595.2,\n        237567.2,\n        241782.4,\n        202531.6,\n        238699.0,\n        229230.2,\n        228845.9,\n        247392.5,\n        233886.8,\n        253992.9,\n        238794.5,\n        227792.7,\n        232063.2,\n        236309.8,\n        202336.1,\n        232237.9,\n        251861.2,\n        237749.2\n      ],\n      'type': 'line',\n      'axesMin': null,\n      'axesMax': null,\n      'yAxisID': null,\n      'yAxesPosition': null,\n      'xAxesPosition': null,\n      'yAxisTitle': '',\n      'isLegend': null,\n      'isGrid': null,\n      'dataViewColorDefault': null,\n      'dataViewColorLastMonth': '#317DB7'\n    }\n  ],\n  'labelBolds': [],\n  'height': null,\n  'takeCount': 0,\n  'layoutPadding': {\n    'right': null,\n    'left': null,\n    'top': null\n  },\n  'isDataViewRotate': null\n}\">Yükleniyor...</div>\r\n<br><br>\r\nBir önceki ay 1 milyar 904 milyon 42 bin adet olan tavuk yumurtası üretimi\r\nAğustos ayında %7,1 oranında artarak 2 milyar 40 milyon 54 bin adet oldu.\r\n<br><br>\r\n<strong>Tavuk yumurtası üretim miktarı, Ağustos 2026\r\n</strong>\r\n<br> \r\n(Milyar adet)\r\n<div class=\"grafik\" id=\"GRAFIK1-TR\" \n                  data-name=\"GRAFIK1\" \n                  data-width=\"12\" \n                  data-lang=\"tr\" \n                  data-options=\"{\n  'id': 'GRAFIK1',\n  'name': 'Tavuk yumurtası üretim miktarı, Ağustos 2026',\n  'type': 'line',\n  'dataLines': null,\n  'decimalPointCount': 2,\n  'decimalPointChar': ',',\n  'textPointIsAbove': true,\n  'axesStep': 200000.0,\n  'isShowLabels': null,\n  'label': null,\n  'yAxesPosition': null,\n  'xAxesPosition': null,\n  'axesMax': 2000000.0,\n  'axesMin': 1400000.0,\n  'labels': [\n    '2024-08',\n    '2024-09',\n    '2024-10',\n    '2024-11',\n    '2024-12',\n    '2025-01',\n    '2025-02',\n    '2025-03',\n    '2025-04',\n    '2025-05',\n    '2025-06',\n    '2025-07',\n    '2025-08',\n    '2025-09',\n    '2025-10',\n    '2025-11',\n    '2025-12',\n    '2026-01',\n    '2026-02',\n    '2026-03',\n    '2026-04',\n    '2026-05',\n    '2026-06',\n    '2026-07',\n    '2026-08'\n  ],\n  'islegend': false,\n  'order': null,\n  'isGrid': null,\n  'fractionDigit': 2,\n  'divisorValue': 1000000,\n  'isNumberFormat': true,\n  'labelPosition': null,\n  'data': [\n    {\n      'label': 'Tavuk yumurtası üretim miktarı',\n      'color': '#317DB7',\n      'dataViews': [\n        {\n          'index': 24,\n          'value': 2040054.4,\n          'backgroundColor': '#AB1419'\n        },\n        {\n          'index': 23,\n          'value': 1904042.4,\n          'backgroundColor': '#317DB7'\n        },\n        {\n          'index': 12,\n          'value': 1680373.4,\n          'backgroundColor': '#AB1419'\n        },\n        {\n          'index': 0,\n          'value': 1808368.3,\n          'backgroundColor': '#AB1419'\n        }\n      ],\n      'data': [\n        1808368.3,\n        1828029.8,\n        1881357.8,\n        1714131.1,\n        1687939.7,\n        1652690.5,\n        1547159.6,\n        1632852.1,\n        1551893.8,\n        1527424.6,\n        1519295.0,\n        1624550.4,\n        1680373.4,\n        1725362.0,\n        1803429.7,\n        1767068.1,\n        1860594.4,\n        1902299.2,\n        1820501.9,\n        1920705.0,\n        1844972.7,\n        1857150.1,\n        1838966.0,\n        1904042.4,\n        2040054.4\n      ],\n      'type': 'line',\n      'axesMin': null,\n      'axesMax': null,\n      'yAxisID': null,\n      'yAxesPosition': null,\n      'xAxesPosition': null,\n      'yAxisTitle': '',\n      'isLegend': null,\n      'isGrid': null,\n      'dataViewColorDefault': null,\n      'dataViewColorLastMonth': '#317DB7'\n    }\n  ],\n  'labelBolds': [],\n  'height': null,\n  'takeCount': 0,\n  'layoutPadding': {\n    'right': null,\n    'left': null,\n    'top': null\n  },\n  'isDataViewRotate': null\n}\">Yükleniyor...</div>\r\n<br><br>\r\n<strong>Bu konu ile ilgili bir sonraki haber bülteninin yayımlanma tarihi: 12 Kasım 2026</strong>\r\n<br>\r\n___________________________________________________________________________________________________\r\n<br>\r\n<br>\r\n<strong>AÇIKLAMALAR</strong>\r\n<br>\r\n<br>\r\nBu haber bültenindeki istatistikler ticari olarak faaliyet gösteren kanatlı işletmelerinin tamamına aylık olarak uygulanan anket çalışmasından elde edilmektedir. Anket kapsamına hanehalkı yetiştiriciliği (köy tavukçuluğu) dâhil değildir.\r\n<br>\r\n<br>\r\n</div>\r\n\r\n\r\n",
+    "statisticalTables": [
+      {
+        "type": "dataflow",
+        "title": "Kümes Hayvancılığı Ürünleri",
+        "url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/13/13_2/TR,DF_KUMES_HAYVANCILIK_URUN_V1,1.0"
+      }
+    ],
+    "tables": [
+      {
+        "type": "xls",
+        "title": "Kümes hayvancılığı ürünleri",
+        "url": "/api/tr/data/downloads?t=t&pid=58058&p=JiAokKWq4eG2s1kMLeDDmZq0AGtKEks%2B1NKbJ8ucrWMcxryOtZFh8Nqh%2FjpmHWAn2EQ8q65kGZkorSkMWh6%2FEap9lxH4A38GtmJWu1IWsdur2BimlIk1L73l%2BXVY8bvh"
+      }
+    ],
+    "reports": [],
+    "metadatas": [
+      {
+        "title": "Kümes Hayvancılığı Üretim İstatistikleri",
+        "data": [
+          {
+            "title": "1. İletişim",
+            "detail": [
+              {
+                "title": "1.1. Kurum Adı",
+                "content": "<div style=\"text-align: justify;\">Türkiye İstatistik Kurumu (TÜİK)</div>"
+              },
+              {
+                "title": "1.5. İletişim Kurulacak Birimin Adresi",
+                "content": "<div style=\"text-align: justify;\">Devlet Mahallesi Necatibey Caddesi No:114 06420 Çankaya/Ankara</div>"
+              }
+            ]
+          },
+          {
+            "title": "2. Metaveri Güncelleme",
+            "detail": [
+              {
+                "title": "2.1. Metaverinin Onaylanma Tarihi",
+                "content": ""
+              },
+              {
+                "title": "2.2. Metaverinin Son Gönderilme Tarihi",
+                "content": ""
+              },
+              {
+                "title": "2.3. Metaveri Güncelleme Tarihi",
+                "content": "27.02.2026 16:37:08"
+              }
+            ]
+          },
+          {
+            "title": "3. İstatistiksel Sunum",
+            "detail": [
+              {
+                "title": "3.1. Verinin Tanımı",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Çalışmanın amacı :<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: left; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Ülkemizin ekonomik yapısında meydana gelen değişimleri\nbelirlemek, tarımsal ekonomiyi oluşturan sektörlerden kümes hayvancılığı\nişletmelerinin durumlarını izlemek için gerekli veri setlerini oluşturmak,\nkarar organlarının alacağı ekonomik ve sosyal tedbirlere ışık tutacak bilgileri\nelde etmek, ülkemiz kümes hayvancılığı politikasının belirlenmesi için çeşitli\naraştırmalara veri hazırlamak ve sektörün milli gelire&nbsp;katkısını\nbelirlemek için Avrupa Birliği hayvansal üretim mevzuatlarına uyumlu veri\nderlemektir.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Verinin tanımı :<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kümes hayvancılığı anketi ile aşağıda\nbelirtilen&nbsp;veriler derlenir.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">1.<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kümeslerdeki ay sonu\nitibariyle canlı hayvan sayısı&nbsp;ve ay içinde üretilen toplam\nyumurta&nbsp;miktarı.&nbsp;<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">2.<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kuluçkahanelerde ay\niçinde toplam kuluçkaya basılan yumurta\nsayısı&nbsp;ve&nbsp;üretilen&nbsp;toplam&nbsp;civciv miktarı.&nbsp;<o:p></o:p></span></p><p>\n\n\n\n\n\n\n\n\n\n\n\n</p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">3.<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kanatlı kesimhanelerinde\nkesilen kümes hayvanı sayısı&nbsp;ve&nbsp;üretilen beyaz et miktarı.</span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"text-indent: -24px; font-size: 10pt; font-family: Helvetica, sans-serif;\">4.<span times=\"\" new=\"\" roman\";\"=\"\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span style=\"text-indent: -24px; font-size: 10pt; font-family: Helvetica, sans-serif;\">Kuluçkahanelerdeki gelişim makinelerinin toplam kurulu kapasitesi.</span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\"><br></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; text-align: justify; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\"><o:p><br></o:p></span></p>"
+              },
+              {
+                "title": "3.2. Sınıflama Sistemi",
+                "content": "<p><span style=\"font-size: 10pt; line-height: 107%; font-family: Poppins, serif;\">Avrupa Topluluğunda Ekonomik Faaliyetlerin\nİstatistiki Sınıflaması , NACE Rev.2</span></p>"
+              },
+              {
+                "title": "3.3. Sektörel Kapsam",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kümes hayvancılığı ve yumurta üretim\nistatistikleri soru formları sadece ticari olarak faaliyet gösteren kanatlı\nişletmelerine uygulanmaktadır (hane halkı tarımsal işletmelerine yani köy\ntavukçuluğuna uygulanmamaktadır).<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Etçi piliç işletmeleri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Yumurtacı tavuk işletmeleri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Damızlık etçi tavuk işletmeleri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Damızlık yumurtacı tavuk işletmeleri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kuluçkahane işletmeleri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><!--[if !supportLists]--><span style=\"font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><!--[endif]--><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kanatlı kesimhane işletmeleri</span></p><p class=\"MsoNormal\" style=\"margin-left: 26.6pt; margin-bottom: 0.0001pt; text-indent: -18pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"text-indent: -18pt; font-size: 10pt; font-family: Symbol;\">·<span style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: \" times=\"\" new=\"\" roman\";\"=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n</span></span><span style=\"text-indent: -18pt; font-size: 10pt; font-family: Helvetica, sans-serif;\">Hindi-bıldırcın-ördek-kaz-karma ırk tavukçuluk ve beç (Gine) tavuğu yetiştiriciliği işletmeleri</span></p>"
+              },
+              {
+                "title": "3.4. İstatistiksel Kavramlar ve Tanımlar",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Damızlık sayısı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Kuluçkalık\nyumurta üretmek amacına yönelik olarak yetiştirilen her yaştaki erkek ve dişi, etçi\nve yumurtacı tavuk sayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Üretilen kuluçkalık yumurta miktarı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Damızlık dişi\ntavukların yumurtladığı kuluçkalık yumurta sayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Hayvan sayısı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Damızlık\namacıyla değil üretim amacıyla yetiştirilen kümes hayvanı sayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Üretilen yumurta miktarı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Kümes\nhayvanlarının yumurtladığı yumurta sayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kuluçka makinesine basılan yumurta\nsayısı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Civciv üretmek amacıyla kuluçkaya sokulan döllü kuluçkalık yumurta\nsayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: left; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kullanım için ayrılan civciv sayısı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Kuluçkadan çıkan\ncivcivlerden işletmenin kendi üretiminde kullandığı veya sattığı civciv\nsayısıdır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica;\">Damızlık erkek civciv:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\"><span style=\"font-family: Helvetica; font-size: 10pt;\">&nbsp;Kuluçkadan çıkan\nerkek civcivlerden imha edilmeyip kullanım için ayrılanların sayısıdır.</span><o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Kesilen kümes hayvanı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\"><span style=\"font-size: 10pt;\">&nbsp;Kanatlı\nkesimhanelerince kesilen kümes hayvanı sayısıdır.</span><o:p></o:p></span></p><p class=\"MsoNormal\" style=\"text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Üretilen et miktarı:</span></b><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">&nbsp;Kanatlı\nkesimhanelerince kesilen kümes hayvanlarından üretilen beyaz et miktarıdır.<o:p></o:p></span></p><p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<b><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica;\">Karkas Ağırlık:</span></b><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica;\">&nbsp;Baş ve ayakları kesilmiş\nkümes hayvanlarının tüyleri yolunup, kanı akıtılıp ve içi boşaltıldıktan\nsonraki soğuk bedeninin ağırlığıdır (sakatat dahil değildir).</span></p><p><span style=\"font-weight: 600;\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\">Karma ırk tavukçuluğu:</span></span><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\">&nbsp;<span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">Etçi ve yumurtacı tavuk ırkları dışında kalan ve çift\namaçlı (dual purpose) olarak yetiştirilen\ntavuk ırklarıdır.</span></span></p><p><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-family: Poppins, Helvetica, \" sans-serif\";=\"\" font-size:=\"\" 13px;=\"\" font-weight:=\"\" 600;\"=\"\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><b>Beç (Gine) tavuğu:</b></span></span><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><span style=\"font-size: 10pt; font-family: Helvetica;\">&nbsp;</span><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica;\">Tokat\ntavuğu, İran tavuğu olarak da bilinen bu tavuklar süs tavuğu olmasının yanında\netlik tavuk olarak da beslenir.</span></span></span></span></span></p><p><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; line-height: 107%; font-family: Helvetica;\"><span style=\"font-family: Poppins, Helvetica, \" sans-serif\";=\"\" font-size:=\"\" 13px;=\"\" font-weight:=\"\" 600;\"=\"\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\"><b>Kuluçkahane kapasitesi</b>:</span></span><span style=\"font-size: 10pt; line-height: 14.2667px;\"><span style=\"font-size: 10pt;\">&nbsp;</span><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; line-height: 14.2667px; font-family: Helvetica;\">Kuluçkahanedeki gelişim makinelerine bir defada&nbsp;</span></span></span></span></span></span></span></span><span style=\"font-family: Helvetica; font-size: 13.3333px;\">en fazla</span><span style=\"font-family: Helvetica; font-size: 13.3333px;\">&nbsp;basılabilecek</span><span style=\"font-family: Helvetica; font-size: 10pt;\">&nbsp;yumurta sayısıdır.</span></p>"
+              },
+              {
+                "title": "3.5. İstatistiki Birim",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Ticari kanatlı işletmeleri<o:p></o:p></span></p>"
+              },
+              {
+                "title": "3.6. Kitle",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><font face=\"Helvetica, sans-serif\">Referans ayda Türkiye'de faaliyet gösteren ticari kanatlı hayvan yetiştirme işletmeleri, kuluçkahaneler ve kanatlı hayvan kesimhaneleridir.</font></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><font face=\"Helvetica, sans-serif\"><br></font></p>"
+              },
+              {
+                "title": "3.7. Coğrafi Kapsam",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Türkiye<o:p></o:p></span></p>"
+              },
+              {
+                "title": "3.8. Zaman Kapsamı",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">2010 yılından beri mevcuttur.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "3.9. Temel Dönem/Yıl",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;font-family:\" tahoma\",sans-serif;=\"\" mso-fareast-font-family:\"times=\"\" new=\"\" roman\";color:gray;mso-fareast-language:tr\"=\"\">Temel\ndönem bulunmamaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "4. Ölçü Birimi",
+            "detail": [
+              {
+                "title": "4. Ölçü Birimi",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Hayvan ve yumurta sayısı bilgileri için adet, et üretimi için kilogramdır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "5. Referans Dönemi",
+            "detail": [
+              {
+                "title": "5. Referans Dönemi",
+                "content": "<p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Aylık</span></p>"
+              }
+            ]
+          },
+          {
+            "title": "6. Kurumsal Sorumluluk",
+            "detail": [
+              {
+                "title": "6.1. Yasal Dayanak ve Diğer Anlaşmalar",
+                "content": "<div style=\"text-align: justify; \">Verilerin derlenmesi ve dağıtılması 10 Kasım 2005 tarihli ve 5429 sayılı Türkiye İstatistik Kanunu'na tabidir.</div><div style=\"text-align: justify; \">Bu Kanunun amacı; resmî istatistiklerin üretimine ve organizasyonuna ilişkin temel ilkeleri ve standartları belirlemek; ülkenin ihtiyaç duyduğu alanlarda veri ve bilgilerin derlenmesini, değerlendirilmesini, gerekli istatistiklerin üretilmesini, yayımlanmasını, dağıtımını ve Resmî İstatistik Programında istatistik sürecine dâhil kurum ve kuruluşlar arasında koordinasyonu sağlamaktır (Madde 1).</div><div style=\"text-align: justify;\">Resmî İstatistik Programı, ulusal ve uluslararası düzeyde ihtiyaç duyulan konularda üretilecek resmî istatistiklere ilişkin çerçeveyi oluşturur. Sayım ve araştırmalar Program çerçevesinde yapılır (Madde 3).</div><div><br></div>"
+              },
+              {
+                "title": "6.2. Veri Paylaşımı",
+                "content": "<p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">EUROSTAT ve FAO ile paylaşılmaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "7. Gizlilik",
+            "detail": [
+              {
+                "title": "7.1. Gizlilik Politikası",
+                "content": "<div style=\"text-align: justify; \">Türkiye İstatistik Kurumu tarafından üretilen istatistiklere ilişkin veri gizliliği ve gizli veri güvenliği, 5429 sayılı Türkiye İstatistik Kanunu ve Resmî İstatistiklerde Veri Gizliliği ve Gizli Veri Güvenliğine İlişkin Usul Ve Esaslar Hakkında Yönetmelik kapsamında güvence altındadır. İstatistikler ayrıca, Avrupa Birliğine uyum çalışmaları kapsamında, Avrupa Birliği İstatistik Ofisi (Eurostat) tarafından 11 Mart 2009 tarih ve 223/2009 sayı ile yayımlanan düzenlemeye ve Avrupa İstatistikleri Uygulama Esaslarına (The European Statistics Code of Practice) uygun olarak hazırlanır. İlgili mevzuat ve düzenlemelerle verilerin yalnızca istatistiksel amaçlarla toplanması ve bireysel yanıtların gizliliği garanti edilir.&nbsp;</div><div><br></div>"
+              },
+              {
+                "title": "7.2. Gizlilik Kuralları",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Herhangi bir istatistiki bilginin\nderlendiği istatistiki birim sayısının üçten az olması, istatistiki birim\nsayısı üç ve daha fazla olduğu hâlde herhangi bir birime ait bilginin o\nhücredeki toplam bilginin yüzde sekseninden, iki birime ait bilginin o\nhücredeki toplam bilginin yüzde doksanından fazlasını oluşturması durumunda\nilgili hücredeki veri gizli kabul edilir.</span></p><p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\"><o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "8. Dağıtım Politikası",
+            "detail": [
+              {
+                "title": "8.1. Yayımlama Takvimi",
+                "content": "<p style=\"text-align: justify; \">TÜİK'te istatistiksel çıktılar için&nbsp; yayın takvimi yıllık bazda hazırlanır ve bu takvim herkese açık olarak web sitesinde ilan edilir.</p><p><br></p><p class=\"MsoNormal\" style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height:\nnormal\"><br></p>"
+              },
+              {
+                "title": "8.2. Yayımlama Takvimine Erişim",
+                "content": "<p style=\"text-align: justify; \">Türkiye İstatistik Kurumu tarafından yayımlanan haber bültenlerinin yayım tarih ve saatleri <a href=\"https://www.tuik.gov.tr/Kurumsal/Veri_Takvimi\" target=\"_blank\">Ulusal Veri Yayınlama Takvimi</a> adresinde yer almaktadır.</p>"
+              },
+              {
+                "title": "8.3. Kullanıcı Erişimi",
+                "content": "<div style=\"text-align: justify;\">Türkiye İstatistik Kurumu tarafından üretilen istatistiklerin yayın ve dağıtımına ilişkin ilke, standart ve usuller, Yayın ve Dağıtım Kurulu tarafından belirlenir.&nbsp; İstatistiklerin kullanıcılara, doğru, güvenilir, tutarlı, güncel, şeffaf, gizlilik esaslarına uygun ve eşit erişim ilkesi doğrultusunda ulaştırılmasını sağlamak için haber bültenlerinin yayımlanma tarihleri, Türkiye İstatistik Kurumu Başkanlığı Çalışma Takvimlerine İlişkin Usul ve Esaslar Hakkında Yönerge çerçevesinde hazırlanır ve her yılın başında kurumsal web sitesinden&nbsp; kamuoyuna duyurulur.</div>"
+              }
+            ]
+          },
+          {
+            "title": "9. Yayımlama Sıklığı",
+            "detail": [
+              {
+                "title": "9. Yayımlama Sıklığı",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Aylık<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "10. Erişilebilirlik ve Açıklık",
+            "detail": [
+              {
+                "title": "10.1. Haber Bülteni",
+                "content": "<p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Haber\nbültenleri sayfasına erişim:<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><a href=\"https://data.tuik.gov.tr/Kategori/GetKategori?p=tarim-111&amp;dil=1\" target=\"_blank\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">https://data.tuik.gov.tr/Kategori/GetKategori?p=tarim-111&amp;dil=1</span></a><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\"><o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Helvetica, sans-serif;\">Örnek\nhaber bülteni:<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">\n\n\n\n\n\n</p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><font color=\"#3699ff\" face=\"Helvetica\">https://veriportali.tuik.gov.tr/tr/press/53954</font></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 13.3333px; color: rgb(54, 153, 255); font-family: Helvetica, sans-serif;\"><br></span></p>"
+              },
+              {
+                "title": "10.2. Yayın",
+                "content": "<p><span style=\"font-size:10.0pt;line-height:107%;\nfont-family:\" tahoma\",sans-serif;mso-fareast-font-family:\"times=\"\" new=\"\" roman\";=\"\" color:gray;mso-ansi-language:tr;mso-fareast-language:tr;mso-bidi-language:ar-sa\"=\"\">Haber\nbülteni</span></p>"
+              },
+              {
+                "title": "10.3. Çevrimiçi Veritabanı",
+                "content": "<p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\">Merkezi Dağıtım Sistemi,&nbsp;Kümes Hayvancılığı Üretimi ;</span></p><p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\"></span></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><a href=\"https://biruni.tuik.gov.tr/medas/?kn=80&amp;locale=tr\" target=\"_blank\">https://biruni.tuik.gov.tr/medas/?kn=80&amp;locale=tr</a></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><br></p>"
+              },
+              {
+                "title": "10.4. Mikro Veri Erişimi",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Kümes Hayvancılığı Üretimi Mikro Veri Seti ;<o:p></o:p></span></p><p><a href=\"https://www.tuik.gov.tr/Kurumsal/Mikro_Veri\" target=\"_blank\">https://www.tuik.gov.tr/Kurumsal/Mikro_Veri</a><br></p>"
+              },
+              {
+                "title": "10.5. Diğer Veri Dağıtım Kanalları",
+                "content": "<p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\">Ulusal ve uluslarası düzeyde bilgi talepleri karşılanmaktadır. Eurostat\ntarafından istenilen bilgiler EDAMİS üzerinden iletilmektedir.</span></p>"
+              },
+              {
+                "title": "10.6. Metodolojiye İlişkin Dokümanlar",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32008R0617&amp;from=IT\" target=\"_blank\">https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32008R0617&amp;from=IT</a><font face=\"Tahoma, sans-serif\"><span style=\"font-size: 13.3333px;\"></span></font></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><font face=\"Tahoma, sans-serif\"><span style=\"font-size: 13.3333px;\"><br></span></font></p>"
+              },
+              {
+                "title": "10.7. Kaliteye İlişkin Dokümanlar",
+                "content": "<div style=\"text-align: justify;\"><b>Avrupa İstatistikleri Uygulama Esasları (Code of Practice-CoP)</b></div><div style=\"text-align: justify;\"><b>&nbsp;</b></div><div style=\"text-align: justify; \">Avrupa İstatistikleri Uygulama Esasları (Code of Practice-CoP), Avrupa Birliği tarafından oluşturulmuş kalite ilke ve standartlarıdır. CoP; kurumsal çevre, istatistiksel süreçler ve istatistiksel çıktılar olmak üzere 3 ana bölümden oluşmakta olup, 16 kalite ilkesi ve bu ilkeler altındaki 84 kalite göstergesinden oluşur. TÜİK, çalışmalarını CoP'in kalite ilke ve göstergelerine uygun şekilde yürütmektedir. CoP'in Türkçe çevirisi <a href=\"https://www.tuik.gov.tr/Kurumsal/Avrupa_Istatistikleri_Uygulama_Esaslari\" target=\"_blank\">TÜİK internet sayfasında</a> yer almaktadır.</div><div style=\"text-align: justify;\"><br></div><div style=\"text-align: justify;\"><br></div><div style=\"text-align: justify; \"><b>Kurumsal Kalite Raporları</b></div><div style=\"text-align: justify;\"><b><br></b></div><div style=\"text-align: justify; \">Yıllık çalışmalar için kurumsal kalite raporu düzenlenmektedir. İlgili kalite raporuna <a href=\"https://data.tuik.gov.tr/\" target=\"_blank\">İstatistik Veri Portalı</a>&nbsp;sayfasında Metaveri sekmesi altında erişilebilmektedir.&nbsp;</div><div style=\"text-align: justify; \"><br></div><div style=\"text-align: justify; \"><br></div><div><p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><b><span style=\"font-family: \" times=\"\" new=\"\" roman\",=\"\" serif;\"=\"\"><span style=\"font-size: 13px;\">I</span><span style=\"font-family: Poppins; font-size: 13px;\">SO 9001:2015 Kalite\nYönetimi Dokümantasyonu</span><o:p></o:p></span></b></p>\n\n<p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-family: \" times=\"\" new=\"\" roman\",=\"\" serif;\"=\"\">&nbsp;</span></p>\n\n<p class=\"MsoNormal\" style=\"text-align: justify; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-family: \" times=\"\" new=\"\" roman\",=\"\" serif;\"=\"\"><span style=\"font-family: Poppins; font-size: 13px;\">Kaliteye ilişkin dokümanlar ISO 9001:2015 Kalite Yönetim Standardı\nkapsamında oluşturulmuştur. Prosedürler, kılavuzlar, talimatlar, planlar,\nlisteler, formlar standart kodlama sistemi ile birlikte kalite yönetim\nsisteminde yer almaktadır. Dokümanların oluşturulması ve güncellenmesine\nyönelik “Doküman Kontrolü Prosedürü” bulunmaktadır. Ayrıca ISO 9001:2015 Kalite\nYönetim Standardı kapsamında hazırlanan “Kalite El Kitabı”nda standardın\nmaddeleri bazında tüm çalışmalar detaylandırılmıştır.&nbsp;</span><o:p></o:p></span></p></div>"
+              }
+            ]
+          },
+          {
+            "title": "11. Kalite Yönetimi",
+            "detail": [
+              {
+                "title": "11.1. Kalite Güvencesi",
+                "content": "<p style=\"text-align: justify; \"><b>TÜİK Kalite Politikası</b></p><p style=\"text-align: justify; \">TÜİK, Avrupa İstatistik Ofisi (Eurostat) tarafından belirlenen Avrupa İstatistikleri Uygulama Esasları (ES-CoP), Avrupa İstatistik Sistemi Kalite Güvence Çerçevesi (ESS-QAF) ve diğer uluslararası kabul görmüş iyi uygulama belgelerine dayalı bir kalite politikasının uygulanması kararlılığındadır. Bu çerçevede TÜİK, ISO 9001:2015 Kalite Yönetim Sistemi standardına uygun olarak sürekli iyileştirme ve mükemmeliyet ilkesini benimseyerek istatistik üretim süreçlerinde kalite standartlarını sıkı bir şekilde takip etmekte ve uygulamaktadır.</p><p style=\"text-align: justify; \">TÜİK Kalite Politikası<a href=\"https://www.tuik.gov.tr/Kurumsal/Kalite_Politikasi\" target=\"_blank\"> TÜİK internet sayfasında</a> yer almaktadır.</p><p style=\"text-align: justify; \"><br></p><p style=\"text-align: justify; \"><b>Kalite Güvence Çerçevesi</b></p><p style=\"text-align: justify; \">Avrupa İstatistik Sistemi’nin Kalite Güvence Çerçevesi (ESS QAF), Avrupa İstatistikleri Uygulama Esasları (Code of Practice-CoP) uygulanmasına yardımcı olmayı amaçlayan destekleyici bir belgedir. CoP'in göstergelerinin uygulanması için rehberlik ve kanıt sunabilecek olası faaliyetleri, yöntemleri ve araçları belirler. TÜİK, QAF doğrultusunda kendi kalite güvence çerçevesini belirlemiştir ve <a href=\"https://www.tuik.gov.tr/Kurumsal/Tuik_Kalite_Guvence_Cercevesi_Belgesi\" target=\"_blank\">TÜİK internet sitesinde</a> tüm kullanıcılar ile paylaşmaktadır. TÜİK kalite güvence çerçevesi CoP ilkeleri doğrultusunda, TÜİK tarafından yapılan çalışmalar, araçlar, yasal düzenlemeler yer almaktadır.</p><p style=\"text-align: justify; \"><br></p><p style=\"text-align: justify; \"><b>ISO 9001:2015 Kalite Yönetim Sistemi</b></p><p style=\"text-align: justify; \">TÜİK, ISO 9001:2015 Kalite Yönetim Sistemi standardı ile belgelendirilmiştir. Standardın tüm gerekli şartlarını yerine getirerek, bütünsel bir kalite yönetim sistemi uygulamaktadır.</p>"
+              },
+              {
+                "title": "11.2. Kalite Değerlendirmesi",
+                "content": "<div style=\"text-align: justify;\"><b>Kalite İzleme ve Değerlendirme Aracı (KİDA)</b></div><div style=\"text-align: justify;\"><br></div><div style=\"text-align: justify;\">TÜİK tarafından üretilen resmi istatistiklerin, Avrupa İstatistikleri Uygulama Esaslarına&nbsp; (Code of Practice-CoP) dayanan kalite ilke ve standartlarına uygunluğunun değerlendirilerek istatistiklerin kalitesinin artırılması amaçlanmaktadır. KİDA ile gerçekleştirilen kalite değerlendirmesi sonucunda iyileştirmeye açık alanlar belirlenir ve iyileştirme eylem planları oluşturulur. İyileştirme eylem planında takvimlendirilen eylemler düzenli olarak izlenerek resmi istatistiklerin kalitesinde sürekli iyileştirme sağlanır.&nbsp;</div>"
+              }
+            ]
+          },
+          {
+            "title": "12. Uygunluk",
+            "detail": [
+              {
+                "title": "12.1. Kullanıcı İhtiyaçları",
+                "content": "<div style=\"text-align: justify; \"><span style=\"font-size: 13px;\">Kurumumuz web sitesinde gerek genel bilgiye gerekse ayrıntılı bilgiye erişmek isteyen kullanıcılar için bölümler mevcuttur. \"İstatistikler\" bölümündeki başlıkların, \"Alt Kategoriler\" kısmından ilgilenilen konu seçildikten sonra, \"Ara\" butonu aracılığıyla \"Haber Bülteni\", \"İstatistiksel Tablolar\", \"Veritabanları\", \"Raporlar\" ve \"Metaveri\" içeriklerine ulaşılabilmektedir.</span></div><div style=\"text-align: justify;\"><span style=\"font-size: 13px;\">\"E-Hizmetler\" bölümünde yer alan \"Bölgesel İstatistikler\", \"İl Göstergeleri\", \"Uluslararası Seçilmiş Göstergeler\", \"TÜİK Kütüphane\" uygulamaları aracılığı ile uluslararası ve bölgesel düzeyde birçok bilgiye erişilebilmektedir.</span></div><div style=\"text-align: justify;\"><span style=\"font-size: 13px;\">Karşılanamayan bilgi talepleri düzenli olarak derlenmekte ve bu bilgiler ışığında üretim süreçlerine yön verilmektedir.</span></div><div style=\"text-align: justify;\"><span style=\"font-size: 13px;\">Erişilmek istenen bilgilere web sitesinden ulaşılamaması halinde; https://ty.tuik.gov.tr adresi üzerinden bilgi talebi başvurusunda bulunulabilir.&nbsp;</span></div>"
+              },
+              {
+                "title": "12.2. Kullanıcı Memnuniyeti",
+                "content": "<div style=\"text-align: justify; \"><span style=\"font-size: 13px;\">Türkiye İstatistik Kurumu tarafından üretilen istatistikler kullanıcılara çeşitli kanallar yoluyla sunulmakta, hizmet kalitesini arttırmak ve kullanıcı ihtiyaçlarını karşılamak amacıyla da pek çok çalışma yürütülmektedir. Bu çalışmalardan bir tanesi olan memnuniyet anketi, kullanıcı ihtiyaçlarını ve profilini belirlemek, beklentilerini tespit etmek amacıyla kurumsal web sitesi sayfası yoluyla yapılmakta olup araştırmanın sonuçları yıllık olarak raporlanmaktadır.&nbsp;</span></div><div style=\"text-align: justify; \"><span style=\"font-size: 13px;\"><br></span></div><div><span style=\"font-size: 13px;\"> </span></div><div><a href=\"https://anket.tuik.gov.tr/tr/MAnket/b588756c1a9049a09668a26020053334\" target=\"_blank\">Kullanıcı Memnuniyet Araştırması</a><span style=\"font-size: 13px;\"></span></div><div><br></div><div><br></div><div><br></div><div><br></div>"
+              },
+              {
+                "title": "12.3. Tamlık",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Veri mevcudiyeti %100’dür.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "13. Doğruluk ",
+            "detail": [
+              {
+                "title": "13.1. Doğruluk - Genel",
+                "content": "<p style=\"margin-top: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 11pt; font-family: Calibri, sans-serif; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">Aylık periyodlar halinde işletmeler tarafından\nweb ortamında girilen bilgilerin iç tutarlılıkları veri giriş esnasında program\ntarafından sağlanır. Veriler daha sonra TÜİK Bölge Müdürlükleri tarafından\nincelenir. Yapılan kontrol ve tutarlılık analizlerinden sonra makro ve mikro\ndüzeyde analizi yapılmış ve son halini almış veriler merkeze gönderilir.\nMerkezde Tarımsal Üretim İstatistikleri Grubu tarafından tekrar analiz ve\nkontrollere tabi tutulan veriler gerekiyorsa ilgili işletmelerle irtibata\ngeçilerek düzeltilmesi sağlanır ve yayına hazır hale getirilir. Diğer yandan,\naraştırmanın kapsamı ilgili tüm ticari işletmeler olmasına karşın&nbsp;sektörde\nkayıt dışı işletmeler bulunabilir. Bu durumda eksik kapsamdan kaynaklı hata\nolabilir.</span><span style=\"font-size: 11pt; font-family: Calibri, sans-serif;\"><o:p></o:p></span></p>"
+              },
+              {
+                "title": "13.2. Örneklem Hatası",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Tam sayım yapıldığı için örneklem hatası\nbulunmamaktadır.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "13.3. Örneklem Dışı Hata",
+                "content": "<p class=\"MsoNormal\" style=\"margin-bottom: 0.0001pt; text-align: justify; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Olası eksik kapsamın giderilmesi\namacıyla kapsam güncelleme çalışmaları yapılmaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "14. Zamanlılık ve Dakiklik",
+            "detail": [
+              {
+                "title": "14.1. Zamanlılık",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Nihai sonuçların yayımlandığı tarih ile referans dönemi son tarihi\narasındaki fark (gün) : Ortalama 44 gündür.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "14.2. Dakiklik",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;font-family:\" tahoma\",sans-serif;=\"\" mso-fareast-font-family:\"times=\"\" new=\"\" roman\";color:gray;mso-fareast-language:tr\"=\"\">0\ngündür. Kullanıcılara önceden duyurulan tarih ve zamana uyulmaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "15. Uyumluluk ve Karşılaştırılabilirlik",
+            "detail": [
+              {
+                "title": "15.1. Karşılaştırılabilirlik - Coğrafi (Uluslararası)",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Üretilen veriler ulusal ve uluslararası karşılaştırmalara uygundur.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "15.2. Karşılaştırılabilirlik - Zaman",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Üretilen veriler zamanlılık yönünden\nkarşılaştırmalara uygundur. Zaman serisinde kırılma yoktur.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "15.3. Uyumluluk - Diğer İstatistikler",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Karşılaştırılabilecek istatistik yoktur.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "15.4. Uyumluluk - İçsel",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: left; margin-bottom: 0.0001pt; line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Veri kendi içinde tutarlı ve uyumludur.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "16. Maliyet ve Cevaplayıcı Yükü",
+            "detail": [
+              {
+                "title": "16. Maliyet ve Cevaplayıcı Yükü",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Hesaplanmamaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "17. Veri Revizyonu",
+            "detail": [
+              {
+                "title": "17.1. Veri Revizyon Politikası",
+                "content": "<div style=\"text-align: justify;\"><b>Revizyon Politikası</b></div><div style=\"text-align: justify;\">Mevcut istatistiklerin güvenilir, karşılaştırılabilir, uyumlu, tutarlı ve veri entegrasyonu sağlanarak üretilmesi için yayımlanan verilerde revizyon yapılmasına ilişkin stratejiler \"Türkiye İstatistik Kurumu Başkanlığı Tarafından Üretilen İstatistiki Verilerde Revizyon Yapılmasına İlişkin Usul ve Esaslar Hakkında Yönerge\" ile belirlenmiştir. Bu kapsamda, uzunluk ve derinlik detayında hangi istatistiklerin, hangi nedenden dolayı revize edileceğine ilişkin genel çerçeveyi çizen yönergeye <a href=\"https://www.tuik.gov.tr/Kurumsal/Revizyon_Politikasi#\" target=\"_blank\">web sitesinden</a> ulaşılabilir.</div><div style=\"text-align: justify;\"><br></div><div style=\"text-align: justify;\"><br></div><div style=\"text-align: justify;\"><b>Cari Yıl Revizyon Planı</b></div><div style=\"text-align: justify;\">Cari dönemde uygulanacak olan rutin/ana revizyon uygulamalarına ilişkin bilgiler, verinin zaman içinde geçerliliğinin anlaşılması açısından önem taşımaktadır. Bu kapsamda TÜİK, her takvim yılının başında ilgili yılda yayımlanacak tüm istatistiki konu başlıkları için rutin ve/veya ana revizyon durumlarının kamuoyu ile <a href=\"https://www.tuik.gov.tr/Kurumsal/Cari_Yil_Revizyon_Plani\" target=\"_blank\">web sitesinde</a> paylaşmaktadır.</div><div><br></div><div><br></div>"
+              },
+              {
+                "title": "17.2. Veri Revizyon Uygulaması",
+                "content": "<p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\">Ana revizyon uygulanmamaktadır. Kaynak verideki değişimden dolayı rutin\nrevizyon uygulanmaktadır.</span></p><p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\"></span></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">İlgili ay bülteni yayımlanırken 2 ay önceki ay verisine kadar, yılın son ay\nhaber bülteni yayımlanırken de son 3 yıla ait tüm ayların verisi revize\nedilebilir.</span></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><a href=\"https://www.tuik.gov.tr/indir/revizyon/02_0046_RP_2022_00_TR.pdf\" target=\"_blank\">https://www.tuik.gov.tr/indir/revizyon/02_0046_RP_2022_00_TR.pdf</a><br></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\"><o:p></o:p></span></p><p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\"><o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "18. İstatistiksel İşleme",
+            "detail": [
+              {
+                "title": "18.1. Veri Kaynağı",
+                "content": "<p><span style=\"font-size: 10pt; line-height: 107%; font-family: Tahoma, sans-serif;\">Veri kaynağı tam kapsamlı işyeri araştırmasıdır. Tarım ve Orman Bakanlığı il ve ilçe müdürlüklerinden üretim izni\nalmış kanatlı hayvan işletmelerine uygulanır. Söz konusu anket çalışmasına ilk kez\n2008 yılının Ocak ayında geçilmiş ve 3 aylık periyotlar halinde yılda 4 kez\ngirişim merkezlerinden uygulanmaya başlanmıştır. 2010 yılı Ocak ayından\nitibaren ise anket birimi yerel birimler olarak değiştirilmiş ve aylık\nuygulamaya geçilmiştir. Kümes hayvancılığı ve yumurta üretim istatistikleri anketi aylık soru\nformlarından derlenen veriler 2010 yılından itibaren her ay haber bültenleri\nşeklinde kamuoyuna duyurulmaktadır.</span></p>"
+              },
+              {
+                "title": "18.2. Veri Toplama Sıklığı",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Aylık.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "18.3.Veri Toplama Yöntemi",
+                "content": "<p class=\"MsoNormal\"><span style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">CAWI\n(Bilgisayar Destekli Web Görüşmesi)<o:p></o:p></span></p>"
+              },
+              {
+                "title": "18.4. Veri Doğrulama",
+                "content": "<p class=\"MsoNormal\" style=\"text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";=\"\" mso-bidi-font-family:calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:=\"\" tr\"=\"\">Aylık periyodlar halinde işletmeler tarafından web ortamında girilen\nbilgilerin iç tutarlılıkları veri giriş esnasında program tarafından sağlanır.\nVeriler daha sonra TÜİK Bölge Müdürlükleri tarafından incelenir. Yapılan makro\nve mikro düzey kontrol ve tutarlılık analizlerinden sonra veriler merkeze\ngönderilir. <o:p></o:p></span></p><p style=\"margin-top: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">\n\n</p><p class=\"MsoNormal\" style=\"text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";=\"\" mso-bidi-font-family:calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:=\"\" tr\"=\"\">Merkezde Tarımsal Üretim İstatistikleri Grubu tarafından derlenen tüm\ndeğişkenlerin içsel ve önceki dönemler ile tutarlılığı kontrol edilir. Kontrol\nsonunda tespit edilen şüpheli kayıtlar, hatalar ve tutarsızlıklar için Bölge\nMüdürlükleri ile irtibata geçilerek tekrar incelenmesi, gerekiyorsa ilgili\nişletmelerle irtibata geçilerek düzeltilmesi sağlanır.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "18.5. Veri Derleme",
+                "content": "<p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">Anket\nkapsamındaki her işletmeye TÜİK tarafından bir kullanıcı adı ve şifre tahsis\nedilmiştir. İşletmeler kendilerine verilen bu şifreler ile her ay web üzerinden\nelektronik ortamda bilgilerini girerler.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">Toplulaştırılmış\nbilgiler, herhangi bir hesaplama yoluna gidilmeksizin işyerlerine ait verilerin\ntoplanması ile elde edilir.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">İlgili ayda\nmücbir sebeple bilgi veremeyen işyerlerinin verilerine imputasyon yapılır.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">İmputasyon\ndeğeri, imputasyon yapılacak verinin bir önceki ay değerine toplulaştırılmış\nTürkiye verisinin önceki aya göre değişim oranının uygulanması sonucu elde\nedilir.<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">X=(100+A)*B/100<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">X: İmputasyon\ndeğeri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">A: Türkiye\nverisinin önceki aya göre değişim oranı<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";mso-bidi-font-family:=\"\" calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:tr\"=\"\">B: İmputasyon\nyapılacak verinin bir önceki ay değeri<o:p></o:p></span></p><p class=\"MsoNormal\" style=\"background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n</p><p class=\"MsoNormal\" style=\"text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size:10.0pt;mso-fareast-font-family:\" times=\"\" new=\"\" roman\";=\"\" mso-bidi-font-family:calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:=\"\" tr\"=\"\">Bu kapsamda, 2023 yılı Şubat-Mayıs döneminde derlenen veriler için deprem\nfelaketinden etkilenen illerdeki bazı işletmelerden sağlıklı veri/bilgi elde\nedilememesi nedeniyle, belirtilen dönemde faaliyetlerine devam ettikleri\nbelirlenen işletmeler için imputasyon yapılmıştır. Ancak hesaplamalarda daha\ndoğru bir sonuca ulaşabilmek için Türkiye geneli üretim değişimi yerine,\ndepremden etkilenen illerdeki değişimler esas alınmıştır.<o:p></o:p></span></p>"
+              },
+              {
+                "title": "18.6. Düzeltme",
+                "content": "<p class=\"MsoNormal\" style=\"line-height: normal; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\"><span style=\"font-size: 10pt; font-family: Tahoma, sans-serif;\">Mevsimsel ve diğer makro seviye düzeltme prosedürleri\nuygulanmamaktadır.<o:p></o:p></span></p>"
+              }
+            ]
+          },
+          {
+            "title": "19. Ek Bilgi",
+            "detail": [
+              {
+                "title": "19. Ek Bilgi",
+                "content": "<p>-</p>"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "previousPresses": [
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Temmuz 2026",
+        "url": "/tr/press/58053"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Haziran 2026",
+        "url": "/tr/press/58057"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Mayıs 2026",
+        "url": "/tr/press/58063"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Nisan 2026",
+        "url": "/tr/press/58056"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Mart 2026",
+        "url": "/tr/press/58055"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Şubat 2026",
+        "url": "/tr/press/58054"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Ocak 2026",
+        "url": "/tr/press/58061"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Aralık 2025",
+        "url": "/tr/press/53954"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Kasım 2025",
+        "url": "/tr/press/53950"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Ekim 2025",
+        "url": "/tr/press/53949"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Eylül 2025",
+        "url": "/tr/press/53948"
+      },
+      {
+        "title": "Kümes Hayvancılığı Üretimi",
+        "period": "Ağustos 2025",
+        "url": "/tr/press/53947"
+      }
+    ]
+  },
+  "isError": false,
+  "message": "ok"
+}

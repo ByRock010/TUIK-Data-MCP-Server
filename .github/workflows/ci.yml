@@ -5,6 +5,7 @@ on:
     branches: [master, develop]
   pull_request:
     branches: [master, develop]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
 
 permissions:
   contents: read
@@ -14,6 +15,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  branch-policy:
+    name: Branch policy
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const branchPolicy = require('./.github/scripts/branch-policy.cjs');
+            core.info(branchPolicy({
+              pull: context.payload.pull_request,
+              repository: `${context.repo.owner}/${context.repo.repo}`
+            }));
+
   test:
     name: Lint and test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
@@ -41,6 +59,9 @@ jobs:
 
       - name: Develop issue-closing tests (no network)
         run: node --test .github/scripts/close-develop-issues.test.cjs
+
+      - name: Branch policy tests (no network)
+        run: node --test .github/scripts/branch-policy.test.cjs
 
       - name: Issue reporter tests (no network)
         run: node --test .github/scripts/report-live-contracts.test.cjs

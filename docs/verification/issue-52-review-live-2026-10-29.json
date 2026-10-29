@@ -1,0 +1,64 @@
+{
+  "checked_at": "2026-10-29T16:51:55.615565+00:00",
+  "package_version": "0.2.0",
+  "csv": {
+    "rejected_bound": {
+      "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+      "retrieved_at": "2026-10-29T16:51:59.341552Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "status": "error",
+      "code": "invalid_query",
+      "message": "Range minimum '100.5' is not a valid number bound for 'Gözlem Değeri': use decimal_separator ',' consistently with the column (or explicitly declare it for both); use plain numbers without grouping, exponents or percent signs"
+    },
+    "corrected_bound": "100,5",
+    "rows": [
+      {
+        "Gözlem Değeri": "100,5011653824717"
+      },
+      {
+        "Gözlem Değeri": "100,504598733191"
+      }
+    ],
+    "total_rows": 3144,
+    "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+    "retrieved_at": "2026-10-29T16:51:59.132704Z"
+  },
+  "excel": {
+    "resource_id": "press:57987:file:temel-işgücü-göstergeleri-15-yaş~8c14b63e77",
+    "rejected_bounds": [
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+        "retrieved_at": "2026-10-29T16:52:01.851975Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "status": "error",
+        "code": "invalid_query",
+        "message": "Range minimum '1.234' has ambiguous numeric notation; set decimal_separator explicitly and use ungrouped numbers."
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+        "retrieved_at": "2026-10-29T16:52:01.854936Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "status": "error",
+        "code": "invalid_query",
+        "message": "Range minimum '1,234' has ambiguous numeric notation; set decimal_separator explicitly and use ungrouped numbers."
+      }
+    ],
+    "integer_bound": "47938",
+    "explicit_decimal_bound": "1.234",
+    "decimal_separator": ".",
+    "rows": [
+      {
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "47938"
+      },
+      {
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "48015"
+      }
+    ],
+    "total_rows": 12,
+    "snapshot_id": "sha256:d2fa2e2575098735964fa090c652b85359fdf1cd2ac20cabe5bd6952848b2c34",
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=VGMxUpzI366%2FET2UYJ3tiJswqQs2dEiRO%2FQ7KPmhf0%2F5oYLQkbreAAuixxq7kDphz8YsKgtJrMGQRFnXeTlGH7ECksB5p1OvSCsaUrZED3gsMf41fOKktRFmUDvBa4%2FE",
+    "retrieved_at": "2026-10-29T16:52:01.768573Z"
+  },
+  "status": "ok"
+}

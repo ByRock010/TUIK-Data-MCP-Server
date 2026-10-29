@@ -5,6 +5,11 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
+Version 0.2.0 includes eight tools, Excel/PDF reading, bounded table inspection,
+typed table queries and snapshot-bound pagination. See the
+[release notes](docs/releases/v0.2.0.md) for scope and upgrade details, and the
+[release checklist](docs/RELEASE_0.2.0.md) for verification and publication status.
+
 ## Implemented tools
 
 | Tool | Purpose |
@@ -12,7 +17,8 @@ verifies official table downloads. Runtime results always come from TÜİK.
 | `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
-| `get_tuik_data(resource_id, filters={}, limit=100, sheet=None)` | CSV/XLS/XLSX rows, verified download, or an explicit unsupported response |
+| `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
+| `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -105,6 +111,10 @@ must appear in the title, description or major theme. Exact titles rank first,
 followed by title phrase/word matches; ties use title and ID. This is literal text
 matching, without stemming or semantic search. Optional `theme` must match the full
 major theme name, case-insensitively; use `list_tuik_themes` to discover names.
+When an OpenSearch index is configured (see below), the same tool ranks the index
+instead (`backend: "opensearch"`) with Turkish stemming, ASCII folding and
+abbreviation synonyms; results still resolve through the live catalog, and any
+fallback to literal matching is reported in `warnings`.
 
 By default only datasets advertising public exports are included. Set
 `downloadable_only: false` to also discover entries without an export.
@@ -170,8 +180,8 @@ restart, expiration (one hour), or cache eviction.
   failures are standard MCP tool errors before execution.
 
 CSV/Excel filters are **local exact string equality**, not a universal query language.
-Call without filters to inspect the exact column labels, then use those labels as
-keys. A limit bounds returned rows (1–1000), not the full upstream file download.
+Call `inspect_tuik_data` (or `get_tuik_data` without filters) to learn the exact column
+labels, then use those labels as keys. A limit bounds returned rows (1–1000), not the full upstream file download.
 An unsupported filter column is an error. File download URLs can expire or change;
 repeat the search/detail request if necessary.
 
@@ -186,6 +196,94 @@ these returned column labels. File URL, sheet and retrieval time identify the
 source snapshot for citation. Passing `sheet` for a CSV is an input error.
 When a bulletin offers dataflow CSV choices, choose a `flow:` ID for CSV or an
 explicit file ID for Excel; no related table is selected automatically.
+`ok` responses include `snapshot_id`, the SHA-256 of the retained file snapshot.
+
+## Inspect a table before querying
+
+`inspect_tuik_data` selects the same file as `get_tuik_data` (CSV first; bulletins with
+dataflows return `related_datasets` for an explicit choice; Excel defaults to the first
+sheet) and profiles it instead of returning rows:
+
+```json
+{"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0"}
+{"resource_id": "<bulletin Excel file ID>", "sheet": "Tablo", "columns": ["Yıllar - Years [column 1]"], "max_values": 50}
+```
+
+Each entry in `columns` has the exact `name` accepted as a `get_tuik_data` filter key,
+`label_en` when the workbook provides one, `non_empty` and `empty` counts, the most
+frequent observed `values` with counts (use them verbatim as filter values),
+`distinct_count`, and a conservative `type_hint` (`string`, `number`, `date`, `period`,
+`mixed` or `unknown`) marked `type_hint_source: "inferred"`. CSV and Excel declare no
+semantic types, so every hint comes from observed strings:
+
+- Numbers report the observed `decimal_separator` (`.` or `,`); `1.234`-style values
+  alone are `ambiguous` (thousands or decimal) and are never converted.
+- Only valid ISO dates are `date`; `01.02.2024` stays a `string`. SDMX-style periods
+  (`2024-01`, `2024-Q1`, `2024M02`) are `period`; bare years are `period` only when the
+  header names a time dimension (Yıl, Year, Dönem, Zaman, Ay...), otherwise `number`.
+- Zero-padded codes such as `01` are strings. Symbols such as `-`, `..` or `x` are
+  counted under `placeholders` without being read as zero or missing; they stay in
+  `values` because they are valid exact filter values.
+- Values longer than 200 characters are shown shortened with `truncated: true` and
+  cannot be used as filters.
+
+Coverage is explicit. `rows_examined` of `total_rows` were profiled and `complete`
+says whether that is the whole parsed table; counts and `distinct_exact` are exact
+only for complete scans without capped distinct tracking. `values_complete` says
+whether every distinct value is listed. Observed values describe this file, not an
+official code list or statistical dimension. The response keeps `unit`,
+`table_notes`, `source_note`, `layout` and warnings (including raw-layout warnings),
+plus `source_url`, `retrieved_at`, `sheet` and `snapshot_id`. Unknown sheets are
+`invalid_input`; unknown `columns` are `invalid_columns`; file problems keep their
+source error codes.
+
+Inspection and queries share the one-hour file snapshot: inspecting again or calling
+`get_tuik_data` afterwards reuses the downloaded file, and the same `snapshot_id`
+confirms both read the same version. Budgets (`TUIK_INSPECT_*` in `.env.example`)
+bound rows scanned (100,000), columns profiled (100; pass `columns` for others),
+distinct values tracked per column (10,000) and column-profile output (64 KiB,
+measured as UTF-8 bytes of the indented JSON the MCP response carries). When output
+is limited, listed values shrink first, then trailing columns are omitted, with
+warnings; a single profile that cannot fit is omitted rather than exceeding the
+limit. `max_values` (1–200) and `columns` (1–50 names) are validated.
+
+## Query and paginate a table
+
+After `inspect_tuik_data`, pass `query={}` to page through a complete table, or
+provide a projection, predicates and ordered sort keys. Existing calls without
+`query`/`cursor` keep their first-rows/exact-filter behavior.
+
+```json
+{
+  "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+  "limit": 10,
+  "query": {
+    "columns": ["Zaman (2015-01)", "Gözlem Değeri"],
+    "predicates": [
+      {"op": "eq", "column": "Gözlem Sıklığı (M)", "value": "Aylık"},
+      {"op": "range", "column": "Zaman (2015-01)", "value_type": "period", "period_format": "month", "minimum": "2020-01", "maximum": "2025-12"}
+    ],
+    "sort": [{"column": "Gözlem Değeri", "value_type": "number", "decimal_separator": ",", "direction": "desc"}]
+  }
+}
+```
+
+Use exact inspected source column names; formats vary between tables. Filtering
+precedes stable sorting, pagination and projection. `total_rows` is the complete
+match count. Range bounds are inclusive; numeric/date/period comparisons validate
+source values without changing returned strings. Ambiguous numeric separators
+require an explicit format; missing markers never become zero.
+
+When `has_more` is true, send `resource_id` and the returned `next_cursor` to the
+same server process. Omit `query`, `filters` and `sheet` to reuse the retained
+selection, or repeat them unchanged. `limit` may change. Page sizes can shrink to
+fit the UTF-8 response budget, so continue using the cursor rather than a row count.
+The default cursor lifetime is 15 minutes, shortened by file/query snapshot eviction
+or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
+`cursor_mismatch`; continuation never re-downloads newer source data at an old offset.
+
+The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
+missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
 
 ## Read PDF documents
 
@@ -239,10 +337,9 @@ compatible agent explicitly identifies the project. No login or credentials are
 used. See [source research](docs/TUIK_SOURCES.md).
 
 The replaceable `Cache` interface has a bounded in-memory TTL implementation:
-search 10 minutes, metadata/catalog/search handles one hour, themes six hours,
-small CSV downloads 10 minutes. Dataset discovery and detail share one catalog fetch,
-including concurrent calls, and retain its retrieval timestamp. CSV bodies larger than
-256 KiB are not cached by this general cache; Excel/PDF files use the separate
+search 10 minutes, metadata/catalog/search handles one hour, themes six hours.
+Dataset discovery and detail share one catalog fetch, including concurrent calls,
+and retain its retrieval timestamp. CSV exports and Excel/PDF files use the separate
 byte-bounded file cache below.
 Cache hits retain the
 original source retrieval timestamp where applicable. Caches are process-local.
@@ -251,7 +348,8 @@ File parsing has configurable sheet/cell limits and an XLSX uncompressed-size
 preflight (see `.env.example`). XLSX dimensions are checked against actual XML
 coordinates, then rows are counted again during read-only loading. File parsing
 services share a 32 MiB payload-byte cache of one-hour downloads and parsed results;
-keys include stable resource identity and content SHA-256. Excel and PDF reading share these limits and caches.
+keys include stable resource identity and content SHA-256. CSV, Excel and PDF reading
+and `inspect_tuik_data` profiles share these limits and caches.
 Workers run off the event loop, one at a time; cancellation waits for the active
 worker to finish. Input budgets limit ordinary workloads; they are not a hard CPU
 or process-memory sandbox for malicious library inputs.
@@ -267,13 +365,20 @@ or process-memory sandbox for malicious library inputs.
 .venv/bin/pytest -m live
 
 # Full MCP stdio workflow with a JSON report
-.venv/bin/python scripts/live_smoke.py
+.venv/bin/python scripts/live_smoke.py --output /tmp/tuik-live-report.json
+
+# Slower requests for a release acceptance run (file downloads keep their 6 s spacing)
+TUIK_MIN_INTERVAL_SECONDS=2 .venv/bin/python scripts/live_smoke.py --output /tmp/tuik-release.json
 ```
 
 Offline tests use reduced real response fixtures and mocked HTTP, plus an actual
-stdio subprocess for tool discovery and validation. Live checks exercise all seven
-tools, eight Turkish queries, bulletin detail, Excel rows, dataset discovery and
-CSV retrieval, plus publication/methodology PDF pages and same-page continuation.
+stdio subprocess for tool discovery and validation. Live checks exercise all eight
+tools, eight Turkish queries, an explicit bulletin → related dataset → CSV choice,
+an explicit bulletin → Excel attachment, dataset discovery, table inspection and
+exact-filter queries, plus publication/methodology PDF pages and same-page continuation.
+Reports retain package/Python versions, request/download pacing, file snapshots
+and source provenance. `TUIK_*` settings are passed to the stdio server, so the
+configured release-run pacing applies to the process making the requests.
 See [the verification report](docs/VERIFICATION.md) for results and limitations of
 the development run.
 
@@ -345,10 +450,23 @@ Use `-i` without `-t` for MCP stdio. A client can launch `docker` with arguments
 
 ## Local OpenSearch development stack
 
-OpenSearch is optional. The base install and all seven MCP tools continue to work
-without it. This issue provides infrastructure and settings; indexing and routing
-MCP searches to the index follow in #14–#18. Setting a URL alone does not yet change
-search behavior.
+The [Turkish search design](docs/SEARCH_DESIGN.md) records the packaged analyzer
+chains, candidate synonym rules and real OpenSearch token/probe evidence (#13).
+[ADR 0002](docs/adr/0002-opensearch.md) explains the optional, rebuildable index.
+Reproduce the linguistic checks with `scripts/inspect_search_analysis.py --help`.
+The [index contract](docs/SEARCH_INDEX.md) defines the shared metadata documents,
+packaged strict mapping and opt-in real-cluster verification (#14).
+The [metadata crawler](docs/METADATA_CRAWL.md) emits validated JSONL from public
+dataflows, bulletins and metadata, with bounded dry runs and incremental state (#15).
+The [indexer](docs/INDEXING.md) loads those documents into a versioned index behind
+the alias (#16).
+
+OpenSearch is optional. The base install and every MCP tool work without it. With
+`TUIK_OPENSEARCH_URL` set and an index built, `search_tuik_datasets` searches the
+index through the [search backend](docs/SEARCH_BACKEND.md) (#17); if the cluster or
+alias is unavailable it falls back to literal catalog matching with a warning
+(`TUIK_OPENSEARCH_TIMEOUT_SECONDS`, default 5, bounds the wait). Other tools are
+unchanged until #18 exposes indexed search for bulletins and metadata.
 
 ```bash
 # Requires Docker Compose v2 and a running Docker daemon
@@ -388,17 +506,51 @@ extra is never imported by the base server. For a separate CI instance use
 `docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration
 checks are tracked in #19.
 
+### Build the index locally
+
+With the cluster running and `TUIK_OPENSEARCH_URL` exported as above:
+
+```bash
+# First build: crawl every bulletin detail, load tuik-resources-v1, point the alias at it.
+tuik-mcp-index --full --report /tmp/index-full.json
+
+# Later refreshes: reuse unchanged details and upsert new/changed documents.
+tuik-mcp-index --incremental --report /tmp/index-incremental.json
+
+# Inspect the result
+curl 'http://localhost:9200/_cat/aliases/tuik-resources?v'
+curl 'http://localhost:9200/tuik-resources/_search?q=title.ascii:issizlik&pretty'
+```
+
+A full build paces TÜİK requests two seconds apart and can take an hour or more.
+`--dry-run` crawls and plans without writing the index or crawl state. Crawl state
+advances only after the index write succeeds; full builds keep previous versions
+for rollback. See [docs/INDEXING.md](docs/INDEXING.md) for modes, failure handling
+and the JSON report.
+
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
 
 ## Future roadmap
 
+The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the current issue
+dependencies and sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) provides
+the 48-query baseline snapshot, independent judging workflow and metric commands;
+human relevance judgments and baseline quality scores remain pending (#11).
+
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
-title-derived stable IDs. The plan for the next phases is tracked in the roadmap
-issue (#25).
-Next comes OpenSearch Turkish lexical search and measured relevance (v0.3.0).
+title-derived stable IDs. The plan for the next phases is tracked in
+[roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
+The optional OpenSearch stack, analysis, crawler, indexer and dataset backend are
+already included. The v0.3.0 work still covers indexed general MCP search, dedicated
+cluster CI and independently judged relevance measurements; these are not v0.2.0
+release prerequisites.
 Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
 stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Excel/PDF reading is implemented;
-v0.2.0 release closure remains issue #10.
+current roadmap. Version 0.2.0 also includes
+[advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
+(#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
+#52 on `develop`. Publication follows the
+[v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
+reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.

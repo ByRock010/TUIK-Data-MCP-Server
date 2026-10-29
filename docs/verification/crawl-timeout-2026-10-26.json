@@ -1,0 +1,20 @@
+{
+  "status": "error",
+  "state_committed": false,
+  "dry_run": true,
+  "started_at": "2026-10-26T07:55:53.386499+00:00",
+  "mode": "full",
+  "warnings": [],
+  "pages": 0,
+  "upstream_total": null,
+  "fetched_bulletins": 0,
+  "reused_bulletins": 0,
+  "counts": {},
+  "error": {
+    "type": "SourceError",
+    "message": "TÜİK request failed after bounded retries",
+    "code": "upstream_timeout",
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows"
+  },
+  "finished_at": "2026-10-26T07:56:03.678713+00:00"
+}

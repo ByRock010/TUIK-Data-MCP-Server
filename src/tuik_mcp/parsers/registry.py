@@ -14,6 +14,8 @@ def parse_table(
     filters: dict[str, str] | None = None,
     sheet: str | None = None,
     budgets: ParseLimits | None = None,
+    scan_max_rows: int | None = None,
+    scan_max_cells: int | None = None,
 ) -> list[ParsedTable]:
     """Parse locally; async callers must offload this synchronous function to a thread.
 
@@ -21,11 +23,19 @@ def parse_table(
     per sheet, or only `sheet` when given. PDF tables will be registered by their
     ingestion feature. A format without an implementation fails explicitly rather
     than guessing from the bytes.
+    scan_max_* are fail-fast CSV query bounds; workbooks use their existing
+    archive/grid budgets and the query layer validates the selected table.
     """
     if limit is not None and (type(limit) is not int or limit < 1):
         raise ValueError("Parser limit must be a positive integer")
     if fmt == "csv":
-        return parse_csv(body, limit=limit, filters=filters)
+        return parse_csv(
+            body,
+            limit=limit,
+            filters=filters,
+            scan_max_rows=scan_max_rows,
+            scan_max_cells=scan_max_cells,
+        )
     if fmt in {"xls", "xlsx"}:
         return parse_spreadsheet(
             body, fmt, limit=limit, filters=filters, sheet=sheet, budgets=budgets
