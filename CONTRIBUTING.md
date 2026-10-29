@@ -110,6 +110,12 @@ and [push event workflows](https://docs.github.com/en/actions/reference/workflow
 
 ## Releasing
 
+For v0.2.0, use the issue-by-issue readiness and evidence checklist in
+[`docs/RELEASE_0.2.0.md`](docs/RELEASE_0.2.0.md). Keep #10 and its tracking epic #23
+open until the reviewed promotion and tag are complete; a preparation PR uses
+`Refs #10`, not an early issue-closing directive. The old `release/0.2.0` instruction
+in #10 predates the enforced topic → `develop` → `master` branch policy below.
+
 1. `git switch -c chore/prepare-0.2.0 develop`
 2. Bump `version` in `pyproject.toml`, move `[Unreleased]` entries in
    `CHANGELOG.md` under `[0.2.0] - YYYY-MM-DD`, and refresh `docs/VERIFICATION.md`
