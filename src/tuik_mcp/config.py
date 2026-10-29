@@ -48,6 +48,13 @@ class Settings(BaseModel):
     inspect_max_columns: int = Field(default=100, ge=1, le=1000)
     inspect_max_distinct: int = Field(default=10_000, ge=10, le=100_000)
     inspect_max_output_bytes: int = Field(default=64 * 1024, ge=8 * 1024, le=1024 * 1024)
+    query_max_rows: int = Field(default=100_000, ge=1, le=1_000_000)
+    query_max_cells: int = Field(default=2_000_000, ge=1, le=5_000_000)
+    query_max_sort_rows: int = Field(default=50_000, ge=1, le=1_000_000)
+    query_max_snapshot_bytes: int = Field(default=8 * 1024 * 1024, ge=1024, le=64 * 1024 * 1024)
+    query_max_output_bytes: int = Field(default=64 * 1024, ge=1024, le=1024 * 1024)
+    query_cache_bytes: int = Field(default=16 * 1024 * 1024, ge=1024, le=128 * 1024 * 1024)
+    query_cursor_ttl_seconds: int = Field(default=900, ge=1, le=3600)
 
     @field_validator("opensearch_url", mode="before")
     @classmethod

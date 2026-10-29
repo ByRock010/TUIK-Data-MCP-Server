@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
@@ -90,6 +91,9 @@ class DataResponse(Provenance):
     warnings: list[str] = Field(default_factory=list)
     # Content SHA-256 of the retained file snapshot the rows were read from.
     snapshot_id: str | None = None
+    next_cursor: str | None = None
+    has_more: bool = False
+    cursor_expires_at: datetime | None = None
 
 
 class InspectResponse(Provenance):
