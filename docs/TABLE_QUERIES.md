@@ -63,6 +63,14 @@ Up to five sort keys are ordered by priority. Each uses `direction: asc|desc`
   `YYYY-Hn`/`YYYYSn` (optional hyphen); `week` accepts `YYYY-Www`/`YYYYWww` and
   validates ISO week existence. Frequencies are never silently mixed.
 
+The same ambiguity rule applies to **range operands**. An integer-only column does
+not establish a decimal separator: `minimum: "1.234"` or `maximum: "1,234"` requires
+an explicit `decimal_separator`. A matching separator established by unambiguous
+source decimals can also disambiguate that operand. Explicit `"."` interprets
+`"1.234"` as the decimal 1.234; it never means grouped integer 1234. To request
+integer 1234, write `"1234"`. Bound errors identify `minimum`/`maximum` and the
+expected notation, independently from errors in the source column itself.
+
 Typed referenced columns are validated against the **complete parsed table**, even
 if a predicate would remove an incompatible row. Empty/whitespace values and the
 inspection markers `-`, `–`, `—`, `.`, `..`, `...`, `…`, `:`, `x`, `X`, `*` are
@@ -123,6 +131,12 @@ selected table against query limits. Parsing, query work and JSON serialization
 share the cancellation-safe worker slot. Only one advanced query pipeline runs at
 a time; cancelling a worker waits for its completion before releasing the slot.
 These are bounded ordinary workloads, not a hard OS-level CPU/RSS sandbox.
+
+Parsed tables and original bodies share `TUIK_PARSE_CACHE_BYTES` (default 32 MiB).
+A large CSV's parsed JSON may evict its body even when the query result fits the
+separate query cache. Multi-page queries then fail explicitly with a retention
+error; operators can increase `TUIK_PARSE_CACHE_BYTES` within their memory budget.
+Increasing `TUIK_QUERY_CACHE_BYTES` alone does not retain an evicted file body.
 
 The response budget shrinks **rows only**, preserves exact totals, and supplies the
 next cursor at the first unreturned position. If metadata or a single row cannot

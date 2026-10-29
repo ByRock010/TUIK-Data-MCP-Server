@@ -69,8 +69,13 @@ remain usable without it. Known source failures remain explicit errors.
 
 ## Reviewed release sequence
 
-- [ ] Review and merge `chore/10-prepare-0.2.0` into `develop` after required CI and
-  a teammate's approval. Refresh the planned changelog date if publication moves.
+- [x] Review and merge `chore/10-prepare-0.2.0` into `develop` after required CI and
+  a teammate's approval: PR #59, commit `d8c358f`, 2026-10-29. #10/#23 closed
+  automatically. Refresh the planned changelog date if publication moves.
+- [ ] Verify the release scope before promotion. The recorded 0.2.0 evidence covers
+  #59's accepted snapshot. Promote/tag it before #60 (#52) merges, or update the
+  version/changelog and acceptance evidence for the expanded feature set. The
+  Unreleased #52 entry alone does not exclude its code from a future `develop` tag.
 - [ ] Open **`develop` → `master`**, with the exact prepared version and release
   evidence. Require normal CI and review; use a **merge commit**, as enforced by
   the branch policy. The obsolete `release/0.2.0` → `master` route is not allowed.

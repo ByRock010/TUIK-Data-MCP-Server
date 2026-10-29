@@ -547,8 +547,9 @@ cluster CI and independently judged relevance measurements; these are not v0.2.0
 release prerequisites.
 Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
 stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Advanced row queries and snapshot-bound cursor pagination (#52)
-are a separate, unassigned follow-up. Excel/PDF reading is implemented;
-the preparation PR automatically closes #10 and epic #23 on its merge into
-`develop`. Publication follows the [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
+current roadmap. The next, Unreleased increment adds
+[advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
+(#52) to the file-reading workflow. The v0.2.0 preparation PR #59 merged into
+`develop` and automatically closed #10 and epic #23. Publication follows the
+[v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
 reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.

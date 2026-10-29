@@ -69,3 +69,33 @@ async def test_real_stdio_query_schema_continuation_and_errors():
                 },
             )
             assert invalid.isError
+            ambiguous_range = {
+                "columns": ["n"],
+                "predicates": [
+                    {
+                        "op": "range",
+                        "column": "n",
+                        "value_type": "number",
+                        "minimum": "1.234",
+                    }
+                ],
+            }
+            invalid_bound = await session.call_tool(
+                "get_tuik_data",
+                {
+                    "resource_id": resource,
+                    "query": ambiguous_range,
+                },
+            )
+            assert invalid_bound.structuredContent["code"] == "invalid_query"
+            assert "Range minimum" in invalid_bound.structuredContent["message"]
+            assert "decimal_separator" in invalid_bound.structuredContent["message"]
+            ambiguous_range["predicates"][0]["decimal_separator"] = "."
+            explicit = await session.call_tool(
+                "get_tuik_data",
+                {
+                    "resource_id": resource,
+                    "query": ambiguous_range,
+                },
+            )
+            assert explicit.structuredContent["rows"] == [{"n": "2"}, {"n": "10"}]

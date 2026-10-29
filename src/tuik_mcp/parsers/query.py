@@ -38,6 +38,7 @@ def missing(value: str) -> bool:
 
 def converter(spec: Comparison, values: list[str], column: str):
     separator = spec.decimal_separator
+    established_separator = separator
     if spec.value_type == "number" and separator is None:
         shapes = {shape(value) for value in values if not missing(value)}
         dots, commas = shapes & {"dot", "dot3"}, shapes & {"comma", "comma3"}
@@ -45,11 +46,26 @@ def converter(spec: Comparison, values: list[str], column: str):
             raise QueryError(
                 "invalid_query", f"Ambiguous numeric notation in {column!r}; set decimal_separator."
             )
-        separator = "," if commas else "."
+        established_separator = "," if commas else "." if dots else None
+        separator = established_separator or "."
 
-    def convert(value: str):
+    def convert(value: str, *, bound: str | None = None):
         if missing(value):
+            if bound is not None:
+                raise QueryError(
+                    "invalid_query", f"Range {bound} cannot be empty or a placeholder."
+                )
             return None
+        if bound is not None and spec.value_type == "number" and spec.decimal_separator is None:
+            value_shape = shape(value)
+            if (value_shape == "dot3" and established_separator != ".") or (
+                value_shape == "comma3" and established_separator != ","
+            ):
+                raise QueryError(
+                    "invalid_query",
+                    f"Range {bound} {value[:80]!r} has ambiguous numeric notation; "
+                    "set decimal_separator explicitly and use ungrouped numbers.",
+                )
         text = value.strip()
         try:
             if spec.value_type == "text":
@@ -83,6 +99,18 @@ def converter(spec: Comparison, values: list[str], column: str):
                 date.fromisocalendar(parts[0], parts[1], 1)
             return parts
         except ValueError as exc:
+            if bound is not None:
+                detail = str(exc)
+                if spec.value_type == "number":
+                    detail = (
+                        f"use decimal_separator {separator!r} consistently with the column "
+                        "(or explicitly declare it for both); " + detail
+                    )
+                raise QueryError(
+                    "invalid_query",
+                    f"Range {bound} {value[:80]!r} is not a valid {spec.value_type} "
+                    f"bound for {column!r}: {detail}",
+                ) from exc
             raise QueryError(
                 "invalid_query",
                 f"Column {column!r} has incompatible {spec.value_type} value {value[:80]!r}: {exc}",
@@ -135,14 +163,16 @@ def evaluate(table: ParsedTable, query: TableQuery, filters: dict[str, str], lim
             )
         else:
             values, convert = typed(predicate)
-            low = convert(predicate.minimum) if predicate.minimum is not None else None
-            high = convert(predicate.maximum) if predicate.maximum is not None else None
-            if (
-                predicate.minimum is not None
-                and low is None
-                or (predicate.maximum is not None and high is None)
-            ):
-                raise QueryError("invalid_query", "Range bounds cannot be empty or placeholders.")
+            low = (
+                convert(predicate.minimum, bound="minimum")
+                if predicate.minimum is not None
+                else None
+            )
+            high = (
+                convert(predicate.maximum, bound="maximum")
+                if predicate.maximum is not None
+                else None
+            )
             if low is not None and high is not None and low > high:
                 raise QueryError("invalid_query", "range minimum must not exceed maximum")
             checks.append(
