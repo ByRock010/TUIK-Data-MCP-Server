@@ -1,7 +1,9 @@
 """Derive validated metadata documents without importing an OpenSearch client."""
 
 import asyncio
+import os
 import re
+import tempfile
 from collections import Counter
 from datetime import date, datetime
 from pathlib import Path
@@ -411,3 +413,18 @@ def state_bytes(state):
     if len(payload) > MAX_STATE_BYTES:
         raise ValueError("Crawl state exceeds its byte budget")
     return payload
+
+
+def atomic_write(path, payload):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as file:
+            temporary = Path(file.name)
+            file.write(payload)
+            file.flush()
+            os.fsync(file.fileno())
+        temporary.replace(path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)

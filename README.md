@@ -404,11 +404,12 @@ The [index contract](docs/SEARCH_INDEX.md) defines the shared metadata documents
 packaged strict mapping and opt-in real-cluster verification (#14).
 The [metadata crawler](docs/METADATA_CRAWL.md) emits validated JSONL from public
 dataflows, bulletins and metadata, with bounded dry runs and incremental state (#15).
+The [indexer](docs/INDEXING.md) loads those documents into a versioned index behind
+the alias (#16).
 
 OpenSearch is optional. The base install and all seven MCP tools continue to work
-without it. This issue provides infrastructure and settings; indexing and routing
-MCP searches to the index follow in #16–#18. Setting a URL alone does not yet change
-search behavior.
+without it. Routing MCP searches to the index follows in #17–#18. Setting a URL
+alone does not yet change search behavior.
 
 ```bash
 # Requires Docker Compose v2 and a running Docker daemon
@@ -447,6 +448,28 @@ whitespace-only values also leave the optional backend disabled;
 extra is never imported by the base server. For a separate CI instance use
 `docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration
 checks are tracked in #19.
+
+### Build the index locally
+
+With the cluster running and `TUIK_OPENSEARCH_URL` exported as above:
+
+```bash
+# First build: crawl every bulletin detail, load tuik-resources-v1, point the alias at it.
+tuik-mcp-index --full --report /tmp/index-full.json
+
+# Later refreshes: reuse unchanged details and upsert new/changed documents.
+tuik-mcp-index --incremental --report /tmp/index-incremental.json
+
+# Inspect the result
+curl 'http://localhost:9200/_cat/aliases/tuik-resources?v'
+curl 'http://localhost:9200/tuik-resources/_search?q=title.ascii:issizlik&pretty'
+```
+
+A full build paces TÜİK requests two seconds apart and can take an hour or more.
+`--dry-run` crawls and plans without writing the index or crawl state. Crawl state
+advances only after the index write succeeds; full builds keep previous versions
+for rollback. See [docs/INDEXING.md](docs/INDEXING.md) for modes, failure handling
+and the JSON report.
 
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
