@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `tuik-mcp-index` crawls public metadata and writes it to OpenSearch: `--full`
+  loads a new versioned index, verifies its document count and atomically moves the
+  alias, keeping previous versions for rollback; `--incremental` upserts only new or
+  changed documents and reports stale IDs without deleting them. Crawl state advances
+  only after a successful write; `--dry-run` plans without writing (#16).
+
 - GitHub branch ruleset payloads requiring PRs, one approval and CI for `master`
   and `develop`, with a tested branch-policy check enforcing topic PRs into
   `develop` and promotions only from `develop` into `master`.
