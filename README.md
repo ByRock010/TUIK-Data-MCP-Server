@@ -5,6 +5,10 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
+The v0.2.0 preparation includes eight tools, Excel/PDF reading and bounded table
+inspection. See the [release checklist](docs/RELEASE_0.2.0.md) for verification and
+the remaining reviewed promotion/tag steps.
+
 ## Implemented tools
 
 | Tool | Purpose |
@@ -322,13 +326,20 @@ or process-memory sandbox for malicious library inputs.
 .venv/bin/pytest -m live
 
 # Full MCP stdio workflow with a JSON report
-.venv/bin/python scripts/live_smoke.py
+.venv/bin/python scripts/live_smoke.py --output /tmp/tuik-live-report.json
+
+# Slower requests for a release acceptance run (file downloads keep their 6 s spacing)
+TUIK_MIN_INTERVAL_SECONDS=2 .venv/bin/python scripts/live_smoke.py --output /tmp/tuik-release.json
 ```
 
 Offline tests use reduced real response fixtures and mocked HTTP, plus an actual
-stdio subprocess for tool discovery and validation. Live checks exercise all seven
-tools, eight Turkish queries, bulletin detail, Excel rows, dataset discovery and
-CSV retrieval, plus publication/methodology PDF pages and same-page continuation.
+stdio subprocess for tool discovery and validation. Live checks exercise all eight
+tools, eight Turkish queries, an explicit bulletin → related dataset → CSV choice,
+an explicit bulletin → Excel attachment, dataset discovery, table inspection and
+exact-filter queries, plus publication/methodology PDF pages and same-page continuation.
+Reports retain package/Python versions, request/download pacing, file snapshots
+and source provenance. `TUIK_*` settings are passed to the stdio server, so the
+configured release-run pacing applies to the process making the requests.
 See [the verification report](docs/VERIFICATION.md) for results and limitations of
 the development run.
 
@@ -490,10 +501,16 @@ human relevance judgments and baseline quality scores remain pending (#11).
 
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
-title-derived stable IDs. The plan for the next phases is tracked in the roadmap
-issue (#25).
-Next comes OpenSearch Turkish lexical search and measured relevance (v0.3.0).
+title-derived stable IDs. The plan for the next phases is tracked in
+[roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
+The optional OpenSearch stack, analysis, crawler, indexer and dataset backend are
+already included. The v0.3.0 work still covers indexed general MCP search, dedicated
+cluster CI and independently judged relevance measurements; these are not v0.2.0
+release prerequisites.
 Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
 stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Excel/PDF reading is implemented;
-v0.2.0 release closure remains issue #10.
+current roadmap. Advanced row queries and snapshot-bound cursor pagination (#52)
+are a separate, unassigned follow-up. Excel/PDF reading is implemented;
+the preparation PR automatically closes #10 and epic #23 on its merge into
+`develop`. Publication follows the [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
+reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.

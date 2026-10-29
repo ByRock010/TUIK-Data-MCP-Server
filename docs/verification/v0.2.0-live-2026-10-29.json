@@ -1,0 +1,1272 @@
+{
+  "status": "ok",
+  "checked_at": "2026-10-29T12:18:55.733827+00:00",
+  "package_version": "0.2.0",
+  "python_version": "3.13.5",
+  "pacing": {
+    "request_interval_seconds": 2.0,
+    "download_interval_seconds": 6
+  },
+  "tools": [
+    "search_tuik",
+    "search_tuik_datasets",
+    "get_tuik_resource",
+    "get_tuik_data",
+    "inspect_tuik_data",
+    "list_tuik_themes",
+    "read_tuik_document",
+    "search_tuik_classifications"
+  ],
+  "searches": {
+    "işsizlik": [
+      {
+        "id": "table:işsizlik-oranı~2b7854b01a",
+        "title": "İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=RYRC%2FMLsWGTe6%2BxmluxrcQynjGQ8R6bevDl2UZL%2BdjmzMh1alwFXU%2FWp%2Fu0F6Xzf"
+      },
+      {
+        "id": "table:genç-işsizlik-oranı~04c9503c21",
+        "title": "Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=3T4hn%2Boz%2BEUvdYcpv%2BI8qplK7OK8TvmxoLhnM%2BbrcNkbyCKNZEmRgyYKMRb4WwGvEK6ilYWO8arwksdJaU3Idw%3D%3D"
+      },
+      {
+        "id": "table:il-düzeyinde-işsizlik-oranı~f769d0b059",
+        "title": "İl düzeyinde işsizlik oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=5NH99AS2nAkKByFO%2Bq2MmJkLEllPz0u3H89VWE8BPvImpgAZsUOtNUXDwZd24WWKMq4qk%2BTY9bxnn44p%2FHmldA%3D%3D"
+      }
+    ],
+    "nüfus": [
+      {
+        "id": "resource:f0d30030e8a6e870f4897877369b0e1ead0d9b901de999a33d930b74e3cd81e1",
+        "title": "Nüfus İstatistikleri Portalı",
+        "source_url": "https://nip.tuik.gov.tr/"
+      },
+      {
+        "id": "press:53899",
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2025",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/53899"
+      },
+      {
+        "id": "press:53783",
+        "title": "Adrese Dayalı Nüfus Kayıt Sistemi Sonuçları, 2024",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/53783"
+      }
+    ],
+    "enflasyon": [
+      {
+        "id": "press:58298",
+        "title": "Tüketici Fiyat Endeksi, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58298"
+      },
+      {
+        "id": "press:58290",
+        "title": "Tüketici Fiyat Endeksi, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58290"
+      },
+      {
+        "id": "press:58297",
+        "title": "Tüketici Fiyat Endeksi, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58297"
+      }
+    ],
+    "TÜFE": [
+      {
+        "id": "press:58298",
+        "title": "Tüketici Fiyat Endeksi, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58298"
+      },
+      {
+        "id": "press:58290",
+        "title": "Tüketici Fiyat Endeksi, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58290"
+      },
+      {
+        "id": "press:58297",
+        "title": "Tüketici Fiyat Endeksi, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58297"
+      }
+    ],
+    "dış ticaret": [
+      {
+        "id": "press:58240",
+        "title": "Dış Ticaret İstatistikleri, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58240"
+      },
+      {
+        "id": "flow:DF_DIS_TICARET_HADLERI_V1+V1.0",
+        "title": "Dış Ticaret Hadleri",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_DIS_TICARET_HADLERI_V1,1.0"
+      },
+      {
+        "id": "press:58239",
+        "title": "Dış Ticaret İstatistikleri, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58239"
+      }
+    ],
+    "İstanbul nüfusu": [
+      {
+        "id": "flow:DF_ADNKS_T18+V1.1",
+        "title": "Belediye Sayısı ve Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T18,1.1"
+      },
+      {
+        "id": "flow:DF_ADNKS_T14+V1.1",
+        "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T14,1.1"
+      },
+      {
+        "id": "flow:DF_ADNKS_T22+V1.1",
+        "title": "İl ve İlçelere Göre İl/İlçe Merkezi, Belde/Köy Nüfusu",
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ADNKS_T22,1.1"
+      }
+    ],
+    "genç işsizlik": [
+      {
+        "id": "table:genç-işsizlik-oranı~04c9503c21",
+        "title": "Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=lmZenu5oKWo5qTwn7vekeugtUjfUU6Z%2F2mplw%2FJnUFLuo%2BAQ%2BFZJ9ZT4kIhulm2VSWcIn6ECcL3O88%2BPEQh6BQ%3D%3D"
+      },
+      {
+        "id": "table:cinsiyete-göre-genç-işsizlik-oranı~9aff30a349",
+        "title": "Cinsiyete Göre Genç İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=34CMPZv1nirxC9b%2BfgAR0QC0Wf6mkueFXZJLRBM%2FYuaF2vkfDqqZ9cSQRvF1oYCYXYpXJ5YM%2F7yftAFQYoRBquUIQUGU1pLOgoSnTlFe6Sg%3D"
+      },
+      {
+        "id": "table:cinsiyete-göre-genç-işsizlik-oranı~87f338a965",
+        "title": "Cinsiyete göre genç işsizlik oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=GxRI6DRzOTACj1ZjITdXIAeFK9c4wZLra5vb%2FSobN9hBxamKsz2xeRRLhDraKDIPgnU%2FlXpYZHECFwAjJaKJ86uN6o5a4t1FN2yTqEn2Tv4%3D"
+      }
+    ],
+    "konut satışları": [
+      {
+        "id": "press:58347",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Eylül 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58347"
+      },
+      {
+        "id": "press:58346",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Ağustos 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58346"
+      },
+      {
+        "id": "press:58339",
+        "title": "Konut ve İş Yeri Satış İstatistikleri, Temmuz 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/tr/press/58339"
+      }
+    ]
+  },
+  "bulletin": {
+    "id": "press:57988",
+    "title": "İşgücü İstatistikleri, Eylül 2026",
+    "download_count": 9,
+    "source_url": "https://veriportali.tuik.gov.tr/tr/press/57988"
+  },
+  "bulletin_excel": {
+    "bulletin_id": "press:57988",
+    "bulletin_source_url": "https://veriportali.tuik.gov.tr/tr/press/57988",
+    "selected_file_id": "press:57988:file:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-yaş~35fc30e1b3",
+    "data": {
+      "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57988&p=xRD87u0P3o0vULXEuSROu3jKcEzOtnPRw7tZvG5CWGkJfMZ371O%2BP%2FqKDGF%2F0ucE%2BHVR9gy1NDJVFKmZVBj8WI3YMS3qBB3hcS3qxctVW1Che6WFQaEYxebrg6v%2FbIuNttPB2CiyRQsoosV2TxAn6EzJ0v6UiS2S%2BkvSZM6CT8OeUudS%2FwxF7pVto2cvKQoV",
+      "retrieved_at": "2026-10-29T12:19:02.177385Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "resource_id": "press:57988:file:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-yaş~35fc30e1b3",
+      "status": "ok",
+      "message": "Spreadsheet values preserve source precision. Exact filters apply locally.",
+      "columns": [
+        "Yıllar - Years [column 1]",
+        "column_2",
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]",
+        "İşgücü Labour force [column 4]",
+        "İstihdam Employment [column 5]",
+        "İşsiz Unemployment [column 6]",
+        "İşgücüne dahil olmayanlar Not in labour force [column 7]",
+        "İşgücüne katılma oranı Labour force participation rate (%) [column 8]",
+        "İstihdam oranı Employment rate (%) [column 9]",
+        "İşsizlik oranı Unemployment rate (%) [column 10]",
+        "column_11",
+        "Yıllar - Years [column 12]",
+        "column_13",
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 14]",
+        "İşgücü Labour force [column 15]",
+        "İstihdam Employment [column 16]",
+        "İşsiz Unemployment [column 17]",
+        "İşgücüne dahil olmayanlar Not in labour force [column 18]",
+        "İşgücüne katılma oranı Labour force participation rate (%) [column 19]",
+        "İstihdam oranı Employment rate (%) [column 20]",
+        "İşsizlik oranı Unemployment rate (%) [column 21]",
+        "column_22",
+        "Yıllar - Years [column 23]",
+        "column_24",
+        "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 25]",
+        "İşgücü Labour force [column 26]",
+        "İstihdam Employment [column 27]",
+        "İşsiz Unemployment [column 28]",
+        "İşgücüne dahil olmayanlar Not in labour force [column 29]",
+        "İşgücüne katılma oranı Labour force participation rate (%) [column 30]",
+        "İstihdam oranı Employment rate (%) [column 31]",
+        "İşsizlik oranı Unemployment rate (%) [column 32]",
+        "column_33",
+        "column_34",
+        "Bölüm / Section [column 1]",
+        "Bölüm / Section [column 12]",
+        "Bölüm / Section [column 23]"
+      ],
+      "rows": [
+        {
+          "Yıllar - Years [column 1]": "2005",
+          "column_2": "Ocak - January",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "47938",
+          "İşgücü Labour force [column 4]": "21215",
+          "İstihdam Employment [column 5]": "19267",
+          "İşsiz Unemployment [column 6]": "1949",
+          "İşgücüne dahil olmayanlar Not in labour force [column 7]": "26723",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 8]": "44.3",
+          "İstihdam oranı Employment rate (%) [column 9]": "40.2",
+          "İşsizlik oranı Unemployment rate (%) [column 10]": "9.2",
+          "column_11": "",
+          "Yıllar - Years [column 12]": "2005",
+          "column_13": "Ocak - January",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 14]": "23497",
+          "İşgücü Labour force [column 15]": "16024",
+          "İstihdam Employment [column 16]": "14526",
+          "İşsiz Unemployment [column 17]": "1498",
+          "İşgücüne dahil olmayanlar Not in labour force [column 18]": "7473",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 19]": "68.2",
+          "İstihdam oranı Employment rate (%) [column 20]": "61.8",
+          "İşsizlik oranı Unemployment rate (%) [column 21]": "9.4",
+          "column_22": "",
+          "Yıllar - Years [column 23]": "2005",
+          "column_24": "Ocak - January",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 25]": "24441",
+          "İşgücü Labour force [column 26]": "5191",
+          "İstihdam Employment [column 27]": "4740",
+          "İşsiz Unemployment [column 28]": "450",
+          "İşgücüne dahil olmayanlar Not in labour force [column 29]": "19250",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 30]": "21.2",
+          "İstihdam oranı Employment rate (%) [column 31]": "19.4",
+          "İşsizlik oranı Unemployment rate (%) [column 32]": "8.7",
+          "column_33": "",
+          "column_34": "",
+          "Bölüm / Section [column 1]": "Toplam - Total",
+          "Bölüm / Section [column 12]": "Erkek - Male",
+          "Bölüm / Section [column 23]": "Kadın - Female"
+        },
+        {
+          "Yıllar - Years [column 1]": "2005",
+          "column_2": "Şubat - February",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 3]": "48015",
+          "İşgücü Labour force [column 4]": "21120",
+          "İstihdam Employment [column 5]": "19180",
+          "İşsiz Unemployment [column 6]": "1941",
+          "İşgücüne dahil olmayanlar Not in labour force [column 7]": "26895",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 8]": "44.0",
+          "İstihdam oranı Employment rate (%) [column 9]": "39.9",
+          "İşsizlik oranı Unemployment rate (%) [column 10]": "9.2",
+          "column_11": "",
+          "Yıllar - Years [column 12]": "2005",
+          "column_13": "Şubat - February",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 14]": "23537",
+          "İşgücü Labour force [column 15]": "15985",
+          "İstihdam Employment [column 16]": "14483",
+          "İşsiz Unemployment [column 17]": "1502",
+          "İşgücüne dahil olmayanlar Not in labour force [column 18]": "7551",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 19]": "67.9",
+          "İstihdam oranı Employment rate (%) [column 20]": "61.5",
+          "İşsizlik oranı Unemployment rate (%) [column 21]": "9.4",
+          "column_22": "",
+          "Yıllar - Years [column 23]": "2005",
+          "column_24": "Şubat - February",
+          "15 ve daha yukarı yaştaki nüfus Population 15 years and over [column 25]": "24479",
+          "İşgücü Labour force [column 26]": "5135",
+          "İstihdam Employment [column 27]": "4696",
+          "İşsiz Unemployment [column 28]": "439",
+          "İşgücüne dahil olmayanlar Not in labour force [column 29]": "19344",
+          "İşgücüne katılma oranı Labour force participation rate (%) [column 30]": "21.0",
+          "İstihdam oranı Employment rate (%) [column 31]": "19.2",
+          "İşsizlik oranı Unemployment rate (%) [column 32]": "8.5",
+          "column_33": "",
+          "column_34": "",
+          "Bölüm / Section [column 1]": "Toplam - Total",
+          "Bölüm / Section [column 12]": "Erkek - Male",
+          "Bölüm / Section [column 23]": "Kadın - Female"
+        }
+      ],
+      "unit": "15+ yaş - age",
+      "notes": "Resolved from the bulletin's current file list. The download URL changes over time; this ID does not.",
+      "download_links": [
+        {
+          "title": "Mevsim etkisinden arındırılmış temel işgücü göstergeleri (15+ yaş)",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57988&p=xRD87u0P3o0vULXEuSROu3jKcEzOtnPRw7tZvG5CWGkJfMZ371O%2BP%2FqKDGF%2F0ucE%2BHVR9gy1NDJVFKmZVBj8WI3YMS3qBB3hcS3qxctVW1Che6WFQaEYxebrg6v%2FbIuNttPB2CiyRQsoosV2TxAn6EzJ0v6UiS2S%2BkvSZM6CT8OeUudS%2FwxF7pVto2cvKQoV",
+          "format": "xls",
+          "verified": true,
+          "size_bytes": 221696,
+          "resource_id": "press:57988:file:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-yaş~35fc30e1b3"
+        }
+      ],
+      "total_rows": 261,
+      "related_datasets": [],
+      "truncated": true,
+      "format": "xls",
+      "extraction": "xls",
+      "sheet": "Tablo",
+      "sheets": [
+        "Tablo"
+      ],
+      "table_title": "Mevsim etkisinden arındırılmış temel işgücü göstergeleri, 2005-2026",
+      "table_title_en": "Seasonally adjusted main labour force indicators, 2005-2026",
+      "columns_en": [],
+      "table_notes": [
+        "(Bin kişi - Thousand person)",
+        "TÜİK, İşgücü İstatistikleri, Eylül 2026",
+        "TURKSTAT, Labour Force Statistics, September 2026",
+        "Tablodaki rakamlar, yuvarlamadan dolayı toplamı vermeyebilir.",
+        "Figures in table may not add up to totals due to rounding.",
+        "2005-2020 aylık sonuçlar model ile tahmin edilmiştir.",
+        "The monthly results of 2005-2020 were estimated by model.",
+        "(r) Veriler revize edilmiştir.",
+        "(r) Data are revised."
+      ],
+      "source_note": "TÜİK, İşgücü İstatistikleri, Eylül 2026",
+      "layout": "table",
+      "warnings": [
+        "Side-by-side blocks share column names; each block's section is in its 'Bölüm / Section [column N]' column, N being the block's first source column."
+      ],
+      "snapshot_id": "sha256:73d8159f1502ae9007a5b4dbe74c0086f94a9d7b4410883ae1b976eeb33efa28"
+    }
+  },
+  "inspect_excel": {
+    "resource_id": "table:işsizlik-oranı~2b7854b01a",
+    "format": "xls",
+    "sheet": "t908",
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=RYRC%2FMLsWGTe6%2BxmluxrcQynjGQ8R6bevDl2UZL%2BdjmzMh1alwFXU%2FWp%2Fu0F6Xzf",
+    "retrieved_at": "2026-10-29T12:19:08.521823Z",
+    "snapshot_id": "sha256:6dbeba3f3b26df6d3fdc507f4cc42521ca6d9c822f4646cce02a21c88f9d36e9",
+    "total_rows": 27,
+    "complete": true,
+    "filter": {
+      "Yıl Year": "2014"
+    },
+    "matched_rows": 3,
+    "query_snapshot_id": "sha256:6dbeba3f3b26df6d3fdc507f4cc42521ca6d9c822f4646cce02a21c88f9d36e9"
+  },
+  "download": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=RYRC%2FMLsWGTe6%2BxmluxrcQynjGQ8R6bevDl2UZL%2BdjmzMh1alwFXU%2FWp%2Fu0F6Xzf",
+    "retrieved_at": "2026-10-29T12:19:08.521823Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "table:işsizlik-oranı~2b7854b01a",
+    "status": "ok",
+    "message": "Spreadsheet values preserve source precision. Exact filters apply locally.",
+    "columns": [
+      "Yıl Year",
+      "İşsiz sayısı Number of Unemployed",
+      "İşsizlik oranı Unemployment rate (%)",
+      "column_4",
+      "column_5",
+      "column_6",
+      "Bölüm / Section"
+    ],
+    "rows": [
+      {
+        "Yıl Year": "2014",
+        "İşsiz sayısı Number of Unemployed": "2853",
+        "İşsizlik oranı Unemployment rate (%)": "9.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2015",
+        "İşsiz sayısı Number of Unemployed": "3057",
+        "İşsizlik oranı Unemployment rate (%)": "10.3",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2016",
+        "İşsiz sayısı Number of Unemployed": "3330",
+        "İşsizlik oranı Unemployment rate (%)": "10.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2017",
+        "İşsiz sayısı Number of Unemployed": "3454",
+        "İşsizlik oranı Unemployment rate (%)": "10.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2018",
+        "İşsiz sayısı Number of Unemployed": "3537",
+        "İşsizlik oranı Unemployment rate (%)": "11.0",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2019",
+        "İşsiz sayısı Number of Unemployed": "4469",
+        "İşsizlik oranı Unemployment rate (%)": "13.7",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2020",
+        "İşsiz sayısı Number of Unemployed": "4061",
+        "İşsizlik oranı Unemployment rate (%)": "13.2",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2021(1)",
+        "İşsiz sayısı Number of Unemployed": "3919",
+        "İşsizlik oranı Unemployment rate (%)": "12.0",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2022",
+        "İşsiz sayısı Number of Unemployed": "3582",
+        "İşsizlik oranı Unemployment rate (%)": "10.4",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Toplam-Total"
+      },
+      {
+        "Yıl Year": "2014",
+        "İşsiz sayısı Number of Unemployed": "1813",
+        "İşsizlik oranı Unemployment rate (%)": "9.0",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2015",
+        "İşsiz sayısı Number of Unemployed": "1891",
+        "İşsizlik oranı Unemployment rate (%)": "9.2",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2016",
+        "İşsiz sayısı Number of Unemployed": "2006",
+        "İşsizlik oranı Unemployment rate (%)": "9.6",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2017",
+        "İşsiz sayısı Number of Unemployed": "2024",
+        "İşsizlik oranı Unemployment rate (%)": "9.4",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2018",
+        "İşsiz sayısı Number of Unemployed": "2082",
+        "İşsizlik oranı Unemployment rate (%)": "9.5",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2019",
+        "İşsiz sayısı Number of Unemployed": "2707",
+        "İşsizlik oranı Unemployment rate (%)": "12.4",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2020",
+        "İşsiz sayısı Number of Unemployed": "2599",
+        "İşsizlik oranı Unemployment rate (%)": "12.3",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2021(1)",
+        "İşsiz sayısı Number of Unemployed": "2364",
+        "İşsizlik oranı Unemployment rate (%)": "10.7",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2022",
+        "İşsiz sayısı Number of Unemployed": "2044",
+        "İşsizlik oranı Unemployment rate (%)": "8.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Erkek-Male"
+      },
+      {
+        "Yıl Year": "2014",
+        "İşsiz sayısı Number of Unemployed": "1040",
+        "İşsizlik oranı Unemployment rate (%)": "11.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2015",
+        "İşsiz sayısı Number of Unemployed": "1167",
+        "İşsizlik oranı Unemployment rate (%)": "12.6",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2016",
+        "İşsiz sayısı Number of Unemployed": "1324",
+        "İşsizlik oranı Unemployment rate (%)": "13.7",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2017",
+        "İşsiz sayısı Number of Unemployed": "1431",
+        "İşsizlik oranı Unemployment rate (%)": "14.1",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2018",
+        "İşsiz sayısı Number of Unemployed": "1455",
+        "İşsizlik oranı Unemployment rate (%)": "13.9",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2019",
+        "İşsiz sayısı Number of Unemployed": "1762",
+        "İşsizlik oranı Unemployment rate (%)": "16.5",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2020",
+        "İşsiz sayısı Number of Unemployed": "1462",
+        "İşsizlik oranı Unemployment rate (%)": "15.0",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2021(1)",
+        "İşsiz sayısı Number of Unemployed": "1554",
+        "İşsizlik oranı Unemployment rate (%)": "14.7",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      },
+      {
+        "Yıl Year": "2022",
+        "İşsiz sayısı Number of Unemployed": "1538",
+        "İşsizlik oranı Unemployment rate (%)": "13.4",
+        "column_4": "",
+        "column_5": "",
+        "column_6": "",
+        "Bölüm / Section": "Kadın-Female"
+      }
+    ],
+    "unit": "15+ yaş-age",
+    "notes": "Metadata available from the official search record; further fields are not exposed by a supported detail endpoint.",
+    "download_links": [
+      {
+        "title": "İşsizlik Oranı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=i&p=RYRC%2FMLsWGTe6%2BxmluxrcQynjGQ8R6bevDl2UZL%2BdjmzMh1alwFXU%2FWp%2Fu0F6Xzf",
+        "format": "xls",
+        "verified": true,
+        "size_bytes": 71168,
+        "resource_id": null
+      }
+    ],
+    "total_rows": 27,
+    "related_datasets": [],
+    "truncated": false,
+    "format": "xls",
+    "extraction": "xls",
+    "sheet": "t908",
+    "sheets": [
+      "t908"
+    ],
+    "table_title": "İşsizlik oranı, 2014-2022",
+    "table_title_en": "Unemployment rate, 2014-2022",
+    "columns_en": [],
+    "table_notes": [
+      "(Bin kişi-Thousand person)",
+      "Kaynak: TÜİK, İşgücü İstatistikleri, 2014-2022",
+      "Source: TurkStat, Labour Force Statistics, 2014-2022",
+      "Not. Tarım dışı işsizlik oranı (%) 2021 yılından itibaren yayınlanmayacaktır.",
+      "Note. Non-agricultural unemployment rate (%) will not be published from 2021.",
+      "(1) 2021 yılından itibaren HİA’da anketin tanım, kapsam ve tasarımındaki düzenlemeler nedeniyle seri önceki yıllarla karşılaştırılabilir değildir.",
+      "(1) In HLFS, the series is not comparable to previous years due to the adjustments in the definition, scope and design of the survey since 2021."
+    ],
+    "source_note": "Kaynak: TÜİK, İşgücü İstatistikleri, 2014-2022",
+    "layout": "table",
+    "warnings": [],
+    "snapshot_id": "sha256:6dbeba3f3b26df6d3fdc507f4cc42521ca6d9c822f4646cce02a21c88f9d36e9"
+  },
+  "bulletin_csv": {
+    "bulletin_id": "press:58347",
+    "bulletin_source_url": "https://veriportali.tuik.gov.tr/tr/press/58347",
+    "selection_status": "related_datasets",
+    "selected_dataset_id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+    "format": "csv",
+    "data": {
+      "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+      "retrieved_at": "2026-10-29T12:19:26.724337Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "resource_id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+      "status": "ok",
+      "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+      "columns": [
+        "Gözlem Sıklığı (M)",
+        "Satış Türü (_T)",
+        "Coğrafi Kapsam (TR)",
+        "Konut ve iş yeri Gösterge (2)",
+        "Adet Pay Oranı (_T)",
+        "İstatistiksel Gösterge (MII_KSS)",
+        "Zaman (2026-09)",
+        "Gözlem Değeri",
+        "Birim Çarpanı",
+        "Zaman Formatı",
+        "Gizlilik Durumu",
+        "Ondalık Basamak Sayısı",
+        "Gözlem Durumu"
+      ],
+      "rows": [
+        {
+          "Gözlem Sıklığı (M)": "Aylık",
+          "Satış Türü (_T)": "Toplam",
+          "Coğrafi Kapsam (TR)": "Türkiye",
+          "Konut ve iş yeri Gösterge (2)": "Satış Şekline Göre",
+          "Adet Pay Oranı (_T)": "Toplam",
+          "İstatistiksel Gösterge (MII_KSS)": "Konut Satış Sayıları",
+          "Zaman (2026-09)": "2026-09",
+          "Gözlem Değeri": "142390",
+          "Birim Çarpanı": "",
+          "Zaman Formatı": "",
+          "Gizlilik Durumu": "",
+          "Ondalık Basamak Sayısı": "",
+          "Gözlem Durumu": ""
+        },
+        {
+          "Gözlem Sıklığı (M)": "Aylık",
+          "Satış Türü (_T)": "Toplam",
+          "Coğrafi Kapsam (TR)": "Türkiye",
+          "Konut ve iş yeri Gösterge (2)": "Satış Şekline Göre",
+          "Adet Pay Oranı (_T)": "Toplam",
+          "İstatistiksel Gösterge (MII_KSS)": "Konut Satış Sayıları",
+          "Zaman (2026-09)": "2026-08",
+          "Gözlem Değeri": "127410",
+          "Birim Çarpanı": "",
+          "Zaman Formatı": "",
+          "Gizlilik Durumu": "",
+          "Ondalık Basamak Sayısı": "",
+          "Gözlem Durumu": ""
+        }
+      ],
+      "unit": null,
+      "notes": null,
+      "download_links": [
+        {
+          "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+          "format": "csv",
+          "verified": true,
+          "size_bytes": 670509,
+          "resource_id": null
+        },
+        {
+          "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/json",
+          "format": "json",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        },
+        {
+          "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/xml",
+          "format": "xml",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        }
+      ],
+      "total_rows": 4984,
+      "related_datasets": [],
+      "truncated": true,
+      "format": null,
+      "extraction": null,
+      "sheet": null,
+      "sheets": [],
+      "table_title": null,
+      "table_title_en": null,
+      "columns_en": [],
+      "table_notes": [],
+      "source_note": null,
+      "layout": null,
+      "warnings": [],
+      "snapshot_id": "sha256:20e9baa03d49b0158f25c4300b25682eb676dbb506d7902b49dc5f2ac79de9bf"
+    }
+  },
+  "datasets": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows",
+    "retrieved_at": "2026-10-29T12:19:00.168761Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "query": "Altın Hariç Dış Ticaret Hadleri",
+    "downloadable_only": true,
+    "theme": null,
+    "results": [
+      {
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ALTINSIZ_DTH,1.0",
+        "retrieved_at": "2026-10-29T12:19:00.168761Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "flow:DF_ALTINSIZ_DTH+V1.0",
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "description": null,
+        "resource_type": "dataset",
+        "theme": "Uluslararası Ticaret",
+        "publication_date": null,
+        "source": "TÜİK",
+        "updated_at": "2026-10-13T10:00:00",
+        "available_formats": [
+          "csv",
+          "json",
+          "xml"
+        ],
+        "download_links": [
+          {
+            "title": "Altın Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Altın Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Altın Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "dimensions": [],
+        "metadata": [],
+        "related_datasets": [],
+        "notes": null
+      },
+      {
+        "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ALTINSIZ_ENERJISIZ_DTH,1.0",
+        "retrieved_at": "2026-10-29T12:19:00.168761Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "flow:DF_ALTINSIZ_ENERJISIZ_DTH+V1.0",
+        "title": "Altın ve Enerji Hariç Dış Ticaret Hadleri",
+        "description": null,
+        "resource_type": "dataset",
+        "theme": "Uluslararası Ticaret",
+        "publication_date": null,
+        "source": "TÜİK",
+        "updated_at": "2026-10-13T10:00:00",
+        "available_formats": [
+          "csv",
+          "json",
+          "xml"
+        ],
+        "download_links": [
+          {
+            "title": "Altın ve Enerji Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_ENERJISIZ_DTH%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Altın ve Enerji Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_ENERJISIZ_DTH%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Altın ve Enerji Hariç Dış Ticaret Hadleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_ENERJISIZ_DTH%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "dimensions": [],
+        "metadata": [],
+        "related_datasets": [],
+        "notes": null
+      }
+    ],
+    "total": 2,
+    "truncated": false,
+    "backend": "literal",
+    "warnings": [
+      "Indexed search is not configured (TUIK_OPENSEARCH_URL); used literal catalog matching."
+    ]
+  },
+  "inspect_csv": {
+    "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+    "format": "csv",
+    "sheet": null,
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+    "retrieved_at": "2026-10-29T12:19:29.646678Z",
+    "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+    "total_rows": 11564,
+    "complete": true,
+    "filter": {
+      "Gözlem Sıklığı (M)": "Aylık"
+    },
+    "matched_rows": 8260,
+    "query_snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628"
+  },
+  "csv": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+    "retrieved_at": "2026-10-29T12:19:29.646678Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+    "status": "ok",
+    "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+    "columns": [
+      "Gözlem Sıklığı (M)",
+      "Ölçü Birimi (RO)",
+      "Dış Ticaret Göstergeleri (18)",
+      "Dış Ticaret Türü (_O)",
+      "İstatistiksel Gösterge (UTOD_DISTIC_END)",
+      "İktisadi Faaliyet (0)",
+      "Dış Ticaret Endeks Sektör Kodları (0)",
+      "Temel Dönem/Yıl (2015)",
+      "Coğrafi Kapsam (TR)",
+      "Zaman (2015-01)",
+      "Gözlem Değeri",
+      "Gözlem Durumu",
+      "Gizlilik Durumu",
+      "Ondalık Basamak Sayısı",
+      "Zaman Formatı",
+      "Birim Çarpanı"
+    ],
+    "rows": [
+      {
+        "Gözlem Sıklığı (M)": "Aylık",
+        "Ölçü Birimi (RO)": "Oran",
+        "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+        "Dış Ticaret Türü (_O)": "Diğer",
+        "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+        "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+        "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+        "Temel Dönem/Yıl (2015)": "2015",
+        "Coğrafi Kapsam (TR)": "Türkiye",
+        "Zaman (2015-01)": "2015-01",
+        "Gözlem Değeri": "98,4622068329301",
+        "Gözlem Durumu": "",
+        "Gizlilik Durumu": "",
+        "Ondalık Basamak Sayısı": "",
+        "Zaman Formatı": "",
+        "Birim Çarpanı": ""
+      },
+      {
+        "Gözlem Sıklığı (M)": "Aylık",
+        "Ölçü Birimi (RO)": "Oran",
+        "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+        "Dış Ticaret Türü (_O)": "Diğer",
+        "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+        "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+        "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+        "Temel Dönem/Yıl (2015)": "2015",
+        "Coğrafi Kapsam (TR)": "Türkiye",
+        "Zaman (2015-01)": "2015-02",
+        "Gözlem Değeri": "101,664854746884",
+        "Gözlem Durumu": "",
+        "Gizlilik Durumu": "",
+        "Ondalık Basamak Sayısı": "",
+        "Zaman Formatı": "",
+        "Birim Çarpanı": ""
+      }
+    ],
+    "unit": null,
+    "notes": null,
+    "download_links": [
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+        "format": "csv",
+        "verified": true,
+        "size_bytes": 2939621,
+        "resource_id": null
+      },
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/json",
+        "format": "json",
+        "verified": false,
+        "size_bytes": null,
+        "resource_id": null
+      },
+      {
+        "title": "Altın Hariç Dış Ticaret Hadleri",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/xml",
+        "format": "xml",
+        "verified": false,
+        "size_bytes": null,
+        "resource_id": null
+      }
+    ],
+    "total_rows": 11564,
+    "related_datasets": [],
+    "truncated": true,
+    "format": null,
+    "extraction": null,
+    "sheet": null,
+    "sheets": [],
+    "table_title": null,
+    "table_title_en": null,
+    "columns_en": [],
+    "table_notes": [],
+    "source_note": null,
+    "layout": null,
+    "warnings": [],
+    "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628"
+  },
+  "themes": {
+    "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+    "retrieved_at": "2026-10-29T12:19:30.553826Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "themes": [
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553395Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "1",
+        "name": "Adalet ve Seçim"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553406Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "2",
+        "name": "Bilim, Teknoloji ve Bilgi Toplumu"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553408Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "3",
+        "name": "Çevre"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553409Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "4",
+        "name": "Eğitim"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553410Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "5",
+        "name": "Enerji"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553412Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "6",
+        "name": "Fiyat İstatistikleri"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553413Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "7",
+        "name": "Gelir, Tüketim ve Yoksulluk"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553414Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "8",
+        "name": "İstihdam, İşsizlik ve Ücret"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553415Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "9",
+        "name": "Kısa Dönemli Ekonomik Göstergeler"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553416Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "10",
+        "name": "Kültür ve Spor"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553418Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "11",
+        "name": "Nüfus ve Demografi"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553419Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "12",
+        "name": "Sağlık ve Sosyal Koruma"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553420Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "13",
+        "name": "Tarım"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553422Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "14",
+        "name": "Turizm"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553423Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "15",
+        "name": "Ulaştırma ve Haberleşme"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553425Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "16",
+        "name": "Ulusal Hesaplar"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553427Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "17",
+        "name": "Uluslararası Ticaret"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553428Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "18",
+        "name": "Yapısal Ekonomik Göstergeler ve İş Demografisi"
+      },
+      {
+        "source_url": "https://veriportali.tuik.gov.tr/tr/statistical-themes",
+        "retrieved_at": "2026-10-29T12:19:30.553430Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "20",
+        "name": "Çok Boyutlu İstatistikler"
+      }
+    ]
+  },
+  "classifications": {
+    "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsTurDetay?tur=0&searchname=NACE",
+    "retrieved_at": "2026-10-29T12:19:32.779374Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "query": "NACE",
+    "results": [
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=207",
+        "retrieved_at": "2026-10-29T12:19:32.779272Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:207",
+        "title": "NACE Rev.1",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması NACE Rev.1",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      },
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=4",
+        "retrieved_at": "2026-10-29T12:19:32.779305Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:4",
+        "title": "NACE Rev.1.1",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması, NACE Rev.1.1",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      },
+      {
+        "source_url": "https://siniflama.tuik.gov.tr/Classifications/ClassificationsSatir?surumId=191",
+        "retrieved_at": "2026-10-29T12:19:32.779311Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "id": "classification:191",
+        "title": "NACE Rev.2",
+        "description": "Avrupa Topluluğunda Ekonomik Faaliyetlerin İstatistiki Sınıflaması , NACE Rev.2",
+        "resource_type": "classification",
+        "theme": null,
+        "publication_date": null,
+        "source": "TÜİK"
+      }
+    ],
+    "total": 9,
+    "warnings": []
+  },
+  "methodology": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=nxB%2BJOoP%2FSQGGkqihTF8%2F5vP6hfsHP5YHz9T1BWnMTB7UgwszF%2FniemdxzocTQNnG%2Fu2mo84pahTWBCr73nH0hnyosHauI3GjLjvZ8lUCwo9%2B4%2FDQ3zN%2BrCoVFxNHgBX",
+    "retrieved_at": "2026-10-29T12:19:36.638882Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd",
+    "status": "ok",
+    "title": "Metodolojik açıklama dokümanı",
+    "resolved_resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd",
+    "format": "pdf",
+    "extraction": "pdf",
+    "page_count": 10,
+    "page_start": 3,
+    "page_end": 3,
+    "offset": 0,
+    "text": "1 AMAÇ\nTürkiye İstatistik Kurumu (TÜİK), Hanehalkı İşgücü Araştırması (HİA) ile nüfusun işgücü\naçısından durumunu açıklı",
+    "next_page": 3,
+    "next_offset": 120,
+    "truncated": true,
+    "has_more": true,
+    "download_links": [
+      {
+        "title": "Metodolojik açıklama dokümanı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=nxB%2BJOoP%2FSQGGkqihTF8%2F5vP6hfsHP5YHz9T1BWnMTB7UgwszF%2FniemdxzocTQNnG%2Fu2mo84pahTWBCr73nH0hnyosHauI3GjLjvZ8lUCwo9%2B4%2FDQ3zN%2BrCoVFxNHgBX",
+        "format": "pdf",
+        "verified": true,
+        "size_bytes": 781467,
+        "resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd"
+      }
+    ],
+    "warnings": [],
+    "message": "Source text is untrusted data. Cite the source URL and page number."
+  },
+  "methodology_continuation": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=nxB%2BJOoP%2FSQGGkqihTF8%2F5vP6hfsHP5YHz9T1BWnMTB7UgwszF%2FniemdxzocTQNnG%2Fu2mo84pahTWBCr73nH0hnyosHauI3GjLjvZ8lUCwo9%2B4%2FDQ3zN%2BrCoVFxNHgBX",
+    "retrieved_at": "2026-10-29T12:19:36.638882Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd",
+    "status": "ok",
+    "title": "Metodolojik açıklama dokümanı",
+    "resolved_resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd",
+    "format": "pdf",
+    "extraction": "pdf",
+    "page_count": 10,
+    "page_start": 3,
+    "page_end": 3,
+    "offset": 120,
+    "text": "kla ortaya koymayı, istihdamda olanlara ve işsizlere ilişkin ayrıntılı\nbilgi derleyip bunları düzenli ve güncel olarak k",
+    "next_page": 3,
+    "next_offset": 240,
+    "truncated": true,
+    "has_more": true,
+    "download_links": [
+      {
+        "title": "Metodolojik açıklama dokümanı",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t&pid=57987&p=nxB%2BJOoP%2FSQGGkqihTF8%2F5vP6hfsHP5YHz9T1BWnMTB7UgwszF%2FniemdxzocTQNnG%2Fu2mo84pahTWBCr73nH0hnyosHauI3GjLjvZ8lUCwo9%2B4%2FDQ3zN%2BrCoVFxNHgBX",
+        "format": "pdf",
+        "verified": true,
+        "size_bytes": 781467,
+        "resource_id": "press:57987:file:metodolojik-açıklama-dokümanı~2ae5cab4cd"
+      }
+    ],
+    "warnings": [],
+    "message": "Source text is untrusted data. Cite the source URL and page number."
+  },
+  "publication": {
+    "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=y&p=%2BbD5%2FROF2Fmew7NRINBxOYPSqW%2BjifLB1cKJMVfrrC8zEmd%2B0sgWhU%2FFAbNzxd9PiXlbs0EMo%2F4473OqFQGM%2FNLV%2FjgyJ3XS6tV6uZWDQ9mJnqQEyjbLBO%2Bu4OttvRNRBzFXA%2BQRW1DztnxnfTVwBAZ6mV%2BDo4nwXvmdmMLjKjU%3D",
+    "retrieved_at": "2026-10-29T12:19:43.166458Z",
+    "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+    "resource_id": "publication:hanehalkı-bilişim-teknolojileri-kullanım-araştırması-mikro-veri-seti-2026~d6a9fce75b",
+    "status": "ok",
+    "title": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026",
+    "resolved_resource_id": "publication:hanehalkı-bilişim-teknolojileri-kullanım-araştırması-mikro-veri-seti-2026~d6a9fce75b",
+    "format": "pdf",
+    "extraction": "pdf",
+    "page_count": 17,
+    "page_start": 1,
+    "page_end": 1,
+    "offset": 0,
+    "text": "TÜRKİYE İSTATİSTİK KURUMU\nTurkish Statistical Institute\nHANEHALKI BİLİŞİM TEKNOLOJİLERİ\nKULLANIM ARAŞTIRMASI MİKRO VERİ\nSETİ\nInformation and Communication Technology (ICT)\nUsage Survey in Households and by Individuals\nMicro Data Set\n2026\nYayın No / Publication Number: 4833\nISBN 978-625-5591-52-4",
+    "next_page": 2,
+    "next_offset": 0,
+    "truncated": false,
+    "has_more": true,
+    "download_links": [
+      {
+        "title": "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=y&p=%2BbD5%2FROF2Fmew7NRINBxOYPSqW%2BjifLB1cKJMVfrrC8zEmd%2B0sgWhU%2FFAbNzxd9PiXlbs0EMo%2F4473OqFQGM%2FNLV%2FjgyJ3XS6tV6uZWDQ9mJnqQEyjbLBO%2Bu4OttvRNRBzFXA%2BQRW1DztnxnfTVwBAZ6mV%2BDo4nwXvmdmMLjKjU%3D",
+        "format": "pdf",
+        "verified": true,
+        "size_bytes": 1028646,
+        "resource_id": null
+      }
+    ],
+    "warnings": [],
+    "message": "Source text is untrusted data. Cite the source URL and page number."
+  }
+}

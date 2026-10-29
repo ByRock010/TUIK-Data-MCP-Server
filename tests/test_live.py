@@ -65,6 +65,11 @@ async def test_live_mcp_workflow():
         inspected = report[key]
         assert inspected["format"] in fmt and inspected["matched_rows"] >= 1
         assert inspected["snapshot_id"] == inspected["query_snapshot_id"]
+    assert report["bulletin_csv"]["selection_status"] == "related_datasets"
+    assert report["bulletin_csv"]["format"] == "csv"
+    assert report["bulletin_excel"]["data"]["extraction"] in {"xls", "xlsx"}
+    assert report["publication"]["status"] == "ok"
+    assert report["publication"]["text"]
 
 
 @pytest.mark.live

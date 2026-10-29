@@ -3,13 +3,67 @@
 import argparse
 import asyncio
 import json
+import os
+import platform
 import sys
 import traceback
 from datetime import UTC, datetime
+from importlib.metadata import version
 from pathlib import Path
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+
+from tuik_mcp.config import Settings
+
+
+async def bulletin_to_csv(call, resource_id):
+    """Follow an explicit bulletin dataflow choice, rather than an unrelated catalog hit."""
+    detail = await call("get_tuik_resource", {"resource_id": resource_id})
+    choices = await call("get_tuik_data", {"resource_id": resource_id})
+    assert choices["status"] == "related_datasets", choices
+    dataset = next(
+        item
+        for item in choices["related_datasets"]
+        if item["downloadable"] and "csv" in item["available_formats"]
+    )
+    assert dataset["id"] in {item["id"] for item in detail["related_datasets"]}
+    rows = await call("get_tuik_data", {"resource_id": dataset["id"], "limit": 2})
+    assert rows["status"] == "ok" and rows["rows"] and len(rows["rows"]) <= 2, rows
+    assert rows["snapshot_id"] and any(
+        link["format"] == "csv" and link["verified"] and link["source_url"] == rows["source_url"]
+        for link in rows["download_links"]
+    ), rows
+    assert rows["resource_id"] == dataset["id"]
+    return {
+        "bulletin_id": resource_id,
+        "bulletin_source_url": detail["source_url"],
+        "selection_status": choices["status"],
+        "selected_dataset_id": dataset["id"],
+        "format": "csv",
+        "data": rows,
+    }
+
+
+async def bulletin_to_excel(call, detail):
+    """Select a real attachment ID from the bulletin before downloading Excel rows."""
+    link = next(
+        link
+        for link in detail["download_links"]
+        if link["format"] in {"xls", "xlsx"} and link.get("resource_id")
+    )
+    assert link["resource_id"].startswith(detail["id"] + ":file:")
+    rows = await call("get_tuik_data", {"resource_id": link["resource_id"], "limit": 2})
+    assert rows["status"] == "ok" and rows["rows"] and len(rows["rows"]) <= 2, rows
+    assert rows["extraction"] in {"xls", "xlsx"} and rows["snapshot_id"] and rows["sheet"]
+    assert rows["resource_id"] == link["resource_id"]
+    assert any(item["verified"] for item in rows["download_links"])
+    return {
+        "bulletin_id": detail["id"],
+        "bulletin_source_url": detail["source_url"],
+        "selected_file_id": link["resource_id"],
+        "data": rows,
+    }
 
 
 async def inspect_then_query(call, resource_id):
@@ -51,12 +105,26 @@ async def inspect_then_query(call, resource_id):
 
 
 async def run():
-    params = StdioServerParameters(command=sys.executable, args=["-m", "tuik_mcp.server"])
+    # The SDK otherwise drops TUIK_* variables, including requested live-test pacing.
+    params = StdioServerParameters(
+        command=sys.executable,
+        args=["-m", "tuik_mcp.server"],
+        env={key: value for key, value in os.environ.items() if key.startswith("TUIK_")},
+    )
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             tools = await session.list_tools()
-            report = {"tools": [t.name for t in tools.tools], "searches": {}}
+            report = {
+                "package_version": version("tuik-mcp"),
+                "python_version": platform.python_version(),
+                "pacing": {
+                    "request_interval_seconds": Settings.from_env().min_interval_seconds,
+                    "download_interval_seconds": Settings.from_env().download_interval_seconds,
+                },
+                "tools": [t.name for t in tools.tools],
+                "searches": {},
+            }
 
             async def call(name, arguments):
                 result = await session.call_tool(name, arguments)
@@ -93,12 +161,14 @@ async def run():
                         "download_count": len(detail["download_links"]),
                         "source_url": detail["source_url"],
                     }
+                    report["bulletin_excel"] = await bulletin_to_excel(call, detail)
                     report["inspect_excel"] = await inspect_then_query(call, table["id"])
                     download = await call("get_tuik_data", {"resource_id": table["id"]})
                     assert download["status"] == "ok" and download["rows"]
                     assert download["extraction"] in {"xls", "xlsx"}
                     assert download["download_links"][0]["verified"]
                     report["download"] = download
+            report["bulletin_csv"] = await bulletin_to_csv(call, "press:58347")
             datasets = await call(
                 "search_tuik_datasets", {"query": "Altın Hariç Dış Ticaret Hadleri", "limit": 3}
             )
