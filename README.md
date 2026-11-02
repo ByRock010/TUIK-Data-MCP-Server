@@ -19,7 +19,7 @@ typed table queries and snapshot-bound pagination. See the
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
-| `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
+| `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
 
@@ -213,7 +213,7 @@ restart, expiration (one hour), or cache eviction.
   No table is selected automatically; existing file downloads remain in the response.
 - `download_available`: an actual file has been downloaded within the size bound
   and its signature/media type checked. `download_links` includes its official URL,
-  format, verification flag and byte count. PDF and ZIP remain downloads in this tool; read PDF pages with `read_tuik_document`.
+  format, verification flag and byte count. PDF and ZIP remain downloads in this tool; read PDF pages, and best-effort PDF tables, with `read_tuik_document`.
 - `not_structured`: no supported public export is advertised.
 - `unsupported_filters`: filters were requested for a resource without CSV/Excel rows; none applied.
 - `error`: a structured `code`, `message`, and source URL, for example an upstream
@@ -349,10 +349,24 @@ of the text is read does it advance. This avoids silently skipping text. Offsets
 count characters in the normalized extracted text. `truncated` applies to the
 current page; `has_more` also accounts for later pages.
 
-PDF text is deduplicated and whitespace/line-end hyphenation normalized. Layout
-and tables are not reconstructed. `no_text_layer` means no extractable text on
-the requested page, which may be blank or scanned; OCR is not performed. Source
-text remains untrusted data. PDF table extraction is a later stretch goal.
+PDF text is deduplicated and whitespace/line-end hyphenation normalized; `text`
+does not reconstruct layout. `no_text_layer` means no extractable text on the
+requested page, which may be blank or scanned; OCR is not performed. Source text
+remains untrusted data.
+
+**PDF tables are best effort.** Pass `tables: true` to also receive the page's
+ruled tables (`extraction: "pdf"`, with `page`, `title`, `columns`, string `rows`,
+`total_rows`, `layout` and `warnings`). Only tables drawn with ruling lines are
+detected; whitespace-aligned text, charts and scanned pages yield none. A table
+without a recognizable header row has `layout: "raw"` and positional columns
+(`column_1`, ...), which usually means it continues a table from an earlier page.
+Values are never typed or normalized, and every table carries a warning to verify
+it against the page text. Prefer a dataset's CSV or a bulletin's XLS file whenever
+one exists. Measured coverage and known failure modes: [PDF tables](docs/PDF_TABLES.md).
+
+```json
+{"resource_id": "press:57987", "page": 9, "tables": true}
+```
 
 See [file reading design](docs/FILE_READING_DESIGN.md) for the scope decisions,
 limits, cache policy, research sources and verification strategy.
@@ -476,7 +490,7 @@ pyproject.toml, README.md, .env.example, Dockerfile
   unverified TÜİK subdomains are excluded from the allowlist.
 - Download links listed in metadata are advertised, not necessarily verified.
   `get_tuik_data` verifies one selected file (preferring CSV); other links retain
-  `verified: false`. Excel tables and PDF text pages are parsed on demand; OCR and PDF table extraction are not implemented.
+  `verified: false`. Excel tables and PDF text pages are parsed on demand. PDF tables are best effort (ruled grids only) and OCR is not implemented.
 - Transport is local stdio. HTTP transport can be added to the SDK entrypoint
   later with explicit deployment constraints.
 
@@ -590,8 +604,8 @@ The optional OpenSearch stack, analysis, crawler, indexer and dataset backend ar
 already included. The v0.3.0 work still covers indexed general MCP search, dedicated
 cluster CI and independently judged relevance measurements; these are not v0.2.0
 release prerequisites.
-Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
-stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
+Hybrid search and table/PDF content indexing are v0.4.0 stretch goals; best-effort
+PDF tables (#8) are available through `read_tuik_document`. A PostgreSQL canonical catalog and DOCX ingestion are outside the
 current roadmap. Version 0.2.0 also includes
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
 (#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and

@@ -20,9 +20,9 @@ def parse_table(
     """Parse locally; async callers must offload this synchronous function to a thread.
 
     The format comes from verified download metadata. Spreadsheets return one table
-    per sheet, or only `sheet` when given. PDF tables will be registered by their
-    ingestion feature. A format without an implementation fails explicitly rather
-    than guessing from the bytes.
+    per sheet, or only `sheet` when given. PDF tables are page-scoped and best effort,
+    so they come from `parse_pdf(tables=True)`, not from here. A format without an
+    implementation fails explicitly rather than guessing from the bytes.
     scan_max_* are fail-fast CSV query bounds; workbooks use their existing
     archive/grid budgets and the query layer validates the selected table.
     """
