@@ -19,7 +19,13 @@ from tuik_mcp.models.dataset import (
     TuikResource,
 )
 from tuik_mcp.models.query import TableQuery
-from tuik_mcp.models.search import SearchResponse, ThemesResponse, TuikSearchResult
+from tuik_mcp.models.search import (
+    IndexedSearchInput,
+    IndexedSearchResponse,
+    SearchResponse,
+    ThemesResponse,
+    TuikSearchResult,
+)
 from tuik_mcp.parsers.profile import UnknownColumnsError
 from tuik_mcp.search.backend import (
     BackendUnavailable,
@@ -160,6 +166,76 @@ class CatalogService:
             retrieved_at=retrieved_at,
             backend=hits.backend,
             warnings=hits.warnings,
+        )
+
+    async def discover(
+        self,
+        query: str,
+        limit: int = 10,
+        kind: str | None = None,
+        theme: str | None = None,
+        published_after: str | None = None,
+        published_before: str | None = None,
+        downloadable_only: bool = False,
+        live: bool = False,
+    ) -> IndexedSearchResponse:
+        args = IndexedSearchInput(
+            query=query,
+            limit=limit,
+            kind=kind,
+            theme=theme,
+            published_after=published_after,
+            published_before=published_before,
+            downloadable_only=downloadable_only,
+            live=live,
+        )
+        filters = SearchFilters(
+            kinds=[args.kind] if args.kind else [],
+            themes=[args.theme] if args.theme else None,
+            published_after=args.published_after,
+            published_before=args.published_before,
+            downloadable=True if args.downloadable_only else None,
+        )
+        hits = (
+            await self.portal_search.search(args.query, filters, args.limit)
+            if args.live
+            else await self.search_index(args.query, filters, args.limit)
+        )
+        warnings = list(hits.warnings)
+        if hits.backend != "opensearch":
+            warnings.append(
+                "Facets, scores, highlights and indexed_at are unavailable without the index."
+            )
+        return IndexedSearchResponse(
+            query=args.query,
+            source={"opensearch": "index", "portal": "portal", "literal": "catalog"}[hits.backend],
+            backend=hits.backend,
+            source_url=f"{PORTAL}/tr/search?" + urlencode({"q": args.query}),
+            results=[
+                TuikSearchResult(
+                    id=hit.id,
+                    title=hit.title,
+                    description=hit.description,
+                    resource_type=hit.kind,
+                    source_url=hit.source_url,
+                    **({"retrieved_at": hit.retrieved_at} if hit.retrieved_at else {}),
+                    theme=hit.theme[0] if hit.theme else None,
+                    themes=hit.theme,
+                    publication_date=hit.publication_date,
+                    score=hit.score,
+                    highlights=hit.highlights,
+                    indexed_at=hit.indexed_at,
+                    downloadable=hit.downloadable,
+                    formats=hit.formats,
+                )
+                for hit in hits.hits
+            ],
+            total=hits.total,
+            limit=args.limit,
+            truncated=hits.total > len(hits.hits) if hits.total is not None else None,
+            facets=hits.facets,
+            indexed_at=hits.indexed_at,
+            warnings=warnings,
         )
 
     async def search(self, query: str, limit: int = 10) -> SearchResponse:
