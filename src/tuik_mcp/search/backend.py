@@ -9,10 +9,10 @@ from collections.abc import Awaitable, Callable
 from datetime import date
 from typing import Literal, Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from tuik_mcp.models.dataset import TuikResource
-from tuik_mcp.models.search import SearchResponse
+from tuik_mcp.models.search import SearchFacet, SearchFacets, SearchResponse
 from tuik_mcp.utils.normalization import turkish_casefold
 
 from .indexer import IndexerError, OpenSearchStore
@@ -35,11 +35,19 @@ class SearchFilters(BaseModel):
     published_after: date | None = None
     published_before: date | None = None
 
+    @model_validator(mode="after")
+    def ordered_dates(self):
+        if self.published_after and self.published_before:
+            if self.published_after > self.published_before:
+                raise ValueError("published_after must not be later than published_before")
+        return self
+
 
 class SearchHit(BaseModel):
     id: str
     kind: str
     title: str
+    description: str | None = None
     score: float | None = None
     source_url: str
     theme: list[str] = Field(default_factory=list)
@@ -59,6 +67,8 @@ class SearchHits(BaseModel):
     limit: int
     offset: int = 0
     warnings: list[str] = Field(default_factory=list)
+    facets: SearchFacets | None = None
+    indexed_at: str | None = None
 
 
 class BackendUnavailable(Exception):
@@ -126,6 +136,11 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
         "from": offset,
         "size": limit,
         "track_total_hits": True,
+        "aggs": {
+            "kind": {"terms": {"field": "kind", "size": 3}},
+            "theme": {"terms": {"field": "theme", "size": 50}},
+            "indexed_at": {"max": {"field": "indexed_at"}},
+        },
         "_source": {"excludes": ["body", "description"]},
         "highlight": {
             "fields": {field: {} for field in HIGHLIGHT_FIELDS},
@@ -161,9 +176,28 @@ class OpenSearchBackend:
                 total=hits["total"]["value"],
                 limit=limit,
                 offset=offset,
+                facets=self.facets(response.get("aggregations")),
+                indexed_at=(response.get("aggregations") or {})
+                .get("indexed_at", {})
+                .get("value_as_string"),
             )
-        except (IndexerError, KeyError, TypeError, ValueError) as exc:
+        except (IndexerError, KeyError, TypeError, ValueError, AttributeError) as exc:
             raise BackendUnavailable(str(exc)) from exc
+
+    @staticmethod
+    def facets(aggregations: dict | None) -> SearchFacets | None:
+        if aggregations is None:
+            return None
+        return SearchFacets(
+            **{
+                name: SearchFacet(
+                    counts={b["key"]: b["doc_count"] for b in aggregations[name]["buckets"]},
+                    truncated=aggregations[name]["sum_other_doc_count"] > 0,
+                    count_error_upper_bound=aggregations[name]["doc_count_error_upper_bound"],
+                )
+                for name in ("kind", "theme")
+            }
+        )
 
     @staticmethod
     def hit(item: dict) -> SearchHit:
@@ -296,6 +330,7 @@ class PortalBackend:
                     id=result.id,
                     kind=result.resource_type,
                     title=result.title,
+                    description=result.description,
                     source_url=result.source_url,
                     theme=[result.theme] if result.theme else [],
                     publication_date=result.publication_date,

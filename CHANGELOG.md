@@ -8,6 +8,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
+  with kind/theme/date/downloadability filters, scores, highlights, provenance,
+  bounded full-match kind/theme facets and explicit source/backend reporting.
+  Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
+  the portal. Literal/portal fallbacks report unsupported filters and unavailable
+  facets, with null totals/truncation when unknown. Eight tools remain (#18).
+
 - Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
   JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
   apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
