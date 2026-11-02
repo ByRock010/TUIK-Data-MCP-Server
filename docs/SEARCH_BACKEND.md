@@ -1,4 +1,4 @@
-# Search backends (#17)
+# Search backends (#17, #18)
 
 `tuik_mcp.search.backend` puts the search implementations behind one protocol so MCP
 tools do not depend on where results come from:
@@ -11,7 +11,7 @@ async def search(query, filters: SearchFilters, limit, offset=0) -> SearchHits
 (any of them), `downloadable` and a `published_after`/`published_before` date range.
 `SearchHits` reports which `backend` answered, the `hits` (ID, kind, title, score,
 source URL, themes, dates, formats, highlights, `retrieved_at`, `indexed_at`),
-`total`, `limit`, `offset` and `warnings`. `limit` is 1–50 and `offset` 0–1000.
+`total`, `limit`, `offset`, `warnings`, `facets` and `indexed_at`. `limit` is 1–50 and `offset` 0–1000.
 
 | Backend | Corpus | Matching | Filters |
 | --- | --- | --- | --- |
@@ -40,6 +40,15 @@ highlight `title`, `title.ascii`, `description` and `body` with OpenSearch's def
 `<em>` tags. Highlighting analyzes at most 100,000 characters per field, so very long
 bulletin bodies cannot fail the request (the index default limit is one million).
 Highlights are source text: untrusted data, never instructions.
+
+The same query aggregates `kind` (3 buckets), `theme` (50 buckets) and the maximum
+`indexed_at`, across all matches after filters, before paging. Facets include
+`counts`, `truncated` (`sum_other_doc_count > 0`) and `count_error_upper_bound` from
+OpenSearch, so omitted terms and distributed count uncertainty are explicit.
+Multi-valued themes count a document once in each applicable bucket, so theme
+counts need not sum to `total`. Empty matches return empty counts and a null
+indexing time. The timestamp is the latest among matches; each hit retains its own
+time. See [OpenSearch terms aggregation](https://docs.opensearch.org/latest/aggregations/bucket/terms/).
 
 ## Fallbacks
 
@@ -70,6 +79,30 @@ refresh), and `truncated` means `total` exceeds the returned results. Themes res
 case-insensitively to the exact stored name before filtering. `downloadable_only` filters `downloadable: true`, which the crawler takes
 from the same flag that determines the advertised CSV export.
 
+## MCP discovery contract (#18)
+
+`search_tuik` calls `CatalogService.discover`, which validates the query, limit,
+kind, theme and ISO dates before I/O. Reversed date ranges are rejected. The
+existing `CatalogService.search` remains the live adapter path, avoiding recursive
+fallback and preserving baseline/portal callers.
+
+The tool keeps `results` and `resource_type` for compatibility and adds scores,
+highlights, indexing time, formats, downloadability and all `themes` (the existing
+`theme` is the first). It adds no search tool. The response reports `source`
+(`index` / `portal` / `catalog`), `backend`, `limit`, `total`, `truncated` and facets.
+`live=true` bypasses the index and always uses the portal. Otherwise it uses the
+normal index/literal/portal routing above. The general tool's theme filter is an
+exact, case-sensitive full stored name; dataset export discovery retains its
+existing case-insensitive theme resolution.
+
+Portal kind filtering samples at most 50 upstream results: the full filtered total
+and truncation are unknown (`null`), not the page length. Portal theme, date and
+downloadability filters cannot be applied and are named in warnings. Fallback
+facets are null, not misleading counts computed from the returned page. Literal
+fallback is dataset-only. Scores/highlights/index times are also unavailable on
+both fallback paths. `downloadable_only=false` disables the filter; it does not
+select non-downloadable records.
+
 ## Known limits
 
 - OpenSearch matches any query word (ranked), while literal matching requires all of
@@ -80,8 +113,11 @@ from the same flag that determines the advertised CSV export.
   ranks the producer price bulletin above the consumer price bulletin. Ranking
   quality is measured in #20 against the #11 judgments, not asserted here.
 - Indexed dataset search still needs the cached live catalog to return full records.
-- MCP exposure for bulletins/metadata, facets and highlights is #18; the CI job that
-  runs the opt-in cluster tests is #19.
+- General indexed discovery returns metadata snapshots without fetching each hit.
+  Stable IDs resolve afresh while their upstream record exists; removed source
+  records require an index refresh. Explicit portal search includes types outside
+  the index. Corpus coverage differs; see [evaluation](SEARCH_EVALUATION.md).
+- The CI job that runs the opt-in cluster tests is #19.
 
 ## Verify
 

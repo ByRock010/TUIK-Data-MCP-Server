@@ -14,7 +14,7 @@ typed table queries and snapshot-bound pagination. See the
 
 | Tool | Purpose |
 | --- | --- |
-| `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
+| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False)` | Turkish indexed discovery with filters, highlights and facets; optional live portal search |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
@@ -95,6 +95,48 @@ NACE sınıflamasını TÜİK'te ara.
 {"resource_id": "press:57987"}
 {"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0", "filters": {}, "limit": 5}
 ```
+
+`search_tuik` uses the metadata index when configured. It covers dataflows,
+bulletins and bulletin metadata; set `live: true` to search the current portal,
+including tables and publications outside the index. No additional tool is needed.
+Existing `query`/`limit` calls and the `results` collection remain supported.
+
+```json
+{"query": "issizlik", "kind": "bulletin", "theme": "İstihdam, İşsizlik ve Ücret", "published_after": "2026-01-01", "limit": 5}
+{"query": "TÜFE", "downloadable_only": true, "limit": 5}
+{"query": "metodoloji", "live": true, "limit": 5}
+```
+
+`kind` accepts `dataset`, `bulletin` or `metadata`. `theme` is an exact full stored
+name (case-sensitive for this tool; use `list_tuik_themes`). Publication bounds are
+inclusive ISO dates (`YYYY-MM-DD`, UTC); dataflows without a publication date do
+not match a date range. `downloadable_only` means advertised availability, which
+is verified only when fetching data.
+
+Each indexed result adds `score`, `highlights`, `indexed_at`, all `themes`,
+`downloadable` and `formats`; existing `id`, `resource_type`, `theme` (first theme),
+`source_url` and provenance remain available. IDs resolve through
+`get_tuik_resource` in a fresh session while the upstream resource exists.
+`source` (`index`, `portal`, `catalog`) and `backend` (`opensearch`, `portal`,
+`literal`) identify what actually answered. `total` counts matches before `limit`;
+`truncated` says whether some were omitted. Both may be null when a kind-filtered
+portal sample cannot establish the full total.
+
+`facets.kind` and `facets.theme` count the entire filtered match set, before the
+result limit. Each has `counts`, `truncated` and `count_error_upper_bound`; at most
+3 kinds and 50 themes are returned. Top-level `indexed_at` is the latest document
+indexing time among all matches (null for no matches). Hits keep their own indexing
+times, so incremental updates do not imply a single snapshot timestamp.
+Highlights contain untrusted source text, including `<em>` markers.
+
+Without a configured/reachable index, dataset-only requests use literal catalog
+matching; other requests use the portal. Warnings name the fallback and any
+unsupported filters: the portal can apply only `kind`, within its first 50 results.
+`live: true` always selects the portal, including for dataset queries. Facets,
+scores, highlights and indexing times are unavailable on these paths; no page-only
+facet counts are presented as corpus totals. See [search backends](docs/SEARCH_BACKEND.md)
+for limitations and [search evaluation](docs/SEARCH_EVALUATION.md) for the pending
+human-judged relevance baseline.
 
 To find datasets that can return rows, first call `search_tuik_datasets`:
 
@@ -463,10 +505,12 @@ the alias (#16).
 
 OpenSearch is optional. The base install and every MCP tool work without it. With
 `TUIK_OPENSEARCH_URL` set and an index built, `search_tuik_datasets` searches the
-index through the [search backend](docs/SEARCH_BACKEND.md) (#17); if the cluster or
-alias is unavailable it falls back to literal catalog matching with a warning
-(`TUIK_OPENSEARCH_TIMEOUT_SECONDS`, default 5, bounds the wait). Other tools are
-unchanged until #18 exposes indexed search for bulletins and metadata.
+index through the [search backend](docs/SEARCH_BACKEND.md) (#17). `search_tuik`
+also uses that index for general discovery, with filters, highlights and facets
+(#18). If the cluster or alias is unavailable, dataset-only search falls back to
+literal matching and general search to the portal, with warnings.
+`TUIK_OPENSEARCH_TIMEOUT_SECONDS` (default 5) bounds the wait. `search_tuik` with
+`live: true` bypasses the index to query the current portal.
 
 ```bash
 # Requires Docker Compose v2 and a running Docker daemon

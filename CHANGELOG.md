@@ -6,6 +6,15 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
+  with kind/theme/date/downloadability filters, scores, highlights, provenance,
+  bounded full-match kind/theme facets and explicit source/backend reporting.
+  Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
+  the portal. Literal/portal fallbacks report unsupported filters and unavailable
+  facets, with null totals/truncation when unknown. Eight tools remain (#18).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
