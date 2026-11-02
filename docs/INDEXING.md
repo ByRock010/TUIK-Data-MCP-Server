@@ -17,7 +17,16 @@ tuik-mcp-index --incremental --report /tmp/index-incremental.json
 
 # Plan only: crawl and read the cluster; write neither index nor crawl state.
 tuik-mcp-index --full --dry-run
+
+# File content (#22): tables and PDF pages, at most 25 downloads per run.
+tuik-mcp-index --incremental --content --max-content-files 25
 ```
+
+`--content`, `--content-file`, `--max-content-files` and `--content-state` index
+file content next to the metadata; see [file content index](CONTENT_INDEX.md). The
+report then has a `content` section with the files downloaded, reused, pending and
+failed. Schema version 2 (#22) added content locators: rebuild with `--full` once
+after upgrading.
 
 The command uses the crawler's pacing (two-second request spacing, 429 cooldown),
 so a full refresh of ~1,500 bulletins can take an hour or more. `--state` defaults

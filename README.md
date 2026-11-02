@@ -14,7 +14,7 @@ typed table queries and snapshot-bound pagination. See the
 
 | Tool | Purpose |
 | --- | --- |
-| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False)` | Turkish indexed discovery with filters, highlights and facets; optional live portal search |
+| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False)` | Turkish indexed discovery with filters, highlights and facets; table/PDF-page content search; optional live portal search |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
@@ -107,7 +107,17 @@ Existing `query`/`limit` calls and the `results` collection remain supported.
 {"query": "metodoloji", "live": true, "limit": 5}
 ```
 
-`kind` accepts `dataset`, `bulletin` or `metadata`. `theme` is an exact full stored
+`kind` accepts `dataset`, `bulletin` or `metadata`, or `table` / `document_chunk` to
+search inside indexed files (#22): workbook table titles, headers and notes, or PDF
+passages. Such a result's `id` is the file, with `sheet` or `page` locating the
+match for `get_tuik_data` or `read_tuik_document`; without a kind, file content is
+never returned. See [file content index](docs/CONTENT_INDEX.md).
+
+```json
+{"query": "CATI telefonla görüşme", "kind": "document_chunk", "limit": 3}
+```
+
+`theme` is an exact full stored
 name (case-sensitive for this tool; use `list_tuik_themes`). Publication bounds are
 inclusive ISO dates (`YYYY-MM-DD`, UTC); dataflows without a publication date do
 not match a date range. `downloadable_only` means advertised availability, which
@@ -560,6 +570,9 @@ tuik-mcp-index --full --report /tmp/index-full.json
 
 # Later refreshes: reuse unchanged details and upsert new/changed documents.
 tuik-mcp-index --incremental --report /tmp/index-incremental.json
+
+# Also index tables and PDF pages of the newest bulletin per series (#22).
+tuik-mcp-index --incremental --content --max-content-files 25
 
 # Inspect the result
 curl 'http://localhost:9200/_cat/aliases/tuik-resources?v'

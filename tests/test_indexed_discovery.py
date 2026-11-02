@@ -195,5 +195,5 @@ def test_date_ranges_and_bounded_facets():
         2026, 11, 2
     )
     aggs = build_query("x", SearchFilters(), 1)["aggs"]
-    assert aggs["kind"]["terms"] == {"field": "kind", "size": 3}
+    assert aggs["kind"]["terms"] == {"field": "kind", "size": 5}
     assert aggs["theme"]["terms"] == {"field": "theme", "size": 50}

@@ -1,4 +1,4 @@
-# Search backends (#17, #18)
+# Search backends (#17, #18, #22)
 
 `tuik_mcp.search.backend` puts the search implementations behind one protocol so MCP
 tools do not depend on where results come from:
@@ -7,7 +7,8 @@ tools do not depend on where results come from:
 async def search(query, filters: SearchFilters, limit, offset=0) -> SearchHits
 ```
 
-`SearchFilters` holds `kinds` (`dataset`, `bulletin`, `metadata`), exact `themes`
+`SearchFilters` holds `kinds` (`dataset`, `bulletin`, `metadata`, and the #22 file
+content kinds `table` and `document_chunk`), exact `themes`
 (any of them), `downloadable` and a `published_after`/`published_before` date range.
 `SearchHits` reports which `backend` answered, the `hits` (ID, kind, title, score,
 source URL, themes, dates, formats, highlights, `retrieved_at`, `indexed_at`),
@@ -118,6 +119,10 @@ select non-downloadable records.
   records require an index refresh. Explicit portal search includes types outside
   the index. Corpus coverage differs; see [evaluation](SEARCH_EVALUATION.md).
 - The CI job that runs the opt-in cluster tests is #19.
+- File content (#22): `table` and `document_chunk` documents are excluded unless a
+  kind names them (a `must_not` filter), so general results and facets keep their
+  #18 meaning. Their hits carry `parent_id`, `page` and `sheet`; MCP results report
+  the parent file as `id`. See [file content index](CONTENT_INDEX.md).
 
 ## Verify
 

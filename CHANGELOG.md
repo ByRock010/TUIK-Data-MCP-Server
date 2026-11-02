@@ -14,6 +14,16 @@ All notable changes to this project are documented here. The format follows
   Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
   the portal. Literal/portal fallbacks report unsupported filters and unavailable
   facets, with null totals/truncation when unknown. Eight tools remain (#18).
+- File content index: `tuik-mcp-index --content` indexes the workbook tables
+  (titles, headers, notes) and PDF passages of the newest bulletin per series, and
+  `--content-file` adds files on demand. `search_tuik` with `kind="table"` or
+  `kind="document_chunk"` returns the file ID with the matching `sheet` or `page`.
+  Downloads are budgeted per run and cached in a content state (#22).
+
+### Changed
+
+- Index schema version 2 adds `page`/`sheet` locators; run one `--full` build after
+  upgrading (#22).
 
 ## [0.2.0] - 2026-10-29
 

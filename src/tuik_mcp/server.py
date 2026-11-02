@@ -65,7 +65,7 @@ async def search_tuik(
     query: Annotated[str, Field(min_length=1, max_length=200)],
     ctx: Context,
     limit: Annotated[int, Field(ge=1, le=50)] = 10,
-    kind: Literal["dataset", "bulletin", "metadata"] | None = None,
+    kind: Literal["dataset", "bulletin", "metadata", "table", "document_chunk"] | None = None,
     theme: Annotated[str | None, Field(min_length=1, max_length=200)] = None,
     published_after: str | None = None,
     published_before: str | None = None,
@@ -82,6 +82,12 @@ async def search_tuik(
     source/backend identify what answered. Without the index, dataset-only searches use
     literal catalog matching; general/bulletin searches use the live portal with warnings
     for unsupported filters. Missing facets and unknown totals/truncated are null.
+
+    kind="document_chunk" or kind="table" searches inside indexed files instead (the
+    newest bulletin of each series plus files indexed on demand): PDF passages with their
+    page, and workbook table titles/headers/notes with their sheet. Such a result's id is
+    the file: open it with read_tuik_document(id, page=page) or get_tuik_data(id,
+    sheet=sheet). Without kind, results never include file content.
 
     Set live=true for current portal search across tables, publications and other types
     outside the index; only kind can be filtered in this mode. Use search_tuik_datasets

@@ -1,4 +1,10 @@
-"""Validated v0.3 metadata documents shared by crawling and indexing (#14)."""
+"""Validated index documents shared by crawling and indexing (#14, #22).
+
+Metadata documents are datasets, bulletins and bulletin metadata. File content
+documents (#22) are spreadsheet tables and PDF passages; their parent is the stable
+file ID (#27) that get_tuik_resource, get_tuik_data and read_tuik_document accept,
+and their own ID only adds a page/chunk or table locator.
+"""
 
 import re
 from datetime import date, datetime
@@ -7,13 +13,40 @@ from typing import Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from tuik_mcp.models.common import now
-from tuik_mcp.utils.normalization import official_url, validate_id
+from tuik_mcp.utils.normalization import FILE_KEY, official_url, validate_id
+
+METADATA_KINDS = ("dataset", "bulletin", "metadata")
+CONTENT_KINDS = ("table", "document_chunk")
+FILE_PARENT = re.compile(
+    rf"press:[1-9][0-9]{{0,9}}:file:{FILE_KEY}|(?:table|report|publication):{FILE_KEY}"
+)
+CONTENT_ID = re.compile(
+    rf"(?P<parent>{FILE_PARENT.pattern})"
+    r"#(?:p(?P<page>[1-9][0-9]{0,5})\.(?P<chunk>[1-9][0-9]{0,3})|t(?P<table>[1-9][0-9]{0,2}))"
+)
+
+
+def chunk_id(parent: str, page: int, chunk: int) -> str:
+    return f"{parent}#p{page}.{chunk}"
+
+
+def table_id(parent: str, ordinal: int) -> str:
+    return f"{parent}#t{ordinal}"
+
+
+def file_id(value: str) -> str:
+    """A stable file identity that the MCP file tools resolve in a fresh session."""
+    if not FILE_PARENT.fullmatch(validate_id(value)):
+        raise ValueError("Expected a bulletin file or a table/report/publication file ID")
+    return value
 
 
 def index_resource_id(value: str) -> str:
+    if CONTENT_ID.fullmatch(value):
+        return value
     validate_id(value)
     if not value.startswith(("flow:", "press:")) or ":file:" in value:
-        raise ValueError("v0.3 indexes only dataflows, bulletins and bulletin metadata")
+        raise ValueError("Metadata documents are dataflows, bulletins and bulletin metadata")
     return value
 
 
@@ -34,7 +67,7 @@ class IndexDocument(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     id: str
-    kind: Literal["dataset", "bulletin", "metadata"]
+    kind: Literal["dataset", "bulletin", "metadata", "table", "document_chunk"]
     title: str = Field(min_length=1, max_length=4000)
     title_en: str | None = Field(default=None, max_length=4000)
     description: str | None = Field(default=None, max_length=2_000_000)
@@ -51,6 +84,9 @@ class IndexDocument(BaseModel):
     downloadable: bool = Field(default=False, strict=True)
     source_url: str
     parent_id: str | None = None
+    # Citation locators of file content: a PDF page or a workbook sheet.
+    page: int | None = Field(default=None, ge=1, le=100_000)
+    sheet: str | None = Field(default=None, min_length=1, max_length=200)
     retrieved_at: AwareDatetime = Field(default_factory=now)
     indexed_at: AwareDatetime = Field(default_factory=now)
 
@@ -61,7 +97,9 @@ class IndexDocument(BaseModel):
     @field_validator("parent_id")
     @classmethod
     def parent(cls, value):
-        return index_resource_id(value) if value is not None else None
+        if value is None:
+            return None
+        return file_id(value) if FILE_PARENT.fullmatch(value) else index_resource_id(value)
 
     @field_validator("related_ids", "theme", "subtheme", "category_path", "formats")
     @classmethod
@@ -77,8 +115,11 @@ class IndexDocument(BaseModel):
 
     @model_validator(mode="after")
     def identity_matches_kind(self):
+        content = CONTENT_ID.fullmatch(self.id)
         expected = (
-            "dataset"
+            ("document_chunk" if content["page"] else "table")
+            if content
+            else "dataset"
             if self.id.startswith("flow:")
             else "metadata"
             if self.id.endswith(":metadata")
@@ -86,11 +127,20 @@ class IndexDocument(BaseModel):
         )
         if self.kind != expected:
             raise ValueError("Document kind does not match its stable ID")
-        if self.kind == "metadata":
+        if content:
+            if self.parent_id != content["parent"]:
+                raise ValueError("File content must name its own file as parent")
+            if self.kind == "document_chunk" and self.page != int(content["page"]):
+                raise ValueError("A passage must carry the page of its ID")
+            if self.kind == "table" and self.sheet is None and self.page is None:
+                raise ValueError("A table needs a sheet or page locator")
+        elif self.page is not None or self.sheet is not None:
+            raise ValueError("Only file content has page/sheet locators")
+        elif self.kind == "metadata":
             if self.parent_id != self.id.removesuffix(":metadata"):
                 raise ValueError("Metadata parent must be its own bulletin ID")
         elif self.parent_id is not None:
-            raise ValueError("Only metadata documents have a parent in v0.3")
+            raise ValueError("Only metadata and file content documents have a parent")
         if self.id in self.related_ids:
             raise ValueError("A document cannot link to itself")
         return self
