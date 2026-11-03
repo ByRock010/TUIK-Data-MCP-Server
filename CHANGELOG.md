@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Indexed MCP release smoke (`--indexed-only`, optional `--index-query`) follows
+  a real OpenSearch dataset hit through resource resolution to verified bounded
+  CSV rows, rejecting fallbacks. Full smoke selects portal search explicitly for
+  tables/publications; v0.3.0 readiness documents remaining evaluation/release gates (#29).
+
 - `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
   with kind/theme/date/downloadability filters, scores, highlights, provenance,
   bounded full-match kind/theme facets and explicit source/backend reporting.

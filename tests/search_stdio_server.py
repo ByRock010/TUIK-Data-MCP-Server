@@ -19,6 +19,12 @@ STAMP = "2026-11-02T09:00:00.000Z"
 
 def upstream(request):
     path = request.url.path
+    if path.endswith("/file/csv"):
+        return httpx.Response(
+            200,
+            content=(FIXTURES / "data.csv").read_bytes(),
+            headers={"content-type": "text/csv"},
+        )
     name = (
         "flows"
         if path == "/api/tr/dataflows"

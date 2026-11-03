@@ -104,7 +104,35 @@ async def inspect_then_query(call, resource_id):
     }
 
 
-async def run():
+async def indexed_to_data(call, query):
+    """Require a real index hit, then resolve and read that exact stable dataset ID."""
+    found = await call(
+        "search_tuik", {"query": query, "kind": "dataset", "downloadable_only": True, "limit": 3}
+    )
+    assert found["source"] == "index" and found["backend"] == "opensearch", found
+    assert found["results"] and found["indexed_at"], found
+    dataset = found["results"][0]
+    assert dataset["id"].startswith("flow:") and dataset["resource_type"] == "dataset", dataset
+    assert dataset["indexed_at"] and dataset["retrieved_at"] and dataset["source_url"], dataset
+    assert dataset["score"] is not None and dataset["downloadable"], dataset
+    assert "csv" in dataset["formats"], dataset
+    detail = await call("get_tuik_resource", {"resource_id": dataset["id"]})
+    assert detail["id"] == dataset["id"] and "csv" in detail["available_formats"], detail
+    rows = await call("get_tuik_data", {"resource_id": detail["id"], "limit": 2})
+    assert rows["status"] == "ok" and rows["resource_id"] == dataset["id"], rows
+    assert rows["rows"] and len(rows["rows"]) <= 2 and rows["snapshot_id"], rows
+    assert rows["source_url"] and rows["retrieved_at"], rows
+    assert any(
+        link["format"] == "csv" and link["verified"] and link["source_url"] == rows["source_url"]
+        for link in rows["download_links"]
+    ), rows
+    return {"query": query, "search": found, "resource": detail, "data": rows}
+
+
+async def run(*, indexed_only=False, index_query="Altın Hariç Dış Ticaret Hadleri"):
+    settings = Settings.from_env()
+    if indexed_only and settings.opensearch_url is None:
+        raise ValueError("Indexed smoke requires TUIK_OPENSEARCH_URL and a populated index")
     # The SDK otherwise drops TUIK_* variables, including requested live-test pacing.
     params = StdioServerParameters(
         command=sys.executable,
@@ -116,6 +144,7 @@ async def run():
             await session.initialize()
             tools = await session.list_tools()
             report = {
+                "mode": "indexed_only" if indexed_only else "full",
                 "package_version": version("tuik-mcp"),
                 "python_version": platform.python_version(),
                 "pacing": {
@@ -134,6 +163,11 @@ async def run():
                 assert data["source_url"]
                 return data
 
+            if settings.opensearch_url is not None:
+                report["indexed_search"] = await indexed_to_data(call, index_query)
+            if indexed_only:
+                return report
+
             for query in [
                 "işsizlik",
                 "nüfus",
@@ -144,7 +178,7 @@ async def run():
                 "genç işsizlik",
                 "konut satışları",
             ]:
-                data = await call("search_tuik", {"query": query})
+                data = await call("search_tuik", {"query": query, "live": True})
                 assert data["results"], query
                 assert all(r["source_url"] for r in data["results"])
                 report["searches"][query] = [
@@ -220,6 +254,7 @@ async def run():
                     "query": (
                         "Hanehalkı Bilişim Teknolojileri Kullanım Araştırması Mikro Veri Seti, 2026"
                     ),
+                    "live": True,
                 },
             )
             publication = next(
@@ -241,10 +276,21 @@ async def run():
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, help="Write a JSON report on success or failure")
+    parser.add_argument(
+        "--indexed-only", action="store_true", help="Run only indexed search → resource → CSV"
+    )
+    parser.add_argument(
+        "--index-query", default=None, help="Indexed smoke query (choose a small CSV export)"
+    )
     args = parser.parse_args(argv)
     checked_at = datetime.now(UTC).isoformat()
     try:
-        report = {"status": "ok", "checked_at": checked_at, **asyncio.run(run())}
+        options = {}
+        if args.indexed_only:
+            options["indexed_only"] = True
+        if args.index_query is not None:
+            options["index_query"] = args.index_query
+        report = {"status": "ok", "checked_at": checked_at, **asyncio.run(run(**options))}
         exit_code = 0
     except Exception as exc:
         traceback.print_exc(file=sys.stderr)
