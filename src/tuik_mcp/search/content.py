@@ -60,6 +60,8 @@ class FailedFile(BaseModel):
     model_config = ConfigDict(extra="forbid")
     attempts: int = Field(ge=1)
     code: str | None = None
+    # For a bulletin file list: the publication it failed for; a new one starts over.
+    published: str | None = None
 
 
 class ContentState(BaseModel):
@@ -69,6 +71,8 @@ class ContentState(BaseModel):
     files: dict[str, ContentFile] = Field(default_factory=dict, max_length=MAX_FILES)
     # Listed files that could not be indexed yet, so retries never starve new files.
     failures: dict[str, FailedFile] = Field(default_factory=dict, max_length=MAX_FILES)
+    # Bulletins whose file list could not be fetched yet, scheduled the same way.
+    list_failures: dict[str, FailedFile] = Field(default_factory=dict, max_length=MAX_FILES)
 
     @classmethod
     def load(cls, path: Path) -> "ContentState":
@@ -85,6 +89,9 @@ class ContentState(BaseModel):
                 raise ValueError("Content state documents belong to another file")
         for key in state.failures:
             file_id(key)
+        for key in state.list_failures:
+            if not re.fullmatch(r"press:[1-9][0-9]{0,9}", key):
+                raise ValueError("Content state list failures must name bulletins")
         return state
 
 
@@ -151,6 +158,7 @@ class ContentIndexer:
             "pending_files": 0,
             "pending_refreshes": 0,
             "given_up": 0,
+            "lists_given_up": 0,
             "failures": [],
             "page_limited": [],
             "on_demand": on_demand,
@@ -195,31 +203,56 @@ class ContentIndexer:
                 report["reused"] += 1
                 keep(fid, cached)
 
+        # File lists to (re)fetch: never-tried first, then earlier failures by attempts,
+        # each retried at most MAX_ATTEMPTS times per publication, so lists that keep
+        # failing cannot starve the bulletins after them.
+        lists = {b.id: self.state.bulletins.get(b.id) for b in latest}
+        fresh: set[str] = set()
+        stale = [b for b in latest if lists[b.id] is None or lists[b.id].published != published(b)]
+
+        def list_attempts(bulletin: IndexDocument) -> int:
+            failed = self.state.list_failures.get(bulletin.id)
+            if failed is None or failed.published != published(bulletin):
+                return 0
+            return failed.attempts
+
+        stale.sort(key=list_attempts)
+        for bulletin in stale:
+            attempts = list_attempts(bulletin)
+            if attempts >= MAX_ATTEMPTS:
+                report["lists_given_up"] += 1
+                state.list_failures[bulletin.id] = self.state.list_failures[bulletin.id]
+                continue
+            if lists_left <= 0:
+                report["pending_bulletins"] += 1
+                if attempts:
+                    state.list_failures[bulletin.id] = self.state.list_failures[bulletin.id]
+                continue
+            lists_left -= 1
+            try:
+                resource = await self.service.resource(bulletin.id)
+            except SourceError as exc:
+                report["failures"].append({"id": bulletin.id} | error_details(exc))
+                state.list_failures[bulletin.id] = FailedFile(
+                    attempts=attempts + 1, code=exc.code, published=published(bulletin)
+                )
+                continue
+            report["file_lists_fetched"] += 1
+            fresh.add(bulletin.id)
+            lists[bulletin.id] = BulletinFiles(
+                published=published(bulletin),
+                file_ids=[
+                    link.resource_id
+                    for link in resource.download_links
+                    if link.format in CONTENT_FORMATS and link.resource_id
+                ],
+            )
+
         candidates: list[tuple[str, IndexDocument]] = []
         for bulletin in latest:
-            listed = self.state.bulletins.get(bulletin.id)
-            fresh = None
-            if listed is None or listed.published != published(bulletin):
-                if lists_left > 0:
-                    lists_left -= 1
-                    try:
-                        resource = await self.service.resource(bulletin.id)
-                    except SourceError as exc:
-                        report["failures"].append({"id": bulletin.id} | error_details(exc))
-                    else:
-                        report["file_lists_fetched"] += 1
-                        fresh = listed = BulletinFiles(
-                            published=published(bulletin),
-                            file_ids=[
-                                link.resource_id
-                                for link in resource.download_links
-                                if link.format in CONTENT_FORMATS and link.resource_id
-                            ],
-                        )
-                else:
-                    report["pending_bulletins"] += 1
-                if listed is None:
-                    continue
+            listed = lists[bulletin.id]
+            if listed is None:
+                continue
             # An outdated list keeps its files indexed, and is retried, until one is fetched.
             state.bulletins[bulletin.id] = listed
             for fid in listed.file_ids:
@@ -229,7 +262,7 @@ class ContentIndexer:
                     report["reused"] += 1
                     keep(fid, ContentFile(documents=self.state.files[fid].documents))
                 else:
-                    if fresh is None and fid in self.state.failures:
+                    if bulletin.id not in fresh and fid in self.state.failures:
                         state.failures[fid] = self.state.failures[fid]
                     candidates.append((fid, bulletin))
         # Never-tried files first, then earlier failures by attempts: failures cannot

@@ -61,7 +61,10 @@ tuik-mcp-index --incremental --content-file 'publication:<key>'    # on demand
   fewest attempts first. A file that keeps failing therefore never blocks the files
   after it; it is retried at most three times (`given_up` counts the rest) until its
   bulletin is republished, which fetches a fresh file list and starts its files
-  over. `--content-file` always retries.
+  over. `--content-file` always retries. Bulletin file lists are scheduled the same
+  way: lists never fetched go before earlier failures, and a list that keeps failing
+  is retried at most three times per publication (`lists_given_up`), so unavailable
+  bulletins never keep the healthy ones after them out of the index.
 - **State.** `--content-state` (default `.tuik-content-state.json`) keeps every
   indexed file's documents and each bulletin's file list. File IDs embed their
   bulletin, so a cached file is never downloaded again. Every run, including a

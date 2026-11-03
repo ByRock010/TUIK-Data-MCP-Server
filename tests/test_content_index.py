@@ -240,6 +240,42 @@ async def test_failing_files_cannot_starve_later_files_and_retries_are_bounded(c
     assert fresh.report["pending_files"] == 5
 
 
+async def test_failing_file_lists_cannot_starve_later_bulletins():
+    metadata = [
+        bulletin(60000, date(2026, 10, 30), "series:60000"),
+        bulletin(59000, date(2026, 10, 20), "series:59000"),
+        bulletin(57987, date(2026, 9, 30), "series:57987"),
+    ]
+    upstream, state, reports = Upstream(), ContentState(), []
+
+    async def run(documents):
+        nonlocal state
+        upstream.requests.clear()
+        http = client(upstream)  # A new process: no snapshot or metadata cache.
+        try:
+            indexer = ContentIndexer(CatalogService(http), state, ContentLimits(max_downloads=2))
+            await indexer.documents(documents)
+        finally:
+            await http.close()
+        state = ContentState.model_validate_json(indexer.next_state.model_dump_json())
+        reports.append(indexer.report)
+        return {r.url.path for r in upstream.requests if r.url.path.startswith("/api/tr/press")}
+
+    # Both newer bulletins are unavailable; run 2 still reaches the healthy one.
+    assert await run(metadata) == {"/api/tr/press/60000", "/api/tr/press/59000"}
+    assert "/api/tr/press/57987" in await run(metadata)
+    assert reports[1]["file_lists_fetched"] == 1 and {PDF, ADJUSTED} <= set(state.files)
+    for _ in range(3):
+        await run(metadata)
+    assert {f.attempts for f in state.list_failures.values()} == {MAX_ATTEMPTS}
+    failing = {"/api/tr/press/60000", "/api/tr/press/59000"}
+    assert not await run(metadata) & failing and reports[-1]["lists_given_up"] == 2
+    assert {PDF, ADJUSTED} <= set(state.files)
+    # A new publication of a failed bulletin gets a fresh attempt.
+    republished = [bulletin(60000, date(2026, 11, 2), "series:60000"), *metadata[1:]]
+    assert "/api/tr/press/60000" in await run(republished)
+
+
 async def test_deferred_explicit_refreshes_keep_cached_files(content):
     service, _ = content
     first = ContentIndexer(service)
