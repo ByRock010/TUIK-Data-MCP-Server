@@ -17,6 +17,14 @@ methods and default pacing, without downloading files. Interrupted collection ca
 resume missing results against the same frozen catalog. An upstream failure is an
 error, never an empty ranking; incomplete runs are rejected by the scorer.
 
+Every new checkpoint records the source revision and collector SHA-256 before any
+query results are written. `collect --resume` requires both to match the current
+code, as well as the query set. It rejects changed or missing provenance before
+opening an HTTP client or writing the existing checkpoint. Restore the original
+checkout/script to continue an interrupted run, or start a new run with a distinct
+output path. Do not edit a checkpoint's provenance to bypass this check. Historical
+completed snapshots remain valid scoring inputs; they do not need to be resumed.
+
 | System | Searchable corpus | Returned top-ten slots |
 | --- | --- | ---: |
 | Portal | All public portal types, non-archive | 480 |
@@ -117,6 +125,13 @@ These overall scores are not a comparison over identical corpora. Resource-type
 rows filter the original top-ten list without backfilling; they describe that list,
 not a new filtered retrieval run. Unjudged share is weighted by returned slots;
 it is `null` for no returned results.
+
+Every judged candidate must have document metadata (`id`, `title`,
+`resource_type`, `source_url`). Pooling may fill missing metadata from the supplied
+rankings; candidates still missing metadata afterwards cause an explicit
+validation error naming the query and ID, rather than a scoring crash or silently
+dropping a judged relevant document. Retained document records must have matching
+IDs and nonempty metadata. Judge-sheet export applies the same validation.
 
 ## Adding OpenSearch variants (#20)
 

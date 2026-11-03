@@ -15,6 +15,13 @@ All notable changes to this project are documented here. The format follows
   the portal. Literal/portal fallbacks report unsupported filters and unavailable
   facets, with null totals/truncation when unknown. Eight tools remain (#18).
 
+### Fixed
+
+- Search evaluation rejects orphaned or malformed document metadata before
+  scoring or judge-sheet export. Resumable baseline collection records provenance
+  in every checkpoint and rejects changed/missing source revisions or collector
+  hashes before network access or checkpoint writes (#11).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
