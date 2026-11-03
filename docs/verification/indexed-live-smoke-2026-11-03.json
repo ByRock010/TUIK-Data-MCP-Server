@@ -1,0 +1,251 @@
+{
+  "status": "ok",
+  "checked_at": "2026-11-03T10:13:25.141922+00:00",
+  "mode": "indexed_only",
+  "package_version": "0.2.0",
+  "python_version": "3.13.5",
+  "pacing": {
+    "request_interval_seconds": 2.0,
+    "download_interval_seconds": 6
+  },
+  "tools": [
+    "search_tuik",
+    "search_tuik_datasets",
+    "get_tuik_resource",
+    "get_tuik_data",
+    "inspect_tuik_data",
+    "list_tuik_themes",
+    "read_tuik_document",
+    "search_tuik_classifications"
+  ],
+  "searches": {},
+  "indexed_search": {
+    "query": "altin haric dis ticaret hadleri",
+    "search": {
+      "source_url": "https://veriportali.tuik.gov.tr/tr/search?q=altin+haric+dis+ticaret+hadleri",
+      "retrieved_at": "2026-11-03T10:13:25.420342Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "query": "altin haric dis ticaret hadleri",
+      "results": [
+        {
+          "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ALTINSIZ_DTH,1.0",
+          "retrieved_at": "2026-11-03T10:13:24.828521Z",
+          "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+          "id": "flow:DF_ALTINSIZ_DTH+V1.0",
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "description": null,
+          "resource_type": "dataset",
+          "theme": "Uluslararası Ticaret",
+          "publication_date": null,
+          "source": "TÜİK",
+          "score": 1.8960863,
+          "highlights": {
+            "title.ascii": [
+              "<em>Altın</em> <em>Hariç</em> <em>Dış</em> <em>Ticaret</em> <em>Hadleri</em>"
+            ],
+            "title": [
+              "Altın <em>Hariç</em> Dış <em>Ticaret</em> <em>Hadleri</em>"
+            ]
+          },
+          "indexed_at": "2026-11-03T10:13:24.873158Z",
+          "themes": [
+            "Uluslararası Ticaret"
+          ],
+          "downloadable": true,
+          "formats": [
+            "csv",
+            "json",
+            "xml"
+          ]
+        }
+      ],
+      "total": 1,
+      "warnings": [],
+      "source": "index",
+      "backend": "opensearch",
+      "limit": 3,
+      "truncated": false,
+      "facets": {
+        "kind": {
+          "counts": {
+            "dataset": 1
+          },
+          "truncated": false,
+          "count_error_upper_bound": 0
+        },
+        "theme": {
+          "counts": {
+            "Uluslararası Ticaret": 1
+          },
+          "truncated": false,
+          "count_error_upper_bound": 0
+        }
+      },
+      "indexed_at": "2026-11-03T10:13:24.873Z"
+    },
+    "resource": {
+      "source_url": "https://databrowser2.tuik.gov.tr/#/tr/tuik/TR,DF_ALTINSIZ_DTH,1.0",
+      "retrieved_at": "2026-11-03T10:13:25.818207Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "id": "flow:DF_ALTINSIZ_DTH+V1.0",
+      "title": "Altın Hariç Dış Ticaret Hadleri",
+      "description": null,
+      "resource_type": "dataset",
+      "theme": "Uluslararası Ticaret",
+      "publication_date": null,
+      "source": "TÜİK",
+      "score": null,
+      "highlights": {},
+      "indexed_at": null,
+      "themes": [],
+      "downloadable": null,
+      "formats": [],
+      "updated_at": "2026-10-13T10:00:00",
+      "available_formats": [
+        "csv",
+        "json",
+        "xml"
+      ],
+      "download_links": [
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+          "format": "csv",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        },
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/json",
+          "format": "json",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        },
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/xml",
+          "format": "xml",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        }
+      ],
+      "dimensions": [],
+      "metadata": [],
+      "related_datasets": [],
+      "notes": null
+    },
+    "data": {
+      "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+      "retrieved_at": "2026-11-03T10:13:29.901310Z",
+      "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+      "resource_id": "flow:DF_ALTINSIZ_DTH+V1.0",
+      "status": "ok",
+      "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+      "columns": [
+        "Gözlem Sıklığı (M)",
+        "Ölçü Birimi (RO)",
+        "Dış Ticaret Göstergeleri (18)",
+        "Dış Ticaret Türü (_O)",
+        "İstatistiksel Gösterge (UTOD_DISTIC_END)",
+        "İktisadi Faaliyet (0)",
+        "Dış Ticaret Endeks Sektör Kodları (0)",
+        "Temel Dönem/Yıl (2015)",
+        "Coğrafi Kapsam (TR)",
+        "Zaman (2015-01)",
+        "Gözlem Değeri",
+        "Gözlem Durumu",
+        "Gizlilik Durumu",
+        "Ondalık Basamak Sayısı",
+        "Zaman Formatı",
+        "Birim Çarpanı"
+      ],
+      "rows": [
+        {
+          "Gözlem Sıklığı (M)": "Aylık",
+          "Ölçü Birimi (RO)": "Oran",
+          "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+          "Dış Ticaret Türü (_O)": "Diğer",
+          "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+          "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+          "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+          "Temel Dönem/Yıl (2015)": "2015",
+          "Coğrafi Kapsam (TR)": "Türkiye",
+          "Zaman (2015-01)": "2015-01",
+          "Gözlem Değeri": "98,4622068329301",
+          "Gözlem Durumu": "",
+          "Gizlilik Durumu": "",
+          "Ondalık Basamak Sayısı": "",
+          "Zaman Formatı": "",
+          "Birim Çarpanı": ""
+        },
+        {
+          "Gözlem Sıklığı (M)": "Aylık",
+          "Ölçü Birimi (RO)": "Oran",
+          "Dış Ticaret Göstergeleri (18)": "Altın Hariç Dış Ticaret Hadleri",
+          "Dış Ticaret Türü (_O)": "Diğer",
+          "İstatistiksel Gösterge (UTOD_DISTIC_END)": "Dış Ticaret Endeksleri",
+          "İktisadi Faaliyet (0)": "Gıda ve canlı hayvanlar",
+          "Dış Ticaret Endeks Sektör Kodları (0)": "0 Canlı hayvanlar ve gıda maddeleri",
+          "Temel Dönem/Yıl (2015)": "2015",
+          "Coğrafi Kapsam (TR)": "Türkiye",
+          "Zaman (2015-01)": "2015-02",
+          "Gözlem Değeri": "101,664854746884",
+          "Gözlem Durumu": "",
+          "Gizlilik Durumu": "",
+          "Ondalık Basamak Sayısı": "",
+          "Zaman Formatı": "",
+          "Birim Çarpanı": ""
+        }
+      ],
+      "unit": null,
+      "notes": null,
+      "download_links": [
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/csv",
+          "format": "csv",
+          "verified": true,
+          "size_bytes": 2939621,
+          "resource_id": null
+        },
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/json",
+          "format": "json",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        },
+        {
+          "title": "Altın Hariç Dış Ticaret Hadleri",
+          "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ALTINSIZ_DTH%2BV1.0/file/xml",
+          "format": "xml",
+          "verified": false,
+          "size_bytes": null,
+          "resource_id": null
+        }
+      ],
+      "total_rows": 11564,
+      "related_datasets": [],
+      "truncated": true,
+      "format": null,
+      "extraction": null,
+      "sheet": null,
+      "sheets": [],
+      "table_title": null,
+      "table_title_en": null,
+      "columns_en": [],
+      "table_notes": [],
+      "source_note": null,
+      "layout": null,
+      "warnings": [],
+      "snapshot_id": "sha256:c41486eb78f1e9f9be23db5b4f8bc786312b373587157bbfdd002799193c9628",
+      "next_cursor": null,
+      "has_more": false,
+      "cursor_expires_at": null
+    }
+  }
+}
