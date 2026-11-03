@@ -15,7 +15,13 @@ from test_metadata_crawl import Source
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.config import PORTAL, Settings
 from tuik_mcp.search.backend import OpenSearchBackend
-from tuik_mcp.search.content import ContentIndexer, ContentLimits, ContentState, latest_per_series
+from tuik_mcp.search.content import (
+    MAX_ATTEMPTS,
+    ContentIndexer,
+    ContentLimits,
+    ContentState,
+    latest_per_series,
+)
 from tuik_mcp.search.documents import IndexDocument, chunk_id, file_id, table_id
 from tuik_mcp.search.index_cli import main, run
 from tuik_mcp.search.indexer import OpenSearchStore, prepare, rebuild
@@ -198,6 +204,56 @@ async def test_cached_content_is_reused_without_requests_and_budget_defers_the_r
     # The next file in order is unavailable upstream: one attempt, reported, then deferred.
     assert resumed.report["reused"] == 2 and upstream.downloads() == 1
     assert len(resumed.report["failures"]) == 1 and resumed.report["pending_files"] == 6
+
+
+async def test_failing_files_cannot_starve_later_files_and_retries_are_bounded(content):
+    service, upstream = content
+    metadata = [bulletin(57987, date(2026, 9, 30), "series:1")]
+    state, runs = ContentState(), []
+    # Bulletin order: PDF, ADJUSTED, three unavailable files, BASIC, three unavailable.
+    for _ in range(3):
+        indexer = ContentIndexer(service, state, ContentLimits(max_downloads=2))
+        await indexer.documents(metadata)
+        state = ContentState.model_validate_json(indexer.next_state.model_dump_json())
+        runs.append(indexer.report)
+    assert runs[0]["downloaded"] == 2 and set(state.files) >= {PDF, ADJUSTED}
+    assert [len(run["failures"]) for run in runs[1:]] == [2, 1]
+    # Run 3 skips the two failures of run 2 and reaches BASIC.
+    assert BASIC in state.files and runs[2]["downloaded"] == 1
+    assert sorted(f.attempts for f in state.failures.values()) == [1, 1, 1]
+    for _ in range(8):
+        indexer = ContentIndexer(service, state, ContentLimits(max_downloads=2))
+        await indexer.documents(metadata)
+        state = indexer.next_state
+    assert {f.attempts for f in state.failures.values()} == {MAX_ATTEMPTS}
+    assert len(state.failures) == 6 and set(state.files) == {PDF, ADJUSTED, BASIC}
+    upstream.requests.clear()
+    settled = ContentIndexer(service, state)
+    assert len(await settled.documents(metadata)) == 17
+    assert settled.report["given_up"] == 6 and upstream.requests == []
+    # A republished bulletin gets a fresh file list, and its failures a fresh start.
+    republished = [bulletin(57987, date(2026, 10, 1), "series:1")]
+    fresh = ContentIndexer(service, state, ContentLimits(max_downloads=1))
+    await fresh.documents(republished)
+    assert fresh.report["file_lists_fetched"] == 1 and fresh.report["given_up"] == 0
+    assert [f.attempts for f in fresh.next_state.failures.values()] == [1]
+    assert fresh.report["pending_files"] == 5
+
+
+async def test_deferred_explicit_refreshes_keep_cached_files(content):
+    service, _ = content
+    first = ContentIndexer(service)
+    cached = await first.documents([], on_demand=[PDF, BASIC])
+    assert set(first.next_state.files) == {PDF, BASIC}
+    # One download: the PDF refreshes, BASIC's refresh waits but stays indexed.
+    limited = ContentIndexer(service, first.next_state, ContentLimits(max_downloads=1))
+    again = await limited.documents([], on_demand=[PDF, BASIC])
+    assert {d.id for d in again} == {d.id for d in cached}
+    assert set(limited.next_state.files) == {PDF, BASIC}
+    assert limited.next_state.files[BASIC].on_demand and limited.report["pending_refreshes"] == 1
+    idle = ContentIndexer(service, limited.next_state)
+    assert len(await idle.documents([], on_demand=[PDF, BASIC], download=False)) == len(cached)
+    assert idle.report["pending_refreshes"] == 2 and set(idle.next_state.files) == {PDF, BASIC}
 
 
 async def test_on_demand_files_are_sticky_and_keep_cache_when_a_refresh_fails(content):

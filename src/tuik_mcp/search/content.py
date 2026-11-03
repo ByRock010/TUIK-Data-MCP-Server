@@ -29,6 +29,8 @@ from .documents import IndexDocument, chunk_id, file_id, table_id
 
 CONTENT_FORMATS = {"xls", "xlsx", "pdf"}
 MAX_FILES = 5000
+# Failed files are retried after every never-tried file, at most this many times.
+MAX_ATTEMPTS = 3
 MAX_REPORTED = 50
 COLUMN_MARKER = re.compile(r"\s*\[column \d+\]$")
 PLACEHOLDER = re.compile(r"column_\d+")
@@ -54,11 +56,19 @@ class ContentFile(BaseModel):
     documents: list[IndexDocument] = Field(default_factory=list)
 
 
+class FailedFile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    attempts: int = Field(ge=1)
+    code: str | None = None
+
+
 class ContentState(BaseModel):
     model_config = ConfigDict(extra="forbid")
     version: int = 1
     bulletins: dict[str, BulletinFiles] = Field(default_factory=dict, max_length=MAX_FILES)
     files: dict[str, ContentFile] = Field(default_factory=dict, max_length=MAX_FILES)
+    # Listed files that could not be indexed yet, so retries never starve new files.
+    failures: dict[str, FailedFile] = Field(default_factory=dict, max_length=MAX_FILES)
 
     @classmethod
     def load(cls, path: Path) -> "ContentState":
@@ -73,6 +83,8 @@ class ContentState(BaseModel):
             file_id(key)
             if any(document.parent_id != key for document in entry.documents):
                 raise ValueError("Content state documents belong to another file")
+        for key in state.failures:
+            file_id(key)
         return state
 
 
@@ -121,7 +133,12 @@ class ContentIndexer:
     async def documents(
         self, metadata: list[IndexDocument], *, on_demand: list[str] = (), download: bool = True
     ) -> list[IndexDocument]:
-        """Content documents for this snapshot; `download=False` reuses cached files only."""
+        """Content documents for this snapshot; `download=False` reuses cached files only.
+
+        Indexed files are reused and never dropped for lack of budget. The budget goes
+        first to explicit on-demand refreshes, then to listed files never tried, then
+        to earlier failures (fewest attempts first, at most MAX_ATTEMPTS each).
+        """
         on_demand = list(dict.fromkeys(file_id(value) for value in on_demand))
         bulletins = {d.id: d for d in metadata if d.kind == "bulletin"}
         latest = latest_per_series(metadata)
@@ -132,58 +149,66 @@ class ContentIndexer:
             "reused": 0,
             "pending_bulletins": 0,
             "pending_files": 0,
+            "pending_refreshes": 0,
+            "given_up": 0,
             "failures": [],
             "page_limited": [],
             "on_demand": on_demand,
         }
         self.remaining = self.limits.max_downloads if download else 0
+        lists_left = self.remaining
         state = ContentState()
         results: list[IndexDocument] = []
 
-        async def include(fid: str, parent: IndexDocument | None, *, sticky: bool, refresh: bool):
-            cached = self.state.files.get(fid)
-            if cached is not None and not refresh:
-                report["reused"] += 1
-                entry = ContentFile(
-                    on_demand=sticky or cached.on_demand, documents=cached.documents
-                )
-            elif self.remaining > 0:
-                self.remaining -= 1
-                try:
-                    documents = await self.extract(fid, parent)
-                except (SourceError, ParseError, ValueError) as exc:
-                    report["failures"].append({"id": fid} | error_details(exc))
-                    if cached is None:
-                        return
-                    # Keep the last good documents rather than dropping the file.
-                    entry = ContentFile(
-                        on_demand=sticky or cached.on_demand, documents=cached.documents
-                    )
-                else:
-                    report["downloaded"] += 1
-                    entry = ContentFile(on_demand=sticky, documents=documents)
-            else:
-                report["pending_files"] += 1
-                return
+        def keep(fid: str, entry: ContentFile):
             state.files[fid] = entry
             results.extend(entry.documents)
 
+        async def attempt(fid: str, parent: IndexDocument | None):
+            """(documents, None) on success, even with no documents; (None, code) on failure."""
+            self.remaining -= 1
+            try:
+                documents = await self.extract(fid, parent)
+            except (SourceError, ParseError, ValueError) as exc:
+                details = error_details(exc)
+                report["failures"].append({"id": fid} | details)
+                return None, details.get("code")
+            report["downloaded"] += 1
+            return documents, None
+
+        # Explicit requests refresh first; a deferred or failed refresh keeps the cache.
         for fid in on_demand:
-            await include(fid, self.parent(fid, bulletins), sticky=True, refresh=True)
+            cached = self.state.files.get(fid)
+            documents = None
+            if self.remaining > 0:
+                documents, _ = await attempt(fid, self.parent(fid, bulletins))
+            elif cached is not None:
+                report["pending_refreshes"] += 1
+            else:
+                report["pending_files"] += 1
+            if documents is not None:
+                keep(fid, ContentFile(on_demand=True, documents=documents))
+            elif cached is not None:
+                keep(fid, ContentFile(on_demand=True, documents=cached.documents))
         for fid, cached in self.state.files.items():
             if cached.on_demand and fid not in state.files and fid not in on_demand:
-                await include(fid, self.parent(fid, bulletins), sticky=True, refresh=False)
+                report["reused"] += 1
+                keep(fid, cached)
+
+        candidates: list[tuple[str, IndexDocument]] = []
         for bulletin in latest:
             listed = self.state.bulletins.get(bulletin.id)
+            fresh = None
             if listed is None or listed.published != published(bulletin):
-                if self.remaining > 0:
+                if lists_left > 0:
+                    lists_left -= 1
                     try:
                         resource = await self.service.resource(bulletin.id)
                     except SourceError as exc:
                         report["failures"].append({"id": bulletin.id} | error_details(exc))
                     else:
                         report["file_lists_fetched"] += 1
-                        listed = BulletinFiles(
+                        fresh = listed = BulletinFiles(
                             published=published(bulletin),
                             file_ids=[
                                 link.resource_id
@@ -198,14 +223,44 @@ class ContentIndexer:
             # An outdated list keeps its files indexed, and is retried, until one is fetched.
             state.bulletins[bulletin.id] = listed
             for fid in listed.file_ids:
-                if fid not in state.files:
-                    await include(fid, bulletin, sticky=False, refresh=False)
+                if fid in state.files:
+                    continue
+                if fid in self.state.files:
+                    report["reused"] += 1
+                    keep(fid, ContentFile(documents=self.state.files[fid].documents))
+                else:
+                    if fresh is None and fid in self.state.failures:
+                        state.failures[fid] = self.state.failures[fid]
+                    candidates.append((fid, bulletin))
+        # Never-tried files first, then earlier failures by attempts: failures cannot
+        # starve later files, and each failure is retried a bounded number of times.
+        candidates.sort(key=lambda item: self.attempts(state, item[0]))
+        for fid, bulletin in candidates:
+            failed = state.failures.get(fid)
+            if failed is not None and failed.attempts >= MAX_ATTEMPTS:
+                report["given_up"] += 1
+            elif self.remaining > 0:
+                documents, code = await attempt(fid, bulletin)
+                if documents is not None:
+                    state.failures.pop(fid, None)
+                    keep(fid, ContentFile(documents=documents))
+                else:
+                    state.failures[fid] = FailedFile(
+                        attempts=self.attempts(state, fid) + 1, code=code
+                    )
+            else:
+                report["pending_files"] += 1
         report["files"] = len(state.files)
         report["documents"] = dict(Counter(document.kind for document in results))
         report["failures"] = report["failures"][:MAX_REPORTED]
         report["page_limited"] = report["page_limited"][:MAX_REPORTED]
         self.next_state = state
         return results
+
+    @staticmethod
+    def attempts(state: ContentState, fid: str) -> int:
+        failed = state.failures.get(fid)
+        return failed.attempts if failed is not None else 0
 
     @staticmethod
     def parent(fid: str, bulletins: dict[str, IndexDocument]) -> IndexDocument | None:

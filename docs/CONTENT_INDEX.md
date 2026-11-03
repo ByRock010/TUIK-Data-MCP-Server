@@ -53,9 +53,15 @@ tuik-mcp-index --incremental --content-file 'publication:<key>'    # on demand
   keeps it on later runs.
 - **Throttle-aware.** Files resolve, download and parse through the server's own
   `CatalogService`: the same allowlist, file verification, six-second download spacing
-  and parse budgets. At most `--max-content-files` downloads happen per run (default
-  25); the rest are reported as `pending_files`/`pending_bulletins` and continue on
-  the next run.
+  and parse budgets. At most `--max-content-files` downloads (default 25), and as
+  many bulletin file-list requests, happen per run; the rest are reported as
+  `pending_files`/`pending_bulletins` and continue on the next run.
+- **Order.** The budget goes first to explicit `--content-file` refreshes, then to
+  listed files never tried (newest series first), and only then to earlier failures,
+  fewest attempts first. A file that keeps failing therefore never blocks the files
+  after it; it is retried at most three times (`given_up` counts the rest) until its
+  bulletin is republished, which fetches a fresh file list and starts its files
+  over. `--content-file` always retries.
 - **State.** `--content-state` (default `.tuik-content-state.json`) keeps every
   indexed file's documents and each bulletin's file list. File IDs embed their
   bulletin, so a cached file is never downloaded again. Every run, including a
@@ -64,9 +70,11 @@ tuik-mcp-index --incremental --content-file 'publication:<key>'    # on demand
   and failures leave it unchanged. Files of bulletins that are no longer the newest
   in their series leave the state (and, on the next full build, the index).
 - **Failures.** A file that cannot be downloaded or parsed is reported under
-  `content.failures` and skipped; if it was indexed before, its previous documents
-  are kept. PDFs are read up to 300 pages (`page_limited` lists longer ones), and a
-  file may yield at most 2,000 documents.
+  `content.failures`, and its attempt count is kept in the state. Indexed content is
+  never dropped for lack of budget or a failed refresh: a deferred `--content-file`
+  refresh (`pending_refreshes`), a failed one, or a bulletin whose file list cannot
+  be refreshed keeps the previous documents. PDFs are read up to 300 pages
+  (`page_limited` lists longer ones), and a file may yield at most 2,000 documents.
 
 The MCP server never writes to the index: indexing a file read through
 `get_tuik_data` or `read_tuik_document` is an explicit `--content-file` run, so the
