@@ -1,5 +1,6 @@
 """Best-effort PDF tables (#8) on the recorded TÜİK publication and methodology PDFs."""
 
+import io
 import re
 from functools import cache
 from pathlib import Path
@@ -29,6 +30,68 @@ def body(name):
 
 def tables(name, page):
     return parse_pdf(body(name), page=page, tables=True)
+
+
+def ruled_pdf(lines, texts):
+    """A valid one-page PDF with stroked lines (x0, y0, x1, y1) and Helvetica texts."""
+    ops = [f"{x0} {y0} m {x1} {y1} l S" for x0, y0, x1, y1 in lines]
+    ops += [f"BT /F1 9 Tf {x} {y} Td ({text}) Tj ET" for x, y, text in texts]
+    stream = "\n".join(ops).encode()
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 300 300] /Contents 4 0 R "
+        b"/Resources << /Font << /F1 5 0 R >> >> >>",
+        b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    ]
+    output = io.BytesIO(b"%PDF-1.4\n")
+    output.seek(0, 2)
+    offsets = []
+    for number, obj in enumerate(objects, 1):
+        offsets.append(output.tell())
+        output.write(f"{number} 0 obj\n".encode() + obj + b"\nendobj\n")
+    xref = output.tell()
+    output.write(f"xref\n0 {len(objects) + 1}\n0000000000 65535 f \n".encode())
+    for offset in offsets:
+        output.write(f"{offset:010d} 00000 n \n".encode())
+    output.write(
+        f"trailer\n<< /Size {len(objects) + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF".encode()
+    )
+    return output.getvalue()
+
+
+def grid(x0, split, x1, ys, *, merged_top=False):
+    """Ruling lines of a two-column grid; a merged top row has no middle line."""
+    lines = [(x0, y, x1, y) for y in ys] + [(x0, ys[0], x0, ys[-1]), (x1, ys[0], x1, ys[-1])]
+    return lines + [(split, ys[1] if merged_top else ys[0], split, ys[-1])]
+
+
+def test_an_empty_merged_first_row_keeps_the_header_and_other_tables():
+    lines = grid(50, 150, 250, [250, 230, 210, 190, 170], merged_top=True)
+    lines += grid(50, 120, 200, [120, 100, 80])
+    texts = [
+        (55, 215, "Region"),
+        (155, 215, "Population"),
+        (55, 195, "Ankara"),
+        (155, 195, "100"),
+        (55, 175, "Istanbul"),
+        (155, 175, "200"),
+        (55, 105, "Year"),
+        (125, 105, "Rate"),
+        (55, 85, "2026"),
+        (125, 85, "8.5"),
+    ]
+    parsed = parse_pdf(ruled_pdf(lines, texts), tables=True)
+    assert parsed.warnings == []
+    first, second = parsed.tables
+    # pdfplumber reads the empty merged top row as ['', None].
+    assert first.layout == "table" and first.columns == ["Region", "Population"]
+    assert first.rows == [
+        {"Region": "Ankara", "Population": "100"},
+        {"Region": "Istanbul", "Population": "200"},
+    ]
+    assert second.columns == ["Year", "Rate"] and second.rows == [{"Year": "2026", "Rate": "8.5"}]
 
 
 def test_cell_text_joins_wrapped_codes_and_words():

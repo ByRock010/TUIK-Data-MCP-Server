@@ -167,16 +167,18 @@ def page_tables(page, number: int) -> tuple[list[ParsedTable], list[str]]:
         if width < 2 or not any(any(row) for row in rows):
             continue  # Decorative boxes and single-column frames are not tables.
         rows = [row + [""] * (width - len(row)) for row in rows]
+        # Leading blank rows (an empty merged cell, say) carry neither title nor header.
+        while not any(rows[0]):
+            rows, raw = rows[1:], raw[1:]
         if len(results) == MAX_TABLES_PER_PAGE:
             warnings.append(
                 f"Page {number} has more than {MAX_TABLES_PER_PAGE} tables; the rest were omitted."
             )
             break
         title = None
-        first = raw[0] if raw else []
-        spanning = len(first) > 1 and sum(cell is not None for cell in first) == 1
+        spanning = len(raw[0]) > 1 and sum(cell is not None for cell in raw[0]) == 1
         if spanning and len(rows) > 2 and header_like(rows[1]):
-            title = next(cell for cell in rows[0] if cell)
+            title = next((cell for cell in rows[0] if cell), None)
             rows = rows[1:]
         notes = [HEURISTIC]
         if len(rows) > 1 and header_like(rows[0]):
