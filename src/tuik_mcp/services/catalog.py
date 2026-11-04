@@ -2,12 +2,14 @@ import asyncio
 from datetime import datetime
 from urllib.parse import urlencode
 
+from tuik_mcp import charts
 from tuik_mcp.cache import Cache, MemoryTTLCache
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.classification import ClassificationClient
 from tuik_mcp.clients.tuik_portal import TuikPortal, normalize_result
 from tuik_mcp.config import CLASSIFICATION, PORTAL
 from tuik_mcp.identities import FILE_ID, KIND_TYPES, SEARCH_ID, key_parts
+from tuik_mcp.models.chart import ChartResponse
 from tuik_mcp.models.common import SearchInput, now
 from tuik_mcp.models.dataset import (
     DataResponse,
@@ -27,6 +29,7 @@ from tuik_mcp.models.search import (
     TuikSearchResult,
 )
 from tuik_mcp.parsers.profile import UnknownColumnsError
+from tuik_mcp.parsers.query import QueryError, evaluate
 from tuik_mcp.search.backend import (
     BackendUnavailable,
     LiteralBackend,
@@ -712,6 +715,172 @@ class CatalogService:
                 "exact only when complete is true; distinct counts when distinct_exact is true."
             ),
         )
+
+    async def chart(
+        self,
+        resource_id: str,
+        x: list[str],
+        y: list[str],
+        chart: str = "line",
+        *,
+        series: str | None = None,
+        sheet: str | None = None,
+        filters: dict[str, str] | None = None,
+        query: TableQuery | dict | None = None,
+        last: int | None = None,
+        title: str | None = None,
+        decimal_separator: str | None = None,
+        labels: list[str] | None = None,
+    ) -> tuple[ChartResponse, bytes | None]:
+        """Chart the rows get_tuik_data would read, from the same retained snapshot (#72)."""
+        validate_id(resource_id)
+        if chart not in {"line", "bar"}:
+            raise ValueError("chart must be 'line' or 'bar'")
+        for name, names, most in (("x", x, 3), ("y", y, 6)):
+            if (
+                not isinstance(names, list)
+                or not 1 <= len(names) <= most
+                or any(not isinstance(c, str) or not 1 <= len(c) <= 200 for c in names)
+            ):
+                raise ValueError(f"{name} must list 1-{most} exact column names")
+        if labels is not None and (
+            not isinstance(labels, list)
+            or any(not isinstance(label, str) or not 1 <= len(label) <= 100 for label in labels)
+        ):
+            raise ValueError("labels must be non-empty names of at most 100 characters")
+        if last is not None and (type(last) is not int or not 1 <= last <= charts.MAX_POINTS):
+            raise ValueError(f"last must be an integer between 1 and {charts.MAX_POINTS}")
+        if decimal_separator not in {None, ".", ","}:
+            raise ValueError("decimal_separator must be '.' or ','")
+        if sheet is not None and (not isinstance(sheet, str) or not 1 <= len(sheet) <= 200):
+            raise ValueError("Sheet must be a non-empty name of at most 200 characters")
+        filters = filters or {}
+        if (
+            not isinstance(filters, dict)
+            or len(filters) > 20
+            or any(
+                not isinstance(k, str) or not isinstance(v, str) or len(k) > 200 or len(v) > 200
+                for k, v in filters.items()
+            )
+        ):
+            raise ValueError(
+                "Filters support at most 20 exact string column/value pairs (200 characters each)"
+            )
+        query = TableQuery.model_validate(query) if query is not None else TableQuery()
+        resource = await self.resource(resource_id)
+        base = dict(
+            resource_id=resource_id,
+            chart=chart,
+            source_url=resource.source_url,
+            download_links=resource.download_links,
+            related_datasets=resource.related_datasets,
+        )
+        # Same selection as get_tuik_data: CSV first, explicit related-dataset choice.
+        csv_link = next((link for link in resource.download_links if link.format == "csv"), None)
+        if csv_link is None and any(item.downloadable for item in resource.related_datasets):
+            return ChartResponse(
+                **base,
+                status="related_datasets",
+                message=(
+                    "Choose a related dataset ID and call chart_tuik_data with that flow: ID. "
+                    "No dataset was selected automatically."
+                ),
+            ), None
+        if not resource.download_links:
+            return ChartResponse(
+                **base,
+                status="not_structured",
+                message="This resource has no supported public structured export.",
+            ), None
+        link = csv_link or resource.download_links[0]
+        if csv_link is not None and sheet is not None:
+            raise ValueError("sheet applies only to XLS/XLSX files; omit it for CSV")
+        file = await self.files.download(link.resource_id or resource_id, link)
+        verified = file.link
+        base["download_links"] = [
+            verified if item.source_url == link.source_url else item
+            for item in resource.download_links
+        ]
+        base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
+        if verified.format not in {"csv", "xls", "xlsx"}:
+            return ChartResponse(
+                **base,
+                status="download_available",
+                format=verified.format,
+                message=(
+                    "Official download verified. Only CSV/XLS/XLSX rows can be charted; "
+                    "read PDF tables with read_tuik_document tables=true."
+                ),
+            ), None
+        if sheet is not None and verified.format == "csv":
+            raise ValueError("sheet applies only to XLS/XLSX files")
+        csv = verified.format == "csv"
+        limits = self.queries.limits
+        tables = await self.files.tables(
+            link.resource_id or resource_id,
+            file,
+            scan_max_rows=limits.max_rows if csv else None,
+            scan_max_cells=limits.max_cells if csv else None,
+        )
+        if not tables:
+            raise SourceError(
+                "parse_failed", "Workbook contains no worksheets", verified.source_url
+            )
+        table = next((t for t in tables if t.sheet == sheet), None) if sheet else tables[0]
+        if table is None:
+            raise ValueError(
+                f"Workbook has no sheet named {sheet!r}; sheets: {[t.sheet for t in tables]}"
+            )
+        heading = title or table.title or resource.title or resource_id
+        retrieved = file.retrieved_at.date().isoformat()
+        # Download URLs change within hours (#27); the image cites the resource page.
+        footer = f"Kaynak: TÜİK · {resource.source_url[:120]} · Erişim: {retrieved}"
+        try:
+            columns, rows = await self.files.work(evaluate, table, query, filters, limits)
+            plot = await self.files.work(
+                charts.build,
+                columns,
+                rows,
+                x,
+                y,
+                series=series,
+                last=last,
+                decimal_separator=decimal_separator,
+                labels=labels,
+            )
+            image, width, height = await self.files.work(
+                charts.render, plot, chart, heading, table.unit, footer
+            )
+        except QueryError as exc:
+            raise SourceError(exc.code, str(exc), verified.source_url) from exc
+        warnings = [*table.warnings, *plot.warnings]
+        if chart == "bar" and len(plot.labels) > charts.MAX_BAR_POINTS:
+            warnings.append(
+                f"{len(plot.labels)} bars are hard to read; consider chart='line' or last."
+            )
+        return ChartResponse(
+            **base,
+            status="ok",
+            title=heading,
+            unit=table.unit,
+            format=verified.format,
+            sheet=table.sheet,
+            sheets=[] if csv else [t.sheet for t in tables],
+            snapshot_id="sha256:" + file.digest,
+            x=x,
+            x_order=plot.order,
+            x_points=len(plot.labels),
+            matched_rows=len(rows),
+            series=charts.summarize(plot),
+            image="image/png",
+            width_px=width,
+            height_px=height,
+            warnings=warnings,
+            message=(
+                "PNG chart of the published values; gaps are empty cells, placeholders or "
+                "non-numeric values. Cite source_url and verify exact values with get_tuik_data."
+            ),
+        ), image
 
     async def document(
         self,

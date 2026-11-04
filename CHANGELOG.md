@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `chart_tuik_data` draws CSV/XLS/XLSX rows as a PNG line or bar chart (MCP image
+  content) with a JSON summary of each series' points, gaps and first/last/min/max.
+  It shares `get_tuik_data`'s snapshot, filters and query. It adds label columns,
+  `series` splitting for long-format dataflows, `last` and line `labels`, and shows
+  the title, unit, source and retrieval date. Gaps are never drawn as zero.
+  matplotlib is the optional `viz` extra (#72).
 - Source-checked sequential AI relevance review with live stdio MCP query/resource
   replay, bounded table probes, retained first-pass grades and explicit revision
   reasons. `score-ai --require-reviewed` validates full-pool coverage and source

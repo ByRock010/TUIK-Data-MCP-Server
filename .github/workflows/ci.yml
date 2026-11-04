@@ -49,7 +49,7 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Install
-        run: python -m pip install -e '.[dev,fixtures]'
+        run: python -m pip install -e '.[dev,fixtures,viz]'
 
       - name: Ruff lint
         run: ruff check src tests scripts
@@ -107,7 +107,7 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
       - name: Install
-        run: python -m pip install -e '.[dev,fixtures]'
+        run: python -m pip install -e '.[dev,fixtures,viz]'
       - name: Verify cluster version and health
         run: |
           curl --fail --silent "$TUIK_OPENSEARCH_URL/"

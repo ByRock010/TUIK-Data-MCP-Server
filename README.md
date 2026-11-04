@@ -19,6 +19,7 @@ typed table queries and snapshot-bound pagination. See the
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
+| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra) |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -35,14 +36,17 @@ Requires Python 3.12 or newer. From the directory containing `pyproject.toml`:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,viz]'
 ```
+
+The `viz` extra installs matplotlib for `chart_tuik_data`. Without it, every
+other tool works and the chart tool returns `visualization_unavailable`.
 
 Alternatively, with uv:
 
 ```bash
 uv venv .venv
-uv pip install --python .venv/bin/python -e '.[dev]'
+uv pip install --python .venv/bin/python -e '.[dev,viz]'
 ```
 
 The implementation uses FastMCP from the **official MCP Python SDK 1.x**
@@ -336,6 +340,50 @@ or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
 
 The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
 missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
+
+## Chart a table
+
+`chart_tuik_data` draws the rows `get_tuik_data` would read as a PNG image, so a
+trend over hundreds of rows reaches the conversation as one picture instead of a
+long table. It uses the same file selection, snapshot, `sheet`, `filters` and
+`query`. Call `inspect_tuik_data` first for the exact column names.
+
+```json
+{
+  "resource_id": "press:57987:file:<key>",
+  "x": ["Yıllar - Years [column 1]", "column_2"],
+  "y": [
+    "İşsizlik oranı Unemployment rate (%) [column 10]",
+    "İşsizlik oranı Unemployment rate (%) [column 21]"
+  ],
+  "labels": ["Toplam", "Erkek"],
+  "last": 24
+}
+```
+
+- **Axes.** `x` lists 1–3 label columns, joined per row (e.g. year and month). `y`
+  lists 1–6 numeric columns, one line or bar group each. `labels` renames them in order.
+- **Long-format dataflows.** Set `series` to a dimension column to draw one line per
+  value, with exactly one `y` column and at most 8 values. Narrow the rest with
+  `filters` or predicates.
+- **Order and range.** When every x label is a date or period (`2026`, `2026-03`,
+  `2026M03`, `2026-Q2`, `2026-03-15`, or a year plus a month name such as
+  `2026 Ağustos - August`), points run oldest to newest whatever the row order, and
+  `last` keeps the most recent N. The summary reports `x_order: "chronological"`.
+  Other labels keep row order (`x_order: "source"`); sort with `query`. In that case
+  `last` keeps the final N rows, and a warning says they are not necessarily the newest.
+- **Gap counts.** `missing` and `invalid` count gaps inside the plotted window only.
+- **Numbers.** Values are parsed with the table-query rules. Set `decimal_separator`
+  when a column's notation is ambiguous. Empty cells, placeholders and other text
+  become gaps, never zero, and are counted in the summary.
+
+The response holds the image and a JSON summary. The summary repeats the provenance
+and lists each series' plotted points, gaps and first/last/min/max values, so the
+assistant can describe the trend without reading the pixels. The image shows the
+title, unit, retrieval date and the resource's page. Download URLs change within
+hours, so the summary's `source_url` names the downloaded file instead. `chart="bar"` is meant for a few points
+(a warning appears above 60). Bulletins with related datasets return
+`related_datasets`, and PDFs return `download_available`; neither includes an image.
 
 ## Read PDF documents
 
