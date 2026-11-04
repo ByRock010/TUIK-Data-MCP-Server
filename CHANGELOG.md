@@ -19,6 +19,11 @@ All notable changes to this project are documented here. The format follows
   warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
   was measured on the recorded publication and methodology PDFs (#8).
 
+- Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
+  JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
+  apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
+  fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
