@@ -14,6 +14,10 @@ All notable changes to this project are documented here. The format follows
   Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
   the portal. Literal/portal fallbacks report unsupported filters and unavailable
   facets, with null totals/truncation when unknown. Eight tools remain (#18).
+- `read_tuik_document(..., tables=true)` returns a PDF page's ruled tables, best
+  effort, with page, title, header or positional columns, string rows and
+  warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
+  was measured on the recorded publication and methodology PDFs (#8).
 
 - Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
   JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
