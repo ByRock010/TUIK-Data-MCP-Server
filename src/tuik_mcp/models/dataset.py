@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-from tuik_mcp.parsers.models import ColumnProfile
+from tuik_mcp.parsers.models import ColumnProfile, ParsedTable
 
 from .common import Provenance, SearchInput
 from .search import TuikSearchResult
@@ -139,6 +139,8 @@ class DocumentResponse(Provenance):
     next_offset: int | None = None
     truncated: bool = False
     has_more: bool = False
+    # Best-effort tables of page_start; null unless requested.
+    tables: list[ParsedTable] | None = None
     download_links: list[DownloadLink] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
     message: str | None = None

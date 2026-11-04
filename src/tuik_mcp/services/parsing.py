@@ -84,9 +84,10 @@ def parse_document_source(
     *,
     page: int = 1,
     budgets: ParseLimits | None = None,
+    tables: bool = False,
 ) -> ParsedDocument:
     try:
-        return parse_pdf(body, page=page, budgets=budgets)
+        return parse_pdf(body, page=page, budgets=budgets, tables=tables)
     except ParseLimitError as exc:
         raise SourceError("parse_limit_exceeded", str(exc), source_url) from exc
     except ParseError as exc:
