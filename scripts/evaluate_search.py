@@ -126,6 +126,26 @@ def validate_run(run, suite):
                     raise ValueError("Hits require title, source_url and resource_type")
 
 
+def validate_pool_documents(suite):
+    documents = suite.get("documents", {})
+    for qid, judgments in suite["judgments"].items():
+        for doc_id in judgments:
+            if doc_id not in documents:
+                raise ValueError(f"Missing document metadata for {qid}: {doc_id}")
+    for doc_id, document in documents.items():
+        if (
+            not isinstance(document, dict)
+            or document.get("id") != doc_id
+            or not all(
+                isinstance(document.get(key), str) and document[key].strip()
+                for key in ("title", "resource_type", "source_url")
+            )
+        ):
+            raise ValueError(f"Invalid document metadata for {doc_id}")
+        stable_id(doc_id)
+    return documents
+
+
 def pool(suite, runs):
     suite = validate_suite(json.loads(json.dumps(suite)))
     documents = suite.setdefault("documents", {})
@@ -139,6 +159,8 @@ def pool(suite, runs):
                         hit["id"], {"judge_a": None, "judge_b": None, "resolved": None}
                     )
                     documents.setdefault(hit["id"], hit)
+    # New runs may restore missing metadata; validate only after pooling all hits.
+    validate_pool_documents(suite)
     # IDs order candidates consistently without disclosing system or rank.
     suite["documents"] = dict(sorted(documents.items()))
     suite["judgments"] = {
@@ -148,10 +170,11 @@ def pool(suite, runs):
 
 
 def judge_sheet(suite, judge):
+    validate_suite(suite)
     return {
         "judge": judge,
         "queries": suite["queries"],
-        "documents": suite["documents"],
+        "documents": validate_pool_documents(suite),
         "grades": {qid: dict.fromkeys(sorted(docs)) for qid, docs in suite["judgments"].items()},
     }
 
@@ -288,6 +311,7 @@ async def collect(suite, output, resume=False):
         "version": 1,
         "collected_at": datetime.now(UTC).isoformat(),
         "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "queries": {q["id"]: q["text"] for q in suite["queries"]},
         "systems": {
             "portal": {"corpus": "portal_all_types_non_archive", "results": {}},
@@ -299,6 +323,12 @@ async def collect(suite, output, resume=False):
         previous = read_json(output)
         if previous["queries"] != report["queries"]:
             raise ValueError("Cannot resume a different query set")
+        for field in ("revision", "collector_sha256"):
+            if previous.get(field) != report[field]:
+                raise ValueError(
+                    f"Cannot resume: {field} differs or is missing; "
+                    "use the original code or collect a new run in a separate output file"
+                )
         report = previous
     http = HttpClient(Settings.from_env())
     try:
@@ -360,7 +390,6 @@ async def collect(suite, output, resume=False):
     finally:
         await http.close()
         report["last_attempt_at"] = datetime.now(UTC).isoformat()
-        report["collector_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
         write_json(output, report)
     return 1 if report["errors"] else 0
 
