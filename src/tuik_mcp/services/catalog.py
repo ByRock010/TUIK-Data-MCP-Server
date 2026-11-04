@@ -868,6 +868,7 @@ class CatalogService:
             sheets=[] if csv else [t.sheet for t in tables],
             snapshot_id="sha256:" + file.digest,
             x=x,
+            x_order=plot.order,
             x_points=len(plot.labels),
             matched_rows=len(rows),
             series=charts.summarize(plot),

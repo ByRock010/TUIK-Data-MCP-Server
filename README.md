@@ -366,8 +366,13 @@ long table. It uses the same file selection, snapshot, `sheet`, `filters` and
 - **Long-format dataflows.** Set `series` to a dimension column to draw one line per
   value, with exactly one `y` column and at most 8 values. Narrow the rest with
   `filters` or predicates.
-- **Range.** Rows keep their source order; sort with `query`. `last` keeps the most
-  recent N x points.
+- **Order and range.** When every x label is a date or period (`2026`, `2026-03`,
+  `2026M03`, `2026-Q2`, `2026-03-15`, or a year plus a month name such as
+  `2026 Ağustos - August`), points run oldest to newest whatever the row order, and
+  `last` keeps the most recent N. The summary reports `x_order: "chronological"`.
+  Other labels keep row order (`x_order: "source"`); sort with `query`. In that case
+  `last` keeps the final N rows, and a warning says they are not necessarily the newest.
+- **Gap counts.** `missing` and `invalid` count gaps inside the plotted window only.
 - **Numbers.** Values are parsed with the table-query rules. Set `decimal_separator`
   when a column's notation is ambiguous. Empty cells, placeholders and other text
   become gaps, never zero, and are counted in the summary.

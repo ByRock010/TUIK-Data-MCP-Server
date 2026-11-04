@@ -134,6 +134,70 @@ async def test_placeholders_and_text_become_gaps_never_zero():
         await http.close()
 
 
+@pytest.mark.parametrize("descending_sort", [False, True])
+async def test_last_keeps_the_most_recent_periods_whatever_the_row_order(descending_sort):
+    # Newest-first source rows, or ascending rows sorted descending by query.
+    months = ["2026-01", "2026-02", "2026-03"]
+    rows = [("Gıda", month, str(n)) for n, month in enumerate(months, start=1)]
+    body = long_csv(rows if descending_sort else rows[::-1])
+    query = (
+        {
+            "sort": [
+                {
+                    "column": "Zaman",
+                    "value_type": "period",
+                    "period_format": "month",
+                    "direction": "desc",
+                }
+            ]
+        }
+        if descending_sort
+        else None
+    )
+    http, catalog, _ = service(body, "csv")
+    try:
+        result, _ = await catalog.chart(FLOW, ["Zaman"], ["Gözlem Değeri"], query=query, last=2)
+        (line,) = result.series
+        assert result.x_order == "chronological" and result.x_points == 2
+        assert (line.first.x, line.last.x, line.last.value) == ("2026-02", "2026-03", 3.0)
+        assert any("chronologically" in warning for warning in result.warnings)
+    finally:
+        await http.close()
+
+
+def test_named_month_labels_are_ordered_and_other_labels_keep_row_order():
+    rows = [
+        {"Yıl": "2026", "Ay": month, "Değer": str(n)}
+        for n, month in enumerate(["Mart - March", "Şubat - February (r)", "Ocak - January"])
+    ]
+    plot = charts.build(["Yıl", "Ay", "Değer"], rows, ["Yıl", "Ay"], ["Değer"], last=2)
+    assert plot.order == "chronological"
+    assert plot.labels == ["2026 Şubat - February (r)", "2026 Mart - March"]
+    names = [{"Ad": name, "Değer": str(n)} for n, name in enumerate(["B", "A", "C"])]
+    plot = charts.build(["Ad", "Değer"], names, ["Ad"], ["Değer"], last=2)
+    assert plot.order == "source" and plot.labels == ["A", "C"]
+    assert any("not necessarily the most recent" in warning for warning in plot.warnings)
+
+
+@pytest.mark.parametrize("split", [False, True])
+def test_gap_counts_and_warnings_cover_only_the_plotted_window(split):
+    values = ["-", "n/a", "10", "20"]
+    rows = [
+        {"Sektör": "Gıda", "Zaman": f"2026-0{n}", "Değer": value}
+        for n, value in enumerate(values, start=1)
+    ]
+    columns = ["Sektör", "Zaman", "Değer"]
+    options = {"series": "Sektör"} if split else {}
+    plot = charts.build(columns, rows, ["Zaman"], ["Değer"], last=2, **options)
+    (line,) = charts.summarize(plot)
+    assert (line.points, line.missing, line.invalid) == (2, 0, 0)
+    assert not any("non-numeric" in warning for warning in plot.warnings)
+    whole = charts.build(columns, rows, ["Zaman"], ["Değer"], **options)
+    (line,) = charts.summarize(whole)
+    assert (line.points, line.missing, line.invalid) == (2, 1, 1)
+    assert any("1 non-numeric" in warning for warning in whole.warnings)
+
+
 @pytest.mark.parametrize(
     "arguments,code",
     [
@@ -225,7 +289,7 @@ def test_missing_matplotlib_is_an_actionable_error(monkeypatch):
         return real_import(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, "__import__", without_matplotlib)
-    plot = charts.Plot(labels=["a"], lines=[charts.Line("b", "b", [1.0])])
+    plot = charts.Plot(labels=["a"], lines=[charts.Line("b", "b", [1.0], ["ok"])])
     with pytest.raises(QueryError, match=r"tuik-mcp\[viz\]") as error:
         charts.render(plot, "line", "t", None, "f")
     assert error.value.code == "visualization_unavailable"

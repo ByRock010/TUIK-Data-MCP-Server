@@ -37,6 +37,8 @@ class ChartResponse(Provenance):
     sheets: list[str] = Field(default_factory=list)
     snapshot_id: str | None = None
     x: list[str] = Field(default_factory=list)
+    # "chronological" when every x label is a recognised date/period (oldest first).
+    x_order: Literal["chronological", "source"] | None = None
     x_points: int = 0
     matched_rows: int = 0
     series: list[ChartSeries] = Field(default_factory=list)

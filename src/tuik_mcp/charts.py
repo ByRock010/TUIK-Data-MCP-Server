@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from tuik_mcp.models.chart import ChartPoint, ChartSeries
 from tuik_mcp.models.query import Comparison
 from tuik_mcp.parsers.query import QueryError, converter, missing
+from tuik_mcp.utils.normalization import turkish_casefold
 
 MAX_SERIES = 8
 MAX_POINTS = 5000
@@ -22,6 +23,36 @@ WIDTH_IN, HEIGHT_IN, DPI = 10.0, 5.6, 110
 # Okabe-Ito: distinguishable with common colour-vision deficiencies.
 COLORS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#000000", "#F0E442")
 COLUMN_SUFFIX = re.compile(r"\s*\[column \d+\]$")
+MONTHS = {
+    name: number
+    for number, names in enumerate(
+        (
+            ("ocak", "january"),
+            ("şubat", "february"),
+            ("mart", "march"),
+            ("nisan", "april"),
+            ("mayıs", "may"),
+            ("haziran", "june"),
+            ("temmuz", "july"),
+            ("ağustos", "august"),
+            ("eylül", "september"),
+            ("ekim", "october"),
+            ("kasım", "november"),
+            ("aralık", "december"),
+        ),
+        start=1,
+    )
+    for name in names
+}
+# Recognised x labels and their sort keys. Each kind orders only labels of that kind.
+TEMPORAL = (
+    ("date", re.compile(r"(\d{4})-(\d{2})-(\d{2})")),
+    ("month", re.compile(r"(\d{4})(?:-|M)(0[1-9]|1[0-2])")),
+    ("quarter", re.compile(r"(\d{4})-?Q([1-4])")),
+    ("half", re.compile(r"(\d{4})-?[HS]([12])")),
+    ("year", re.compile(r"(\d{4})")),
+)
+NAMED_MONTH = re.compile(r"(\d{4})\s+([^\W\d_]+)")
 
 
 @dataclass
@@ -29,8 +60,16 @@ class Line:
     name: str
     column: str
     values: list[float | None]
-    missing: int = 0
-    invalid: int = 0
+    # Per point: "ok", "missing", "invalid", or None where a series has no row.
+    states: list[str | None]
+
+    @property
+    def missing(self) -> int:
+        return self.states.count("missing")
+
+    @property
+    def invalid(self) -> int:
+        return self.states.count("invalid")
 
 
 @dataclass
@@ -38,6 +77,20 @@ class Plot:
     labels: list[str]
     lines: list[Line]
     warnings: list[str] = field(default_factory=list)
+    order: str = "source"
+
+
+def temporal_key(label: str) -> tuple[str, tuple[int, ...]] | None:
+    """A sortable key for dates/periods, including "2026 Ağustos - August"."""
+    text = label.strip()
+    for kind, pattern in TEMPORAL:
+        match = pattern.fullmatch(text)
+        if match:
+            return kind, tuple(int(part) for part in match.groups())
+    match = NAMED_MONTH.match(text)
+    if match and (month := MONTHS.get(turkish_casefold(match.group(2)))):
+        return "month", (int(match.group(1)), month)
+    return None
 
 
 def display(name: str, limit: int = 70) -> str:
@@ -108,25 +161,18 @@ def build(
         lines = []
         for name, indexes in groups.items():
             values: list[float | None] = [None] * len(points)
-            filled = set()
+            point_states: list[str | None] = [None] * len(points)
             for i in indexes:
                 slot = position[by_row[i]]
-                if slot in filled:
+                if point_states[slot] is not None:
                     raise QueryError(
                         "invalid_query",
                         f"x label {by_row[i]!r} repeats within series {name!r}; add x "
                         "columns or filters so each point is unique.",
                     )
-                filled.add(slot)
-                values[slot] = converted[i]
+                values[slot], point_states[slot] = converted[i], states[i]
             lines.append(
-                Line(
-                    name=display(name or "(boş)"),
-                    column=y[0],
-                    values=values,
-                    missing=sum(states[i] == "missing" for i in indexes),
-                    invalid=sum(states[i] == "invalid" for i in indexes),
-                )
+                Line(name=display(name or "(boş)"), column=y[0], values=values, states=point_states)
             )
     else:
         points = by_row
@@ -140,8 +186,7 @@ def build(
                     name=display(labels[n]) if labels else display(column),
                     column=column,
                     values=values,
-                    missing=states.count("missing"),
-                    invalid=states.count("invalid"),
+                    states=states,
                 )
             )
         names = [line.name for line in lines]
@@ -151,10 +196,28 @@ def build(
                 if names.count(line.name) > 1:
                     line.name = " ".join(line.column.split())[:90]
             warnings.append("y columns share a header; pass labels to name the lines.")
+    keys = [temporal_key(label) for label in points]
+    order = "source"
+    if all(keys) and len({key[0] for key in keys}) == 1:
+        # Dates/periods always run oldest to newest, so last is the most recent window
+        # even for newest-first sources or a descending query sort.
+        order = "chronological"
+        index = sorted(range(len(points)), key=lambda i: keys[i][1])
+        if index != list(range(len(points))):
+            points = [points[i] for i in index]
+            for line in lines:
+                line.values = [line.values[i] for i in index]
+                line.states = [line.states[i] for i in index]
+            warnings.append("Rows were not oldest-first; points are plotted chronologically.")
     if last is not None and len(points) > last:
+        if order == "source":
+            warnings.append(
+                "x labels are not recognised dates or periods; last kept the final "
+                f"{last} points in row order, not necessarily the most recent."
+            )
         points = points[-last:]
         for line in lines:
-            line.values = line.values[-last:]
+            line.values, line.states = line.values[-last:], line.states[-last:]
     if len(points) > MAX_POINTS:
         raise QueryError(
             "chart_limit_exceeded",
@@ -168,7 +231,7 @@ def build(
     for line in lines:
         if all(value is None for value in line.values):
             warnings.append(f"{line.name}: no numeric values in the plotted range.")
-    return Plot(labels=points, lines=lines, warnings=warnings)
+    return Plot(labels=points, lines=lines, warnings=warnings, order=order)
 
 
 def summarize(plot: Plot) -> list[ChartSeries]:

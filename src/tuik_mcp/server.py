@@ -230,8 +230,11 @@ async def chart_tuik_data(
     call inspect_tuik_data first for exact column names. x names 1-3 label columns joined
     per row (e.g. year and month); y names 1-6 numeric columns, one line each. For
     long-format dataflow CSVs, set series to a dimension column to draw one line per
-    value (exactly one y column, at most 8 values; filter the rest). Rows keep their
-    order; sort with query to reorder. last keeps the most recent N x points. labels
+    value (exactly one y column, at most 8 values; filter the rest). If every x label
+    is a date/period (2026, 2026-03, 2026-Q2, 2026-03-15, "2026 Ağustos"), points run
+    oldest to newest and last keeps the most recent N (x_order "chronological").
+    Otherwise rows keep their order (sort with query) and last keeps the final N
+    rows (x_order "source"). Gap counts cover only the plotted points. labels
     renames the y lines in order (e.g. "Toplam", "Erkek" for side-by-side blocks).
     Numbers follow get_tuik_data's rules: set decimal_separator if notation is
     ambiguous. Empty cells, placeholders and non-numeric values become gaps, never
