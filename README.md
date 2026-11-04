@@ -647,9 +647,10 @@ indexed general MCP search are included on `develop`. Dedicated cluster CI (#19)
 and independently judged relevance measurements (#11/#20) remain v0.3.0 release
 gates; these are not v0.2.0 release prerequisites. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
-Hybrid search and table/PDF content indexing are v0.4.0 stretch goals; best-effort
-PDF tables (#8) are available through `read_tuik_document`. A PostgreSQL canonical
-catalog and DOCX ingestion are outside the
+Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
+available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
+"document_chunk")`, and best-effort PDF tables (#8) through `read_tuik_document`.
+A PostgreSQL canonical catalog and DOCX ingestion are outside the
 current roadmap. Version 0.2.0 also includes
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
 (#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
