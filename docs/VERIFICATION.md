@@ -1,5 +1,21 @@
 # Verification
 
+## Indexed MCP development increment — 2026-11-03
+
+The #29 acceptance path now checks real indexed discovery → stable resource
+resolution → verified bounded CSV rows, rejecting literal/portal fallbacks.
+The [dated verification](verification/issue-29-2026-11-03.md) records **578 offline
+tests** on Python 3.13/3.14, **5 real-cluster tests**, lint/format and **28 Node
+tests**, plus a separate live TÜİK run through a UUID-isolated, one-flow OpenSearch
+3.3.2 index. The [unaltered live JSON](verification/indexed-live-smoke-2026-11-03.json)
+contains the ASCII query, exact flow ID, indexing/source provenance and **2 of
+11,564 CSV rows**. The temporary index was deleted after the check.
+
+This is bounded development evidence. Human relevance measurements, full-corpus
+acceptance and the final v0.3.0 version/tag are still pending; see the
+[release readiness checklist](RELEASE_0.3.0.md). The recorded package version is
+0.2.0, not a claim that v0.3.0 has been released.
+
 ## Final v0.2.0 candidate — 2026-10-29
 
 The combined accepted implementation at `8e566bf` includes PRs #59 and #60.

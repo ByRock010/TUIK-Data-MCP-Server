@@ -586,6 +586,35 @@ advances only after the index write succeeds; full builds keep previous versions
 for rollback. See [docs/INDEXING.md](docs/INDEXING.md) for modes, failure handling
 and the JSON report.
 
+### Verify indexed discovery through MCP
+
+After a successful build, keep `TUIK_OPENSEARCH_URL` and `TUIK_OPENSEARCH_INDEX`
+exported and run:
+
+```bash
+.venv/bin/python scripts/live_smoke.py --indexed-only \
+  --output /tmp/indexed-live-report.json
+# Optional: choose a different query whose top hit has a small public CSV export.
+.venv/bin/python scripts/live_smoke.py --indexed-only \
+  --index-query 'altin haric dis ticaret hadleri' \
+  --output /tmp/indexed-ascii-report.json
+```
+
+This starts the real stdio MCP server and follows `search_tuik(kind="dataset",
+downloadable_only=true)` → `get_tuik_resource` → `get_tuik_data(limit=2)` using the
+exact same `flow:` ID. It requires `source: index`, `backend: opensearch`, indexing
+provenance, rows, a content snapshot and a verified CSV link. A literal/portal
+fallback fails the indexed check even when it returns useful rows; failure still
+writes JSON and exits nonzero. Select a bounded export: the row limit does not
+avoid downloading the whole CSV within the configured download limit.
+
+The full smoke also runs this indexed path whenever the cluster URL is configured.
+Its legacy table/publication checks explicitly use live portal search, since those
+resource types are outside the v0.3 metadata index. Without a cluster URL, the
+full smoke remains available for upstream contracts; `--indexed-only` fails before
+starting the server. The [v0.3.0 release checklist](docs/RELEASE_0.3.0.md) separates
+these operational checks from the human relevance study and release/tag gates.
+
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
 
@@ -600,12 +629,14 @@ Dataset discovery now searches public export availability and returns catalog-ba
 identities, and downloadable tables, reports, publications and bulletin files have
 title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
-The optional OpenSearch stack, analysis, crawler, indexer and dataset backend are
-already included. The v0.3.0 work still covers indexed general MCP search, dedicated
-cluster CI and independently judged relevance measurements; these are not v0.2.0
-release prerequisites.
+The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
+indexed general MCP search are included on `develop`. Dedicated cluster CI (#19)
+and independently judged relevance measurements (#11/#20) remain v0.3.0 release
+gates; these are not v0.2.0 release prerequisites. See the
+[v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search and table/PDF content indexing are v0.4.0 stretch goals; best-effort
-PDF tables (#8) are available through `read_tuik_document`. A PostgreSQL canonical catalog and DOCX ingestion are outside the
+PDF tables (#8) are available through `read_tuik_document`. A PostgreSQL canonical
+catalog and DOCX ingestion are outside the
 current roadmap. Version 0.2.0 also includes
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
 (#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
