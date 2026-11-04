@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Explicit single-AI relevance pilot over 917 pooled query–document pairs, with
+  a source-bound `score-ai` path that cannot satisfy the human release gate.
+  Blank CSV judge sheets support spreadsheet editing and validated import;
+  `score --require-complete` rejects pending human judgments/adjudication (#11, #20).
 - Indexed MCP release smoke (`--indexed-only`, optional `--index-query`) follows
   a real OpenSearch dataset hit through resource resolution to verified bounded
   CSV rows, rejecting fallbacks. Full smoke selects portal search explicitly for

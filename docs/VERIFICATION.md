@@ -1,5 +1,21 @@
 # Verification
 
+## AI relevance pilot and human judging handoff — 2026-11-04
+
+The [dated #11/#20 report](verification/issue-11-20-ai-pilot-2026-11-04.md)
+records single-AI metadata relevance grades for **917** pooled query–document
+pairs, with per-query rationale, source fingerprints and reproducible metrics.
+On the shared 342-flow subset, preliminary nDCG@10 is **0.6357** (built-in Turkish),
+**0.6193** (multi-field) and **0.7332** (with synonyms). These are AI pilot scores,
+not independent human findings or a full-corpus comparison. κ is undefined and
+the human release gate stays unsatisfied. No production default was changed.
+
+Blank spreadsheet judge exports and validated imports support the human study;
+strict human scoring fails until labels/adjudication are complete. The offline
+suite passed **653 tests**, Ruff passed and **28 Node tests** passed. Local
+OpenSearch checks were skipped with the Docker daemon unavailable. See the
+[release checklist](RELEASE_0.3.0.md) for the remaining human/full-corpus gates.
+
 ## Indexed MCP development increment — 2026-11-03
 
 The #29 acceptance path now checks real indexed discovery → stable resource

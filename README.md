@@ -642,10 +642,12 @@ Dataset discovery now searches public export availability and returns catalog-ba
 identities, and downloadable tables, reports, publications and bulletin files have
 title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
-The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
-indexed general MCP search are included on `develop`. Dedicated cluster CI (#19)
-and independently judged relevance measurements (#11/#20) remain v0.3.0 release
-gates; these are not v0.2.0 release prerequisites. See the
+The optional OpenSearch stack, analysis, crawler, indexer, dataset backend,
+indexed general MCP search and dedicated cluster CI (#19) are merged into
+`develop`. Independently judged relevance measurements (#11/#20), full-corpus
+acceptance and publication remain v0.3.0 gates. A separately identified
+[single-AI relevance pilot](docs/verification/issue-11-20-ai-pilot-2026-11-04.md)
+is available; it does not replace the two independent human assessments. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
