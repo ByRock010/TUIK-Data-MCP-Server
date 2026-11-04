@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Indexed MCP release smoke (`--indexed-only`, optional `--index-query`) follows
+  a real OpenSearch dataset hit through resource resolution to verified bounded
+  CSV rows, rejecting fallbacks. Full smoke selects portal search explicitly for
+  tables/publications; v0.3.0 readiness documents remaining evaluation/release gates (#29).
 - Frozen-corpus OpenSearch evaluation collection for built-in Turkish, multi-field
   and synonym variants, with engine/configuration provenance, deterministic ties,
   disposable indices and rejection of incomplete runs. Relevance judgments and
