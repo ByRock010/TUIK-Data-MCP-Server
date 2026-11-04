@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 
 class ParsedTable(BaseModel):
     sheet: str | None = None
+    # One-based source page of a PDF table, for citation.
+    page: int | None = Field(default=None, ge=1)
     title: str | None = None
     title_en: str | None = None
     unit: str | None = None
@@ -33,6 +35,9 @@ class DocumentChunk(DocumentPage):
 class ParsedDocument(BaseModel):
     page_count: int = Field(ge=1)
     pages: list[DocumentPage]
+    # Best-effort tables of the selected pages, when requested.
+    tables: list[ParsedTable] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
 class ObservedValue(BaseModel):
