@@ -24,6 +24,13 @@ All notable changes to this project are documented here. The format follows
   apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
   fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
 
+### Fixed
+
+- Search evaluation rejects orphaned or malformed document metadata before
+  scoring or judge-sheet export. Resumable baseline collection records provenance
+  in every checkpoint and rejects changed/missing source revisions or collector
+  hashes before network access or checkpoint writes (#11).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added

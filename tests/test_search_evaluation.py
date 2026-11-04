@@ -194,6 +194,14 @@ async def test_collection_checkpoints_errors_and_resumes_without_repeating_succe
 
     monkeypatch.setattr(evaluation, "HttpClient", lambda settings: FakeHttp())
     monkeypatch.setattr(evaluation, "CatalogService", FakeService)
+    write_json = evaluation.write_json
+
+    def checkpoint(path, report):
+        # An abrupt stop after the first checkpoint must leave resumable provenance.
+        assert report["revision"] and len(report["collector_sha256"]) == 64
+        write_json(path, report)
+
+    monkeypatch.setattr(evaluation, "write_json", checkpoint)
     output = tmp_path / "run.json"
     assert await evaluation.collect(suite, output) == 1
     failed = evaluation.read_json(output)
@@ -204,6 +212,8 @@ async def test_collection_checkpoints_errors_and_resumes_without_repeating_succe
     assert await evaluation.collect(suite, output, resume=True) == 0
     assert calls == ["portal", "literal", "portal"]
     resumed = evaluation.read_json(output)
+    for key in ("revision", "collector_sha256", "collected_at"):
+        assert resumed[key] == failed[key]
     assert resumed["catalog_sha256"] == failed["catalog_sha256"]
     assert resumed["errors"] == {}
     evaluation.validate_run(resumed, suite)
