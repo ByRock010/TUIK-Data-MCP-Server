@@ -5,7 +5,7 @@ import re
 
 from .errors import ParseError, ParseLimitError
 from .limits import ParseLimits
-from .models import DocumentChunk, DocumentPage, ParsedDocument
+from .models import DocumentChunk, DocumentPage, ParsedDocument, ParsedTable
 
 
 def normalize_text(text: str) -> str:
@@ -20,16 +20,21 @@ def parse_pdf(
     page: int = 1,
     pages: int = 1,
     budgets: ParseLimits | None = None,
+    tables: bool = False,
 ) -> ParsedDocument:
     import pdfplumber
     from pdfminer.pdfpage import PDFPage
     from pdfplumber.page import Page
+
+    from .pdf_tables import page_tables
 
     budgets = budgets or ParseLimits()
     if type(page) is not int or page < 1 or type(pages) is not int or pages < 1:
         raise ValueError("PDF page and pages must be positive integers")
     budgets.check(pages, budgets.max_pdf_pages_per_call, "PDF pages per call")
     selected: list[DocumentPage] = []
+    found: list[ParsedTable] = []
+    warnings: list[str] = []
     total = 0
     try:
         # Own the byte stream. Avoid PDF.pages, which would enumerate/create every
@@ -54,6 +59,20 @@ def parse_pdf(
                     first = text.splitlines()[0] if text else None
                     heading = first if first and len(first) <= 120 else None
                     selected.append(DocumentPage(page=number, text=text, heading=heading))
+                    if tables:
+                        try:
+                            page_found, page_warnings = page_tables(clean, number)
+                        except Exception:
+                            # A heuristic failure must not cost the caller the page text.
+                            page_found, page_warnings = (
+                                [],
+                                [
+                                    f"Table detection failed on page {number}; its text is "
+                                    "unaffected."
+                                ],
+                            )
+                        found.extend(page_found)
+                        warnings.extend(page_warnings)
                 finally:
                     if clean is not None:
                         clean.close()
@@ -67,7 +86,7 @@ def parse_pdf(
         raise ParseError("PDF has no pages")
     if page > total:
         raise ValueError(f"PDF page {page} is out of range; document has {total} pages")
-    return ParsedDocument(page_count=total, pages=selected)
+    return ParsedDocument(page_count=total, pages=selected, tables=found, warnings=warnings)
 
 
 def chunk_pages(pages: list[DocumentPage], max_chars: int = 1500) -> list[DocumentChunk]:
