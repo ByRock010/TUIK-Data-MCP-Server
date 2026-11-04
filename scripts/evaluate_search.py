@@ -11,12 +11,18 @@ import math
 import re
 import subprocess
 from collections import Counter
+from copy import deepcopy
 from datetime import UTC, datetime
 from pathlib import Path
+from uuid import uuid4
 
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
 from tuik_mcp.models.dataset import TuikResource
+from tuik_mcp.search.backend import OpenSearchBackend, SearchFilters, build_query
+from tuik_mcp.search.documents import IndexDocument
+from tuik_mcp.search.indexer import IndexerError, OpenSearchStore, prepare
+from tuik_mcp.search.schema import index_definition
 from tuik_mcp.services.catalog import CatalogService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
@@ -95,6 +101,8 @@ def validate_suite(suite):
 
 
 def validate_run(run, suite):
+    if "status" in run and run["status"] != "ok":
+        raise ValueError("Incomplete run: collection status is not ok")
     expected = {q["id"]: q["text"] for q in suite["queries"]}
     if run.get("queries") != expected:
         raise ValueError("Run query IDs/text must match the evaluation suite exactly")
@@ -118,6 +126,26 @@ def validate_run(run, suite):
                     raise ValueError("Hits require title, source_url and resource_type")
 
 
+def validate_pool_documents(suite):
+    documents = suite.get("documents", {})
+    for qid, judgments in suite["judgments"].items():
+        for doc_id in judgments:
+            if doc_id not in documents:
+                raise ValueError(f"Missing document metadata for {qid}: {doc_id}")
+    for doc_id, document in documents.items():
+        if (
+            not isinstance(document, dict)
+            or document.get("id") != doc_id
+            or not all(
+                isinstance(document.get(key), str) and document[key].strip()
+                for key in ("title", "resource_type", "source_url")
+            )
+        ):
+            raise ValueError(f"Invalid document metadata for {doc_id}")
+        stable_id(doc_id)
+    return documents
+
+
 def pool(suite, runs):
     suite = validate_suite(json.loads(json.dumps(suite)))
     documents = suite.setdefault("documents", {})
@@ -131,6 +159,8 @@ def pool(suite, runs):
                         hit["id"], {"judge_a": None, "judge_b": None, "resolved": None}
                     )
                     documents.setdefault(hit["id"], hit)
+    # New runs may restore missing metadata; validate only after pooling all hits.
+    validate_pool_documents(suite)
     # IDs order candidates consistently without disclosing system or rank.
     suite["documents"] = dict(sorted(documents.items()))
     suite["judgments"] = {
@@ -140,10 +170,11 @@ def pool(suite, runs):
 
 
 def judge_sheet(suite, judge):
+    validate_suite(suite)
     return {
         "judge": judge,
         "queries": suite["queries"],
-        "documents": suite["documents"],
+        "documents": validate_pool_documents(suite),
         "grades": {qid: dict.fromkeys(sorted(docs)) for qid, docs in suite["judgments"].items()},
     }
 
@@ -280,6 +311,7 @@ async def collect(suite, output, resume=False):
         "version": 1,
         "collected_at": datetime.now(UTC).isoformat(),
         "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "queries": {q["id"]: q["text"] for q in suite["queries"]},
         "systems": {
             "portal": {"corpus": "portal_all_types_non_archive", "results": {}},
@@ -291,6 +323,12 @@ async def collect(suite, output, resume=False):
         previous = read_json(output)
         if previous["queries"] != report["queries"]:
             raise ValueError("Cannot resume a different query set")
+        for field in ("revision", "collector_sha256"):
+            if previous.get(field) != report[field]:
+                raise ValueError(
+                    f"Cannot resume: {field} differs or is missing; "
+                    "use the original code or collect a new run in a separate output file"
+                )
         report = previous
     http = HttpClient(Settings.from_env())
     try:
@@ -352,25 +390,180 @@ async def collect(suite, output, resume=False):
     finally:
         await http.close()
         report["last_attempt_at"] = datetime.now(UTC).isoformat()
-        report["collector_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
         write_json(output, report)
     return 1 if report["errors"] else 0
 
 
+INDEX_VARIANTS = ("builtin_turkish", "multi_field", "multi_field_synonyms")
+
+
+def variant_definition(variant):
+    """Keep the corpus and mapping fixed; ablate only the text analysis."""
+    if variant not in INDEX_VARIANTS:
+        raise ValueError(f"Unknown evaluation variant: {variant}")
+    definition = index_definition()
+    properties = definition["mappings"]["properties"]
+    for name in ("title", "description", "body"):
+        field = properties[name]
+        if variant == "builtin_turkish":
+            field.update(analyzer="turkish", search_analyzer="turkish")
+            if name == "title":
+                field["fields"].pop("ascii")
+        elif variant == "multi_field":
+            field["search_analyzer"] = field["analyzer"]
+            if name == "title":
+                ascii_field = field["fields"]["ascii"]
+                ascii_field["search_analyzer"] = ascii_field["analyzer"]
+    return definition
+
+
+def variant_query(variant, text):
+    if variant not in INDEX_VARIANTS:
+        raise ValueError(f"Unknown evaluation variant: {variant}")
+    body = deepcopy(build_query(text, SearchFilters(), 10))
+    if variant == "builtin_turkish":
+        exact, fuzzy = body["query"]["bool"]["should"]
+        exact["multi_match"]["fields"].remove("title.ascii")
+        fuzzy["multi_match"]["fields"] = ["title", "description", "body"]
+        body["highlight"]["fields"].pop("title.ascii")
+    # Match the production ordering, with an explicit final key for tied scores.
+    body["sort"] = [{"_score": "desc"}, {"id": "asc"}]
+    return body
+
+
+def load_documents(path):
+    """Read the crawler's full JSONL, not its redacted diagnostic summary."""
+    return [
+        IndexDocument.model_validate_json(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+async def collect_index(suite, documents, output, url, *, store=None):
+    """Collect comparable top tens without a live crawl or production alias writes."""
+    validate_suite(suite)
+    stamp = datetime.now(UTC)
+    documents = list(documents)
+    payloads, kinds = prepare(documents, stamp)
+    originals = {document.id: document.model_dump(mode="json") for document in documents}
+    corpus_ids = sorted(document["id"] for document in payloads)
+    report = {
+        "version": 1,
+        "status": "running",
+        "collected_at": stamp.isoformat(),
+        "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "corpus_sha256": hashlib.sha256(
+            json.dumps(
+                sorted(originals.values(), key=lambda d: d["id"]),
+                ensure_ascii=False,
+                sort_keys=True,
+            ).encode()
+        ).hexdigest(),
+        "counts": dict(kinds),
+        "queries": {q["id"]: q["text"] for q in suite["queries"]},
+        "systems": {},
+        "cleanup": {},
+        "errors": {},
+    }
+    own_store = store is None
+    store = store or OpenSearchStore(url)
+    try:
+        report["engine"] = (await store._request("GET", "")).json()["version"]
+        for variant in INDEX_VARIANTS:
+            name = "tuik-evaluation-" + uuid4().hex
+            definition = variant_definition(variant)
+            system = report["systems"][variant] = {
+                "corpus": "frozen_metadata_snapshot",
+                "corpus_ids": corpus_ids,
+                "index": name,
+                "definition": definition,
+                "query_template": variant_query(variant, "__QUERY__"),
+                "results": {},
+                "scores": {},
+            }
+            created = False
+            try:
+                await store._request("PUT", name, json=definition)
+                created = True
+                if failures := await store.bulk(name, payloads):
+                    raise IndexerError("Evaluation documents were rejected", failures)
+                await store.refresh(name)
+                if await store.count(name) != len(payloads):
+                    raise IndexerError("Evaluation index count does not match the frozen corpus")
+                for query in suite["queries"]:
+                    response = await store.query(name, variant_query(variant, query["text"]))
+                    if response.get("timed_out") or response.get("_shards", {}).get("failed"):
+                        raise IndexerError("Incomplete evaluation search response")
+                    hits = response["hits"]
+                    if hits["total"].get("relation", "eq") != "eq":
+                        raise IndexerError("Evaluation search returned only a lower-bound total")
+                    system["results"][query["id"]] = [
+                        {
+                            "id": stable_id(hit.id),
+                            "title": hit.title,
+                            "resource_type": hit.kind,
+                            "source_url": hit.source_url,
+                            "description": originals[hit.id].get("description"),
+                            "theme": hit.theme,
+                            "publication_date": hit.publication_date,
+                        }
+                        for hit in map(OpenSearchBackend.hit, hits["hits"])
+                    ]
+                    system["scores"][query["id"]] = [hit.get("_score") for hit in hits["hits"]]
+                    write_json(output, report)
+            finally:
+                if created:
+                    try:
+                        await store.delete(name)
+                        report["cleanup"][name] = "deleted"
+                    except Exception as exc:
+                        report["cleanup"][name] = str(exc)
+                        raise
+        report["status"] = "ok"
+        validate_run(report, suite)
+    except Exception as exc:
+        report["status"] = "error"
+        report["errors"]["collection"] = {"type": type(exc).__name__, "message": str(exc)}
+    finally:
+        report["finished_at"] = datetime.now(UTC).isoformat()
+        try:
+            if own_store:
+                await store.close()
+        finally:
+            write_json(output, report)
+    return 0 if report["status"] == "ok" else 1
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("collect", "pool", "judge", "merge", "score"))
+    parser.add_argument(
+        "command", choices=("collect", "collect-index", "pool", "judge", "merge", "score")
+    )
     parser.add_argument("--suite", type=Path, default=Path("tests/fixtures/search_eval.json"))
     parser.add_argument("--runs", type=Path, nargs="*", default=[])
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--judge", choices=("a", "b"))
     parser.add_argument("--judge-a", type=Path)
     parser.add_argument("--judge-b", type=Path)
+    parser.add_argument("--documents", type=Path, help="Frozen crawler IndexDocument JSONL")
+    parser.add_argument("--url", help="Disposable OpenSearch cluster for collect-index")
     parser.add_argument(
         "--resume", action="store_true", help="Retry only missing collection results"
     )
     args = parser.parse_args(argv)
     suite = validate_suite(read_json(args.suite))
+    if args.command == "collect-index":
+        if not args.documents or not args.url:
+            parser.error("collect-index requires --documents and --url")
+        if args.output.resolve() in {args.suite.resolve(), args.documents.resolve()}:
+            parser.error("Output must not overwrite the suite or frozen documents")
+        if args.resume:
+            parser.error("collect-index rebuilds disposable indices; --resume is unsupported")
+        return asyncio.run(
+            collect_index(suite, load_documents(args.documents), args.output, args.url)
+        )
     if args.command == "collect":
         return asyncio.run(collect(suite, args.output, args.resume))
     if args.command == "judge":

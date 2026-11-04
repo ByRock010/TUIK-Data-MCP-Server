@@ -12,6 +12,10 @@ All notable changes to this project are documented here. The format follows
   a real OpenSearch dataset hit through resource resolution to verified bounded
   CSV rows, rejecting fallbacks. Full smoke selects portal search explicitly for
   tables/publications; v0.3.0 readiness documents remaining evaluation/release gates (#29).
+- Frozen-corpus OpenSearch evaluation collection for built-in Turkish, multi-field
+  and synonym variants, with engine/configuration provenance, deterministic ties,
+  disposable indices and rejection of incomplete runs. Relevance judgments and
+  the default-configuration decision remain pending (#20).
 
 - `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
   with kind/theme/date/downloadability filters, scores, highlights, provenance,
@@ -23,6 +27,18 @@ All notable changes to this project are documented here. The format follows
   effort, with page, title, header or positional columns, string rows and
   warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
   was measured on the recorded publication and methodology PDFs (#8).
+
+- Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
+  JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
+  apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
+  fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
+
+### Fixed
+
+- Search evaluation rejects orphaned or malformed document metadata before
+  scoring or judge-sheet export. Resumable baseline collection records provenance
+  in every checkpoint and rejects changed/missing source revisions or collector
+  hashes before network access or checkpoint writes (#11).
 
 ## [0.2.0] - 2026-10-29
 

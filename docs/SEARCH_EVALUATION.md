@@ -17,6 +17,14 @@ methods and default pacing, without downloading files. Interrupted collection ca
 resume missing results against the same frozen catalog. An upstream failure is an
 error, never an empty ranking; incomplete runs are rejected by the scorer.
 
+Every new checkpoint records the source revision and collector SHA-256 before any
+query results are written. `collect --resume` requires both to match the current
+code, as well as the query set. It rejects changed or missing provenance before
+opening an HTTP client or writing the existing checkpoint. Restore the original
+checkout/script to continue an interrupted run, or start a new run with a distinct
+output path. Do not edit a checkpoint's provenance to bypass this check. Historical
+completed snapshots remain valid scoring inputs; they do not need to be resumed.
+
 | System | Searchable corpus | Returned top-ten slots |
 | --- | --- | ---: |
 | Portal | All public portal types, non-archive | 480 |
@@ -118,7 +126,56 @@ rows filter the original top-ten list without backfilling; they describe that li
 not a new filtered retrieval run. Unjudged share is weighted by returned slots;
 it is `null` for no returned results.
 
+Every judged candidate must have document metadata (`id`, `title`,
+`resource_type`, `source_url`). Pooling may fill missing metadata from the supplied
+rankings; candidates still missing metadata afterwards cause an explicit
+validation error naming the query and ID, rather than a scoring crash or silently
+dropping a judged relevant document. Retained document records must have matching
+IDs and nonempty metadata. Judge-sheet export applies the same validation.
+
 ## Adding OpenSearch variants (#20)
+
+`collect-index` runs the three planned analyzer variants against one frozen
+metadata JSONL produced by the crawler. It accesses only an explicitly supplied
+OpenSearch cluster: no TÜİK requests, file downloads or application alias changes.
+Use a disposable development cluster with room for one extra corpus at a time:
+
+```bash
+docker compose up -d --wait opensearch
+# Freeze once; this command visits TÜİK metadata with normal crawl pacing.
+.venv/bin/python scripts/crawl_metadata.py --output /tmp/eval-documents.jsonl \
+  --state /tmp/eval-crawl-state.json --report /tmp/eval-crawl.json
+.venv/bin/python scripts/evaluate_search.py collect-index \
+  --documents /tmp/eval-documents.jsonl --url http://127.0.0.1:9200 \
+  --output /tmp/opensearch.json
+```
+
+Retain the JSONL with the run for reproducibility. Supply the **full JSONL**, not
+the redacted `crawl-sample-documents` diagnostic report. Input IDs are validated,
+empty/duplicate corpora are rejected, and output cannot overwrite either input.
+The collector loads each variant into a UUID index, checks the bulk responses and
+document count, collects every query's top ten, then deletes that index before
+starting the next. A failed create never causes deletion of an existing index.
+Search timeouts, shard failures, write/count failures and cleanup failures produce
+an error report and nonzero exit; pooling/scoring rejects these incomplete runs.
+Collection is checkpointed for diagnosis but does not resume across rebuilt indices.
+
+The `builtin_turkish` variant uses the engine's `turkish` analyzer on title,
+description and body, without an ASCII title field. `multi_field` uses the packaged
+Turkish/ASCII index analyzers at query time, without graph synonyms.
+`multi_field_synonyms` uses the production definition unchanged. Field weights and
+the weaker fuzzy clause stay fixed across variants; built-in fuzzy title matching
+uses `title` in place of `title.ascii`. Thus this measures analysis with a fixed
+retrieval design, not a tuned optimum for each analyzer. Scores sort descending
+with the stable ID as a tie-breaker. The production ranking configuration is not
+changed by this experiment.
+
+Each run records the engine version, source revision, collector hash, shared
+corpus hash and IDs, exact mappings/query templates, rankings, separate engine
+scores and cleanup outcomes. Engine scores stay outside the pooled documents and
+blind judge sheets. A successful collection is retrieval evidence only; human
+judgments, agreement and adjudication are still required for measured relevance
+and a default-configuration decision.
 
 Provide a run JSON with the exact `queries` ID/text map and uniquely named `systems`.
 Each system has a `corpus` description, optional explicit `corpus_ids`, and a
