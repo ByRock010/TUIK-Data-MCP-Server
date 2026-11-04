@@ -6,6 +6,7 @@ Run with --help. Collection is opt-in; pool and score never access the network.
 import argparse
 import asyncio
 import csv
+import gzip
 import hashlib
 import json
 import math
@@ -29,7 +30,10 @@ from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 
 def read_json(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    path = Path(path)
+    if path.suffix == ".gz":
+        return json.loads(gzip.decompress(path.read_bytes()).decode("utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def write_json(path, data):
@@ -408,7 +412,100 @@ def pool_fingerprint(suite):
     ).hexdigest()
 
 
-def score_ai(suite, runs, assessment):
+def validate_ai_review(pooled, assessment, review, evidence):
+    """Validate one assessor's second pass, preserving the original pass and sources."""
+    if (
+        review.get("review_type") != "single_ai_sequential_source_review"
+        or review.get("human_assessors") != 0
+        or review.get("independent_assessors") is not False
+    ):
+        raise ValueError("Review must explicitly identify one non-independent AI assessor")
+    digest = hashlib.sha256(
+        json.dumps(assessment, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+    if review.get("first_assessment_sha256") != digest:
+        raise ValueError("Review does not match the original AI assessment")
+    if evidence.get("status") not in ("ok", "partial"):
+        raise ValueError("Source collection must have finished before review")
+    pool_file_hash = hashlib.sha256(
+        (json.dumps(pooled, ensure_ascii=False, indent=2) + "\n").encode()
+    ).hexdigest()
+    if evidence.get("pool_file_sha256") != pool_file_hash:
+        raise ValueError("Source collection must use the exact frozen pool")
+    if set(evidence.get("searches", {})) != {query["id"] for query in pooled["queries"]}:
+        raise ValueError("Every frozen query must have a live MCP replay")
+    for query in pooled["queries"]:
+        index = evidence["searches"][query["id"]]
+        calls = evidence.get("calls", [])
+        if type(index) is not int or not 0 <= index < len(calls):
+            raise ValueError("Invalid live query reference")
+        call = calls[index]
+        if (
+            call.get("tool") != "search_tuik"
+            or call.get("arguments") != {"query": query["text"], "limit": 10, "live": True}
+            or call.get("outcome") != "ok"
+            or call.get("response", {}).get("backend") != "portal"
+        ):
+            raise ValueError("Live query reference must replay the exact query through the portal")
+    digest = hashlib.sha256(
+        json.dumps(evidence, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+    if review.get("evidence_sha256") != digest:
+        raise ValueError("Review does not match the recorded live source evidence")
+    if set(review.get("source_checks", {})) != set(pooled["documents"]):
+        raise ValueError("Every pooled document requires a documented source check")
+    if set(review.get("query_notes", {})) != set(pooled["judgments"]):
+        raise ValueError("Every query requires a second-pass rationale")
+    for note in review["query_notes"].values():
+        if not isinstance(note, str) or not note.strip():
+            raise ValueError("Second-pass query rationales must be nonempty")
+    counts = Counter()
+    for doc_id, check in review["source_checks"].items():
+        if not isinstance(check.get("reason"), str) or not check["reason"].strip():
+            raise ValueError(f"Source check requires a reason: {doc_id}")
+        method = check.get("method")
+        if method == "live_metadata":
+            index = check.get("call")
+            calls = evidence.get("calls", [])
+            if type(index) is not int or not 0 <= index < len(calls):
+                raise ValueError(f"Invalid live source reference: {doc_id}")
+            call = calls[index]
+            if (
+                call.get("tool") != "get_tuik_resource"
+                or call.get("arguments", {}).get("resource_id") != doc_id
+                or call.get("outcome") != "ok"
+                or call.get("response", {}).get("id") != doc_id
+            ):
+                raise ValueError(f"Live source reference must resolve the exact resource: {doc_id}")
+        elif method != "archived_metadata":
+            raise ValueError(f"Unknown source-review method: {method}")
+        counts[method] += 1
+    changed = {
+        (qid, doc_id)
+        for qid, values in review["grades"].items()
+        for doc_id, grade in values.items()
+        if grade != assessment["grades"][qid][doc_id]
+    }
+    documented = set()
+    for change in review.get("changes", []):
+        qid, doc_id = change["query_id"], change["document_id"]
+        pair = qid, doc_id
+        if (
+            pair not in changed
+            or pair in documented
+            or change.get("before") != assessment["grades"][qid][doc_id]
+            or change.get("after") != review["grades"][qid][doc_id]
+            or not isinstance(change.get("reason"), str)
+            or not change["reason"].strip()
+        ):
+            raise ValueError("Every revised grade requires its original value and a unique reason")
+        documented.add(pair)
+    if documented != changed:
+        raise ValueError("Every revised grade must be documented")
+    return dict(counts), len(changed)
+
+
+def score_ai(suite, runs, assessment, review=None, evidence=None):
     """Score one explicitly identified AI assessor without manufacturing judge pairs."""
     pooled = pool(suite, runs)
     if assessment.get("assessment_type") != "single_model_ai_preliminary":
@@ -426,7 +523,7 @@ def score_ai(suite, runs, assessment):
             raise ValueError(f"AI assessment document IDs must match the pool for {qid}")
         if any(type(grade) is not int or grade not in (0, 1, 2) for grade in grades[qid].values()):
             raise ValueError("AI grades must all be integers from 0 to 2")
-    return {
+    report = {
         "status": "ai_preliminary",
         "assessment_type": "single_model_ai_preliminary",
         "release_gate_satisfied": False,
@@ -444,6 +541,23 @@ def score_ai(suite, runs, assessment):
         },
         "systems": system_metrics(pooled, runs, grades),
     }
+    if review is not None:
+        # Apply the same completeness, scope and grade checks to the second pass.
+        second = score_ai(suite, runs, review)
+        counts, changed = validate_ai_review(pooled, assessment, review, evidence or {})
+        report.update(
+            status="ai_reviewed",
+            review_complete=True,
+            review_type=review["review_type"],
+            source_checks=counts,
+            revised_pairs=changed,
+            systems=second["systems"],
+            reviewed_assessor=review["assessor"],
+            reviewed_at=review["assessed_at"],
+            reviewed_evidence_scope=review["evidence_scope"],
+            reviewed_limitations=review["limitations"],
+        )
+    return report
 
 
 async def collect(suite, output, resume=False):
@@ -692,6 +806,13 @@ def main(argv=None):
     parser.add_argument(
         "--assessment", type=Path, help="Explicitly identified single-AI assessment"
     )
+    parser.add_argument("--review", type=Path, help="Sequential review by the same AI assessor")
+    parser.add_argument("--evidence", type=Path, help="Live MCP source-review collection")
+    parser.add_argument(
+        "--require-reviewed",
+        action="store_true",
+        help="Fail AI scoring until source review is complete",
+    )
     parser.add_argument(
         "--format", choices=("json", "csv"), default="json", help="Judge export format"
     )
@@ -710,7 +831,20 @@ def main(argv=None):
         parser.error("--format is only supported by judge")
     if args.require_complete and args.command != "score":
         parser.error("--require-complete is only supported by score")
-    inputs = [args.suite, *args.runs, args.judge_a, args.judge_b, args.assessment, args.documents]
+    if (args.review or args.evidence or args.require_reviewed) and args.command != "score-ai":
+        parser.error("AI review options are only supported by score-ai")
+    if bool(args.review) != bool(args.evidence):
+        parser.error("--review and --evidence must be supplied together")
+    inputs = [
+        args.suite,
+        *args.runs,
+        args.judge_a,
+        args.judge_b,
+        args.assessment,
+        args.documents,
+        args.review,
+        args.evidence,
+    ]
     if args.output.resolve() in {path.resolve() for path in inputs if path is not None}:
         parser.error("Output must not overwrite input evidence or judgment files")
     suite = validate_suite(read_json(args.suite))
@@ -758,11 +892,19 @@ def main(argv=None):
     if args.command == "score-ai":
         if not args.assessment:
             parser.error("score-ai requires --assessment")
-        report = score_ai(suite, runs, read_json(args.assessment))
+        report = score_ai(
+            suite,
+            runs,
+            read_json(args.assessment),
+            read_json(args.review) if args.review else None,
+            read_json(args.evidence) if args.evidence else None,
+        )
     else:
         report = pool(suite, runs) if args.command == "pool" else score(suite, runs)
     write_json(args.output, report)
     if args.require_complete and report["status"] != "complete":
+        return 1
+    if args.require_reviewed and report["status"] != "ai_reviewed":
         return 1
     return 0
 

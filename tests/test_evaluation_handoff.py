@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import importlib.util
+import json
 from copy import deepcopy
 from pathlib import Path
 
@@ -294,4 +295,209 @@ def test_committed_ai_pilot_reproduces_with_unchanged_source_runs():
     assert report == evaluation.read_json(
         root / "docs/verification/search-ai-scores-2026-11-04.json"
     )
+    assert evaluation.score(suite, runs)["completed"] == 0
+
+
+def semantic_hash(value):
+    return hashlib.sha256(
+        json.dumps(value, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+
+
+@pytest.fixture
+def source_review(study):
+    suite, _, _ = study
+    assessment = ai_assessment(suite)
+    ids = list(suite["documents"])
+    evidence = {
+        "status": "partial",
+        "searches": {"q1": 1},
+        "pool_file_sha256": hashlib.sha256(
+            (json.dumps(suite, ensure_ascii=False, indent=2) + "\n").encode()
+        ).hexdigest(),
+        "calls": [
+            {
+                "tool": "get_tuik_resource",
+                "arguments": {"resource_id": ids[0]},
+                "outcome": "ok",
+                "response": {
+                    "id": ids[0],
+                    "title": "Synthetic source",
+                    "source_url": "https://www.tuik.gov.tr/",
+                },
+            },
+            {
+                "tool": "search_tuik",
+                "arguments": {"query": "işsizlik", "limit": 10, "live": True},
+                "outcome": "ok",
+                "response": {"backend": "portal"},
+            },
+        ],
+    }
+    review = deepcopy(assessment)
+    review.update(
+        review_type="single_ai_sequential_source_review",
+        human_assessors=0,
+        independent_assessors=False,
+        first_assessment_sha256=semantic_hash(assessment),
+        evidence_sha256=semantic_hash(evidence),
+        source_checks={
+            ids[0]: {"method": "live_metadata", "call": 0, "reason": "Inspected exact source"},
+            ids[1]: {"method": "archived_metadata", "reason": "Only historical source available"},
+        },
+        query_notes={"q1": "Second pass with more source evidence"},
+        changes=[
+            {
+                "query_id": "q1",
+                "document_id": ids[1],
+                "before": 0,
+                "after": 1,
+                "reason": "Synthetic contextual information",
+            }
+        ],
+    )
+    review["grades"]["q1"][ids[1]] = 1
+    return assessment, review, evidence
+
+
+def test_reviewed_ai_scores_preserve_one_assessor_and_original_pass(study, source_review):
+    suite, run, _ = study
+    assessment, review, evidence = source_review
+    original = deepcopy(assessment)
+    report = evaluation.score_ai(suite, [run], assessment, review, evidence)
+    assert report["status"] == "ai_reviewed" and report["review_complete"] is True
+    assert report["revised_pairs"] == 1
+    assert report["source_checks"] == {"live_metadata": 1, "archived_metadata": 1}
+    assert report["agreement"]["paired"] == 0 and report["agreement"]["cohen_kappa"] is None
+    assert report["release_gate_satisfied"] is False
+    assert assessment == original
+    assert evaluation.score(suite, [run])["completed"] == 0
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "human",
+        "independence",
+        "original",
+        "running",
+        "pool",
+        "evidence",
+        "source_id",
+        "source_tool",
+        "source_index",
+        "missing_source",
+        "missing_note",
+        "missing_change",
+        "old_grade",
+        "missing_replay",
+        "wrong_replay",
+    ],
+)
+def test_review_rejects_false_identity_stale_sources_and_undocumented_changes(
+    study, source_review, mutation
+):
+    suite, run, _ = study
+    assessment, review, evidence = source_review
+    doc_id = next(iter(suite["documents"]))
+    if mutation == "human":
+        review["human_assessors"] = 2
+    elif mutation == "independence":
+        review["independent_assessors"] = True
+    elif mutation == "original":
+        review["first_assessment_sha256"] = "changed"
+    elif mutation == "running":
+        evidence["status"] = "running"
+    elif mutation == "pool":
+        evidence["pool_file_sha256"] = "changed"
+    elif mutation == "evidence":
+        review["evidence_sha256"] = "changed"
+    elif mutation == "source_id":
+        evidence["calls"][0]["response"]["id"] = "flow:DF_OTHER+V1.0"
+    elif mutation == "source_tool":
+        evidence["calls"][0]["tool"] = "search_tuik"
+    elif mutation == "source_index":
+        review["source_checks"][doc_id]["call"] = True
+    elif mutation == "missing_source":
+        review["source_checks"].pop(doc_id)
+    elif mutation == "missing_note":
+        review["query_notes"].clear()
+    elif mutation == "missing_change":
+        review["changes"].clear()
+    elif mutation == "old_grade":
+        review["changes"][0]["before"] = 2
+    elif mutation == "missing_replay":
+        evidence["searches"].clear()
+    elif mutation == "wrong_replay":
+        evidence["calls"][1]["arguments"]["query"] = "different query"
+    if mutation != "evidence":
+        review["evidence_sha256"] = semantic_hash(evidence)
+    with pytest.raises(ValueError):
+        evaluation.score_ai(suite, [run], assessment, review, evidence)
+
+
+def test_strict_ai_review_cli_requires_a_valid_second_pass(study, source_review, tmp_path):
+    _, _, paths = study
+    assessment, review, evidence = source_review
+    for name, value in (("assessment", assessment), ("review", review), ("evidence", evidence)):
+        evaluation.write_json(tmp_path / f"{name}.json", value)
+    argv = [
+        "score-ai",
+        "--suite",
+        str(paths["suite"]),
+        "--runs",
+        str(paths["run"]),
+        "--assessment",
+        str(tmp_path / "assessment.json"),
+        "--output",
+        str(paths["output"]),
+        "--require-reviewed",
+    ]
+    assert evaluation.main(argv) == 1
+    assert (
+        evaluation.main(
+            [
+                *argv,
+                "--review",
+                str(tmp_path / "review.json"),
+                "--evidence",
+                str(tmp_path / "evidence.json"),
+            ]
+        )
+        == 0
+    )
+    assert evaluation.read_json(paths["output"])["status"] == "ai_reviewed"
+
+
+def test_committed_source_review_reproduces_without_human_labels_or_network():
+    root = Path(__file__).parents[1]
+    base = root / "docs/verification"
+    assessment = evaluation.read_json(base / "search-ai-assessment-2026-11-04.json")
+    review = evaluation.read_json(base / "search-ai-reviewed-assessment-2026-11-04.json")
+    evidence = evaluation.read_json(base / "search-ai-live-evidence-2026-11-04.json.gz")
+    assert (
+        evidence["collector_sha256"]
+        == hashlib.sha256((root / "scripts/collect_ai_review.py").read_bytes()).hexdigest()
+    )
+    runs = [evaluation.read_json(root / source["path"]) for source in assessment["runs"]]
+    suite = evaluation.read_json(root / "tests/fixtures/search_eval.json")
+    report = evaluation.score_ai(suite, runs, assessment, review, evidence)
+    assert report == evaluation.read_json(base / "search-ai-reviewed-scores-2026-11-04.json")
+    assert set(evidence["searches"]) == {query["id"] for query in suite["queries"]}
+    assert all(
+        evidence["calls"][index]["response"]["backend"] == "portal"
+        for index in evidence["searches"].values()
+    )
+    auxiliary = review["supplemental_scope_checks"]
+    path = root / auxiliary["path"]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == auxiliary["sha256"]
+    checks = evaluation.read_json(path)
+    assert (
+        hashlib.sha256(checks["collector_source"].encode()).hexdigest()
+        == checks["collector_sha256"]
+    )
+    assert checks["status"] == "ok"
+    for check in checks["checks"].values():
+        assert check["result"]["total_rows"] > 0
+        assert check["result"]["snapshot_id"] == check["profile"]["snapshot_id"]
     assert evaluation.score(suite, runs)["completed"] == 0

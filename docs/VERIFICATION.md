@@ -1,6 +1,26 @@
 # Verification
 
-## AI relevance pilot and human judging handoff — 2026-11-04
+## Source-checked AI baseline — 2026-11-04
+
+The owner-requested [AI evaluation method](adr/0004-ai-relevance-evaluation.md)
+uses one assessment followed by a source-checked sequential review. The
+[dated #11 report](verification/issue-11-ai-source-review-2026-11-04.md) records
+**416 actual MCP calls**, all **48** live portal query replays, **345** resolved
+resources, explained archival fallbacks and three nonempty exact-filter queries
+with matching inspect/data snapshots. All **917** pooled pairs were reviewed;
+**11** grades changed with documented source reasons. AI portal/literal nDCG@10
+is **0.8555 / 0.1661** on their respective corpora. There are zero human judge
+pairs; independent human validation is not claimed and κ is not applicable.
+
+The complete AI source-review check passes and the first-pass labels remain
+unchanged. Python **3.14.0** offline verification passed **674 tests**, with
+**21 skipped / 6 deselected**; Ruff and **28 Node tests** passed. Local OpenSearch
+was unavailable; the existing 342-flow variant results remain a pilot and #20's
+full-corpus comparison is still required. See the [release checklist](RELEASE_0.3.0.md).
+
+## Historical first AI pilot and human handoff — 2026-11-04
+
+This first-pass record predates the adopted AI method and source review above.
 
 The [dated #11/#20 report](verification/issue-11-20-ai-pilot-2026-11-04.md)
 records single-AI metadata relevance grades for **917** pooled query–document

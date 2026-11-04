@@ -1,7 +1,10 @@
 # Turkish search evaluation
 
 Issue #11, preparation recorded on 2026-10-26 (Europe/Istanbul).
-Updated 2026-11-04 with a separately identified AI pilot and CSV human handoff.
+Updated 2026-11-04 with the project owner's adopted
+[AI review protocol](adr/0004-ai-relevance-evaluation.md). The active baseline uses
+one AI assessment followed by a source-checked sequential review. The original
+independent human study remains available as an optional validation path.
 
 ## Current evidence
 
@@ -32,13 +35,19 @@ completed snapshots remain valid scoring inputs; they do not need to be resumed.
 | Literal | 342 downloadable flows from a 512-flow catalog | 76 |
 
 The union has **545 query–document pairs**, representing **254 distinct documents**.
-There are **no human judgments yet**. nDCG, MRR, recall and Cohen's κ are therefore
-**pending**, not measured baseline scores. A pending scorer output may contain zero
-values from unjudged candidates; those values must not be reported as search quality.
-Issue #11 remains open until both independent judgments and documented adjudication
-are complete. The human fixture retains blank labels; the separately stored
-[single-AI pilot](verification/issue-11-20-ai-pilot-2026-11-04.md) is preliminary
-evidence and does not supply either human judge's labels.
+There are **no human judgments** in this fixture. The adopted project baseline is
+recorded separately in the [source-review report](verification/issue-11-ai-source-review-2026-11-04.md):
+**917 pooled pairs**, two dependent AI passes, **11 documented revisions**, and
+**345 current resource identities resolved**. The AI portal/literal baseline is
+**0.8555 / 0.1661 nDCG@10** on their respective declared corpora; these are not
+same-corpus scores or independently human-validated findings. κ is not applicable
+and remains null. The original [metadata-only pilot](verification/issue-11-20-ai-pilot-2026-11-04.md)
+is retained unchanged to show the first-pass judgments and metric revisions.
+
+The original 545 human-study pairs remain blank. Human scorer outputs with
+`pending_judgments` must not be presented as completed human measurements. AI
+results use separate assessment/review files and explicit `ai_reviewed` status;
+no labels are copied into either human judge slot.
 
 The literal baseline returns no results for `issizlik orani`, `nufus` and `işsizliğin`.
 These are retrieval observations, not graded relevance findings.
@@ -68,9 +77,11 @@ titles of the same type collapse to one evaluation identity. Review such collisi
 before adding systems. No `resource:` handles or URL-derived identities enter the
 pool. Source URLs remain evidence and may expire independently of the identity.
 
-## Two independent judges
+## Optional independent human study
 
-Prepare separate, initially blank sheets from the committed pool:
+The original two-person study can still be performed independently of the adopted
+AI workflow. It has not been run. Prepare separate, initially blank sheets from
+the committed pool:
 
 ```bash
 .venv/bin/python scripts/evaluate_search.py judge --judge a --output /tmp/judge-a.json
@@ -125,7 +136,7 @@ unjudged. Changing an imported label clears any previous adjudication for that p
 label pair or disagreement resolution is missing. Without this flag, the existing
 pending-report behavior remains available for progress inspection.
 
-Publish scores only after `status: complete`, with the judgment count, unjudged share,
+Publish human-study scores only after `status: complete`, with the judgment count, unjudged share,
 judge protocol and κ. κ is unweighted Cohen's κ on paired 0–2 grades; it is `null`
 when there are no pairs or chance agreement is one. Never substitute a numeric zero
 for undefined agreement.
@@ -194,9 +205,9 @@ changed by this experiment.
 Each run records the engine version, source revision, collector hash, shared
 corpus hash and IDs, exact mappings/query templates, rankings, separate engine
 scores and cleanup outcomes. Engine scores stay outside the pooled documents and
-blind judge sheets. A successful collection is retrieval evidence only; human
-judgments, agreement and adjudication are still required for measured relevance
-and a default-configuration decision.
+blind judge sheets. A successful collection is retrieval evidence only; the adopted AI source review
+(or a separate independent human study) must grade the enlarged full-corpus pool
+before a default-configuration decision.
 
 Provide a run JSON with the exact `queries` ID/text map and uniquely named `systems`.
 Each system has a `corpus` description, optional explicit `corpus_ids`, and a
@@ -205,8 +216,10 @@ empty lists. Each hit needs `id`, `title`, `resource_type` and `source_url`.
 Use distinct names for built-in Turkish, multi-field and synonym variants.
 
 Pool every run together, preserving earlier labels and adding blank labels for new
-top-ten candidates. Re-export independent sheets for the enlarged pool, adjudicate
-the new candidates, then score **all systems against the same enlarged judgments**:
+top-ten candidates. Under the AI protocol, assess and source-review all new
+candidates before scoring all systems. If running the optional human study,
+re-export independent sheets and adjudicate the new candidates, then score
+**all systems against the same enlarged human judgments**:
 
 ```bash
 .venv/bin/python scripts/evaluate_search.py pool --suite /tmp/judged.json \
@@ -216,7 +229,8 @@ the new candidates, then score **all systems against the same enlarged judgments
 ```
 
 Do not choose a winning analyzer from token inspection alone. #13's token evidence
-checks linguistic behavior; #20 selects defaults using this independently judged set.
+checks linguistic behavior; #20 selects defaults using the explicitly identified
+full-corpus evaluation method, not the 342-flow pilot.
 
 ## Explicit AI preliminary assessment
 
@@ -241,7 +255,58 @@ AI files contain one `grades` map, identified as
 `assessment_type: single_model_ai_preliminary`; they never create `judge_a`,
 `judge_b` or adjudication labels. `score-ai` requires complete 0–2 grades matching
 the entire pool, source-evidence SHA-256 and assessor/scope/limitations metadata.
-Its output always has `status: ai_preliminary`, `release_gate_satisfied: false`
-and undefined κ with zero independent pairs. `--require-complete` is supported
-only by the separate human `score` command. Give human judges initially blank
+Without a review, its output has `status: ai_preliminary`. With a validated second
+pass, it reports `ai_reviewed`. Both retain `release_gate_satisfied: false` and
+undefined κ with zero independent human pairs. `--require-complete` belongs only
+to the optional human `score` command. Give future human judges initially blank
 sheets without AI labels or scores to avoid anchoring their independent decisions.
+
+
+## Adopted sequential AI source review
+
+[ADR 0004](adr/0004-ai-relevance-evaluation.md) records the owner-requested method
+change for #11/#20. The [dated review](verification/issue-11-ai-source-review-2026-11-04.md)
+retains the live MCP evidence, exact-filter checks, complete second-pass grades,
+source references, and each revised score. The first-pass files remain immutable.
+The current 342-flow OpenSearch experiment remains a pilot for #20; the adopted
+method does not remove its full-corpus requirement.
+
+Collect fresh evidence separately from the frozen ranking experiment:
+
+```bash
+.venv/bin/python scripts/evaluate_search.py pool \
+  --runs docs/verification/search-baseline-2026-10-26.json \
+    docs/verification/search-variants-dataflows-2026-11-03.json \
+  --output /tmp/review-pool.json
+TUIK_MIN_INTERVAL_SECONDS=2 .venv/bin/python scripts/collect_ai_review.py \
+  --pool /tmp/review-pool.json --output /tmp/source-review.json
+```
+
+The recorder starts the real stdio MCP server, searches all 48 queries using
+`live=true`, resolves each reusable pooled identity and attempts eight bounded
+inspect/data probes. It creates no grades. Evaluation-only identities, removed
+resources, non-structured exports and size-bound failures remain explicit.
+Existing output files cannot be overwritten. Checkpoint writes are atomic;
+three consecutive MCP failures stop collection and preserve diagnostics.
+
+Reproduce the completed review without network access:
+
+```bash
+.venv/bin/python scripts/evaluate_search.py score-ai \
+  --runs docs/verification/search-baseline-2026-10-26.json \
+    docs/verification/search-variants-dataflows-2026-11-03.json \
+  --assessment docs/verification/search-ai-assessment-2026-11-04.json \
+  --review docs/verification/search-ai-reviewed-assessment-2026-11-04.json \
+  --evidence docs/verification/search-ai-live-evidence-2026-11-04.json.gz \
+  --require-reviewed --output /tmp/reviewed-ai-scores.json
+```
+
+The second-pass file has a complete `grades` map, `review_type:
+single_ai_sequential_source_review`, `human_assessors: 0` and
+`independent_assessors: false`. It binds the exact original assessment and finished
+source collection by canonical JSON SHA-256, with a source check for every pooled
+document, rationale for every query and a unique before/after/reason record for
+every changed grade. Live references must resolve the exact resource ID; archival
+fallbacks require an explicit explanation. `--require-reviewed` exits 1 for a
+first-pass-only report and 0 only after the review validates. It does not make the
+optional human study complete or certify a full v0.3.0 release.
