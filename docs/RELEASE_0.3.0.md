@@ -1,19 +1,19 @@
 # v0.3.0 release readiness
 
-Prepared 2026-11-03 (Europe/Istanbul), tracking #29 and epic #24. The package
-remains 0.2.0 until the release gates below are satisfied. This checklist is not
-a release announcement or evidence of measured search quality.
+Prepared 2026-11-03 and updated 2026-11-04 (Europe/Istanbul), tracking #29 and
+epic #24. The package remains 0.2.0 until the release gates below are satisfied.
+This checklist is not a release announcement or evidence of measured search quality.
 
 ## Required evidence
 
-| Gate | State at preparation | Required before release |
+| Gate | State (2026-11-04) | Required before release |
 | --- | --- | --- |
 | Indexer #16 | Merged | Build the full metadata index with a successful JSON report |
 | General MCP search #18 | Merged | Verify indexed filters, provenance, and fallback behavior |
-| Cluster CI #19 | Open PR #64, green | Merge through ordinary review and retain the successful cluster run |
+| Cluster CI #19 | Merged (#64); the `OpenSearch integration` job runs on every PR | Add `OpenSearch integration` to the required checks for `develop` and `master` (repository owner), and retain the successful cluster run for the candidate |
 | AI baseline #11 | Two-pass source review recorded; method in ADR 0004 | Retain complete AI-reviewed baseline metrics, source references and declared limitations |
-| Relevance comparison #20 | Pending #11 and full-corpus variant judging | Pool every system, judge new candidates, report overall/category/corpus metrics and choose defaults |
-| Indexed live smoke #29 | Script and bounded acceptance path prepared | Retain a dated real stdio → index → resource → CSV JSON report for the final candidate |
+| Relevance comparison #20 | Variant collector merged (#67); dataflow-only pilot recorded; full-corpus judging pending | Pool every system, judge new candidates, report overall/category/corpus metrics and choose defaults |
+| Indexed live smoke #29 | Merged (#68); bounded acceptance run recorded | Retain a dated real stdio → index → resource → CSV JSON report for the final candidate |
 
 The [search design](SEARCH_DESIGN.md), [backend contract](SEARCH_BACKEND.md),
 [indexer guide](INDEXING.md) and [evaluation protocol](SEARCH_EVALUATION.md)

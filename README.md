@@ -619,8 +619,9 @@ settings or configure them in the MCP client's environment.
 whitespace-only values also leave the optional backend disabled;
 `TUIK_OPENSEARCH_INDEX` defaults to the future `tuik-resources` alias. The client
 extra is never imported by the base server. For a separate CI instance use
-`docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration
-checks are tracked in #19.
+`docker compose -p tuik-ci up -d --wait` with port 9200 free. The separate
+**OpenSearch integration** CI job runs the real-cluster tests on every PR (#19); see
+[CONTRIBUTING.md](CONTRIBUTING.md#opensearch-integration-checks).
 
 ### Build the index locally
 
@@ -691,9 +692,9 @@ identities, and downloadable tables, reports, publications and bulletin files ha
 title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
 The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
-indexed general MCP search are included on `develop`. Dedicated cluster CI (#19)
-and the full-corpus relevance comparison (#20) remain v0.3.0 release
-gates; these are not v0.2.0 release prerequisites. See the
+indexed general MCP search are included on `develop`, and the dedicated cluster CI
+job (#19) runs on every PR. The full-corpus relevance comparison (#20) remains a
+v0.3.0 release gate; this is not a v0.2.0 release prerequisite. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
