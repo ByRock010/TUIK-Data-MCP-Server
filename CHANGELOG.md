@@ -23,11 +23,22 @@ All notable changes to this project are documented here. The format follows
   `--content-file` adds files on demand. `search_tuik` with `kind="table"` or
   `kind="document_chunk"` returns the file ID with the matching `sheet` or `page`.
   Downloads are budgeted per run and cached in a content state (#22).
+- Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
+  JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
+  apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
+  fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
 
 ### Changed
 
 - Index schema version 2 adds `page`/`sheet` locators; run one `--full` build after
   upgrading (#22).
+
+### Fixed
+
+- Search evaluation rejects orphaned or malformed document metadata before
+  scoring or judge-sheet export. Resumable baseline collection records provenance
+  in every checkpoint and rejects changed/missing source revisions or collector
+  hashes before network access or checkpoint writes (#11).
 
 ## [0.2.0] - 2026-10-29
 
