@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Frozen-corpus OpenSearch evaluation collection for built-in Turkish, multi-field
+  and synonym variants, with engine/configuration provenance, deterministic ties,
+  disposable indices and rejection of incomplete runs. Relevance judgments and
+  the default-configuration decision remain pending (#20).
+
 - `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
   with kind/theme/date/downloadability filters, scores, highlights, provenance,
   bounded full-match kind/theme facets and explicit source/backend reporting.
