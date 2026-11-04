@@ -19,6 +19,7 @@ typed table queries and snapshot-bound pagination. See the
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
+| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra) |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -35,14 +36,17 @@ Requires Python 3.12 or newer. From the directory containing `pyproject.toml`:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,viz]'
 ```
+
+The `viz` extra installs matplotlib for `chart_tuik_data`. Without it, every
+other tool works and the chart tool returns `visualization_unavailable`.
 
 Alternatively, with uv:
 
 ```bash
 uv venv .venv
-uv pip install --python .venv/bin/python -e '.[dev]'
+uv pip install --python .venv/bin/python -e '.[dev,viz]'
 ```
 
 The implementation uses FastMCP from the **official MCP Python SDK 1.x**
@@ -337,6 +341,50 @@ or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
 The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
 missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
 
+## Chart a table
+
+`chart_tuik_data` draws the rows `get_tuik_data` would read as a PNG image, so a
+trend over hundreds of rows reaches the conversation as one picture instead of a
+long table. It uses the same file selection, snapshot, `sheet`, `filters` and
+`query`. Call `inspect_tuik_data` first for the exact column names.
+
+```json
+{
+  "resource_id": "press:57987:file:<key>",
+  "x": ["Yıllar - Years [column 1]", "column_2"],
+  "y": [
+    "İşsizlik oranı Unemployment rate (%) [column 10]",
+    "İşsizlik oranı Unemployment rate (%) [column 21]"
+  ],
+  "labels": ["Toplam", "Erkek"],
+  "last": 24
+}
+```
+
+- **Axes.** `x` lists 1–3 label columns, joined per row (e.g. year and month). `y`
+  lists 1–6 numeric columns, one line or bar group each. `labels` renames them in order.
+- **Long-format dataflows.** Set `series` to a dimension column to draw one line per
+  value, with exactly one `y` column and at most 8 values. Narrow the rest with
+  `filters` or predicates.
+- **Order and range.** When every x label is a date or period (`2026`, `2026-03`,
+  `2026M03`, `2026-Q2`, `2026-03-15`, or a year plus a month name such as
+  `2026 Ağustos - August`), points run oldest to newest whatever the row order, and
+  `last` keeps the most recent N. The summary reports `x_order: "chronological"`.
+  Other labels keep row order (`x_order: "source"`); sort with `query`. In that case
+  `last` keeps the final N rows, and a warning says they are not necessarily the newest.
+- **Gap counts.** `missing` and `invalid` count gaps inside the plotted window only.
+- **Numbers.** Values are parsed with the table-query rules. Set `decimal_separator`
+  when a column's notation is ambiguous. Empty cells, placeholders and other text
+  become gaps, never zero, and are counted in the summary.
+
+The response holds the image and a JSON summary. The summary repeats the provenance
+and lists each series' plotted points, gaps and first/last/min/max values, so the
+assistant can describe the trend without reading the pixels. The image shows the
+title, unit, retrieval date and the resource's page. Download URLs change within
+hours, so the summary's `source_url` names the downloaded file instead. `chart="bar"` is meant for a few points
+(a warning appears above 60). Bulletins with related datasets return
+`related_datasets`, and PDFs return `download_available`; neither includes an image.
+
 ## Read PDF documents
 
 Search for a publication/report, then pass its returned ID to `read_tuik_document`.
@@ -627,17 +675,17 @@ Its legacy table/publication checks explicitly use live portal search, since tho
 resource types are outside the v0.3 metadata index. Without a cluster URL, the
 full smoke remains available for upstream contracts; `--indexed-only` fails before
 starting the server. The [v0.3.0 release checklist](docs/RELEASE_0.3.0.md) separates
-these operational checks from the human relevance study and release/tag gates.
+these operational checks from the adopted AI relevance evaluation and release/tag gates.
 
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
 
 ## Future roadmap
 
-The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the current issue
-dependencies and sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) provides
-the 48-query baseline snapshot, independent judging workflow and metric commands;
-human relevance judgments and baseline quality scores remain pending (#11).
+The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the original issue
+sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) now records the 48-query
+AI baseline, source-checked sequential review and metric commands (#11), alongside
+the optional independent human-study workflow.
 
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
@@ -645,8 +693,8 @@ title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
 The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
 indexed general MCP search are included on `develop`, and the dedicated cluster CI
-job (#19) runs on every PR. Independently judged relevance measurements (#11/#20)
-remain v0.3.0 release gates; these are not v0.2.0 release prerequisites. See the
+job (#19) runs on every PR. The full-corpus relevance comparison (#20) remains a
+v0.3.0 release gate; this is not a v0.2.0 release prerequisite. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
@@ -658,3 +706,10 @@ current roadmap. Version 0.2.0 also includes
 #52 on `develop`. Publication follows the
 [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
 reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
+
+A separately identified [single-AI relevance pilot](docs/verification/issue-11-20-ai-pilot-2026-11-04.md)
+is retained as the first pass of the adopted
+[AI evaluation protocol](docs/adr/0004-ai-relevance-evaluation.md). A
+[source-checked second pass](docs/verification/issue-11-ai-source-review-2026-11-04.md)
+adds live MCP checks and documented grade revisions. Independent human validation
+has not been performed; the full-corpus v0.3.0 comparison remains pending.

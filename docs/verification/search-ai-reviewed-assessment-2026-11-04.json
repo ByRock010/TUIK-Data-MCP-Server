@@ -1,0 +1,2929 @@
+{
+  "version": 1,
+  "assessment_type": "single_model_ai_preliminary",
+  "assessor": "OpenAI Codex, same AI assessor in a sequential second pass; not an independent person",
+  "assessed_at": "2026-11-04T13:59:02.904305+00:00",
+  "source_revision": "1bcac67",
+  "pool_sha256": "86f889788405914a33b4ac7ccd160ed759d814eb10f713dc56fd2be638d05871",
+  "evidence_scope": "All 917 query-document pairs revisited with 48 live MCP portal searches, 346 resource-resolution attempts, stored source metadata and targeted full-bulletin scope passages. Eight table probes and three follow-up exact-filter checks are recorded. Five evaluation-only identities and one removed flow retain archival evidence. Historical rankings remain frozen; fresh portal hits are diagnostic only.",
+  "limitations": "One dependent AI assessor with knowledge of the first pass and system designs; no independent human validation or applicable inter-rater kappa. Most resources were reviewed through official metadata; six table exports yielded rows, one exceeded the configured size bound, and one had no structured export. The OpenSearch comparison remains a historical 342-flow pilot, with no new local cluster run or full metadata crawl. Relevance does not guarantee every advertised file is currently downloadable.",
+  "rubric": {
+    "2": "Stored evidence directly supports the target concept and requested population/geography or explicitly advertises a suitable breakdown.",
+    "1": "Related context, a narrower/broader measure, revisions, or unconfirmed requested scope; not sufficient as a direct answer.",
+    "0": "Unrelated or a different/misleading measure, including enterprise births versus baby births and resident foreigners versus tourists."
+  },
+  "runs": [
+    {
+      "path": "docs/verification/search-baseline-2026-10-26.json",
+      "sha256": "fba0d1bd3a2fde1f3311077ee4abbdf75b5f7e3a9b96c1e57768a08783760702"
+    },
+    {
+      "path": "docs/verification/search-variants-dataflows-2026-11-03.json",
+      "sha256": "f89d75555d09e891724236209ad4359db425d9c8ed30ab9d0a4e9a970d9c8e13"
+    }
+  ],
+  "query_notes": {
+    "q01": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. General CPI and its bulletins answer directly; components, weights, selected prices and core measures are context. Producer prices measure a different target.",
+    "q02": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Stored labour descriptions explicitly include unemployment rates. Revision histories are contextual; demographic dependency and emissions are different indicators.",
+    "q03": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. GDP bulletins directly cover the target. PPP/per-capita comparisons provide context rather than aggregate domestic GDP. Other domestic/foreign word matches are unrelated.",
+    "q04": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ADNKS population outputs and system metadata are direct discovery targets. Foreign-only population, density, median age and name rankings are narrower context.",
+    "q05": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Housing sales totals and bulletins answer directly; buyer-sex shares and foreign-buyer subsets are context. Generic trade, employment and waste statistics do not answer.",
+    "q06": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Industrial production indices and bulletins are direct; revisions and contributions are context. Construction/services production measure different sectors.",
+    "q07": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. TÜFE means consumer prices. Apply the same intent and grades as q01; similarly spelled unrelated words and service trade are not matches.",
+    "q08": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Unqualified ÜFE is interpreted broadly as producer prices, including service, agriculture, domestic and external indices. Item prices and weights are contextual; consumer prices are a different indicator.",
+    "q09": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Yİ-ÜFE specifically requests domestic producer prices. Combined domestic/external totals and domestic contributions are context. Agricultural or external-only series do not answer that target.",
+    "q10": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. GSYH has the same GDP intent as q03. Per-capita PPP comparisons remain contextual.",
+    "q11": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. HİA means Household Labour Force Survey. Metadata explicitly names HİA; labour tables provide partial context. Marital-status population tables use ADNKS, not HİA.",
+    "q12": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ADNKS abbreviation has the same system/population intent as q04. Foreign-only population, median age and name rankings are narrower context.",
+    "q13": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Inflation is interpreted as consumer-price inflation; producer prices, weights and selected prices offer related context.",
+    "q14": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Cost of living maps primarily to consumer prices. Life-satisfaction descriptions explicitly mention cost-of-living concerns, so they provide context; survival/life tables and name rankings do not.",
+    "q15": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. National income maps to aggregate GDP, with PPP GDP contextual. Company income statements, public receipts, investment returns and incubators do not measure national income.",
+    "q16": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. People unable to find work map to unemployed/jobseeker statistics. Recruitment difficulty is the employer perspective; software adoption and already-employed distributions are different targets.",
+    "q17": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Birth-event bulletins answer counts. Birth rates and birth-order proportions are related but not counts. Population by birthplace and enterprise births/deaths must not be mistaken for babies born.",
+    "q18": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Dış satım means exports. Trade bulletins answer directly; terms of trade, export-related prices and trade indices provide partial context.",
+    "q19": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Inflected unemployment retains the q02 intent. Youth-only tables and revisions are narrower context; provincial unemployment is an available direct geographic breakdown.",
+    "q20": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Population counts/distributions answer the broad intent. Density, household size and specialized population subgroups are contextual. Nonparticipation reasons and NEET-only tables do not answer general population.",
+    "q21": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Require an explicit province population breakdown or an Istanbul population snippet for full relevance. Generic geography dimensions do not establish Istanbul coverage; national population/density tables remain context. Source correction: The full 2024 ADNKS bulletin explicitly gives Istanbul population; the original short snippet omitted that paragraph.",
+    "q22": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Unqualified price changes can be consumer or producer prices. Selected price levels are contextual. Wage, employment, hours and agricultural output changes are different quantities.",
+    "q23": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Broad export intent: general export value/volume indices and trade bulletins directly relate. Exclusion-specific indices and enterprise-cohort economic indicators are narrower context.",
+    "q24": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Inflected housing-sales intent matches q05. Adjusted housing sales are direct; buyer nationality/sex subsets are contextual; web and retail-trade sales are different targets.",
+    "q25": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ASCII unemployment-rate query has the q02 intent. Literacy, emissions, dependency, brain-drain, web sales and price rates are different indicators.",
+    "q26": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ASCII population query retains the broad population intent. Foreign-only population, municipality-only population, density/growth and literacy are partial context.",
+    "q27": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ASCII consumer-price query has the same intent as q01, including the distinction between the aggregate index and weights/components/prices.",
+    "q28": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Youth unemployment requires the youth group: basic-indicator descriptions explicitly include ages 15–24. NEET and all-age unemployment are context, not equivalent youth-unemployment measures.",
+    "q29": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ASCII Istanbul population has the same geographic requirement as q21. National totals or generic geographic field names cannot establish province coverage.",
+    "q30": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. ASCII foreign trade covers general import/export and international services. Exclusion-specific indices are partial context. Domestic retail/service-confidence series and birthplace are different concepts.",
+    "q31": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Typo is interpreted as enflasyon. CPI metadata directly answers; national statistical compendia are broader context. Inflation-adjusted company accounts do not measure inflation itself.",
+    "q32": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Typo is interpreted as unemployment; match the labour targets and revision treatment in q02. Construction cost is a different measure.",
+    "q33": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Population typo has exactly the q26 information need and corresponding metadata-based judgments.",
+    "q34": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Housing-sales typo retains q05 intent. Household size/structure is not a transaction count; foreign-buyer housing subsets are context.",
+    "q35": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Consumer-price typo is interpreted as CPI; spatial price levels and basket/selected prices provide context. Corporate accounts and agricultural producer prices do not measure consumer prices.",
+    "q36": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Industrial-production typo targets industry indices/bulletins. Manufacturing structure, environmental production and revision/contribution measures are context; construction/services/crops are different sectors.",
+    "q37": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Full relevance requires joint youth AND female unemployment coverage. Basic-indicator metadata advertises ages 15–24 and sex; separate female participation and total-youth unemployment snippets do not establish the joint rate. Source correction: The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup. Source correction: The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup. Source correction: The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup. Source correction: The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup. Source correction: The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup. Exact-filter follow-up also confirmed nonempty rows for the relevant youth/female/seasonal or first-hand housing selection, with matching inspect/data snapshots.",
+    "q38": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Seasonally adjusted unemployment targets basic/complementary labour indicators. Adjusted employment is context; adjusted CPI, exports, sales and construction are different measures. Exact-filter follow-up also confirmed nonempty rows for the relevant youth/female/seasonal or first-hand housing selection, with matching inspect/data snapshots.",
+    "q39": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Require age-specific population counts. Foreign-born-only population, ratios and general ADNKS metadata/bulletins are partial context unless an explicit age-count table is identified. Child internet usage is not population counts. Source correction: The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic. Source correction: The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic. Source correction: The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic. Source correction: The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic.",
+    "q40": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Sectoral export quantity requires both sector and quantity. Export indices advertise sector fields but do not verify absolute quantities; value/volume bulletins and price indices are partial context. Import quantities are a different direction.",
+    "q41": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. First-hand housing counts appear explicitly in bulletin snippets; sales-status tables can provide that breakdown. Other housing subsets and adjusted total sales are context. Exact-filter follow-up also confirmed nonempty rows for the relevant youth/female/seasonal or first-hand housing selection, with matching inspect/data snapshots.",
+    "q42": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Annual consumer-price change is explicit in CPI bulletin snippets and general CPI tables. Category changes, weights and selected prices are narrower context; producer prices and consumer sentiment are different indicators.",
+    "q43": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. All candidates concern exports but stored metadata does not establish Ankara coverage. No candidate gets full relevance merely from a generic geography dimension.",
+    "q44": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Istanbul population shares q21/q29 geographic criteria: explicit province-count tables and the 2025 Istanbul snippet are direct; national or restricted population measures are context.",
+    "q45": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Province-level sales-status counts can answer Izmir housing sales. National totals and narrower foreign-buyer subsets are context; stored bulletin snippets do not establish Izmir coverage. Source correction: The complete December 2025 bulletin explicitly reports the Izmir housing-sales total; the short first-pass snippet covered national first-hand sales only.",
+    "q46": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Industry-related candidates offer national/sectoral context, but none of the stored descriptions establishes Bursa-specific industry coverage. No full-relevance provincial result is asserted.",
+    "q47": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Tourism bulletins offer national tourism context without confirmed Antalya coverage. Resident foreigners are not visitors; producer agricultural prices are unrelated.",
+    "q48": "Second pass: retained the intent and 0/1/2 distinctions after reviewing the candidates and available source evidence. Provincial birth rates directly address a broad province/birth query. National birth bulletins and birth-order proportions are context. Birthplace population stocks, names and enterprise births are different concepts."
+  },
+  "grades": {
+    "q01": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 0,
+      "flow:DF_SU_ATIKSU_ALICI_ORTAM_BELEDIYE_SEBEKE_V1+V1.0": 0,
+      "flow:DF_TARIMSAL_GIRDI_FIYAT_ENDEKSI_DEGISIM_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT02+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT03+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT05+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT06+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 0,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q02": {
+      "flow:DF_ADNKS_T19+V1.1": 0,
+      "flow:DF_EMISYON_DEGISIM_ORAN+V1.1": 0,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": 1,
+      "press:54068": 2,
+      "press:57982": 2,
+      "press:57983": 2,
+      "press:57984": 2,
+      "press:57985": 2,
+      "press:57986": 2,
+      "press:57987": 2,
+      "press:57997": 2,
+      "press:57998": 2,
+      "press:57999": 2
+    },
+    "q03": {
+      "flow:DF_ADNKS_T01+V1.1": 0,
+      "flow:DF_ADNKS_T02+V1.1": 0,
+      "flow:DF_ADNKS_T32+V1.1": 0,
+      "flow:DF_BIYOTEKNLOJI_TEKNIK_FAALIYET+V1.0": 0,
+      "flow:DF_BIYOTEK_UYGULAMA_FAALIYET+V1.0": 0,
+      "flow:DF_MOTORLU_KARA_TASIT_KAYDI_YAPILAN_IBBS_V2+V1.0": 0,
+      "flow:DF_MOTORLU_KARA_TASIT_YIL_ICINDE_DEVRI_YAPILAN_V2+V1.0": 0,
+      "flow:DF_SGP_GORE_GSYH_BIREYSEL_TUKETIM_ENDEKSLERI_V3+V1.0": 1,
+      "flow:DF_SU_ATIKSU_BELEDIYE_ICMESUYU_SEBEKE_V1+V1.0": 0,
+      "flow:DF_UFE_V6+V1.0": 0,
+      "flow:DF_ULKELER_KISI_BASINA_REEL_GSYH_SGP+V1.0": 1,
+      "flow:DF_YAYIN_TUR_TIRAJ+V1.0": 0,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 0,
+      "flow:DF_YIUFE_EDO_V1+V1.0": 0,
+      "press:53755": 2,
+      "press:54159": 2,
+      "press:54160": 2,
+      "press:54161": 2,
+      "press:54162": 2,
+      "press:54163": 2,
+      "press:54187": 2,
+      "press:58198": 2,
+      "press:58211": 2,
+      "press:58213": 2
+    },
+    "q04": {
+      "flow:DF_ADNKS_T12+V1.1": 1,
+      "flow:DF_ADNKS_T17+V1.1": 2,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T26+V1.1": 2,
+      "flow:DF_ADNKS_T27+V1.1": 2,
+      "flow:DF_ADNKS_T28+V1.1": 1,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T32+V1.1": 1,
+      "flow:DF_ADNKS_T33+V1.1": 1,
+      "flow:DF_ADNKS_T34+V1.1": 2,
+      "flow:DF_ADNKS_T36+V1.1": 2,
+      "flow:DF_ADNKS_T37+V1.1": 2,
+      "press:49684": 2,
+      "press:49685": 2,
+      "press:53783": 2,
+      "press:53783:metadata": 2,
+      "press:53784:metadata": 2,
+      "press:53899": 2,
+      "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": 2
+    },
+    "q05": {
+      "flow:DF_ATIK_BELEDIYE_ARITMA_CAMURU_V1+V1.0": 0,
+      "flow:DF_ATIK_MADEN_ISLETMELERI_V1+V1.0": 0,
+      "flow:DF_ATIK_TERMIK_SANTRALLER_V1+V1.0": 0,
+      "flow:DF_CINSIYETE_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": 2,
+      "flow:DF_SU_ATIKSU_ARITMA_TESIS_V1+V1.0": 0,
+      "flow:DF_TASIT_KILOMETRE_YIL_V2+V1.0": 0,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_UCRETLI_CALISAN_ISTATISTIKLERI_C+V1.0": 0,
+      "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATIS_V3+V1.0": 1,
+      "press:58339": 2,
+      "press:58340": 2,
+      "press:58341": 2,
+      "press:58342": 2,
+      "press:58343": 2,
+      "press:58344": 2,
+      "press:58345": 2,
+      "press:58346": 2,
+      "press:58347": 2,
+      "press:58350": 2
+    },
+    "q06": {
+      "flow:DF_HIZMET_URETIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_INSAAT_URETIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_INSAAT_URETIM_ENDEKS_V1_O+V1.0": 0,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ALT_C+V1.0": 2,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0": 2,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ANA_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_C+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_GRUP_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_SINIF_O+V1.0": 1,
+      "press:58183": 2,
+      "press:58184": 2,
+      "press:58185": 2,
+      "press:58186": 2,
+      "press:58187": 2,
+      "press:58188": 2,
+      "press:58192": 2,
+      "press:58194": 2,
+      "press:58195": 2,
+      "press:58196": 2
+    },
+    "q07": {
+      "flow:DF_AY_TUR_RESM_ILAN_ADET+V1.0": 0,
+      "flow:DF_RES_ILAN_REKLAM_BEDEL_TUR+V1.0": 0,
+      "flow:DF_SURELI_YAY_IC_TUR+V1.0": 0,
+      "flow:DF_SU_ATIKSU_ALICI_ORTAM_BELEDIYE_SEBEKE_V1+V1.0": 0,
+      "flow:DF_TASIT_KILOMETRE_TOPLAM_YAKIT_TURU_V2+V1.0": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT02+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT03+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT05+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT06+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_UHTI_HIZMET_TURU_C+V1.0": 0,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q08": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 2,
+      "flow:DF_TARIM_URUNLERI_GRUP_MADDE_ENDEKS_TAORBA_V2+V1.0": 2,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 2,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT02+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT03+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT05+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT06+V1.0": 0,
+      "flow:DF_UFE_SANAYI_V2+V1.0": 2,
+      "flow:DF_UFE_V6+V1.0": 1,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 2,
+      "flow:DF_YIUFE_EDO_V1+V1.0": 2,
+      "press:57970": 2,
+      "press:57971": 2,
+      "press:57972": 2,
+      "press:57977": 2,
+      "press:57979": 2,
+      "press:58034": 2,
+      "press:58108": 2,
+      "press:58109": 2,
+      "press:58110": 2,
+      "press:58116": 2
+    },
+    "q09": {
+      "flow:DF_TARIM_URUNLERI_GRUP_MADDE_ENDEKS_TAORBA_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 0,
+      "flow:DF_UFE_SANAYI_V2+V1.0": 1,
+      "flow:DF_UFE_V6+V1.0": 1,
+      "flow:DF_YIUFE_EDO_V1+V1.0": 2,
+      "press:57969": 0,
+      "press:57970": 0,
+      "press:57971": 0,
+      "press:57972": 0,
+      "press:57975": 0,
+      "press:57977": 0,
+      "press:57979": 0,
+      "press:58034": 2,
+      "press:58116": 0,
+      "title:dataset:afcfde8dd3a961b3006158fc4db4f45be9fff0f71049ed80c2f1917cd37a2b85": 2
+    },
+    "q10": {
+      "flow:DF_SGP_GORE_GSYH_BIREYSEL_TUKETIM_ENDEKSLERI_V3+V1.0": 1,
+      "flow:DF_ULKELER_KISI_BASINA_REEL_GSYH_SGP+V1.0": 1,
+      "press:53755": 2,
+      "press:54159": 2,
+      "press:54160": 2,
+      "press:54161": 2,
+      "press:54162": 2,
+      "press:54163": 2,
+      "press:54187": 2,
+      "press:58198": 2,
+      "press:58211": 2,
+      "press:58213": 2
+    },
+    "q11": {
+      "flow:DF_ADNKS_T10+V1.1": 0,
+      "flow:DF_ADNKS_T21+V1.1": 0,
+      "press:57985:metadata": 2,
+      "press:57987:metadata": 2,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~87f338a965": 1,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~9aff30a349": 1,
+      "table:cinsiyete-göre-işveren-olarak-çalışanların-istihdam-içindeki-oranı~6206aaaae0": 1,
+      "table:cinsiyete-göre-yönetici-pozisyonlarındaki-bireyler~5fc4cba54e": 1,
+      "table:genç-işsizlik-oranı~04c9503c21": 1,
+      "table:medeni-duruma-göre-istihdam-oranı~6c84530188": 1,
+      "table:yönetici-pozisyonlarındaki-bireylerin-cinsiyete-göre-dağılımı~bb71a78b76": 1,
+      "table:çalışanı-olmayan-hanehalklarında-yaşayan-çocuk-nüfusun-toplam-çocuk-nüfusa-oranı~933c22334c": 1
+    },
+    "q12": {
+      "flow:DF_ADNKS_T12+V1.1": 1,
+      "flow:DF_ADNKS_T13+V1.1": 1,
+      "flow:DF_ADNKS_T26+V1.1": 2,
+      "flow:DF_ADNKS_T27+V1.1": 2,
+      "flow:DF_ADNKS_T28+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T32+V1.1": 1,
+      "flow:DF_ADNKS_T33+V1.1": 1,
+      "flow:DF_ADNKS_T34+V1.1": 2,
+      "flow:DF_ADNKS_T36+V1.1": 2,
+      "flow:DF_ADNKS_T37+V1.1": 2,
+      "press:49684": 2,
+      "press:49685": 2,
+      "press:53783": 2,
+      "press:53783:metadata": 2,
+      "press:53784:metadata": 2,
+      "press:53899": 2,
+      "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": 2
+    },
+    "q13": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 1,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 1,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 1,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_UFE_V6+V1.0": 1,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 1,
+      "flow:DF_YIUFE_EDO_V1+V1.0": 1,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q14": {
+      "flow:DF_ADNKS_T32+V1.1": 0,
+      "flow:DF_ADNKS_T33+V1.1": 0,
+      "flow:DF_BD_HAYATTA_KALMA+V1.2": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "press:37226": 0,
+      "press:45592": 0,
+      "press:49692": 1,
+      "press:49726": 0,
+      "press:53678": 0,
+      "press:54081": 0,
+      "press:54199": 1,
+      "press:58232": 0,
+      "press:58232:metadata": 0,
+      "title:dataset:cc9c7d0598f9ef6ac47ee8cca7009b3aea9973081cc424395cb09d1a56106399": 0
+    },
+    "q15": {
+      "flow:DF_FINANSAL_YATIRIM_ARAC_REEL_GETIRI+V1.0": 0,
+      "flow:DF_GELIR_TABLOSU_NACEREV21+V1.0": 0,
+      "flow:DF_GENEL_DEVLET_VERGI_SOSYAL_KATKI_V2+V1.0": 0,
+      "flow:DF_KUMES_HAYVANCILIK_KULUCKAHANE+V1.0": 0,
+      "flow:DF_SGP_GORE_GSYH_BIREYSEL_TUKETIM_ENDEKSLERI_V3+V1.0": 1,
+      "press:53755": 2,
+      "press:54159": 2,
+      "press:54160": 2,
+      "press:54161": 2,
+      "press:54162": 2,
+      "press:54163": 2,
+      "press:54187": 2,
+      "press:58198": 2,
+      "press:58211": 2,
+      "press:58213": 2
+    },
+    "q16": {
+      "flow:DF_BILISIM_UZMAN_ALIM+V1.0": 0,
+      "flow:DF_ERP_CRM_SCM+V1.0": 0,
+      "flow:DF_ERP_CRM_V1+V1.0": 0,
+      "flow:DF_ISGUCU_CEYREK_ISARAMA_KANAL_ISSIZ_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_ISARAMA_SURE_ISSIZ_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_ISTEKI_DURUM_ISTIHDAM_C+V1.0": 0,
+      "flow:DF_ISGUCU_CEYREK_SGK_KAYIT_C+V1.0": 0,
+      "press:54068": 2,
+      "press:57982": 2,
+      "press:57983": 2,
+      "press:57984": 2,
+      "press:57985": 2,
+      "press:57986": 2,
+      "press:57987": 2,
+      "press:57997": 2,
+      "press:57998": 2,
+      "press:57999": 2
+    },
+    "q17": {
+      "flow:DF_ADNKS_T02+V1.1": 0,
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ADNKS_T05+V1.1": 0,
+      "flow:DF_ADNKS_T18+V1.1": 0,
+      "flow:DF_ADNKS_T32+V1.1": 0,
+      "flow:DF_ADNKS_T33+V1.1": 0,
+      "flow:DF_ADNKS_T4+V1.2": 0,
+      "flow:DF_BD_DOGUM_OLUM+V1.1": 0,
+      "flow:DF_BD_HUKUKI_DOGUM_OLUM+V1.2": 0,
+      "flow:DF_BD_SEKTOREL_DOGUM_OLUM+V1.1": 0,
+      "flow:DF_DOGUM_KDH_C+V1.0": 1,
+      "flow:DF_DOGUM_SIRA_C+V1.0": 1,
+      "flow:DF_MUZE_ESER_SAY+V1.0": 0,
+      "press:49673": 2,
+      "press:53708": 2,
+      "press:54196": 2,
+      "press:58018": 2
+    },
+    "q18": {
+      "flow:DF_ADNKS_T01+V1.1": 0,
+      "flow:DF_ADNKS_T02+V1.1": 0,
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ALTINSIZ_DTH+V1.0": 1,
+      "flow:DF_ALTINSIZ_ENERJISIZ_DTH+V1.0": 1,
+      "flow:DF_BOLGESEL_SGP_TUKETIM_ANA_GRUPLAR_V1+V1.0": 0,
+      "flow:DF_DIS_TICARET_HADLERI_V1+V1.0": 1,
+      "flow:DF_ENERJISIZ_DTH+V1.0": 1,
+      "flow:DF_TRAFIK_KAZA_YERLESIM_YER_OLUMLU_YARALANMALI_V1+V1.0": 0,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 1,
+      "press:58237": 2,
+      "press:58238": 2,
+      "press:58239": 2,
+      "press:58244": 2,
+      "press:58246": 1,
+      "press:58252": 1,
+      "press:58257": 1
+    },
+    "q19": {
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": 1,
+      "press:57987": 2,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~87f338a965": 1,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~9aff30a349": 1,
+      "table:genç-işsizlik-oranı~04c9503c21": 1,
+      "table:il-düzeyinde-işsizlik-oranı~f769d0b059": 2,
+      "table:işsizlik-oranı~2b7854b01a": 2
+    },
+    "q20": {
+      "flow:DF_ADNKS_T10+V1.1": 2,
+      "flow:DF_ADNKS_T17+V1.1": 2,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T21+V1.1": 2,
+      "flow:DF_ADNKS_T25+V1.1": 1,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T36+V1.1": 2,
+      "flow:DF_ADNKS_T37+V1.1": 2,
+      "flow:DF_BED_NUFUS_DAGILIM+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_IDO_NEDEN_C+V1.0": 0,
+      "flow:DF_ISGUCU_CEYREK_NEET_EGITIM_C+V1.0": 0,
+      "flow:DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+V1.0": 0,
+      "flow:DF_MEZUN_NUFUS_ORAN+V1.0": 1,
+      "table:15-yaştaki-nüfusun-işgücü-durumu~1348063db8": 1,
+      "table:konut-kolaylıklarına-göre-kurumsal-olmayan-nüfusun-dağılımı~35d2da2f3c": 1,
+      "table:kurumsal-olmayan-nüfusun-eğitim-ve-işgücü-durumu~e64d78b14d": 1,
+      "table:kurumsal-olmayan-nüfusun-işgücü-durumu~a46424fea2": 1,
+      "table:nüfusun-işgücü-durumu~7ffd3ff893": 1,
+      "table:tarım-arazisine-sahip-yetişkin-nüfusun-oranı~b98e36515d": 1,
+      "table:yoksulluk-içinde-geçirilen-süreye-göre-nüfusun-dağılımı~353a0c25a1": 1
+    },
+    "q21": {
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ADNKS_T13+V1.1": 0,
+      "flow:DF_ADNKS_T14+V1.1": 2,
+      "flow:DF_ADNKS_T15+V1.1": 1,
+      "flow:DF_ADNKS_T17+V1.1": 1,
+      "flow:DF_ADNKS_T18+V1.1": 1,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T22+V1.1": 2,
+      "flow:DF_ADNKS_T26+V1.1": 1,
+      "flow:DF_ADNKS_T27+V1.1": 1,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T34+V1.1": 1,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 1,
+      "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": 1,
+      "flow:DF_SU_ATIKSU_SEBEKE_TESIS_BELEDIYE_NITELIK_V1+V1.0": 1,
+      "press:53783": 2,
+      "press:53899": 2,
+      "table:belediye-sayısı-ve-nüfusu~f3edb90620": 1,
+      "table:şehir-ve-köy-nüfusu~0f8e3803bf": 1
+    },
+    "q22": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 2,
+      "flow:DF_TARIMSAL_GIRDI_FIYAT_ENDEKSI_DEGISIM_V2+V1.0": 2,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 2,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_UFE_SANAYI_V2+V1.0": 2,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 2,
+      "flow:DF_YIUFE_EDO_V1+V1.0": 2,
+      "table:imalat-sanayi-diğer-işlerde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki-yıl~c27e35c2b3": 0,
+      "table:imalat-sanayi-diğer-işlerde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki~a5724ffb13": 0,
+      "table:imalat-sanayi-üretimde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki-yıl-aynı~6772fb6164": 0,
+      "table:imalat-sanayi-üretimde-çalışanlar-endeksi-bir-önceki-yıl-aynı-döneme-göre~858900e272": 0,
+      "table:imalat-sanayi-üretimde-çalışılan-saat-başına-ücret-endeksinin-bir-önceki-döneme~00f3c79428": 0,
+      "table:imalat-sanayi-üretimde-çalışılan-saat-başına-ücret-endeksinin-bir-önceki-yıl~64607b3ac0": 0,
+      "table:imalat-sanayi-üretimde-çalışılan-saat-endeksi-bir-önceki-yıl-aynı-döneme-göre~eb7d859ea8": 0,
+      "table:organik-bitkisel-üretim-ve-yüzde-değişimi~4338f572f9": 0
+    },
+    "q23": {
+      "flow:DF_ALTINSIZ_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_ALTINSIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_IME+V1.0": 1,
+      "flow:DF_BD_KURULUS_YIL+V1.1": 1,
+      "flow:DF_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_IHRACAT_BIRIM_DEGER_V1+V1.0": 2,
+      "flow:DF_IHRACAT_MIKTAR_ENDEKS_V1+V1.0": 2,
+      "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_IHRACAT_V2+V1.0": 2,
+      "press:58239": 2
+    },
+    "q24": {
+      "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": 0,
+      "flow:DF_CINSIYETE_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_MEVSIM_TAKVIM_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": 2,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_O+V1.0": 0,
+      "flow:DF_UYRUKLARA_GORE_ILILCE_V3+V1.0": 1,
+      "flow:DF_UYRUKLARA_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATIS_V3+V1.0": 1,
+      "press:58339": 2,
+      "press:58340": 2,
+      "press:58341": 2,
+      "press:58342": 2,
+      "press:58343": 2,
+      "press:58344": 2,
+      "press:58345": 2,
+      "press:58346": 2,
+      "press:58347": 2,
+      "press:58350": 2
+    },
+    "q25": {
+      "flow:DF_ADNKS_T19+V1.1": 0,
+      "flow:DF_ADNKS_T24+V1.1": 0,
+      "flow:DF_ADNKS_T31+V1.1": 0,
+      "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": 0,
+      "flow:DF_EKONOMIK_GUVEN_SDMX_C+V1.0": 0,
+      "flow:DF_EMISYON_DEGISIM_ORAN+V1.1": 0,
+      "flow:DF_GENC_NUFUS_OKURYAZARLIK_ORAN+V1.0": 0,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_MEZUN_NUFUS_ORAN+V1.0": 0,
+      "flow:DF_TAMAMLAMA_ORAN+V1.0": 0,
+      "flow:DF_TAMAMLANAN_BOLUM_BGO+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 0,
+      "flow:DF_YO_OGRENIM_DIL+V1.0": 0,
+      "press:54068": 2,
+      "press:57982": 2,
+      "press:57983": 2,
+      "press:57984": 2,
+      "press:57985": 2,
+      "press:57986": 2,
+      "press:57987": 2,
+      "press:57997": 2,
+      "press:57998": 2,
+      "press:57999": 2
+    },
+    "q26": {
+      "flow:DF_ADNKS_T03+V1.1": 2,
+      "flow:DF_ADNKS_T12+V1.1": 1,
+      "flow:DF_ADNKS_T13+V1.1": 1,
+      "flow:DF_ADNKS_T14+V1.1": 2,
+      "flow:DF_ADNKS_T17+V1.1": 2,
+      "flow:DF_ADNKS_T18+V1.1": 1,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T26+V1.1": 2,
+      "flow:DF_ADNKS_T27+V1.1": 2,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T34+V1.1": 2,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 2,
+      "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": 1,
+      "press:49684": 2,
+      "press:49685": 2,
+      "press:53783": 2,
+      "press:53783:metadata": 2,
+      "press:53784:metadata": 2,
+      "press:53899": 2,
+      "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": 2,
+      "title:unknown:c1b1d02022d153966857617dcef4b848c07e82b6d88bf8051aec217f5c9c4504": 2
+    },
+    "q27": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 0,
+      "flow:DF_TARIMSAL_GIRDI_FIYAT_ENDEKSI_DEGISIM_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_YDUFE_EDO_V1+V1.0": 0,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q28": {
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 0,
+      "flow:DF_GENC_NUFUS_OKURYAZARLIK_ORAN+V1.0": 0,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_ARANILAN_MESLEK_ISSIZ_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_ISARAMA_KANAL_ISSIZ_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_ISARAMA_SURE_ISSIZ_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_NEET_EGITIM_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_ONCEKI_SEKTOR_ISSIZ_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": 1,
+      "press:57987": 2,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~87f338a965": 2,
+      "table:cinsiyete-göre-genç-işsizlik-oranı~9aff30a349": 2,
+      "table:genç-işsizlik-oranı~04c9503c21": 2,
+      "table:il-düzeyinde-işsizlik-oranı~f769d0b059": 1,
+      "table:işsizlik-oranı~2b7854b01a": 1
+    },
+    "q29": {
+      "flow:DF_ADNKS_T14+V1.1": 2,
+      "flow:DF_ADNKS_T15+V1.1": 1,
+      "flow:DF_ADNKS_T17+V1.1": 1,
+      "flow:DF_ADNKS_T18+V1.1": 1,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T22+V1.1": 2,
+      "flow:DF_ADNKS_T26+V1.1": 1,
+      "flow:DF_ADNKS_T27+V1.1": 1,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T34+V1.1": 1,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 1,
+      "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": 1,
+      "flow:DF_SU_ATIKSU_SEBEKE_TESIS_BELEDIYE_NITELIK_V1+V1.0": 1,
+      "press:53899": 2,
+      "table:belediye-sayısı-ve-nüfusu~f3edb90620": 1,
+      "table:toplam-hanehalkı-nüfusu-hanehalkı-sayısı-ve-ortalama-hanehalkı-büyüklüğü~1fc0fbdf9c": 1,
+      "table:şehir-ve-köy-nüfusu~0f8e3803bf": 1
+    },
+    "q30": {
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ALTINSIZ_DTH+V1.0": 1,
+      "flow:DF_ALTINSIZ_ENERJISIZ_DTH+V1.0": 1,
+      "flow:DF_ALTINSIZ_IME+V1.0": 1,
+      "flow:DF_ALTINSIZ_ITHALAT_ME+V1.0": 1,
+      "flow:DF_DIS_TICARET_HADLERI_V1+V1.0": 2,
+      "flow:DF_ENERJISIZ_DTH+V1.0": 1,
+      "flow:DF_GUVEN_ENDEKS_SEKTOREL_EGILIM_SDMX+V1.0": 0,
+      "flow:DF_IHRACAT_BIRIM_DEGER_V1+V1.0": 2,
+      "flow:DF_IHRACAT_MIKTAR_ENDEKS_V1+V1.0": 2,
+      "flow:DF_ITHALAT_BIRIM_DEGER_ENDEKSI_V1+V1.0": 2,
+      "flow:DF_ITHALAT_MIKTAR_ENDEKS_V1+V1.0": 2,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_O+V1.0": 0,
+      "flow:DF_UHTI_COGRAFI_C+V1.0": 2,
+      "flow:DF_UHTI_EKONOMIK_C+V1.0": 2,
+      "flow:DF_UHTI_HIZMET_COGRAFI_C+V1.0": 2,
+      "flow:DF_UHTI_HIZMET_TURU_C+V1.0": 2,
+      "press:58237": 2,
+      "press:58238": 2,
+      "press:58239": 2,
+      "press:58244": 2,
+      "press:58246": 2,
+      "press:58250": 2,
+      "press:58251": 2,
+      "press:58252": 2,
+      "press:58257": 2
+    },
+    "q31": {
+      "press:54080": 0,
+      "publication:istatistiklerle-türkiye-2022~4bf497d218": 1,
+      "publication:istatistiklerle-türkiye-2023~f9f580da75": 1,
+      "publication:istatistiklerle-türkiye-2024~83ce08d885": 1,
+      "publication:türkiye-istatistikleri-2022~6a9d6f1726": 1,
+      "publication:türkiye-istatistikleri-2023~0baeff00dc": 1,
+      "publication:türkiye-istatistikleri-2024~eb74e3d187": 1,
+      "table:ekonomik-faaliyetlere-göre-firmaların-referans-yıl-gelir-tablosu~4fa06aaf87": 0,
+      "table:ekonomik-faaliyetlere-ve-yıllara-göre-firmaların-gelir-tablosu~dbaade70e6": 0,
+      "title:dataset:2f49d9618905ccb27111b52fdf686bb053f2d5f17150953592a5635e6a34b481": 2
+    },
+    "q32": {
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": 1,
+      "press:57987": 2,
+      "press:58205": 0
+    },
+    "q33": {
+      "flow:DF_ADNKS_T03+V1.1": 2,
+      "flow:DF_ADNKS_T12+V1.1": 1,
+      "flow:DF_ADNKS_T13+V1.1": 1,
+      "flow:DF_ADNKS_T14+V1.1": 2,
+      "flow:DF_ADNKS_T17+V1.1": 2,
+      "flow:DF_ADNKS_T18+V1.1": 1,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T26+V1.1": 2,
+      "flow:DF_ADNKS_T27+V1.1": 2,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T34+V1.1": 2,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 2,
+      "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": 1,
+      "press:49684": 2,
+      "press:49685": 2,
+      "press:53783": 2,
+      "press:53783:metadata": 2,
+      "press:53784:metadata": 2,
+      "press:53899": 2,
+      "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": 2,
+      "title:unknown:c1b1d02022d153966857617dcef4b848c07e82b6d88bf8051aec217f5c9c4504": 2
+    },
+    "q34": {
+      "flow:DF_ADNKS_T06+V1.1": 0,
+      "flow:DF_ADNKS_T07+V1.1": 0,
+      "flow:DF_ADNKS_T08+V1.1": 0,
+      "flow:DF_ADNKS_T25+V1.1": 0,
+      "flow:DF_BUY_GRUP_EKO_FAAL_MAL_HIZMET_SATIS+V1.0": 0,
+      "flow:DF_BUY_GRUP_EKO_FAAL_MAL_HIZMET_SATIS_V1+V1.0": 0,
+      "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": 0,
+      "flow:DF_DF_CEVRE_KORUMA_V2+V1.0": 0,
+      "flow:DF_MEVSIM_TAKVIM_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": 2,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_O+V1.0": 0,
+      "flow:DF_UYRUKLARA_GORE_ILILCE_V3+V1.0": 1,
+      "flow:DF_UYRUKLARA_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATIS_V3+V1.0": 1,
+      "press:58339": 2,
+      "press:58340": 2,
+      "press:58341": 2,
+      "press:58342": 2,
+      "press:58343": 2,
+      "press:58344": 2,
+      "press:58345": 2,
+      "press:58346": 2,
+      "press:58347": 2,
+      "press:58350": 2
+    },
+    "q35": {
+      "flow:DF_BOLGESEL_FIYAT_DUZEYI_GENEL_V1+V1.0": 1,
+      "flow:DF_BOLGESEL_FIYAT_DUZEYI_TUKETIM_ANA_GRUPLAR_V1+V1.0": 1,
+      "flow:DF_KURUMSAL_SEKTOR_HESAPLARI_CARI_FIYATLARLA_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_ULKELER_FIILI_BIREYSEL_TUKETIM_ENDEKS_V2+V1.0": 1,
+      "flow:DF_ULKELER_FIYAT_DUZEYI_ENDEKSLERI+V1.0": 1,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q36": {
+      "flow:DF_BD_DOGUM_TEKNO_DUZEY+V1.1": 1,
+      "flow:DF_DF_CEVRESEL_MAL_HIZMET_SEKTOR+V1.0": 1,
+      "flow:DF_HIZMET_URETIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_INSAAT_URETIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_INSAAT_URETIM_ENDEKS_V1_O+V1.0": 0,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ALT_C+V1.0": 2,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0": 2,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ANA_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_C+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_GRUP_O+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_SINIF_O+V1.0": 1,
+      "flow:DF_YAPISAL_EFGTG_IMALAT_TEKNO+V1.0": 1,
+      "press:58008": 0,
+      "press:58187": 2,
+      "press:58188": 2,
+      "press:58196": 2,
+      "press:58314": 0,
+      "press:58315": 0,
+      "press:58316": 0,
+      "press:58329": 0,
+      "press:58330": 0,
+      "press:58331": 0
+    },
+    "q37": {
+      "flow:DF_ADNKS_T31+V1.1": 0,
+      "flow:DF_ADNKS_T33+V1.1": 0,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 0,
+      "flow:DF_GENC_NUFUS_OKURYAZARLIK_ORAN+V1.0": 0,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_ISGUCU_CEYREK_NEET_EGITIM_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": 1,
+      "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": 1,
+      "press:49668": 1,
+      "press:53675": 1,
+      "press:54076": 1,
+      "press:57984": 2,
+      "press:57985": 2,
+      "press:57986": 2,
+      "press:57987": 2,
+      "press:57999": 2,
+      "press:58272": 1
+    },
+    "q38": {
+      "flow:DF_INSAAT_URETIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_INSAAT_URETIM_ENDEKS_V1_O+V1.0": 0,
+      "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": 2,
+      "flow:DF_MEVSIM_TAKVIM_V3+V1.0": 0,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_C+V1.0": 0,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_O+V1.0": 0,
+      "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_IHRACAT_V2+V1.0": 0,
+      "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_ITHALAT_V2+V1.0": 0,
+      "flow:DF_TUFE_SDMX_TT05+V1.0": 0,
+      "flow:DF_UFE_V6+V1.0": 0,
+      "table:mevsim-etkisinden-arındırılmış-ekonomik-faaliyete-göre-istihdam-edilenler~a60b3ff807": 1,
+      "table:mevsim-etkisinden-arındırılmış-işgücüne-ilişkin-tamamlayıcı-göstergeler~d121462a48": 2,
+      "table:mevsim-etkisinden-arındırılmış-sektörlere-göre-istihdam-edilenler~0040bcf7fa": 1,
+      "table:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-24-yaş~373235767b": 2,
+      "table:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-yaş~aad8d5aafb": 2,
+      "table:mevsim-etkisinden-arındırılmış-tüfe-göstergeleri~df13731d31": 0
+    },
+    "q39": {
+      "flow:DF_ADNKS_T01+V1.1": 1,
+      "flow:DF_ADNKS_T15+V1.1": 2,
+      "flow:DF_ADNKS_T16+V1.0": 2,
+      "flow:DF_ADNKS_T27+V1.1": 2,
+      "flow:DF_ADNKS_T31+V1.1": 1,
+      "flow:DF_ADNKS_T34+V1.1": 2,
+      "flow:DF_ADNKS_T35+V1.1": 2,
+      "flow:DF_ADNKS_T36+V1.1": 2,
+      "flow:DF_COCUKLARDA_BILIISIM_TEKNOLOJILERI_T3+V1.1": 0,
+      "flow:DF_COCUK_BILISIM_TEKNO_KULLANIM_ORAN_CINSIYET_YAS+V1.1": 0,
+      "flow:DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+V1.0": 1,
+      "flow:DF_YUKSEKOGRETIM_MEZUN_ORAN+V1.0": 1,
+      "press:49684": 2,
+      "press:49685": 2,
+      "press:53783": 2,
+      "press:53783:metadata": 1,
+      "press:53784:metadata": 1,
+      "press:53899": 2,
+      "table:cinsiyet-ve-yaş-grubuna-göre-nüfus~8f0424f5de": 2,
+      "table:cinsiyete-ve-yaş-grubuna-göre-nüfus~0cd9a177c1": 2,
+      "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": 1
+    },
+    "q40": {
+      "flow:DF_ALTINSIZ_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_ALTINSIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_IME+V1.0": 1,
+      "flow:DF_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_IHRACAT_BIRIM_DEGER_V1+V1.0": 1,
+      "flow:DF_IHRACAT_MIKTAR_ENDEKS_V1+V1.0": 1,
+      "flow:DF_ITHALAT_MIKTAR_ENDEKS_V1+V1.0": 0,
+      "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_IHRACAT_V2+V1.0": 1,
+      "press:53908": 1,
+      "press:53911": 1,
+      "press:58234": 1,
+      "press:58235": 1,
+      "press:58236": 1,
+      "press:58237": 1,
+      "press:58238": 1,
+      "press:58239": 1,
+      "press:58243": 1,
+      "press:58244": 1
+    },
+    "q41": {
+      "flow:DF_ADNKS_T32+V1.1": 0,
+      "flow:DF_ADNKS_T33+V1.1": 0,
+      "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": 0,
+      "flow:DF_CINSIYETE_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_MEVSIM_TAKVIM_V3+V1.0": 1,
+      "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": 2,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATIS_V3+V1.0": 1,
+      "press:58339": 2,
+      "press:58340": 2,
+      "press:58341": 2,
+      "press:58342": 2,
+      "press:58343": 2,
+      "press:58344": 2,
+      "press:58345": 2,
+      "press:58346": 2,
+      "press:58347": 2,
+      "press:58350": 2
+    },
+    "q42": {
+      "flow:DF_HUFE_EDO_V1+V1.0": 0,
+      "flow:DF_TARIMSAL_GIRDI_FIYAT_ENDEKSI_DEGISIM_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 0,
+      "flow:DF_TUFE_SDMX_2003+V1.0": 2,
+      "flow:DF_TUFE_SDMX_TT01+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT02+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT04+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT07+V1.0": 1,
+      "flow:DF_TUFE_SDMX_TT10+V1.0": 2,
+      "flow:DF_TUKETICI_EGILIM_SDMX+V1.0": 0,
+      "press:58287": 2,
+      "press:58288": 2,
+      "press:58289": 2,
+      "press:58290": 2,
+      "press:58293": 2,
+      "press:58294": 2,
+      "press:58295": 2,
+      "press:58296": 2,
+      "press:58297": 2,
+      "press:58298": 2
+    },
+    "q43": {
+      "flow:DF_ALTINSIZ_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_ALTINSIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ALTINSIZ_IME+V1.0": 1,
+      "flow:DF_BD_KURULUS_YIL+V1.1": 1,
+      "flow:DF_ENERJISIZ_IHRACAT_BDE+V1.0": 1,
+      "flow:DF_ENERJISIZ_IME+V1.0": 1,
+      "flow:DF_IHRACAT_BIRIM_DEGER_V1+V1.0": 1,
+      "flow:DF_IHRACAT_MIKTAR_ENDEKS_V1+V1.0": 1,
+      "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_IHRACAT_V2+V1.0": 1,
+      "press:53908": 1,
+      "press:53911": 1,
+      "press:58234": 1,
+      "press:58235": 1,
+      "press:58236": 1,
+      "press:58237": 1,
+      "press:58238": 1,
+      "press:58239": 1,
+      "press:58243": 1,
+      "press:58244": 1
+    },
+    "q44": {
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ADNKS_T13+V1.1": 0,
+      "flow:DF_ADNKS_T14+V1.1": 2,
+      "flow:DF_ADNKS_T15+V1.1": 1,
+      "flow:DF_ADNKS_T17+V1.1": 1,
+      "flow:DF_ADNKS_T18+V1.1": 1,
+      "flow:DF_ADNKS_T20+V1.1": 1,
+      "flow:DF_ADNKS_T22+V1.1": 2,
+      "flow:DF_ADNKS_T26+V1.1": 1,
+      "flow:DF_ADNKS_T27+V1.1": 1,
+      "flow:DF_ADNKS_T29+V1.1": 1,
+      "flow:DF_ADNKS_T30+V1.1": 2,
+      "flow:DF_ADNKS_T34+V1.1": 1,
+      "flow:DF_DNG_NUFUS_ORAN+V1.0": 1,
+      "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": 1,
+      "flow:DF_SU_ATIKSU_SEBEKE_TESIS_BELEDIYE_NITELIK_V1+V1.0": 1,
+      "press:53899": 2,
+      "table:belediye-sayısı-ve-nüfusu~f3edb90620": 1,
+      "table:toplam-hanehalkı-nüfusu-hanehalkı-sayısı-ve-ortalama-hanehalkı-büyüklüğü~1fc0fbdf9c": 1,
+      "table:şehir-ve-köy-nüfusu~0f8e3803bf": 1
+    },
+    "q45": {
+      "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": 0,
+      "flow:DF_CINSIYETE_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_MEVSIM_TAKVIM_V3+V1.0": 1,
+      "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": 2,
+      "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": 1,
+      "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": 0,
+      "flow:DF_UYRUKLARA_GORE_ILILCE_V3+V1.0": 1,
+      "flow:DF_UYRUKLARA_GORE_SATISLAR_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": 1,
+      "flow:DF_YABANCILARA_SATIS_V3+V1.0": 1,
+      "press:58339": 1,
+      "press:58340": 1,
+      "press:58341": 1,
+      "press:58342": 1,
+      "press:58343": 1,
+      "press:58344": 1,
+      "press:58345": 1,
+      "press:58346": 1,
+      "press:58347": 1,
+      "press:58350": 2
+    },
+    "q46": {
+      "flow:DF_ATIK_IMALAT_SANAYI_ALT_SEKTORLER_V1+V1.0": 1,
+      "flow:DF_ATIK_IMALAT_SANAYI_GOSTERGELER_V1+V1.0": 1,
+      "flow:DF_ATIK_IMALAT_SANAYI_YONETIM_V1+V1.0": 1,
+      "flow:DF_ATIK_ORGANIZE_SANAYI_BOLGELERI_V1+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ALT_C+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_C+V1.0": 1,
+      "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_O+V1.0": 1,
+      "flow:DF_SU_ATIKSU_IMALAT_GOSTERGE_V1+V1.0": 1,
+      "flow:DF_SU_ATIKSU_IMALAT_SANAYI_ALT_SEKTOR_V1+V1.0": 1,
+      "flow:DF_SU_ATIKSU_IMALAT_SANAYI_V1+V1.0": 1,
+      "press:58185": 1,
+      "press:58186": 1,
+      "press:58187": 1,
+      "press:58188": 1,
+      "press:58196": 1
+    },
+    "q47": {
+      "flow:DF_ADNKS_T12+V1.1": 0,
+      "flow:DF_ADNKS_T13+V1.1": 0,
+      "flow:DF_TARIM_URUNLERI_GRUP_MADDE_ENDEKS_TAORBA_V2+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": 0,
+      "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": 0,
+      "press:53658": 1,
+      "press:53659": 1,
+      "press:53660": 1,
+      "press:54155": 1,
+      "press:54156": 1,
+      "press:54157": 1,
+      "press:54158": 1,
+      "press:58025": 1,
+      "press:58142": 1,
+      "press:58143": 1
+    },
+    "q48": {
+      "flow:DF_ADNKS_T02+V1.1": 0,
+      "flow:DF_ADNKS_T03+V1.1": 0,
+      "flow:DF_ADNKS_T05+V1.1": 0,
+      "flow:DF_ADNKS_T32+V1.1": 0,
+      "flow:DF_ADNKS_T33+V1.1": 0,
+      "flow:DF_ADNKS_T4+V1.2": 0,
+      "flow:DF_BD_DOGUM_OLUM+V1.1": 0,
+      "flow:DF_BD_HUKUKI_DOGUM_OLUM+V1.2": 0,
+      "flow:DF_BD_SEKTOREL_DOGUM_OLUM+V1.1": 0,
+      "flow:DF_DOGUM_KDH_C+V1.0": 2,
+      "flow:DF_DOGUM_SIRA_C+V1.0": 1,
+      "press:49673": 1,
+      "press:53708": 1,
+      "press:54196": 1,
+      "press:58018": 1
+    }
+  },
+  "review_type": "single_ai_sequential_source_review",
+  "human_assessors": 0,
+  "independent_assessors": false,
+  "first_assessment_sha256": "68c41ded82d7b0903a3af0c72bfbce1184f082b8f36ac3fc19c686b103bc13be",
+  "evidence_sha256": "7c6f0e4553aa909428323223128f3926359583e3b92338787fd2b9f5c040c825",
+  "source_checks": {
+    "flow:DF_ADNKS_T01+V1.1": {
+      "method": "live_metadata",
+      "call": 48,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T02+V1.1": {
+      "method": "live_metadata",
+      "call": 49,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T03+V1.1": {
+      "method": "live_metadata",
+      "call": 50,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T05+V1.1": {
+      "method": "live_metadata",
+      "call": 51,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T06+V1.1": {
+      "method": "live_metadata",
+      "call": 52,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T07+V1.1": {
+      "method": "live_metadata",
+      "call": 53,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T08+V1.1": {
+      "method": "live_metadata",
+      "call": 54,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T10+V1.1": {
+      "method": "live_metadata",
+      "call": 55,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T12+V1.1": {
+      "method": "live_metadata",
+      "call": 56,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T13+V1.1": {
+      "method": "live_metadata",
+      "call": 57,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T14+V1.1": {
+      "method": "live_metadata",
+      "call": 58,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T15+V1.1": {
+      "method": "live_metadata",
+      "call": 59,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T16+V1.0": {
+      "method": "live_metadata",
+      "call": 60,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T17+V1.1": {
+      "method": "live_metadata",
+      "call": 61,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T18+V1.1": {
+      "method": "live_metadata",
+      "call": 62,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T19+V1.1": {
+      "method": "live_metadata",
+      "call": 63,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T20+V1.1": {
+      "method": "live_metadata",
+      "call": 64,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T21+V1.1": {
+      "method": "live_metadata",
+      "call": 65,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T22+V1.1": {
+      "method": "live_metadata",
+      "call": 66,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T24+V1.1": {
+      "method": "live_metadata",
+      "call": 67,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T25+V1.1": {
+      "method": "live_metadata",
+      "call": 68,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T26+V1.1": {
+      "method": "live_metadata",
+      "call": 69,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T27+V1.1": {
+      "method": "live_metadata",
+      "call": 70,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T28+V1.1": {
+      "method": "live_metadata",
+      "call": 71,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T29+V1.1": {
+      "method": "live_metadata",
+      "call": 72,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T30+V1.1": {
+      "method": "live_metadata",
+      "call": 73,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T31+V1.1": {
+      "method": "live_metadata",
+      "call": 74,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T32+V1.1": {
+      "method": "live_metadata",
+      "call": 75,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T33+V1.1": {
+      "method": "live_metadata",
+      "call": 76,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T34+V1.1": {
+      "method": "live_metadata",
+      "call": 77,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T35+V1.1": {
+      "method": "live_metadata",
+      "call": 78,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T36+V1.1": {
+      "method": "live_metadata",
+      "call": 79,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T37+V1.1": {
+      "method": "live_metadata",
+      "call": 80,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ADNKS_T4+V1.2": {
+      "method": "live_metadata",
+      "call": 81,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_DTH+V1.0": {
+      "method": "live_metadata",
+      "call": 82,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_ENERJISIZ_DTH+V1.0": {
+      "method": "live_metadata",
+      "call": 83,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_ENERJISIZ_IHRACAT_BDE+V1.0": {
+      "method": "live_metadata",
+      "call": 84,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_ENERJISIZ_IME+V1.0": {
+      "method": "live_metadata",
+      "call": 85,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_IHRACAT_BDE+V1.0": {
+      "method": "live_metadata",
+      "call": 86,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_IME+V1.0": {
+      "method": "live_metadata",
+      "call": 87,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ALTINSIZ_ITHALAT_ME+V1.0": {
+      "method": "live_metadata",
+      "call": 88,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_BELEDIYE_ARITMA_CAMURU_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 89,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_IMALAT_SANAYI_ALT_SEKTORLER_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 90,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_IMALAT_SANAYI_GOSTERGELER_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 91,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_IMALAT_SANAYI_YONETIM_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 92,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_MADEN_ISLETMELERI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 93,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_ORGANIZE_SANAYI_BOLGELERI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 94,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ATIK_TERMIK_SANTRALLER_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 95,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_AY_TUR_RESM_ILAN_ADET+V1.0": {
+      "method": "live_metadata",
+      "call": 96,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_DOGUM_OLUM+V1.1": {
+      "method": "live_metadata",
+      "call": 97,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_DOGUM_TEKNO_DUZEY+V1.1": {
+      "method": "live_metadata",
+      "call": 98,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_HAYATTA_KALMA+V1.2": {
+      "method": "live_metadata",
+      "call": 99,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_HUKUKI_DOGUM_OLUM+V1.2": {
+      "method": "live_metadata",
+      "call": 100,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_KURULUS_YIL+V1.1": {
+      "method": "live_metadata",
+      "call": 101,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BD_SEKTOREL_DOGUM_OLUM+V1.1": {
+      "method": "live_metadata",
+      "call": 102,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BED_NUFUS_DAGILIM+V1.0": {
+      "method": "live_metadata",
+      "call": 103,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BILISIM_UZMAN_ALIM+V1.0": {
+      "method": "live_metadata",
+      "call": 104,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BIYOTEKNLOJI_TEKNIK_FAALIYET+V1.0": {
+      "method": "live_metadata",
+      "call": 105,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BIYOTEK_UYGULAMA_FAALIYET+V1.0": {
+      "method": "live_metadata",
+      "call": 106,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BOLGESEL_FIYAT_DUZEYI_GENEL_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 107,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BOLGESEL_FIYAT_DUZEYI_TUKETIM_ANA_GRUPLAR_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 108,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BOLGESEL_SGP_TUKETIM_ANA_GRUPLAR_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 109,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BUY_GRUP_EKO_FAAL_MAL_HIZMET_SATIS+V1.0": {
+      "method": "live_metadata",
+      "call": 110,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BUY_GRUP_EKO_FAAL_MAL_HIZMET_SATIS_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 111,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_BUY_GRUP_WEB_SATIS+V1.0": {
+      "method": "live_metadata",
+      "call": 112,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_CINSIYETE_GORE_SATISLAR_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 113,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_COCUKLARDA_BILIISIM_TEKNOLOJILERI_T3+V1.1": {
+      "method": "live_metadata",
+      "call": 114,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_COCUK_BILISIM_TEKNO_KULLANIM_ORAN_CINSIYET_YAS+V1.1": {
+      "method": "live_metadata",
+      "call": 115,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DF_CEVRESEL_MAL_HIZMET_SEKTOR+V1.0": {
+      "method": "live_metadata",
+      "call": 116,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DF_CEVRE_KORUMA_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 117,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DIS_TICARET_HADLERI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 118,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DNG_NUFUS_ORAN+V1.0": {
+      "method": "live_metadata",
+      "call": 119,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DOGUM_KDH_C+V1.0": {
+      "method": "live_metadata",
+      "call": 120,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_DOGUM_SIRA_C+V1.0": {
+      "method": "live_metadata",
+      "call": 121,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_EKONOMIK_GUVEN_SDMX_C+V1.0": {
+      "method": "live_metadata",
+      "call": 122,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_EMISYON_DEGISIM_ORAN+V1.1": {
+      "method": "live_metadata",
+      "call": 123,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ENERJISIZ_DTH+V1.0": {
+      "method": "live_metadata",
+      "call": 124,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ENERJISIZ_IHRACAT_BDE+V1.0": {
+      "method": "live_metadata",
+      "call": 125,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ENERJISIZ_IME+V1.0": {
+      "method": "live_metadata",
+      "call": 126,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ERP_CRM_SCM+V1.0": {
+      "method": "live_metadata",
+      "call": 127,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ERP_CRM_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 128,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_FINANSAL_YATIRIM_ARAC_REEL_GETIRI+V1.0": {
+      "method": "live_metadata",
+      "call": 129,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_GELIR_TABLOSU_NACEREV21+V1.0": {
+      "method": "live_metadata",
+      "call": 130,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_GENC_NUFUS_OKURYAZARLIK_ORAN+V1.0": {
+      "method": "live_metadata",
+      "call": 131,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_GENEL_DEVLET_VERGI_SOSYAL_KATKI_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 132,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_GUVEN_ENDEKS_SEKTOREL_EGILIM_SDMX+V1.0": {
+      "method": "live_metadata",
+      "call": 133,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_HIZMET_URETIM_ENDEKS_C+V1.0": {
+      "method": "live_metadata",
+      "call": 134,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_HUFE_EDO_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 135,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_IHRACAT_BIRIM_DEGER_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 136,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_IHRACAT_MIKTAR_ENDEKS_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 137,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_INSAAT_URETIM_ENDEKS_C+V1.0": {
+      "method": "live_metadata",
+      "call": 138,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_INSAAT_URETIM_ENDEKS_V1_O+V1.0": {
+      "method": "live_metadata",
+      "call": 139,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+V1.0": {
+      "method": "live_metadata",
+      "call": 140,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_O+V1.0": {
+      "method": "live_metadata",
+      "call": 141,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": {
+      "method": "live_metadata",
+      "call": 142,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_O+V1.0": {
+      "method": "live_metadata",
+      "call": 143,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_ARANILAN_MESLEK_ISSIZ_C+V1.0": {
+      "method": "live_metadata",
+      "call": 144,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_IDO_NEDEN_C+V1.0": {
+      "method": "live_metadata",
+      "call": 145,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_ISARAMA_KANAL_ISSIZ_C+V1.0": {
+      "method": "live_metadata",
+      "call": 146,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_ISARAMA_SURE_ISSIZ_C+V1.0": {
+      "method": "live_metadata",
+      "call": 147,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_ISTEKI_DURUM_ISTIHDAM_C+V1.0": {
+      "method": "live_metadata",
+      "call": 148,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_NEET_EGITIM_C+V1.0": {
+      "method": "live_metadata",
+      "call": 149,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+V1.0": {
+      "method": "live_metadata",
+      "call": 150,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_ONCEKI_SEKTOR_ISSIZ_C+V1.0": {
+      "method": "live_metadata",
+      "call": 151,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_SGK_KAYIT_C+V1.0": {
+      "method": "live_metadata",
+      "call": 152,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_C+V1.0": {
+      "method": "live_metadata",
+      "call": 153,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_TAMAMLAYICI_GOSTERGE_O+V1.0": {
+      "method": "live_metadata",
+      "call": 154,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+V1.0": {
+      "method": "live_metadata",
+      "call": 155,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ISGUCU_CEYREK_TEMEL_ISGUCU_O+V1.0": {
+      "method": "live_metadata",
+      "call": 156,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ITHALAT_BIRIM_DEGER_ENDEKSI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 157,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ITHALAT_MIKTAR_ENDEKS_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 158,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_KUMES_HAYVANCILIK_KULUCKAHANE+V1.0": {
+      "method": "live_metadata",
+      "call": 159,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_KURUMSAL_SEKTOR_HESAPLARI_CARI_FIYATLARLA_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 160,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_MEVSIM_TAKVIM_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 161,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_MEZUN_NUFUS_ORAN+V1.0": {
+      "method": "live_metadata",
+      "call": 162,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_MOTORLU_KARA_TASIT_KAYDI_YAPILAN_IBBS_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 163,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_MOTORLU_KARA_TASIT_YIL_ICINDE_DEVRI_YAPILAN_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 164,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_MUZE_ESER_SAY+V1.0": {
+      "method": "archived_metadata",
+      "reason": "Current catalog resolution returned not_found; retained historical source metadata. Access failure alone does not change relevance."
+    },
+    "flow:DF_OKURYAZAR_CINSIYET_NUFUS+V1.0": {
+      "method": "live_metadata",
+      "call": 166,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_RES_ILAN_REKLAM_BEDEL_TUR+V1.0": {
+      "method": "live_metadata",
+      "call": 167,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_ALT_C+V1.0": {
+      "method": "live_metadata",
+      "call": 168,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0": {
+      "method": "live_metadata",
+      "call": 169,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_ANA_O+V1.0": {
+      "method": "live_metadata",
+      "call": 170,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_C+V1.0": {
+      "method": "live_metadata",
+      "call": 171,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_ETKI_O+V1.0": {
+      "method": "live_metadata",
+      "call": 172,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_GRUP_O+V1.0": {
+      "method": "live_metadata",
+      "call": 173,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SANAYI_URETIM_ENDEKS_SINIF_O+V1.0": {
+      "method": "live_metadata",
+      "call": 174,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SATIS_SEKLI_DURUMU_ILILCE_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 175,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 176,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SGP_GORE_GSYH_BIREYSEL_TUKETIM_ENDEKSLERI_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 177,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SURELI_YAY_IC_TUR+V1.0": {
+      "method": "live_metadata",
+      "call": 178,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_ALICI_ORTAM_BELEDIYE_SEBEKE_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 179,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_ARITMA_TESIS_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 180,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_BELEDIYE_ICMESUYU_SEBEKE_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 181,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_IMALAT_GOSTERGE_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 182,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_IMALAT_SANAYI_ALT_SEKTOR_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 183,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_IMALAT_SANAYI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 184,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_SU_ATIKSU_SEBEKE_TESIS_BELEDIYE_NITELIK_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 185,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_IHRACAT_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 186,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TAKVIM_ETKISINDEN_ARINDIRILMIS_ITHALAT_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 187,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TAMAMLAMA_ORAN+V1.0": {
+      "method": "live_metadata",
+      "call": 188,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TAMAMLANAN_BOLUM_BGO+V1.0": {
+      "method": "live_metadata",
+      "call": 189,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TARIMSAL_GIRDI_FIYAT_ENDEKSI_DEGISIM_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 190,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TARIM_URUNLERI_GRUP_MADDE_ENDEKS_TAORBA_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 191,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TARIM_URUNLERI_UFE_DEGISIM_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 192,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TARIM_URUNLERI_UFE_MADDE_FIYAT_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 193,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TASIT_KILOMETRE_TOPLAM_YAKIT_TURU_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 194,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TASIT_KILOMETRE_YIL_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 195,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TICARET_SATIS_HACIM_ENDEKS_C+V1.0": {
+      "method": "live_metadata",
+      "call": 196,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TICARET_SATIS_HACIM_ENDEKS_O+V1.0": {
+      "method": "live_metadata",
+      "call": 197,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TRAFIK_KAZA_YERLESIM_YER_OLUMLU_YARALANMALI_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 198,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_2003+V1.0": {
+      "method": "live_metadata",
+      "call": 199,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT01+V1.0": {
+      "method": "live_metadata",
+      "call": 200,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT02+V1.0": {
+      "method": "live_metadata",
+      "call": 201,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT03+V1.0": {
+      "method": "live_metadata",
+      "call": 202,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT04+V1.0": {
+      "method": "live_metadata",
+      "call": 203,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT05+V1.0": {
+      "method": "live_metadata",
+      "call": 204,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT06+V1.0": {
+      "method": "live_metadata",
+      "call": 205,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT07+V1.0": {
+      "method": "live_metadata",
+      "call": 206,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUFE_SDMX_TT10+V1.0": {
+      "method": "live_metadata",
+      "call": 207,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_TUKETICI_EGILIM_SDMX+V1.0": {
+      "method": "live_metadata",
+      "call": 208,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UCRETLI_CALISAN_ISTATISTIKLERI_C+V1.0": {
+      "method": "live_metadata",
+      "call": 209,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UFE_SANAYI_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 210,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UFE_V6+V1.0": {
+      "method": "live_metadata",
+      "call": 211,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UHTI_COGRAFI_C+V1.0": {
+      "method": "live_metadata",
+      "call": 212,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UHTI_EKONOMIK_C+V1.0": {
+      "method": "live_metadata",
+      "call": 213,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UHTI_HIZMET_COGRAFI_C+V1.0": {
+      "method": "live_metadata",
+      "call": 214,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UHTI_HIZMET_TURU_C+V1.0": {
+      "method": "live_metadata",
+      "call": 215,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ULKELER_FIILI_BIREYSEL_TUKETIM_ENDEKS_V2+V1.0": {
+      "method": "live_metadata",
+      "call": 216,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ULKELER_FIYAT_DUZEYI_ENDEKSLERI+V1.0": {
+      "method": "live_metadata",
+      "call": 217,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_ULKELER_KISI_BASINA_REEL_GSYH_SGP+V1.0": {
+      "method": "live_metadata",
+      "call": 218,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UYRUKLARA_GORE_ILILCE_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 219,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_UYRUKLARA_GORE_SATISLAR_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 220,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YABANCILARA_SATILAR_ILILCE_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 221,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YABANCILARA_SATIS_V3+V1.0": {
+      "method": "live_metadata",
+      "call": 222,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YAPISAL_EFGTG_IMALAT_TEKNO+V1.0": {
+      "method": "live_metadata",
+      "call": 223,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YAYIN_TUR_TIRAJ+V1.0": {
+      "method": "live_metadata",
+      "call": 224,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YDUFE_EDO_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 225,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YIUFE_EDO_V1+V1.0": {
+      "method": "live_metadata",
+      "call": 226,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YO_OGRENIM_DIL+V1.0": {
+      "method": "live_metadata",
+      "call": 227,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "flow:DF_YUKSEKOGRETIM_MEZUN_ORAN+V1.0": {
+      "method": "live_metadata",
+      "call": 228,
+      "reason": "Resolved the exact current catalog ID; metadata reviewed. Row availability is separately verified only for selected probes."
+    },
+    "press:37226": {
+      "method": "live_metadata",
+      "call": 229,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:45592": {
+      "method": "live_metadata",
+      "call": 230,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49668": {
+      "method": "live_metadata",
+      "call": 231,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49673": {
+      "method": "live_metadata",
+      "call": 232,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49684": {
+      "method": "live_metadata",
+      "call": 233,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49685": {
+      "method": "live_metadata",
+      "call": 234,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49692": {
+      "method": "live_metadata",
+      "call": 235,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:49726": {
+      "method": "live_metadata",
+      "call": 236,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53658": {
+      "method": "live_metadata",
+      "call": 237,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53659": {
+      "method": "live_metadata",
+      "call": 238,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53660": {
+      "method": "live_metadata",
+      "call": 239,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53675": {
+      "method": "live_metadata",
+      "call": 240,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53678": {
+      "method": "live_metadata",
+      "call": 241,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53708": {
+      "method": "live_metadata",
+      "call": 242,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53755": {
+      "method": "live_metadata",
+      "call": 243,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53783": {
+      "method": "live_metadata",
+      "call": 244,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53783:metadata": {
+      "method": "live_metadata",
+      "call": 245,
+      "reason": "Resolved the parent bulletin and returned metadata sections; the metadata content, rather than the parent bulletin title, supplies context."
+    },
+    "press:53784:metadata": {
+      "method": "live_metadata",
+      "call": 246,
+      "reason": "Resolved the parent bulletin and returned metadata sections; the metadata content, rather than the parent bulletin title, supplies context."
+    },
+    "press:53899": {
+      "method": "live_metadata",
+      "call": 247,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53908": {
+      "method": "live_metadata",
+      "call": 248,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:53911": {
+      "method": "live_metadata",
+      "call": 249,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54068": {
+      "method": "live_metadata",
+      "call": 250,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54076": {
+      "method": "live_metadata",
+      "call": 251,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54080": {
+      "method": "live_metadata",
+      "call": 252,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54081": {
+      "method": "live_metadata",
+      "call": 253,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54155": {
+      "method": "live_metadata",
+      "call": 254,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54156": {
+      "method": "live_metadata",
+      "call": 255,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54157": {
+      "method": "live_metadata",
+      "call": 256,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54158": {
+      "method": "live_metadata",
+      "call": 257,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54159": {
+      "method": "live_metadata",
+      "call": 258,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54160": {
+      "method": "live_metadata",
+      "call": 259,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54161": {
+      "method": "live_metadata",
+      "call": 260,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54162": {
+      "method": "live_metadata",
+      "call": 261,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54163": {
+      "method": "live_metadata",
+      "call": 262,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54187": {
+      "method": "live_metadata",
+      "call": 263,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54196": {
+      "method": "live_metadata",
+      "call": 264,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:54199": {
+      "method": "live_metadata",
+      "call": 265,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57969": {
+      "method": "live_metadata",
+      "call": 266,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57970": {
+      "method": "live_metadata",
+      "call": 267,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57971": {
+      "method": "live_metadata",
+      "call": 268,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57972": {
+      "method": "live_metadata",
+      "call": 269,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57975": {
+      "method": "live_metadata",
+      "call": 270,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57977": {
+      "method": "live_metadata",
+      "call": 271,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57979": {
+      "method": "live_metadata",
+      "call": 272,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57982": {
+      "method": "live_metadata",
+      "call": 273,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57983": {
+      "method": "live_metadata",
+      "call": 274,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57984": {
+      "method": "live_metadata",
+      "call": 275,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57985": {
+      "method": "live_metadata",
+      "call": 276,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57985:metadata": {
+      "method": "live_metadata",
+      "call": 277,
+      "reason": "Resolved the parent bulletin and returned metadata sections; the metadata content, rather than the parent bulletin title, supplies context."
+    },
+    "press:57986": {
+      "method": "live_metadata",
+      "call": 278,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57987": {
+      "method": "live_metadata",
+      "call": 279,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57987:metadata": {
+      "method": "live_metadata",
+      "call": 280,
+      "reason": "Resolved the parent bulletin and returned metadata sections; the metadata content, rather than the parent bulletin title, supplies context."
+    },
+    "press:57997": {
+      "method": "live_metadata",
+      "call": 281,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57998": {
+      "method": "live_metadata",
+      "call": 282,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:57999": {
+      "method": "live_metadata",
+      "call": 283,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58008": {
+      "method": "live_metadata",
+      "call": 284,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58018": {
+      "method": "live_metadata",
+      "call": 285,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58025": {
+      "method": "live_metadata",
+      "call": 286,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58034": {
+      "method": "live_metadata",
+      "call": 287,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58108": {
+      "method": "live_metadata",
+      "call": 288,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58109": {
+      "method": "live_metadata",
+      "call": 289,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58110": {
+      "method": "live_metadata",
+      "call": 290,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58116": {
+      "method": "live_metadata",
+      "call": 291,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58142": {
+      "method": "live_metadata",
+      "call": 292,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58143": {
+      "method": "live_metadata",
+      "call": 293,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58183": {
+      "method": "live_metadata",
+      "call": 294,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58184": {
+      "method": "live_metadata",
+      "call": 295,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58185": {
+      "method": "live_metadata",
+      "call": 296,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58186": {
+      "method": "live_metadata",
+      "call": 297,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58187": {
+      "method": "live_metadata",
+      "call": 298,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58188": {
+      "method": "live_metadata",
+      "call": 299,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58192": {
+      "method": "live_metadata",
+      "call": 300,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58194": {
+      "method": "live_metadata",
+      "call": 301,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58195": {
+      "method": "live_metadata",
+      "call": 302,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58196": {
+      "method": "live_metadata",
+      "call": 303,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58198": {
+      "method": "live_metadata",
+      "call": 304,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58205": {
+      "method": "live_metadata",
+      "call": 305,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58211": {
+      "method": "live_metadata",
+      "call": 306,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58213": {
+      "method": "live_metadata",
+      "call": 307,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58232": {
+      "method": "live_metadata",
+      "call": 308,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58232:metadata": {
+      "method": "live_metadata",
+      "call": 309,
+      "reason": "Resolved the parent bulletin and returned metadata sections; the metadata content, rather than the parent bulletin title, supplies context."
+    },
+    "press:58234": {
+      "method": "live_metadata",
+      "call": 310,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58235": {
+      "method": "live_metadata",
+      "call": 311,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58236": {
+      "method": "live_metadata",
+      "call": 312,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58237": {
+      "method": "live_metadata",
+      "call": 313,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58238": {
+      "method": "live_metadata",
+      "call": 314,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58239": {
+      "method": "live_metadata",
+      "call": 315,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58243": {
+      "method": "live_metadata",
+      "call": 316,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58244": {
+      "method": "live_metadata",
+      "call": 317,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58246": {
+      "method": "live_metadata",
+      "call": 318,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58250": {
+      "method": "live_metadata",
+      "call": 319,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58251": {
+      "method": "live_metadata",
+      "call": 320,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58252": {
+      "method": "live_metadata",
+      "call": 321,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58257": {
+      "method": "live_metadata",
+      "call": 322,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58272": {
+      "method": "live_metadata",
+      "call": 323,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58287": {
+      "method": "live_metadata",
+      "call": 324,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58288": {
+      "method": "live_metadata",
+      "call": 325,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58289": {
+      "method": "live_metadata",
+      "call": 326,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58290": {
+      "method": "live_metadata",
+      "call": 327,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58293": {
+      "method": "live_metadata",
+      "call": 328,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58294": {
+      "method": "live_metadata",
+      "call": 329,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58295": {
+      "method": "live_metadata",
+      "call": 330,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58296": {
+      "method": "live_metadata",
+      "call": 331,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58297": {
+      "method": "live_metadata",
+      "call": 332,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58298": {
+      "method": "live_metadata",
+      "call": 333,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58314": {
+      "method": "live_metadata",
+      "call": 334,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58315": {
+      "method": "live_metadata",
+      "call": 335,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58316": {
+      "method": "live_metadata",
+      "call": 336,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58329": {
+      "method": "live_metadata",
+      "call": 337,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58330": {
+      "method": "live_metadata",
+      "call": 338,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58331": {
+      "method": "live_metadata",
+      "call": 339,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58339": {
+      "method": "live_metadata",
+      "call": 340,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58340": {
+      "method": "live_metadata",
+      "call": 341,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58341": {
+      "method": "live_metadata",
+      "call": 342,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58342": {
+      "method": "live_metadata",
+      "call": 343,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58343": {
+      "method": "live_metadata",
+      "call": 344,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58344": {
+      "method": "live_metadata",
+      "call": 345,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58345": {
+      "method": "live_metadata",
+      "call": 346,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58346": {
+      "method": "live_metadata",
+      "call": 347,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58347": {
+      "method": "live_metadata",
+      "call": 348,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "press:58350": {
+      "method": "live_metadata",
+      "call": 349,
+      "reason": "Full bulletin response retained; topic checked and relevant scope passages inspected where needed."
+    },
+    "publication:istatistiklerle-türkiye-2022~4bf497d218": {
+      "method": "live_metadata",
+      "call": 350,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "publication:istatistiklerle-türkiye-2023~f9f580da75": {
+      "method": "live_metadata",
+      "call": 351,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "publication:istatistiklerle-türkiye-2024~83ce08d885": {
+      "method": "live_metadata",
+      "call": 352,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "publication:türkiye-istatistikleri-2022~6a9d6f1726": {
+      "method": "live_metadata",
+      "call": 353,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "publication:türkiye-istatistikleri-2023~0baeff00dc": {
+      "method": "live_metadata",
+      "call": 354,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "publication:türkiye-istatistikleri-2024~eb74e3d187": {
+      "method": "live_metadata",
+      "call": 355,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:15-yaştaki-nüfusun-işgücü-durumu~1348063db8": {
+      "method": "live_metadata",
+      "call": 356,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:belediye-sayısı-ve-nüfusu~f3edb90620": {
+      "method": "live_metadata",
+      "call": 357,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyet-ve-yaş-grubuna-göre-nüfus~8f0424f5de": {
+      "method": "live_metadata",
+      "call": 358,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyete-göre-genç-işsizlik-oranı~87f338a965": {
+      "method": "live_metadata",
+      "call": 359,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyete-göre-genç-işsizlik-oranı~9aff30a349": {
+      "method": "live_metadata",
+      "call": 360,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyete-göre-işveren-olarak-çalışanların-istihdam-içindeki-oranı~6206aaaae0": {
+      "method": "live_metadata",
+      "call": 361,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyete-göre-yönetici-pozisyonlarındaki-bireyler~5fc4cba54e": {
+      "method": "live_metadata",
+      "call": 362,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:cinsiyete-ve-yaş-grubuna-göre-nüfus~0cd9a177c1": {
+      "method": "live_metadata",
+      "call": 363,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:ekonomik-faaliyetlere-göre-firmaların-referans-yıl-gelir-tablosu~4fa06aaf87": {
+      "method": "live_metadata",
+      "call": 364,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:ekonomik-faaliyetlere-ve-yıllara-göre-firmaların-gelir-tablosu~dbaade70e6": {
+      "method": "live_metadata",
+      "call": 365,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:genç-işsizlik-oranı~04c9503c21": {
+      "method": "live_metadata",
+      "call": 366,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:il-düzeyinde-işsizlik-oranı~f769d0b059": {
+      "method": "live_metadata",
+      "call": 367,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-diğer-işlerde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki-yıl~c27e35c2b3": {
+      "method": "live_metadata",
+      "call": 368,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-diğer-işlerde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki~a5724ffb13": {
+      "method": "live_metadata",
+      "call": 369,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-üretimde-çalışan-kişi-başına-kazanç-endeksinin-bir-önceki-yıl-aynı~6772fb6164": {
+      "method": "live_metadata",
+      "call": 370,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-üretimde-çalışanlar-endeksi-bir-önceki-yıl-aynı-döneme-göre~858900e272": {
+      "method": "live_metadata",
+      "call": 371,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-üretimde-çalışılan-saat-başına-ücret-endeksinin-bir-önceki-döneme~00f3c79428": {
+      "method": "live_metadata",
+      "call": 372,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-üretimde-çalışılan-saat-başına-ücret-endeksinin-bir-önceki-yıl~64607b3ac0": {
+      "method": "live_metadata",
+      "call": 373,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:imalat-sanayi-üretimde-çalışılan-saat-endeksi-bir-önceki-yıl-aynı-döneme-göre~eb7d859ea8": {
+      "method": "live_metadata",
+      "call": 374,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:işsizlik-oranı~2b7854b01a": {
+      "method": "live_metadata",
+      "call": 375,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:konut-kolaylıklarına-göre-kurumsal-olmayan-nüfusun-dağılımı~35d2da2f3c": {
+      "method": "live_metadata",
+      "call": 376,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:kurumsal-olmayan-nüfusun-eğitim-ve-işgücü-durumu~e64d78b14d": {
+      "method": "live_metadata",
+      "call": 377,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:kurumsal-olmayan-nüfusun-işgücü-durumu~a46424fea2": {
+      "method": "live_metadata",
+      "call": 378,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:medeni-duruma-göre-istihdam-oranı~6c84530188": {
+      "method": "live_metadata",
+      "call": 379,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-ekonomik-faaliyete-göre-istihdam-edilenler~a60b3ff807": {
+      "method": "live_metadata",
+      "call": 380,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-işgücüne-ilişkin-tamamlayıcı-göstergeler~d121462a48": {
+      "method": "live_metadata",
+      "call": 381,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-sektörlere-göre-istihdam-edilenler~0040bcf7fa": {
+      "method": "live_metadata",
+      "call": 382,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-24-yaş~373235767b": {
+      "method": "live_metadata",
+      "call": 383,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-temel-işgücü-göstergeleri-15-yaş~aad8d5aafb": {
+      "method": "live_metadata",
+      "call": 384,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:mevsim-etkisinden-arındırılmış-tüfe-göstergeleri~df13731d31": {
+      "method": "live_metadata",
+      "call": 385,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:nüfusun-işgücü-durumu~7ffd3ff893": {
+      "method": "live_metadata",
+      "call": 386,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:organik-bitkisel-üretim-ve-yüzde-değişimi~4338f572f9": {
+      "method": "live_metadata",
+      "call": 387,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:tarım-arazisine-sahip-yetişkin-nüfusun-oranı~b98e36515d": {
+      "method": "live_metadata",
+      "call": 388,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:toplam-hanehalkı-nüfusu-hanehalkı-sayısı-ve-ortalama-hanehalkı-büyüklüğü~1fc0fbdf9c": {
+      "method": "live_metadata",
+      "call": 389,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:yoksulluk-içinde-geçirilen-süreye-göre-nüfusun-dağılımı~353a0c25a1": {
+      "method": "live_metadata",
+      "call": 390,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:yönetici-pozisyonlarındaki-bireylerin-cinsiyete-göre-dağılımı~bb71a78b76": {
+      "method": "live_metadata",
+      "call": 391,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:çalışanı-olmayan-hanehalklarında-yaşayan-çocuk-nüfusun-toplam-çocuk-nüfusa-oranı~933c22334c": {
+      "method": "live_metadata",
+      "call": 392,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "table:şehir-ve-köy-nüfusu~0f8e3803bf": {
+      "method": "live_metadata",
+      "call": 393,
+      "reason": "Resolved the current title-derived file identity; file content was not parsed in this metadata check."
+    },
+    "title:dataset:2f49d9618905ccb27111b52fdf686bb053f2d5f17150953592a5635e6a34b481": {
+      "method": "archived_metadata",
+      "reason": "Evaluation-only title identity cannot be submitted as a current MCP resource ID; reviewed the frozen title and description."
+    },
+    "title:dataset:afcfde8dd3a961b3006158fc4db4f45be9fff0f71049ed80c2f1917cd37a2b85": {
+      "method": "archived_metadata",
+      "reason": "Evaluation-only title identity cannot be submitted as a current MCP resource ID; reviewed the frozen title and description."
+    },
+    "title:dataset:cc9c7d0598f9ef6ac47ee8cca7009b3aea9973081cc424395cb09d1a56106399": {
+      "method": "archived_metadata",
+      "reason": "Evaluation-only title identity cannot be submitted as a current MCP resource ID; reviewed the frozen title and description."
+    },
+    "title:dataset:f027403aca40034401c863905dbdc0c814c08ba01df8b2b06f86d2d9e3d42a75": {
+      "method": "archived_metadata",
+      "reason": "Evaluation-only title identity cannot be submitted as a current MCP resource ID; reviewed the frozen title and description."
+    },
+    "title:unknown:c1b1d02022d153966857617dcef4b848c07e82b6d88bf8051aec217f5c9c4504": {
+      "method": "archived_metadata",
+      "reason": "Evaluation-only title identity cannot be submitted as a current MCP resource ID; reviewed the frozen title and description."
+    }
+  },
+  "changes": [
+    {
+      "query_id": "q21",
+      "document_id": "press:53783",
+      "before": 1,
+      "after": 2,
+      "reason": "The full 2024 ADNKS bulletin explicitly gives Istanbul population; the original short snippet omitted that paragraph."
+    },
+    {
+      "query_id": "q37",
+      "document_id": "press:57984",
+      "before": 1,
+      "after": 2,
+      "reason": "The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup."
+    },
+    {
+      "query_id": "q37",
+      "document_id": "press:57985",
+      "before": 1,
+      "after": 2,
+      "reason": "The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup."
+    },
+    {
+      "query_id": "q37",
+      "document_id": "press:57986",
+      "before": 1,
+      "after": 2,
+      "reason": "The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup."
+    },
+    {
+      "query_id": "q37",
+      "document_id": "press:57987",
+      "before": 1,
+      "after": 2,
+      "reason": "The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup."
+    },
+    {
+      "query_id": "q37",
+      "document_id": "press:57999",
+      "before": 1,
+      "after": 2,
+      "reason": "The full labour bulletin explicitly states the unemployment rate for ages 15-24 separately for women, establishing the requested joint subgroup."
+    },
+    {
+      "query_id": "q39",
+      "document_id": "press:49684",
+      "before": 1,
+      "after": 2,
+      "reason": "The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic."
+    },
+    {
+      "query_id": "q39",
+      "document_id": "press:49685",
+      "before": 1,
+      "after": 2,
+      "reason": "The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic."
+    },
+    {
+      "query_id": "q39",
+      "document_id": "press:53783",
+      "before": 1,
+      "after": 2,
+      "reason": "The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic."
+    },
+    {
+      "query_id": "q39",
+      "document_id": "press:53899",
+      "before": 1,
+      "after": 2,
+      "reason": "The full ADNKS bulletin explicitly reports the population age-group distribution for 0-14, 15-64 and 65+, rather than only the general population topic."
+    },
+    {
+      "query_id": "q45",
+      "document_id": "press:58350",
+      "before": 1,
+      "after": 2,
+      "reason": "The complete December 2025 bulletin explicitly reports the Izmir housing-sales total; the short first-pass snippet covered national first-hand sales only."
+    }
+  ],
+  "supplemental_scope_checks": {
+    "path": "docs/verification/search-ai-scope-checks-2026-11-04.json",
+    "sha256": "b0097c572d3846977973ce9b2b5b85ccb9209ee1fe16e7b7c53ee9ab0cfa0387"
+  }
+}

@@ -16,6 +16,7 @@ async def test_stdio_discovery_and_input_validation():
                 "get_tuik_resource",
                 "get_tuik_data",
                 "inspect_tuik_data",
+                "chart_tuik_data",
                 "list_tuik_themes",
                 "read_tuik_document",
                 "search_tuik_classifications",

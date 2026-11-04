@@ -31,7 +31,7 @@ async def session(mode, env=None):
 async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
     async with session("mock-index") as client:
         tools = (await client.list_tools()).tools
-        assert len(tools) == 8
+        assert len(tools) == 9
         search = next(t for t in tools if t.name == "search_tuik")
         properties = search.inputSchema["properties"]
         assert {
