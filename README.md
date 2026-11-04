@@ -669,17 +669,17 @@ Its legacy table/publication checks explicitly use live portal search, since tho
 resource types are outside the v0.3 metadata index. Without a cluster URL, the
 full smoke remains available for upstream contracts; `--indexed-only` fails before
 starting the server. The [v0.3.0 release checklist](docs/RELEASE_0.3.0.md) separates
-these operational checks from the human relevance study and release/tag gates.
+these operational checks from the adopted AI relevance evaluation and release/tag gates.
 
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
 
 ## Future roadmap
 
-The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the current issue
-dependencies and sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) provides
-the 48-query baseline snapshot, independent judging workflow and metric commands;
-human relevance judgments and baseline quality scores remain pending (#11).
+The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the original issue
+sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) now records the 48-query
+AI baseline, source-checked sequential review and metric commands (#11), alongside
+the optional independent human-study workflow.
 
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
@@ -687,7 +687,7 @@ title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
 The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
 indexed general MCP search are included on `develop`. Dedicated cluster CI (#19)
-and independently judged relevance measurements (#11/#20) remain v0.3.0 release
+and the full-corpus relevance comparison (#20) remain v0.3.0 release
 gates; these are not v0.2.0 release prerequisites. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
@@ -700,3 +700,10 @@ current roadmap. Version 0.2.0 also includes
 #52 on `develop`. Publication follows the
 [v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
 reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
+
+A separately identified [single-AI relevance pilot](docs/verification/issue-11-20-ai-pilot-2026-11-04.md)
+is retained as the first pass of the adopted
+[AI evaluation protocol](docs/adr/0004-ai-relevance-evaluation.md). A
+[source-checked second pass](docs/verification/issue-11-ai-source-review-2026-11-04.md)
+adds live MCP checks and documented grade revisions. Independent human validation
+has not been performed; the full-corpus v0.3.0 comparison remains pending.

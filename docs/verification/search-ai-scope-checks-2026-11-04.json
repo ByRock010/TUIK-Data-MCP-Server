@@ -1,0 +1,4375 @@
+{
+  "method": "single_ai_scope_checks",
+  "started_at": "2026-11-04T13:56:43.053161+00:00",
+  "checks": {
+    "young_women_unemployment": {
+      "profile": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/csv",
+        "retrieved_at": "2026-11-04T13:56:47.049487Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+        "status": "ok",
+        "message": "Observed values from the published file, not an official code list. Use column names and values verbatim as get_tuik_data filters. Counts are exact only when complete is true; distinct counts when distinct_exact is true.",
+        "format": "csv",
+        "extraction": "csv",
+        "snapshot_id": "sha256:a03a26b5baa6a8ab69ea6570cea3844ad8dc7cf556884c1628ef2b9a1708b6d5",
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "unit": null,
+        "notes": "Rakamlar yuvarlamadan dolayı toplamı vermeyebilir.\n2005-2020 aylık sonuçlar model ile tahmin edilmiştir.",
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "total_rows": 21600,
+        "rows_examined": 21600,
+        "complete": true,
+        "column_count": 15,
+        "columns": [
+          {
+            "name": "Coğrafi Kapsam",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Türkiye",
+                "count": 21600,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Gözlem Sıklığı",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Aylık",
+                "count": 21600,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "İstatistiksel Gösterge",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Temel İşgücü Göstergeleri",
+                "count": 21600,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "İşgücü Göstergeleri",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 8,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Nüfus (Bin Kişi)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İşgücü (Bin Kişi)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İstihdam (Bin Kişi)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İşsiz (Bin Kişi)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İşgücüne Dahil Olmayanlar (Bin Kişi)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İşgücüne Katılma Oranı (%)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İstihdam Oranı (%)",
+                "count": 2700,
+                "truncated": false
+              },
+              {
+                "value": "İşsizlik Oranı (%)",
+                "count": 2700,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Temel Yaş",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 2,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "15+",
+                "count": 12528,
+                "truncated": false
+              },
+              {
+                "value": "15-24",
+                "count": 9072,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Mevsimsel Düzeltme",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 2,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Mevsim etkilerinden arındırılmış",
+                "count": 10800,
+                "truncated": false
+              },
+              {
+                "value": "Arındırılmamış",
+                "count": 10800,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Cinsiyet",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 3,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Toplam",
+                "count": 8352,
+                "truncated": false
+              },
+              {
+                "value": "Erkek",
+                "count": 6624,
+                "truncated": false
+              },
+              {
+                "value": "Kadın",
+                "count": 6624,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman",
+            "label_en": null,
+            "type_hint": "period",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 261,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "2026-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2026-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2025-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2024-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2023-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2022-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2021-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2020-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-06",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-05",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-04",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-03",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-02",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2019-01",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-12",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-11",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-10",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-09",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-08",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-07",
+                "count": 96,
+                "truncated": false
+              },
+              {
+                "value": "2018-06",
+                "count": 96,
+                "truncated": false
+              }
+            ],
+            "values_complete": false
+          },
+          {
+            "name": "Gözlem Değeri",
+            "label_en": null,
+            "type_hint": "number",
+            "type_hint_source": "inferred",
+            "decimal_separator": ",",
+            "non_empty": 21600,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 9683,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "8,5",
+                "count": 38,
+                "truncated": false
+              },
+              {
+                "value": "9,4",
+                "count": 33,
+                "truncated": false
+              },
+              {
+                "value": "9",
+                "count": 32,
+                "truncated": false
+              },
+              {
+                "value": "8,4",
+                "count": 31,
+                "truncated": false
+              },
+              {
+                "value": "9,3",
+                "count": 30,
+                "truncated": false
+              },
+              {
+                "value": "9,5",
+                "count": 29,
+                "truncated": false
+              },
+              {
+                "value": "10,1",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "10,5",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "8,9",
+                "count": 27,
+                "truncated": false
+              },
+              {
+                "value": "10,8",
+                "count": 26,
+                "truncated": false
+              },
+              {
+                "value": "12,3",
+                "count": 26,
+                "truncated": false
+              },
+              {
+                "value": "13",
+                "count": 26,
+                "truncated": false
+              },
+              {
+                "value": "9,1",
+                "count": 26,
+                "truncated": false
+              },
+              {
+                "value": "8",
+                "count": 25,
+                "truncated": false
+              },
+              {
+                "value": "10,6",
+                "count": 25,
+                "truncated": false
+              },
+              {
+                "value": "12",
+                "count": 25,
+                "truncated": false
+              },
+              {
+                "value": "33,1",
+                "count": 24,
+                "truncated": false
+              },
+              {
+                "value": "32,199999999999996",
+                "count": 24,
+                "truncated": false
+              },
+              {
+                "value": "28",
+                "count": 24,
+                "truncated": false
+              },
+              {
+                "value": "11",
+                "count": 24,
+                "truncated": false
+              },
+              {
+                "value": "9,2",
+                "count": 24,
+                "truncated": false
+              },
+              {
+                "value": "53,2",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "31,6",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "30",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "31,1",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "21,6",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "10,19999999999999",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "13,4",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "9,9",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "8,6",
+                "count": 23,
+                "truncated": false
+              },
+              {
+                "value": "30,6",
+                "count": 22,
+                "truncated": false
+              },
+              {
+                "value": "29,5",
+                "count": 22,
+                "truncated": false
+              },
+              {
+                "value": "10,4",
+                "count": 22,
+                "truncated": false
+              },
+              {
+                "value": "8,8",
+                "count": 22,
+                "truncated": false
+              },
+              {
+                "value": "34,1",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "22,6",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "21,5",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "29",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "10",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "11,6",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "12,6",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "10,9",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "12,5",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "16,5",
+                "count": 21,
+                "truncated": false
+              },
+              {
+                "value": "45,2",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "44",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "31,5",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "22,5",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "22,1",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "33,6",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "27",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "40,1",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "26,799999999999997",
+                "count": 20,
+                "truncated": false
+              },
+              {
+                "value": "47,7",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "71,89999999999999",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "24",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "23,5",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "9,200000000000001",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "12,9",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "15,9",
+                "count": 19,
+                "truncated": false
+              },
+              {
+                "value": "53",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "46,2",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "45,1",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "36",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "34,5",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "34",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "33,29999999999999",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "29,6",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "32,1",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "25",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "21,8",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "22",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "20,8",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "45,6",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "22,8",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "20,3",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "41,7",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "40,2",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "43,2",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "48,39999999999999",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "13,5",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "12,8",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "14,3",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "15,8",
+                "count": 18,
+                "truncated": false
+              },
+              {
+                "value": "53,099999999999994",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "54",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "53,79999999999999",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "31,899999999999988",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "34,29999999999999",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "32,699999999999996",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "26,5",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "26",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "28,1",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "45,79999999999999",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "23,6",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "19,5",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "7,7",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "8,799999999999999",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "10,3",
+                "count": 17,
+                "truncated": false
+              },
+              {
+                "value": "13,3",
+                "count": 17,
+                "truncated": false
+              }
+            ],
+            "values_complete": false
+          },
+          {
+            "name": "Ölçü Birimi",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Gözlem Durumu",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Ondalık Basamak Sayısı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman Formatı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Birim Çarpanı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Gizlilik Durumu",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 21600,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          }
+        ],
+        "columns_truncated": false,
+        "download_links": [
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 3553859,
+            "resource_id": null
+          },
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "related_datasets": []
+      },
+      "arguments": {
+        "resource_id": "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+        "filters": {
+          "Temel Yaş": "15-24",
+          "Cinsiyet": "Kadın",
+          "İşgücü Göstergeleri": "İşsizlik Oranı (%)",
+          "Mevsimsel Düzeltme": "Mevsim etkilerinden arındırılmış"
+        },
+        "limit": 2
+      },
+      "result": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/csv",
+        "retrieved_at": "2026-11-04T13:56:47.049487Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+        "status": "ok",
+        "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+        "columns": [
+          "Coğrafi Kapsam",
+          "Gözlem Sıklığı",
+          "İstatistiksel Gösterge",
+          "İşgücü Göstergeleri",
+          "Temel Yaş",
+          "Mevsimsel Düzeltme",
+          "Cinsiyet",
+          "Zaman",
+          "Gözlem Değeri",
+          "Ölçü Birimi",
+          "Gözlem Durumu",
+          "Ondalık Basamak Sayısı",
+          "Zaman Formatı",
+          "Birim Çarpanı",
+          "Gizlilik Durumu"
+        ],
+        "rows": [
+          {
+            "Coğrafi Kapsam": "Türkiye",
+            "Gözlem Sıklığı": "Aylık",
+            "İstatistiksel Gösterge": "Temel İşgücü Göstergeleri",
+            "İşgücü Göstergeleri": "İşsizlik Oranı (%)",
+            "Temel Yaş": "15-24",
+            "Mevsimsel Düzeltme": "Mevsim etkilerinden arındırılmış",
+            "Cinsiyet": "Kadın",
+            "Zaman": "2026-09",
+            "Gözlem Değeri": "23,3",
+            "Ölçü Birimi": "",
+            "Gözlem Durumu": "",
+            "Ondalık Basamak Sayısı": "",
+            "Zaman Formatı": "",
+            "Birim Çarpanı": "",
+            "Gizlilik Durumu": ""
+          },
+          {
+            "Coğrafi Kapsam": "Türkiye",
+            "Gözlem Sıklığı": "Aylık",
+            "İstatistiksel Gösterge": "Temel İşgücü Göstergeleri",
+            "İşgücü Göstergeleri": "İşsizlik Oranı (%)",
+            "Temel Yaş": "15-24",
+            "Mevsimsel Düzeltme": "Mevsim etkilerinden arındırılmış",
+            "Cinsiyet": "Kadın",
+            "Zaman": "2026-08",
+            "Gözlem Değeri": "19,899999999999988",
+            "Ölçü Birimi": "",
+            "Gözlem Durumu": "",
+            "Ondalık Basamak Sayısı": "",
+            "Zaman Formatı": "",
+            "Birim Çarpanı": "",
+            "Gizlilik Durumu": ""
+          }
+        ],
+        "unit": null,
+        "notes": "Rakamlar yuvarlamadan dolayı toplamı vermeyebilir.\n2005-2020 aylık sonuçlar model ile tahmin edilmiştir.",
+        "download_links": [
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 3553859,
+            "resource_id": null
+          },
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Temel İşgücü Göstergeleri",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "total_rows": 153,
+        "related_datasets": [],
+        "truncated": true,
+        "format": null,
+        "extraction": null,
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "columns_en": [],
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "snapshot_id": "sha256:a03a26b5baa6a8ab69ea6570cea3844ad8dc7cf556884c1628ef2b9a1708b6d5",
+        "next_cursor": null,
+        "has_more": false,
+        "cursor_expires_at": null
+      }
+    },
+    "istanbul_population": {
+      "profile": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/csv",
+        "retrieved_at": "2026-11-04T13:56:48.245282Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_ADNKS_T14+V1.1",
+        "status": "ok",
+        "message": "Observed values from the published file, not an official code list. Use column names and values verbatim as get_tuik_data filters. Counts are exact only when complete is true; distinct counts when distinct_exact is true.",
+        "format": "csv",
+        "extraction": "csv",
+        "snapshot_id": "sha256:caa98575727e714c64b3b044a7e5a28030732e03a7fcf8a69cb9cdb8add2a650",
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "unit": null,
+        "notes": null,
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "total_rows": 12852,
+        "rows_examined": 12852,
+        "complete": true,
+        "column_count": 14,
+        "columns": [
+          {
+            "name": "Coğrafi Kapsam (TR)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Türkiye",
+                "count": 12852,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Gözlem Sıklığı (A)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Yıllık",
+                "count": 12852,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "İstatistiksel Gösterge (NG_ADNKS)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Adrese Dayalı Nüfus Kayıt Sistemi",
+                "count": 12852,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Yerleşim Yeri türü (_T)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 3,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Toplam",
+                "count": 4674,
+                "truncated": false
+              },
+              {
+                "value": "İl ve ilçe merkezleri",
+                "count": 4674,
+                "truncated": false
+              },
+              {
+                "value": "Belde ve köyler",
+                "count": 3504,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "İkamet edilen yer (_T)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 82,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Toplam",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Edirne",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kırklareli",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Çanakkale",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Afyonkarahisar",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kütahya",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Uşak",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bilecik",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bolu",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Düzce",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Yalova",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Karaman",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Burdur",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Isparta",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Osmaniye",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Aksaray",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kırıkkale",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kırşehir",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Nevşehir",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Niğde",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Sivas",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Yozgat",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bartın",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Karabük",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Zonguldak",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Çankırı",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kastamonu",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Sinop",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Amasya",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Çorum",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Tokat",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Artvin",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Giresun",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Gümüşhane",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Rize",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bayburt",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Erzincan",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Ağrı",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Ardahan",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Iğdır",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kars",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bingöl",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Elazığ",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Tunceli",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Bitlis",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Hakkari",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Muş",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Adıyaman",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Kilis",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Batman",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Siirt",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "Şırnak",
+                "count": 171,
+                "truncated": false
+              },
+              {
+                "value": "İstanbul",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Tekirdağ",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Balıkesir",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "İzmir",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Aydın",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Denizli",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Muğla",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Manisa",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Bursa",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Eskişehir",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Kocaeli",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Sakarya",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Ankara",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Konya",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Antalya",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Adana",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Mersin",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Hatay",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Kahramanmaraş",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Kayseri",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Samsun",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Ordu",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Trabzon",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Erzurum",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Malatya",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Van",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Gaziantep",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Diyarbakır",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Şanlıurfa",
+                "count": 132,
+                "truncated": false
+              },
+              {
+                "value": "Mardin",
+                "count": 132,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Cinsiyet (_T)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 3,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Toplam",
+                "count": 4284,
+                "truncated": false
+              },
+              {
+                "value": "Erkek",
+                "count": 4284,
+                "truncated": false
+              },
+              {
+                "value": "Kadın",
+                "count": 4284,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "ADNKS Gösterge (NUFUS)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Nüfus",
+                "count": 12852,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman (2007)",
+            "label_en": null,
+            "type_hint": "period",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 19,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "2007",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2008",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2009",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2010",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2011",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2012",
+                "count": 738,
+                "truncated": false
+              },
+              {
+                "value": "2013",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2014",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2015",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2016",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2017",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2018",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2019",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2020",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2021",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2022",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2023",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2024",
+                "count": 648,
+                "truncated": false
+              },
+              {
+                "value": "2025",
+                "count": 648,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Gözlem",
+            "label_en": null,
+            "type_hint": "number",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 12852,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": null,
+            "distinct_exact": false,
+            "values": [
+              {
+                "value": "117109",
+                "count": 3,
+                "truncated": false
+              },
+              {
+                "value": "14160467",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "14377018",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "14657434",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "14804116",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15029231",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15067724",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15519267",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15462452",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15840900",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15907951",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15655924",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15701602",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "15754053",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7115721",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7221158",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7360499",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7424390",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7529491",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7542231",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7790256",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7750836",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7933686",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7955820",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7806787",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7820462",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7851344",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7044746",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7155860",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7296935",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7379726",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7499740",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7525493",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7729011",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7711616",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7907214",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7952131",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7849137",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7881140",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "7902709",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "407763",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "209390",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "210035",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "356050",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "164521",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "874475",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "906732",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "937910",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "972875",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1005463",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1029927",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1055412",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1081065",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1113400",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1142451",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1167059",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1187162",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1208441",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "450149",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "466956",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "482404",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "499819",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "516496",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "527975",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "542646",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "552587",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "570355",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "583014",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "595133",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "604896",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "615806",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "424326",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "439776",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "455506",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "473056",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "488967",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "501952",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "512766",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "528478",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "543045",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "559437",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "571926",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "582266",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "592635",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1162761",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1189057",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1186688",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1196176",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1204824",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1226575",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1228620",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1240285",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1250610",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1257590",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1273519",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1276096",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "1284517",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "581403",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "593529",
+                "count": 2,
+                "truncated": false
+              },
+              {
+                "value": "592718",
+                "count": 2,
+                "truncated": false
+              }
+            ],
+            "values_complete": false
+          },
+          {
+            "name": "Gözlem Durumu",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 12852,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman Formatı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 12852,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Ondalık Basamak Sayısı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 12852,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Ölçü Birimi",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 12852,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Birim Çarpanı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 12852,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          }
+        ],
+        "columns_truncated": false,
+        "download_links": [
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 1781012,
+            "resource_id": null
+          },
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "related_datasets": []
+      },
+      "arguments": {
+        "resource_id": "flow:DF_ADNKS_T14+V1.1",
+        "filters": {
+          "İkamet edilen yer (_T)": "İstanbul",
+          "Yerleşim Yeri türü (_T)": "Toplam",
+          "Cinsiyet (_T)": "Toplam"
+        },
+        "limit": 2
+      },
+      "result": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/csv",
+        "retrieved_at": "2026-11-04T13:56:48.245282Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_ADNKS_T14+V1.1",
+        "status": "ok",
+        "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+        "columns": [
+          "Coğrafi Kapsam (TR)",
+          "Gözlem Sıklığı (A)",
+          "İstatistiksel Gösterge (NG_ADNKS)",
+          "Yerleşim Yeri türü (_T)",
+          "İkamet edilen yer (_T)",
+          "Cinsiyet (_T)",
+          "ADNKS Gösterge (NUFUS)",
+          "Zaman (2007)",
+          "Gözlem",
+          "Gözlem Durumu",
+          "Zaman Formatı",
+          "Ondalık Basamak Sayısı",
+          "Ölçü Birimi",
+          "Birim Çarpanı"
+        ],
+        "rows": [
+          {
+            "Coğrafi Kapsam (TR)": "Türkiye",
+            "Gözlem Sıklığı (A)": "Yıllık",
+            "İstatistiksel Gösterge (NG_ADNKS)": "Adrese Dayalı Nüfus Kayıt Sistemi",
+            "Yerleşim Yeri türü (_T)": "Toplam",
+            "İkamet edilen yer (_T)": "İstanbul",
+            "Cinsiyet (_T)": "Toplam",
+            "ADNKS Gösterge (NUFUS)": "Nüfus",
+            "Zaman (2007)": "2007",
+            "Gözlem": "12573836",
+            "Gözlem Durumu": "",
+            "Zaman Formatı": "",
+            "Ondalık Basamak Sayısı": "",
+            "Ölçü Birimi": "",
+            "Birim Çarpanı": ""
+          },
+          {
+            "Coğrafi Kapsam (TR)": "Türkiye",
+            "Gözlem Sıklığı (A)": "Yıllık",
+            "İstatistiksel Gösterge (NG_ADNKS)": "Adrese Dayalı Nüfus Kayıt Sistemi",
+            "Yerleşim Yeri türü (_T)": "Toplam",
+            "İkamet edilen yer (_T)": "İstanbul",
+            "Cinsiyet (_T)": "Toplam",
+            "ADNKS Gösterge (NUFUS)": "Nüfus",
+            "Zaman (2007)": "2008",
+            "Gözlem": "12697164",
+            "Gözlem Durumu": "",
+            "Zaman Formatı": "",
+            "Ondalık Basamak Sayısı": "",
+            "Ölçü Birimi": "",
+            "Birim Çarpanı": ""
+          }
+        ],
+        "unit": null,
+        "notes": null,
+        "download_links": [
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 1781012,
+            "resource_id": null
+          },
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "İl ve Cinsiyete Göre İl/İlçe Merkezi, Belde/ Köy Nüfusu",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_ADNKS_T14%2BV1.1/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "total_rows": 19,
+        "related_datasets": [],
+        "truncated": true,
+        "format": null,
+        "extraction": null,
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "columns_en": [],
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "snapshot_id": "sha256:caa98575727e714c64b3b044a7e5a28030732e03a7fcf8a69cb9cdb8add2a650",
+        "next_cursor": null,
+        "has_more": false,
+        "cursor_expires_at": null
+      }
+    },
+    "first_hand_housing": {
+      "profile": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+        "retrieved_at": "2026-11-04T13:56:49.721684Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+        "status": "ok",
+        "message": "Observed values from the published file, not an official code list. Use column names and values verbatim as get_tuik_data filters. Counts are exact only when complete is true; distinct counts when distinct_exact is true.",
+        "format": "csv",
+        "extraction": "csv",
+        "snapshot_id": "sha256:20e9baa03d49b0158f25c4300b25682eb676dbb506d7902b49dc5f2ac79de9bf",
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "unit": null,
+        "notes": null,
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "total_rows": 4984,
+        "rows_examined": 4984,
+        "complete": true,
+        "column_count": 13,
+        "columns": [
+          {
+            "name": "Gözlem Sıklığı (M)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 2,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Aylık",
+                "count": 4620,
+                "truncated": false
+              },
+              {
+                "value": "Yıllık",
+                "count": 364,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Satış Türü (_T)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 9,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Toplam",
+                "count": 712,
+                "truncated": false
+              },
+              {
+                "value": "İpotekli Satış",
+                "count": 712,
+                "truncated": false
+              },
+              {
+                "value": "İlk El Satış",
+                "count": 712,
+                "truncated": false
+              },
+              {
+                "value": "İkinci El Satış",
+                "count": 712,
+                "truncated": false
+              },
+              {
+                "value": "Diğer Satış",
+                "count": 712,
+                "truncated": false
+              },
+              {
+                "value": "İpotekli İlk El Satış",
+                "count": 356,
+                "truncated": false
+              },
+              {
+                "value": "İpotekli İkinci El Satış",
+                "count": 356,
+                "truncated": false
+              },
+              {
+                "value": "Diğer İlk El Satış",
+                "count": 356,
+                "truncated": false
+              },
+              {
+                "value": "Diğer İkinci El Satış",
+                "count": 356,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Coğrafi Kapsam (TR)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 1,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Türkiye",
+                "count": 4984,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Konut ve iş yeri Gösterge (2)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 2,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Satış Şekline Göre",
+                "count": 3204,
+                "truncated": false
+              },
+              {
+                "value": "Satış Durumuna Göre",
+                "count": 1780,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Adet Pay Oranı (_T)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 3,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Adet",
+                "count": 2848,
+                "truncated": false
+              },
+              {
+                "value": "Pay",
+                "count": 1424,
+                "truncated": false
+              },
+              {
+                "value": "Toplam",
+                "count": 712,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "İstatistiksel Gösterge (MII_KSS)",
+            "label_en": null,
+            "type_hint": "string",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 2,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "Konut Satış Sayıları",
+                "count": 2492,
+                "truncated": false
+              },
+              {
+                "value": "İş Yeri Satış Sayıları",
+                "count": 2492,
+                "truncated": false
+              }
+            ],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman (2026-09)",
+            "label_en": null,
+            "type_hint": "period",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 178,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "2026-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2026-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2025-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2024-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2023-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2022-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2021-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2020-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-06",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-05",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-04",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-03",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-02",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2019-01",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-12",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-11",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-10",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-09",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-08",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-07",
+                "count": 28,
+                "truncated": false
+              },
+              {
+                "value": "2018-06",
+                "count": 28,
+                "truncated": false
+              }
+            ],
+            "values_complete": false
+          },
+          {
+            "name": "Gözlem Değeri",
+            "label_en": null,
+            "type_hint": "number",
+            "type_hint_source": "inferred",
+            "decimal_separator": ",",
+            "non_empty": 4984,
+            "empty": 0,
+            "placeholders": {},
+            "distinct_count": 3676,
+            "distinct_exact": true,
+            "values": [
+              {
+                "value": "52,3",
+                "count": 8,
+                "truncated": false
+              },
+              {
+                "value": "98",
+                "count": 8,
+                "truncated": false
+              },
+              {
+                "value": "47,7",
+                "count": 8,
+                "truncated": false
+              },
+              {
+                "value": "36,2",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "31,7",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "31,4",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "32,1",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "85",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "33,4",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "32,4",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "63,8",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "66,6",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "67,6",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "68,6",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "68,3",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "67,9",
+                "count": 6,
+                "truncated": false
+              },
+              {
+                "value": "31,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "34,6",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "27,1",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "31,6",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "33,8",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "4,1",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "4,2",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "2",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "1,3",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "3,6",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "61",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "64",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "33,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "33,7",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "32,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "52,4",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "48,1",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "47,6",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "68,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "66,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "66,3",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "68,4",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "67,5",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "66,2",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "51,9",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "72,9",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "65,4",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "95,9",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "95,8",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "98,7",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "96,4",
+                "count": 5,
+                "truncated": false
+              },
+              {
+                "value": "16455",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "12383",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "12341",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "321",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "9,1",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "9,3",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "35,4",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "30,9",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "29",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "27,9",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "33,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "34,1",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "36,6",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "32,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "38,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "36",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "34,9",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "33,6",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "4,7",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "4,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "2,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "8,9",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "7,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "9,5",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "11,4",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "146",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "68",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "80",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "32,6",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "35,3",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "32,7",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "33,1",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "32,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "26,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "26,5",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "27,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "34",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "69,1",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "63,4",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "67,4",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "64,7",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "67,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "67,3",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "66,4",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "66,9",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "64,6",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "67,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "61,2",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "73,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "72,1",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "73,5",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "72,8",
+                "count": 4,
+                "truncated": false
+              },
+              {
+                "value": "66,8",
+                "count": 4,
+                "truncated": false
+              }
+            ],
+            "values_complete": false
+          },
+          {
+            "name": "Birim Çarpanı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 4984,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Zaman Formatı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 4984,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Gizlilik Durumu",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 4984,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Ondalık Basamak Sayısı",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 4984,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          },
+          {
+            "name": "Gözlem Durumu",
+            "label_en": null,
+            "type_hint": "unknown",
+            "type_hint_source": "inferred",
+            "decimal_separator": null,
+            "non_empty": 0,
+            "empty": 4984,
+            "placeholders": {},
+            "distinct_count": 0,
+            "distinct_exact": true,
+            "values": [],
+            "values_complete": true
+          }
+        ],
+        "columns_truncated": false,
+        "download_links": [
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 670509,
+            "resource_id": null
+          },
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "related_datasets": []
+      },
+      "arguments": {
+        "resource_id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+        "filters": {
+          "Satış Türü (_T)": "İlk El Satış",
+          "İstatistiksel Gösterge (MII_KSS)": "Konut Satış Sayıları",
+          "Adet Pay Oranı (_T)": "Adet"
+        },
+        "limit": 2
+      },
+      "result": {
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+        "retrieved_at": "2026-11-04T13:56:49.721684Z",
+        "publisher": "Türkiye İstatistik Kurumu (TÜİK)",
+        "resource_id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+        "status": "ok",
+        "message": "CSV strings are preserved as published. Exact filters are applied locally after bounded download.",
+        "columns": [
+          "Gözlem Sıklığı (M)",
+          "Satış Türü (_T)",
+          "Coğrafi Kapsam (TR)",
+          "Konut ve iş yeri Gösterge (2)",
+          "Adet Pay Oranı (_T)",
+          "İstatistiksel Gösterge (MII_KSS)",
+          "Zaman (2026-09)",
+          "Gözlem Değeri",
+          "Birim Çarpanı",
+          "Zaman Formatı",
+          "Gizlilik Durumu",
+          "Ondalık Basamak Sayısı",
+          "Gözlem Durumu"
+        ],
+        "rows": [
+          {
+            "Gözlem Sıklığı (M)": "Aylık",
+            "Satış Türü (_T)": "İlk El Satış",
+            "Coğrafi Kapsam (TR)": "Türkiye",
+            "Konut ve iş yeri Gösterge (2)": "Satış Durumuna Göre",
+            "Adet Pay Oranı (_T)": "Adet",
+            "İstatistiksel Gösterge (MII_KSS)": "Konut Satış Sayıları",
+            "Zaman (2026-09)": "2026-09",
+            "Gözlem Değeri": "51519",
+            "Birim Çarpanı": "",
+            "Zaman Formatı": "",
+            "Gizlilik Durumu": "",
+            "Ondalık Basamak Sayısı": "",
+            "Gözlem Durumu": ""
+          },
+          {
+            "Gözlem Sıklığı (M)": "Aylık",
+            "Satış Türü (_T)": "İlk El Satış",
+            "Coğrafi Kapsam (TR)": "Türkiye",
+            "Konut ve iş yeri Gösterge (2)": "Satış Durumuna Göre",
+            "Adet Pay Oranı (_T)": "Adet",
+            "İstatistiksel Gösterge (MII_KSS)": "Konut Satış Sayıları",
+            "Zaman (2026-09)": "2026-08",
+            "Gözlem Değeri": "44378",
+            "Birim Çarpanı": "",
+            "Zaman Formatı": "",
+            "Gizlilik Durumu": "",
+            "Ondalık Basamak Sayısı": "",
+            "Gözlem Durumu": ""
+          }
+        ],
+        "unit": null,
+        "notes": null,
+        "download_links": [
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/csv",
+            "format": "csv",
+            "verified": true,
+            "size_bytes": 670509,
+            "resource_id": null
+          },
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/json",
+            "format": "json",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          },
+          {
+            "title": "Satış Durumuna ve Satış Şekline Göre Satış Sayıları (Türkiye)",
+            "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_SATIS_SEKLI_SATIS_DURUMU_V3%2BV1.0/file/xml",
+            "format": "xml",
+            "verified": false,
+            "size_bytes": null,
+            "resource_id": null
+          }
+        ],
+        "total_rows": 178,
+        "related_datasets": [],
+        "truncated": true,
+        "format": null,
+        "extraction": null,
+        "sheet": null,
+        "sheets": [],
+        "table_title": null,
+        "table_title_en": null,
+        "columns_en": [],
+        "table_notes": [],
+        "source_note": null,
+        "layout": null,
+        "warnings": [],
+        "snapshot_id": "sha256:20e9baa03d49b0158f25c4300b25682eb676dbb506d7902b49dc5f2ac79de9bf",
+        "next_cursor": null,
+        "has_more": false,
+        "cursor_expires_at": null
+      }
+    }
+  },
+  "collector_source": "import asyncio\nimport hashlib\nimport json\nimport os\nimport sys\nfrom datetime import UTC, datetime\nfrom pathlib import Path\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\nCASES = {\n 'young_women_unemployment': ('flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0', {'Temel Yaş':'15-24','Cinsiyet':'Kadın','İşgücü Göstergeleri':'İşsizlik Oranı (%)','Mevsimsel Düzeltme':'Mevsim etkilerinden arındırılmış'}),\n 'istanbul_population': ('flow:DF_ADNKS_T14+V1.1', {'İkamet edilen yer (_T)':'İstanbul','Yerleşim Yeri türü (_T)':'Toplam','Cinsiyet (_T)':'Toplam'}),\n 'first_hand_housing': ('flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0', {'Satış Türü (_T)':'İlk El Satış','İstatistiksel Gösterge (MII_KSS)':'Konut Satış Sayıları','Adet Pay Oranı (_T)':'Adet'}),\n}\n\nasync def main():\n report={'method':'single_ai_scope_checks','started_at':datetime.now(UTC).isoformat(),'checks':{},'collector_source':Path(__file__).read_text(),'collector_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}\n params=StdioServerParameters(command=sys.executable,args=['-m','tuik_mcp.server'],env={k:v for k,v in os.environ.items() if k.startswith('TUIK_')})\n async with stdio_client(params) as (read,write):\n  async with ClientSession(read,write) as session:\n   await session.initialize()\n   for name,(rid,filters) in CASES.items():\n    profile=(await session.call_tool('inspect_tuik_data',{'resource_id':rid,'max_values':100})).structuredContent\n    assert profile and profile['status']=='ok',profile\n    columns={c['name']:{v['value'] for v in c['values']} for c in profile['columns']}\n    assert all(value in columns.get(key,set()) for key,value in filters.items()),filters\n    args={'resource_id':rid,'filters':filters,'limit':2}\n    result=(await session.call_tool('get_tuik_data',args)).structuredContent\n    assert result and result['status']=='ok' and result['total_rows']>0,result\n    assert result['snapshot_id']==profile['snapshot_id'],result\n    assert all(all(row[k]==v for k,v in filters.items()) for row in result['rows']),result\n    report['checks'][name]={'profile':profile,'arguments':args,'result':result}\n    print(name,result['total_rows'],flush=True)\n report['finished_at']=datetime.now(UTC).isoformat()\n report['status']='ok'\n Path('docs/verification/search-ai-scope-checks-2026-11-04.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\\n')\nasyncio.run(main())\n",
+  "collector_sha256": "0c1ea64e5bfd7709b3678af013651ca5de94cb4882756fb61ade10185d69ff8b",
+  "finished_at": "2026-11-04T13:56:49.848599+00:00",
+  "status": "ok"
+}

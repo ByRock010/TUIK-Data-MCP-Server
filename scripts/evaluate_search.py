@@ -5,6 +5,8 @@ Run with --help. Collection is opt-in; pool and score never access the network.
 
 import argparse
 import asyncio
+import csv
+import gzip
 import hashlib
 import json
 import math
@@ -28,7 +30,10 @@ from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 
 def read_json(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    path = Path(path)
+    if path.suffix == ".gz":
+        return json.loads(gzip.decompress(path.read_bytes()).decode("utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def write_json(path, data):
@@ -179,6 +184,83 @@ def judge_sheet(suite, judge):
     }
 
 
+JUDGE_CSV_FIELDS = (
+    "judge",
+    "query_id",
+    "query",
+    "category",
+    "document_id",
+    "title",
+    "description",
+    "resource_type",
+    "source_url",
+    "grade",
+)
+
+
+def spreadsheet_text(value):
+    """Keep source strings as text when opened in a spreadsheet application."""
+    text = str(value or "")
+    return "'" + text if text.lstrip().startswith(("=", "+", "-", "@")) else text
+
+
+def judge_csv_rows(suite, judge):
+    sheet = judge_sheet(suite, judge)
+    for query in sheet["queries"]:
+        for doc_id in sheet["grades"].get(query["id"], {}):
+            document = sheet["documents"][doc_id]
+            yield {
+                "judge": judge,
+                "query_id": query["id"],
+                "query": spreadsheet_text(query["text"]),
+                "category": query["category"],
+                "document_id": doc_id,
+                **{
+                    key: spreadsheet_text(document.get(key))
+                    for key in ("title", "description", "resource_type", "source_url")
+                },
+                "grade": "",
+            }
+
+
+def write_judge_csv(path, suite, judge):
+    # BOM allows Excel to recognize Turkish text; newline="" preserves CSV quoting.
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8-sig", newline="") as output:
+        writer = csv.DictWriter(output, fieldnames=JUDGE_CSV_FIELDS)
+        writer.writeheader()
+        writer.writerows(judge_csv_rows(suite, judge))
+
+
+def read_judge_sheet(path, suite, judge):
+    if Path(path).suffix.lower() != ".csv":
+        return read_json(path)
+    sheet = judge_sheet(suite, judge)
+    expected = {(row["query_id"], row["document_id"]): row for row in judge_csv_rows(suite, judge)}
+    seen = set()
+    with Path(path).open(encoding="utf-8-sig", newline="") as source:
+        reader = csv.DictReader(source)
+        if reader.fieldnames != list(JUDGE_CSV_FIELDS):
+            raise ValueError("Judge CSV columns must match the exported sheet")
+        for row in reader:
+            pair = row["query_id"], row["document_id"]
+            if pair in seen or pair not in expected:
+                raise ValueError(f"Duplicate or unknown judge CSV pair: {pair}")
+            if set(row) != set(JUDGE_CSV_FIELDS) or any(
+                row[key] != expected[pair][key] for key in JUDGE_CSV_FIELDS if key != "grade"
+            ):
+                raise ValueError(f"Judge CSV context changed for {pair}; edit only grade")
+            grade = (row["grade"] or "").strip()
+            if grade not in ("", "0", "1", "2"):
+                raise ValueError(f"Judge CSV grade must be blank, 0, 1 or 2 for {pair}")
+            sheet["grades"][pair[0]][pair[1]] = int(grade) if grade else None
+            seen.add(pair)
+    if seen != set(expected):
+        raise ValueError("Judge CSV document IDs must match the entire pool; rows are missing")
+    return sheet
+
+
 def merge_judges(suite, sheets):
     suite = json.loads(json.dumps(suite))
     for name, sheet in zip(("a", "b"), sheets, strict=True):
@@ -222,7 +304,10 @@ def kappa(judgments):
 
 
 def query_metrics(hits, judgments):
-    grades = {key: final_grade(value) for key, value in judgments.items()}
+    return graded_metrics(hits, {key: final_grade(value) for key, value in judgments.items()})
+
+
+def graded_metrics(hits, grades):
     top = hits[:10]
     gains = [grades.get(hit["id"]) or 0 for hit in top]
     ideal = sorted((g for g in grades.values() if g is not None), reverse=True)[:10]
@@ -266,22 +351,32 @@ def score(suite, runs):
         "agreement": kappa(all_judgments),
         "systems": {},
     }
+    grades = {
+        qid: {doc_id: final_grade(judgment) for doc_id, judgment in judgments.items()}
+        for qid, judgments in pooled["judgments"].items()
+    }
+    report["systems"] = system_metrics(pooled, runs, grades)
+    return report
+
+
+def system_metrics(pooled, runs, grades):
+    systems = {}
     documents = pooled["documents"]
     for run in runs:
         for name, system in run["systems"].items():
-            if name in report["systems"]:
+            if name in systems:
                 raise ValueError(f"Duplicate system name: {name}; use distinct names for variants")
             eligible = set(system["corpus_ids"]) if system.get("corpus_ids") is not None else None
             rows, categories, kinds = [], {}, {}
-            for query in suite["queries"]:
+            for query in pooled["queries"]:
                 qid = query["id"]
                 judgments = {
                     key: value
-                    for key, value in pooled["judgments"][qid].items()
+                    for key, value in grades[qid].items()
                     if eligible is None or key in eligible
                 }
                 hits = system["results"][qid][:10]
-                row = query_metrics(hits, judgments)
+                row = graded_metrics(hits, judgments)
                 rows.append(row)
                 categories.setdefault(query["category"], []).append(row)
                 # Filter the original top ten; do not backfill ranks from lower results.
@@ -292,16 +387,176 @@ def score(suite, runs):
                         if documents[key]["resource_type"] == kind
                     }
                     kinds.setdefault(kind, []).append(
-                        query_metrics(
+                        graded_metrics(
                             [hit for hit in hits if hit["resource_type"] == kind], kind_judgments
                         )
                     )
-            report["systems"][name] = {
+            systems[name] = {
                 "corpus": system["corpus"],
                 "overall": aggregate(rows),
                 "by_category": {key: aggregate(value) for key, value in categories.items()},
                 "by_resource_type": {key: aggregate(value) for key, value in kinds.items()},
             }
+    return systems
+
+
+def pool_fingerprint(suite):
+    """Bind assessments to the exact queries, candidates and stored source evidence."""
+    evidence = {
+        "queries": suite["queries"],
+        "documents": validate_pool_documents(suite),
+        "pairs": {qid: sorted(docs) for qid, docs in suite["judgments"].items()},
+    }
+    return hashlib.sha256(
+        json.dumps(evidence, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+
+
+def validate_ai_review(pooled, assessment, review, evidence):
+    """Validate one assessor's second pass, preserving the original pass and sources."""
+    if (
+        review.get("review_type") != "single_ai_sequential_source_review"
+        or review.get("human_assessors") != 0
+        or review.get("independent_assessors") is not False
+    ):
+        raise ValueError("Review must explicitly identify one non-independent AI assessor")
+    digest = hashlib.sha256(
+        json.dumps(assessment, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+    if review.get("first_assessment_sha256") != digest:
+        raise ValueError("Review does not match the original AI assessment")
+    if evidence.get("status") not in ("ok", "partial"):
+        raise ValueError("Source collection must have finished before review")
+    pool_file_hash = hashlib.sha256(
+        (json.dumps(pooled, ensure_ascii=False, indent=2) + "\n").encode()
+    ).hexdigest()
+    if evidence.get("pool_file_sha256") != pool_file_hash:
+        raise ValueError("Source collection must use the exact frozen pool")
+    if set(evidence.get("searches", {})) != {query["id"] for query in pooled["queries"]}:
+        raise ValueError("Every frozen query must have a live MCP replay")
+    for query in pooled["queries"]:
+        index = evidence["searches"][query["id"]]
+        calls = evidence.get("calls", [])
+        if type(index) is not int or not 0 <= index < len(calls):
+            raise ValueError("Invalid live query reference")
+        call = calls[index]
+        if (
+            call.get("tool") != "search_tuik"
+            or call.get("arguments") != {"query": query["text"], "limit": 10, "live": True}
+            or call.get("outcome") != "ok"
+            or call.get("response", {}).get("backend") != "portal"
+        ):
+            raise ValueError("Live query reference must replay the exact query through the portal")
+    digest = hashlib.sha256(
+        json.dumps(evidence, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
+    if review.get("evidence_sha256") != digest:
+        raise ValueError("Review does not match the recorded live source evidence")
+    if set(review.get("source_checks", {})) != set(pooled["documents"]):
+        raise ValueError("Every pooled document requires a documented source check")
+    if set(review.get("query_notes", {})) != set(pooled["judgments"]):
+        raise ValueError("Every query requires a second-pass rationale")
+    for note in review["query_notes"].values():
+        if not isinstance(note, str) or not note.strip():
+            raise ValueError("Second-pass query rationales must be nonempty")
+    counts = Counter()
+    for doc_id, check in review["source_checks"].items():
+        if not isinstance(check.get("reason"), str) or not check["reason"].strip():
+            raise ValueError(f"Source check requires a reason: {doc_id}")
+        method = check.get("method")
+        if method == "live_metadata":
+            index = check.get("call")
+            calls = evidence.get("calls", [])
+            if type(index) is not int or not 0 <= index < len(calls):
+                raise ValueError(f"Invalid live source reference: {doc_id}")
+            call = calls[index]
+            if (
+                call.get("tool") != "get_tuik_resource"
+                or call.get("arguments", {}).get("resource_id") != doc_id
+                or call.get("outcome") != "ok"
+                or call.get("response", {}).get("id") != doc_id
+            ):
+                raise ValueError(f"Live source reference must resolve the exact resource: {doc_id}")
+        elif method != "archived_metadata":
+            raise ValueError(f"Unknown source-review method: {method}")
+        counts[method] += 1
+    changed = {
+        (qid, doc_id)
+        for qid, values in review["grades"].items()
+        for doc_id, grade in values.items()
+        if grade != assessment["grades"][qid][doc_id]
+    }
+    documented = set()
+    for change in review.get("changes", []):
+        qid, doc_id = change["query_id"], change["document_id"]
+        pair = qid, doc_id
+        if (
+            pair not in changed
+            or pair in documented
+            or change.get("before") != assessment["grades"][qid][doc_id]
+            or change.get("after") != review["grades"][qid][doc_id]
+            or not isinstance(change.get("reason"), str)
+            or not change["reason"].strip()
+        ):
+            raise ValueError("Every revised grade requires its original value and a unique reason")
+        documented.add(pair)
+    if documented != changed:
+        raise ValueError("Every revised grade must be documented")
+    return dict(counts), len(changed)
+
+
+def score_ai(suite, runs, assessment, review=None, evidence=None):
+    """Score one explicitly identified AI assessor without manufacturing judge pairs."""
+    pooled = pool(suite, runs)
+    if assessment.get("assessment_type") != "single_model_ai_preliminary":
+        raise ValueError("Expected a single_model_ai_preliminary assessment")
+    if assessment.get("pool_sha256") != pool_fingerprint(pooled):
+        raise ValueError("AI assessment does not match the pooled source evidence")
+    for field in ("assessor", "assessed_at", "evidence_scope", "limitations"):
+        if not isinstance(assessment.get(field), str) or not assessment[field].strip():
+            raise ValueError(f"AI assessment requires {field}")
+    grades = assessment.get("grades", {})
+    if set(grades) != set(pooled["judgments"]):
+        raise ValueError("AI assessment query IDs must match the pool")
+    for qid, judgments in pooled["judgments"].items():
+        if set(grades[qid]) != set(judgments):
+            raise ValueError(f"AI assessment document IDs must match the pool for {qid}")
+        if any(type(grade) is not int or grade not in (0, 1, 2) for grade in grades[qid].values()):
+            raise ValueError("AI grades must all be integers from 0 to 2")
+    report = {
+        "status": "ai_preliminary",
+        "assessment_type": "single_model_ai_preliminary",
+        "release_gate_satisfied": False,
+        "pool_sha256": assessment["pool_sha256"],
+        **{
+            field: assessment[field]
+            for field in ("assessor", "assessed_at", "evidence_scope", "limitations")
+        },
+        "judgments": sum(map(len, grades.values())),
+        "agreement": {
+            "paired": 0,
+            "cohen_kappa": None,
+            "agreement": None,
+            "reason": "Single AI assessor; no independent human judge pairs",
+        },
+        "systems": system_metrics(pooled, runs, grades),
+    }
+    if review is not None:
+        # Apply the same completeness, scope and grade checks to the second pass.
+        second = score_ai(suite, runs, review)
+        counts, changed = validate_ai_review(pooled, assessment, review, evidence or {})
+        report.update(
+            status="ai_reviewed",
+            review_complete=True,
+            review_type=review["review_type"],
+            source_checks=counts,
+            revised_pairs=changed,
+            systems=second["systems"],
+            reviewed_assessor=review["assessor"],
+            reviewed_at=review["assessed_at"],
+            reviewed_evidence_scope=review["evidence_scope"],
+            reviewed_limitations=review["limitations"],
+        )
     return report
 
 
@@ -539,7 +794,8 @@ async def collect_index(suite, documents, output, url, *, store=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "command", choices=("collect", "collect-index", "pool", "judge", "merge", "score")
+        "command",
+        choices=("collect", "collect-index", "pool", "judge", "merge", "score", "score-ai"),
     )
     parser.add_argument("--suite", type=Path, default=Path("tests/fixtures/search_eval.json"))
     parser.add_argument("--runs", type=Path, nargs="*", default=[])
@@ -547,12 +803,50 @@ def main(argv=None):
     parser.add_argument("--judge", choices=("a", "b"))
     parser.add_argument("--judge-a", type=Path)
     parser.add_argument("--judge-b", type=Path)
+    parser.add_argument(
+        "--assessment", type=Path, help="Explicitly identified single-AI assessment"
+    )
+    parser.add_argument("--review", type=Path, help="Sequential review by the same AI assessor")
+    parser.add_argument("--evidence", type=Path, help="Live MCP source-review collection")
+    parser.add_argument(
+        "--require-reviewed",
+        action="store_true",
+        help="Fail AI scoring until source review is complete",
+    )
+    parser.add_argument(
+        "--format", choices=("json", "csv"), default="json", help="Judge export format"
+    )
+    parser.add_argument(
+        "--require-complete",
+        action="store_true",
+        help="Fail scoring if human judgments are pending",
+    )
     parser.add_argument("--documents", type=Path, help="Frozen crawler IndexDocument JSONL")
     parser.add_argument("--url", help="Disposable OpenSearch cluster for collect-index")
     parser.add_argument(
         "--resume", action="store_true", help="Retry only missing collection results"
     )
     args = parser.parse_args(argv)
+    if args.format != "json" and args.command != "judge":
+        parser.error("--format is only supported by judge")
+    if args.require_complete and args.command != "score":
+        parser.error("--require-complete is only supported by score")
+    if (args.review or args.evidence or args.require_reviewed) and args.command != "score-ai":
+        parser.error("AI review options are only supported by score-ai")
+    if bool(args.review) != bool(args.evidence):
+        parser.error("--review and --evidence must be supplied together")
+    inputs = [
+        args.suite,
+        *args.runs,
+        args.judge_a,
+        args.judge_b,
+        args.assessment,
+        args.documents,
+        args.review,
+        args.evidence,
+    ]
+    if args.output.resolve() in {path.resolve() for path in inputs if path is not None}:
+        parser.error("Output must not overwrite input evidence or judgment files")
     suite = validate_suite(read_json(args.suite))
     if args.command == "collect-index":
         if not args.documents or not args.url:
@@ -569,19 +863,49 @@ def main(argv=None):
     if args.command == "judge":
         if not args.judge:
             parser.error("judge requires --judge a or b")
-        write_json(args.output, judge_sheet(suite, args.judge))
+        if args.format == "csv":
+            if args.output.suffix.lower() != ".csv":
+                parser.error("CSV judge output must use a .csv extension for merge detection")
+            write_judge_csv(args.output, suite, args.judge)
+        else:
+            if args.output.suffix.lower() == ".csv":
+                parser.error("Use --format csv for a .csv judge sheet")
+            write_json(args.output, judge_sheet(suite, args.judge))
         return 0
     if args.command == "merge":
         if not args.judge_a or not args.judge_b:
             parser.error("merge requires --judge-a and --judge-b")
         write_json(
-            args.output, merge_judges(suite, [read_json(args.judge_a), read_json(args.judge_b)])
+            args.output,
+            merge_judges(
+                suite,
+                [
+                    read_judge_sheet(args.judge_a, suite, "a"),
+                    read_judge_sheet(args.judge_b, suite, "b"),
+                ],
+            ),
         )
         return 0
     if not args.runs:
-        parser.error("pool and score require --runs")
+        parser.error("pool, score and score-ai require --runs")
     runs = [read_json(path) for path in args.runs]
-    write_json(args.output, pool(suite, runs) if args.command == "pool" else score(suite, runs))
+    if args.command == "score-ai":
+        if not args.assessment:
+            parser.error("score-ai requires --assessment")
+        report = score_ai(
+            suite,
+            runs,
+            read_json(args.assessment),
+            read_json(args.review) if args.review else None,
+            read_json(args.evidence) if args.evidence else None,
+        )
+    else:
+        report = pool(suite, runs) if args.command == "pool" else score(suite, runs)
+    write_json(args.output, report)
+    if args.require_complete and report["status"] != "complete":
+        return 1
+    if args.require_reviewed and report["status"] != "ai_reviewed":
+        return 1
     return 0
 
 

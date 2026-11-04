@@ -11,7 +11,7 @@ a release announcement or evidence of measured search quality.
 | Indexer #16 | Merged | Build the full metadata index with a successful JSON report |
 | General MCP search #18 | Merged | Verify indexed filters, provenance, and fallback behavior |
 | Cluster CI #19 | Open PR #64, green | Merge through ordinary review and retain the successful cluster run |
-| Human baseline #11 | Retrieval pool prepared; human grades pending | Two independent judges, adjudication, κ and baseline metrics |
+| AI baseline #11 | Two-pass source review recorded; method in ADR 0004 | Retain complete AI-reviewed baseline metrics, source references and declared limitations |
 | Relevance comparison #20 | Pending #11 and full-corpus variant judging | Pool every system, judge new candidates, report overall/category/corpus metrics and choose defaults |
 | Indexed live smoke #29 | Script and bounded acceptance path prepared | Retain a dated real stdio → index → resource → CSV JSON report for the final candidate |
 
@@ -21,19 +21,33 @@ define the behavior to verify. OpenSearch is optional; unconfigured/unavailable
 clusters use literal dataset search or portal discovery, with explicit warnings.
 An indexed acceptance run must reject this fallback, not report it as success.
 
+The owner-adopted [AI evaluation protocol](adr/0004-ai-relevance-evaluation.md)
+supersedes the original two-human-judge requirement for project acceptance.
+The [source-checked baseline](verification/issue-11-ai-source-review-2026-11-04.md)
+has complete AI grades and no human judge pairs; κ is not applicable. #20 still
+requires the full metadata corpus. The 342-flow pilot does not establish release
+readiness or justify the final default configuration.
+
 ## Candidate verification
 
 1. Integrate the prerequisite PRs through their reviews and CI. Keep each issue
    open while its acceptance criteria are outstanding. Do not infer relevance
    scores or a winning analyzer from token tests or returned-hit counts.
-2. Freeze the evaluation corpus, complete the two-judge study and record all five
-   systems in `SEARCH_EVALUATION.md`, including unjudged share, corpus boundaries,
-   adjudication and κ. Re-run any configuration change before calling it the default.
+2. Freeze the full evaluation corpus, complete the adopted AI source review and
+   record all five systems in `SEARCH_EVALUATION.md`, including unjudged share,
+   corpus boundaries, revision reasons and the single-assessor limitations.
+   Re-run configuration changes before choosing defaults. Use
+   `evaluate_search.py score-ai --require-reviewed` with the full-corpus assessment,
+   review and evidence files. The original two-human study remains optional and
+   uses `score --require-complete`; never present AI output as human validation.
 3. Run the documented lint, format, offline, Node and real-cluster checks from
    `CONTRIBUTING.md`. Confirm the dedicated OpenSearch CI job is green for the
    candidate, alongside the required branch, Python and Docker jobs.
 4. Build/refresh the full metadata index with `tuik-mcp-index`; retain the JSON
    report and index timestamp. Keep default request pacing and download limits.
+   The merged content-index work (#22) upgraded the mapping to schema version 2;
+   run a full rebuild before incremental updates of an older schema. Content
+   indexing is opt-in; the v0.3 relevance experiment still needs the full metadata corpus.
 5. Export `TUIK_OPENSEARCH_URL` and `TUIK_OPENSEARCH_INDEX`, then run:
 
    ```bash
