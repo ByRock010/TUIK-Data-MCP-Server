@@ -1,6 +1,6 @@
 {
   "dynamic": "strict",
-  "_meta": {"schema_version": 1, "scope": "v0.3 metadata only"},
+  "_meta": {"schema_version": 2, "scope": "metadata and file content (#22)"},
   "properties": {
     "id": {"type": "keyword"},
     "kind": {"type": "keyword"},
@@ -27,6 +27,8 @@
     "downloadable": {"type": "boolean"},
     "source_url": {"type": "keyword", "index": false, "doc_values": false},
     "parent_id": {"type": "keyword"},
+    "page": {"type": "integer"},
+    "sheet": {"type": "keyword"},
     "retrieved_at": {"type": "date", "format": "strict_date_optional_time"},
     "indexed_at": {"type": "date", "format": "strict_date_optional_time"}
   }

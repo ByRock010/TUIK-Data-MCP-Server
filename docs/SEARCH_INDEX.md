@@ -23,9 +23,13 @@ touch aliases or make network calls. Alias changes belong to the indexer.
 | dataset | `flow:<code>+V<version>` | none |
 | bulletin | `press:<number>` | none |
 | metadata | `press:<number>:metadata` | its own `press:<number>` |
+| table | `<file>#t<n>` | the file: `press:<number>:file:<key>` or a portal file ID |
+| document_chunk | `<file>#p<page>.<n>` | the file, as above |
 
-Reject session handles, classification IDs, file IDs and kind/ID mismatches.
-Table/PDF content documents remain #22. `related_ids` uses the same stable ID
+Reject session handles, classification IDs and kind/ID mismatches; a bare file ID
+is never a document of its own. File content documents (#22) carry `sheet` or `page`
+locators, which other kinds may not have; see [file content index](CONTENT_INDEX.md).
+`related_ids` uses the same stable ID
 scope, is deduplicated and excludes self-links. `series_id` is an optional series
 grouping key, not a file URL. Unknown source fields are forbidden in both the
 Pydantic model and OpenSearch (`dynamic: strict`).

@@ -27,11 +27,20 @@ All notable changes to this project are documented here. The format follows
   effort, with page, title, header or positional columns, string rows and
   warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
   was measured on the recorded publication and methodology PDFs (#8).
-
+- File content index: `tuik-mcp-index --content` indexes the workbook tables
+  (titles, headers, notes) and PDF passages of the newest bulletin per series, and
+  `--content-file` adds files on demand. `search_tuik` with `kind="table"` or
+  `kind="document_chunk"` returns the file ID with the matching `sheet` or `page`.
+  Downloads are budgeted per run and cached in a content state (#22).
 - Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
   JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
   apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
   fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
+
+### Changed
+
+- Index schema version 2 adds `page`/`sheet` locators; run one `--full` build after
+  upgrading (#22).
 
 ### Fixed
 

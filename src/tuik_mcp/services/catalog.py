@@ -206,6 +206,11 @@ class CatalogService:
             warnings.append(
                 "Facets, scores, highlights and indexed_at are unavailable without the index."
             )
+            if args.kind == "document_chunk":
+                warnings.append(
+                    "PDF passages are searchable only in the content index (tuik-mcp-index "
+                    "--content); read documents page by page with read_tuik_document instead."
+                )
         return IndexedSearchResponse(
             query=args.query,
             source={"opensearch": "index", "portal": "portal", "literal": "catalog"}[hits.backend],
@@ -213,7 +218,8 @@ class CatalogService:
             source_url=f"{PORTAL}/tr/search?" + urlencode({"q": args.query}),
             results=[
                 TuikSearchResult(
-                    id=hit.id,
+                    # File content resolves through its file; page/sheet locate the match.
+                    id=hit.parent_id or hit.id,
                     title=hit.title,
                     description=hit.description,
                     resource_type=hit.kind,
@@ -227,6 +233,8 @@ class CatalogService:
                     indexed_at=hit.indexed_at,
                     downloadable=hit.downloadable,
                     formats=hit.formats,
+                    page=hit.page,
+                    sheet=hit.sheet,
                 )
                 for hit in hits.hits
             ],

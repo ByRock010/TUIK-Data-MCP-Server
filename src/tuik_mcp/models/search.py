@@ -6,7 +6,14 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from .common import Provenance, SearchInput
 
 ResourceType = Literal[
-    "dataset", "table", "bulletin", "metadata", "publication", "classification", "unknown"
+    "dataset",
+    "table",
+    "bulletin",
+    "metadata",
+    "publication",
+    "classification",
+    "document_chunk",
+    "unknown",
 ]
 
 
@@ -24,6 +31,9 @@ class TuikSearchResult(Provenance):
     themes: list[str] = Field(default_factory=list)
     downloadable: bool | None = None
     formats: list[str] = Field(default_factory=list)
+    # Indexed file content (#22): open `id` at this PDF page or workbook sheet.
+    page: int | None = None
+    sheet: str | None = None
 
 
 class SearchResponse(Provenance):
@@ -54,7 +64,7 @@ class IndexedSearchResponse(SearchResponse):
 
 
 class IndexedSearchInput(SearchInput):
-    kind: Literal["dataset", "bulletin", "metadata"] | None = None
+    kind: Literal["dataset", "bulletin", "metadata", "table", "document_chunk"] | None = None
     theme: str | None = Field(default=None, min_length=1, max_length=200)
     published_after: date | None = None
     published_before: date | None = None

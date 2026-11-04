@@ -6,7 +6,7 @@ from importlib.resources import files
 
 from . import analysis_settings
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def physical_index_name(alias: str, version: int) -> str:
