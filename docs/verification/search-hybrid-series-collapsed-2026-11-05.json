@@ -1,0 +1,25 @@
+{
+  "method": "Series-collapsed nDCG@10: within each top ten only the first document of a bulletin series (bulletin and its metadata share the series) keeps its gain; later releases of the same series score 0. The ideal list takes each series' best grade once. Grades are the reviewed hybrid assessment restricted to the frozen corpus. Supplementary diagnostic, not the selection metric.",
+  "systems": {
+    "builtin_turkish": {
+      "series_collapsed_ndcg_at_10": 0.4393,
+      "repeated_series_slots": 246
+    },
+    "multi_field": {
+      "series_collapsed_ndcg_at_10": 0.4307,
+      "repeated_series_slots": 247
+    },
+    "multi_field_synonyms": {
+      "series_collapsed_ndcg_at_10": 0.4575,
+      "repeated_series_slots": 252
+    },
+    "hybrid_rrf_lexical_weighted": {
+      "series_collapsed_ndcg_at_10": 0.4553,
+      "repeated_series_slots": 303
+    },
+    "hybrid_rrf_equal": {
+      "series_collapsed_ndcg_at_10": 0.4526,
+      "repeated_series_slots": 328
+    }
+  }
+}

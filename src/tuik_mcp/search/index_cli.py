@@ -30,11 +30,13 @@ from tuik_mcp.search.crawl import (
     state_bytes,
 )
 from tuik_mcp.search.documents import file_id
+from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import (
     IndexerError,
     OpenSearchStore,
     bounded,
     build_target,
+    check_vectors,
     prepare,
     rebuild,
     served_index,
@@ -43,7 +45,7 @@ from tuik_mcp.search.indexer import (
 from tuik_mcp.services.catalog import CatalogService
 
 
-async def run(args, *, source=None, store=None, content_service=None) -> int:
+async def run(args, *, source=None, store=None, content_service=None, embedder=None) -> int:
     started = time.monotonic()
     report = {
         "status": "running",
@@ -61,8 +63,15 @@ async def run(args, *, source=None, store=None, content_service=None) -> int:
             if settings.opensearch_url is None:
                 raise IndexerError("Set TUIK_OPENSEARCH_URL to the OpenSearch cluster")
             store = OpenSearchStore(str(settings.opensearch_url))
+        if getattr(args, "embeddings", False) and embedder is None:
+            embedder = Embedder(cache_dir=settings.embedding_cache_dir)
+        report["embedding_model"] = embedder.model if embedder is not None else None
         # Fail before a crawl that can take an hour: reachable cluster, usable alias.
-        await (build_target if args.full else served_index)(store, settings.opensearch_index)
+        if args.full:
+            await build_target(store, settings.opensearch_index)
+        else:
+            index = await served_index(store, settings.opensearch_index)
+            await check_vectors(store, index, embedder)
         state = await asyncio.to_thread(CrawlState.load, args.state)
         if source is None:
             http = CrawlHttpClient(settings)
@@ -104,7 +113,15 @@ async def run(args, *, source=None, store=None, content_service=None) -> int:
         payloads, kinds = prepare(documents, indexed_at)
         report.update(indexed_at=indexed_at.isoformat(), counts=dict(kinds))
         write = rebuild if args.full else update
-        report.update(await write(store, settings.opensearch_index, payloads, dry_run=args.dry_run))
+        report.update(
+            await write(
+                store,
+                settings.opensearch_index,
+                payloads,
+                dry_run=args.dry_run,
+                embedder=embedder,
+            )
+        )
         if not args.dry_run:
             # The index already holds every document, so a later failure loses nothing.
             payload = await asyncio.to_thread(state_bytes, crawler.next_state)
@@ -173,6 +190,13 @@ def main(argv=None):
         choices=range(1, 6),
         default=1,
         help="Bounded full-listing retries for overlapping pages (default: 1)",
+    )
+    parser.add_argument(
+        "--embeddings",
+        action="store_true",
+        help="Add multilingual-e5-small vectors to metadata documents for hybrid search "
+        "(needs the semantic extra; downloads the model once). Incremental updates of an "
+        "index built with vectors require it too.",
     )
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument(

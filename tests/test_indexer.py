@@ -33,6 +33,7 @@ class FakeStore:
         self.indices: dict[str, dict[str, dict]] = {}
         self.aliases: dict[str, list[str]] = {}
         self.schema: dict[str, int] = {}
+        self.models: dict[str, str | None] = {}
         self.reject: set[str] = set()
         self.lost_swap_response = False
 
@@ -52,9 +53,13 @@ class FakeStore:
     async def schema_version(self, index):
         return self.schema[index]
 
-    async def create(self, name):
+    async def embedding_model(self, index):
+        return self.models.get(index)
+
+    async def create(self, name, embedding_model=None):
         assert name not in self.indices
         self.indices[name], self.schema[name] = {}, SCHEMA_VERSION
+        self.models[name] = embedding_model
 
     async def delete(self, name):
         self.indices.pop(name, None)

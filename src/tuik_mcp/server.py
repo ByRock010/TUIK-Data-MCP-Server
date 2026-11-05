@@ -84,7 +84,9 @@ async def search_tuik(
     ISO publication dates (YYYY-MM-DD), and downloadable_only (advertised, not verified).
     Results preserve reusable IDs, score, highlights, source_url and indexed_at. Facets
     count all matches after filters, before limit; inspect their truncation/error fields.
-    source/backend identify what answered. Without the index, dataset-only searches use
+    source/backend identify what answered; ranking="hybrid" means an index built with
+    embeddings also ranked by meaning (scores are then small fused-rank values), else
+    "lexical". Without the index, dataset-only searches use
     literal catalog matching; general/bulletin searches use the live portal with warnings
     for unsupported filters. Missing facets and unknown totals/truncated are null.
 

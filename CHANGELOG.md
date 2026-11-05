@@ -6,6 +6,23 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Optional hybrid lexical + semantic search (#21, ADR 0005).
+  `tuik-mcp-index --embeddings` stores multilingual-e5-small vectors (`semantic`
+  extra, ONNX). `search_tuik` fuses the lexical query with filtered k-NN by
+  equal-weight RRF and reports `ranking`. On 1,689 reviewed pairs, nDCG@10 rose
+  from 0.694 to 0.852 and MRR@10 from 0.880 to 0.990.
+  - Abbreviation queries regress, and series-collapsed nDCG is unchanged.
+  - Dataset-only, file-content and deep-page searches stay lexical.
+  - The new grades come from a second, non-independent AI assessor.
+- `collect-index --variants` collects the hybrid evaluation systems.
+
+### Changed
+
+- Index mapping schema 3 adds the optional `embedding` vector field; rebuild older
+  indices once with `tuik-mcp-index --full`.
+
 ## [0.3.0] - 2026-11-05
 
 ### Added

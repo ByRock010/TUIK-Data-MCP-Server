@@ -38,6 +38,7 @@ from tuik_mcp.search.backend import (
     SearchFilters,
     SearchHits,
 )
+from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.parsing import parse_source_in_thread
@@ -60,6 +61,9 @@ class CatalogService:
                     str(settings.opensearch_url), timeout=settings.opensearch_timeout_seconds
                 ),
                 settings.opensearch_index,
+                Embedder(cache_dir=settings.embedding_cache_dir, local_files_only=True)
+                if settings.semantic_search
+                else None,
             )
             if settings.opensearch_url is not None
             else None
@@ -168,6 +172,7 @@ class CatalogService:
             source_url=f"{PORTAL}/api/tr/dataflows",
             retrieved_at=retrieved_at,
             backend=hits.backend,
+            ranking=hits.ranking,
             warnings=hits.warnings,
         )
 
@@ -218,6 +223,7 @@ class CatalogService:
             query=args.query,
             source={"opensearch": "index", "portal": "portal", "literal": "catalog"}[hits.backend],
             backend=hits.backend,
+            ranking=hits.ranking,
             source_url=f"{PORTAL}/tr/search?" + urlencode({"q": args.query}),
             results=[
                 TuikSearchResult(

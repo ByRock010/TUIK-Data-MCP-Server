@@ -1,6 +1,6 @@
 {
   "dynamic": "strict",
-  "_meta": {"schema_version": 2, "scope": "metadata and file content (#22)"},
+  "_meta": {"schema_version": 3, "scope": "metadata and file content (#22); optional vectors (#21)"},
   "properties": {
     "id": {"type": "keyword"},
     "kind": {"type": "keyword"},
@@ -30,6 +30,10 @@
     "page": {"type": "integer"},
     "sheet": {"type": "keyword"},
     "retrieved_at": {"type": "date", "format": "strict_date_optional_time"},
-    "indexed_at": {"type": "date", "format": "strict_date_optional_time"}
+    "indexed_at": {"type": "date", "format": "strict_date_optional_time"},
+    "embedding": {
+      "type": "knn_vector", "dimension": 384,
+      "method": {"name": "hnsw", "space_type": "cosinesimil", "engine": "lucene"}
+    }
   }
 }

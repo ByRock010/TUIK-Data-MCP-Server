@@ -6,6 +6,32 @@ Updated 2026-11-05 with the full-metadata comparison under the owner's adopted
 one AI assessment followed by a source-checked sequential review. The original
 independent human study remains available as an optional validation path.
 
+## Hybrid semantic search (#21)
+
+The [2026-11-05 hybrid report](verification/issue-21-hybrid-search-2026-11-05.md)
+adds two pre-registered systems. Both fuse the production lexical query with k-NN
+over multilingual-e5-small vectors using weighted RRF: lexical-weighted 0.7/0.3 and
+equal 0.5/0.5. `collect-index --variants hybrid_rrf_lexical_weighted
+hybrid_rrf_equal` collects them on the same frozen corpus. This needs the
+`semantic` extra. The run records the embedding model, document/query vector
+digests and the exact production request.
+
+The enlarged pool has **1,689 pairs**: 1,390 inherited plus 299 new. A second
+AI model graded the new pairs and source-reviewed them against 742 live
+identities, with 9 documented revisions. Results on that pool:
+
+| System | nDCG@10 | MRR@10 | Pooled Recall@10 |
+| --- | ---: | ---: | ---: |
+| Synonym default | 0.6944 | 0.8796 | 0.3387 |
+| Hybrid 0.7/0.3 | 0.7898 | 0.9578 | 0.3595 |
+| Hybrid equal (new default) | 0.8516 | 0.9896 | 0.3653 |
+
+Abbreviation queries regress (0.911 → 0.833). Series-collapsed nDCG@10 is
+unchanged (0.4575 vs 0.4526), so the gain is precision within already relevant
+series, not new series. Dataset-filtered search stays lexical because it was not
+measured. The same ADR 0004 limitations apply, plus a second, non-independent AI
+assessor for the new pairs.
+
 ## Full-metadata comparison (#20)
 
 The [2026-11-05 report](verification/issue-20-full-corpus-2026-11-05.md) freezes

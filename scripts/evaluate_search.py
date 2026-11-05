@@ -21,9 +21,17 @@ from uuid import uuid4
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
 from tuik_mcp.models.dataset import TuikResource
-from tuik_mcp.search.backend import OpenSearchBackend, SearchFilters, build_query
+from tuik_mcp.search.backend import (
+    HYBRID_DEPTH,
+    HYBRID_RANK_CONSTANT,
+    OpenSearchBackend,
+    SearchFilters,
+    build_hybrid_query,
+    build_query,
+)
 from tuik_mcp.search.crawl import atomic_write
 from tuik_mcp.search.documents import IndexDocument
+from tuik_mcp.search.embeddings import DOCUMENT_CHARS, Embedder, document_text, embeddable
 from tuik_mcp.search.indexer import IndexerError, OpenSearchStore, prepare
 from tuik_mcp.search.schema import index_definition
 from tuik_mcp.services.catalog import CatalogService
@@ -695,10 +703,21 @@ async def collect(suite, output, resume=False, *, documents=None):
 
 
 INDEX_VARIANTS = ("builtin_turkish", "multi_field", "multi_field_synonyms")
+# Production analysis plus k-NN over multilingual-e5-small vectors, fused by weighted
+# RRF (#21). Weights are (lexical, semantic); fixed before any new grades were made.
+HYBRID_VARIANTS = {
+    "hybrid_rrf_lexical_weighted": (0.7, 0.3),
+    "hybrid_rrf_equal": (0.5, 0.5),
+}
+ALL_VARIANTS = INDEX_VARIANTS + tuple(HYBRID_VARIANTS)
 
 
-def variant_definition(variant):
+def variant_definition(variant, embedding_model=None):
     """Keep the corpus and mapping fixed; ablate only the text analysis."""
+    if variant in HYBRID_VARIANTS:
+        if embedding_model is None:
+            raise ValueError("Hybrid variants require an embedding model")
+        return index_definition(embedding_model)
     if variant not in INDEX_VARIANTS:
         raise ValueError(f"Unknown evaluation variant: {variant}")
     definition = index_definition()
@@ -717,7 +736,14 @@ def variant_definition(variant):
     return definition
 
 
-def variant_query(variant, text):
+def variant_query(variant, text, vector=None):
+    if variant in HYBRID_VARIANTS:
+        if vector is None:
+            raise ValueError("Hybrid variants require a query vector")
+        # The production request; hybrid queries cannot add an ID tie-breaker sort.
+        return build_hybrid_query(
+            text, SearchFilters(), 10, 0, vector, weights=HYBRID_VARIANTS[variant]
+        )
     if variant not in INDEX_VARIANTS:
         raise ValueError(f"Unknown evaluation variant: {variant}")
     body = deepcopy(build_query(text, SearchFilters(), 10))
@@ -738,9 +764,23 @@ def load_documents(path):
         return [IndexDocument.model_validate_json(line) for line in source if line.strip()]
 
 
-async def collect_index(suite, documents, output, url, *, store=None):
+def vector_digest(vectors):
+    return hashlib.sha256(json.dumps(vectors, separators=(",", ":")).encode()).hexdigest()
+
+
+async def collect_index(
+    suite, documents, output, url, *, store=None, variants=INDEX_VARIANTS, embedder=None
+):
     """Collect comparable top tens without a live crawl or production alias writes."""
     validate_suite(suite)
+    if not variants or len(set(variants)) != len(variants):
+        raise ValueError("Select distinct evaluation variants")
+    unknown = set(variants) - set(ALL_VARIANTS)
+    if unknown:
+        raise ValueError(f"Unknown evaluation variant(s): {sorted(unknown)}")
+    hybrid = [variant for variant in variants if variant in HYBRID_VARIANTS]
+    if hybrid and embedder is None:
+        raise ValueError("Hybrid variants require an embedder (install the semantic extra)")
     stamp = datetime.now(UTC)
     documents = list(documents)
     payloads, kinds = prepare(documents, stamp)
@@ -759,33 +799,75 @@ async def collect_index(suite, documents, output, url, *, store=None):
         "cleanup": {},
         "errors": {},
     }
+    vectors, query_vectors = None, {}
     own_store = store is None
     store = store or OpenSearchStore(url)
     try:
         report["engine"] = (await store._request("GET", "")).json()["version"]
-        for variant in INDEX_VARIANTS:
+        if hybrid:
+            started = datetime.now(UTC)
+            targets = [payload for payload in payloads if embeddable(payload)]
+            vectors = await asyncio.to_thread(
+                embedder.documents, [document_text(payload) for payload in targets]
+            )
+            vectors = dict(zip((payload["id"] for payload in targets), vectors, strict=True))
+            for query in suite["queries"]:
+                query_vectors[query["id"]] = await asyncio.to_thread(embedder.query, query["text"])
+            report["embeddings"] = {
+                "model": embedder.model,
+                "dimension": embedder.dimension,
+                "document_chars": DOCUMENT_CHARS,
+                "documents": len(vectors),
+                "documents_sha256": vector_digest([vectors[key] for key in sorted(vectors)]),
+                "queries_sha256": vector_digest(
+                    [query_vectors[key] for key in sorted(query_vectors)]
+                ),
+                "seconds": round((datetime.now(UTC) - started).total_seconds(), 3),
+                "fusion": {"depth": HYBRID_DEPTH, "rank_constant": HYBRID_RANK_CONSTANT},
+            }
+        for variant in variants:
             name = "tuik-evaluation-" + uuid4().hex
-            definition = variant_definition(variant)
+            is_hybrid = variant in HYBRID_VARIANTS
+            definition = variant_definition(variant, embedder.model if is_hybrid else None)
             system = report["systems"][variant] = {
                 "corpus": "frozen_metadata_snapshot",
                 "corpus_ids": corpus_ids,
                 "index": name,
                 "definition": definition,
-                "query_template": variant_query(variant, "__QUERY__"),
+                "query_template": variant_query(
+                    variant, "__QUERY__", ["__QUERY_VECTOR__"] if is_hybrid else None
+                ),
                 "results": {},
                 "scores": {},
             }
+            loaded = (
+                [
+                    {**payload, "embedding": vectors[payload["id"]]}
+                    if payload["id"] in vectors
+                    else payload
+                    for payload in payloads
+                ]
+                if is_hybrid
+                else payloads
+            )
             created = False
             try:
                 await store._request("PUT", name, json=definition)
                 created = True
-                if failures := await store.bulk(name, payloads):
+                if failures := await store.bulk(name, loaded):
                     raise IndexerError("Evaluation documents were rejected", failures)
                 await store.refresh(name)
                 if await store.count(name) != len(payloads):
                     raise IndexerError("Evaluation index count does not match the frozen corpus")
                 for query in suite["queries"]:
-                    response = await store.query(name, variant_query(variant, query["text"]))
+                    response = await store.query(
+                        name,
+                        variant_query(
+                            variant,
+                            query["text"],
+                            query_vectors.get(query["id"]) if is_hybrid else None,
+                        ),
+                    )
                     if response.get("timed_out") or response.get("_shards", {}).get("failed"):
                         raise IndexerError("Incomplete evaluation search response")
                     hits = response["hits"]
@@ -861,6 +943,13 @@ def main(argv=None):
     parser.add_argument("--documents", type=Path, help="Frozen crawler IndexDocument JSONL")
     parser.add_argument("--url", help="Disposable OpenSearch cluster for collect-index")
     parser.add_argument(
+        "--variants",
+        nargs="+",
+        choices=ALL_VARIANTS,
+        default=list(INDEX_VARIANTS),
+        help="collect-index systems (hybrid variants need the semantic extra)",
+    )
+    parser.add_argument(
         "--resume", action="store_true", help="Retry only missing collection results"
     )
     args = parser.parse_args(argv)
@@ -892,8 +981,18 @@ def main(argv=None):
             parser.error("Output must not overwrite the suite or frozen documents")
         if args.resume:
             parser.error("collect-index rebuilds disposable indices; --resume is unsupported")
+        hybrid = any(variant in HYBRID_VARIANTS for variant in args.variants)
         return asyncio.run(
-            collect_index(suite, load_documents(args.documents), args.output, args.url)
+            collect_index(
+                suite,
+                load_documents(args.documents),
+                args.output,
+                args.url,
+                variants=tuple(args.variants),
+                embedder=Embedder(cache_dir=Settings.from_env().embedding_cache_dir)
+                if hybrid
+                else None,
+            )
         )
     if args.command == "collect":
         return asyncio.run(

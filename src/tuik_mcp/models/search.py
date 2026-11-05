@@ -57,6 +57,8 @@ class SearchFacets(BaseModel):
 class IndexedSearchResponse(SearchResponse):
     source: Literal["index", "portal", "catalog"]
     backend: Literal["opensearch", "portal", "literal"]
+    # "hybrid" adds semantic (vector) similarity to the index's lexical ranking (#21).
+    ranking: Literal["lexical", "hybrid"] | None = None
     limit: int
     truncated: bool | None = None
     facets: SearchFacets | None = None
