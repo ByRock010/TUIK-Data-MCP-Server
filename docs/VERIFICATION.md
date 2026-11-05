@@ -1,5 +1,30 @@
 # Verification
 
+## Final v0.3.0 candidate — 2026-11-05
+
+Versioned source `4cde23b` prepares package **0.3.0** on accepted `develop`
+`c7bbf8d` (#74). The [final candidate report](verification/v0.3.0-final-2026-11-05.md)
+records **718 offline tests** on both Python 3.13.5 and 3.14.0, Ruff lint/format,
+**28 Node tests**, **21 real OpenSearch 3.3.2 tests**, and a byte-identical
+reproduction of the full-corpus AI-reviewed metrics.
+
+The [full-index rebuild](verification/v0.3.0-final-index-2026-11-05.json) contains
+all **3,424 frozen metadata documents**. The
+[actual full live MCP run](verification/v0.3.0-final-mcp-2026-11-05.json) uses
+installed package **0.3.0**, nine discovered tools and normal two-second/six-second
+pacing. ASCII indexed discovery resolves the same flow ID through verified CSV
+rows; portal, Excel, PDF, inspection and filter paths also pass. The owned UUID
+index was deleted; the application alias and crawl state were unchanged.
+The remaining **5 live contracts passed** separately, with
+[retained JUnit](verification/v0.3.0-final-live-contracts-2026-11-05.xml).
+
+A [clean base-only wheel installation](verification/v0.3.0-final-wheel-2026-11-05.json)
+outside the repository verifies version 0.3.0, both console entry points,
+nine tools, query/search schemas, invalid inputs and packaged schema-2 assets
+without the optional chart/search-client dependencies. Candidate acceptance
+does not imply publication: follow the [release checklist](RELEASE_0.3.0.md)
+for teammate review, green CI, protected promotion, tag and release assets.
+
 ## Full-metadata relevance and MCP acceptance — 2026-11-05
 
 The [full #20 report](verification/issue-20-full-corpus-2026-11-05.md) retains
