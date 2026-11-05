@@ -1,7 +1,9 @@
 # Turkish lexical search design
 
-Issue #13. Token design accepted for the #14 schema foundation on 2026-10-26;
-ranking defaults and synonym enablement remain subject to #11/#20 human evaluation.
+Issue #13. Token design accepted for the #14 schema foundation on 2026-10-26.
+The [full-corpus AI comparison](verification/issue-20-full-corpus-2026-11-05.md)
+now supports retaining the multi-field + synonyms default under
+[ADR 0004](adr/0004-ai-relevance-evaluation.md); human validation remains optional.
 No MCP search routing changes in this increment. See [ADR 0002](adr/0002-opensearch.md).
 
 ## Evidence and reproduction
@@ -11,7 +13,8 @@ records 38 difficult forms through seven analyzers, including full token positio
 offsets, graph lengths, the exact index definition, engine/Lucene version and cleanup
 acknowledgment. Fourteen small controlled retrieval probes compare six variants on
 nine example titles. These are linguistic checks, not the independent relevance
-judgments required by #11. They establish observed behavior, not relevance superiority.
+judgments. They establish observed behavior, not relevance superiority; the
+separate full-corpus comparison supplies the disclosed AI relevance evidence.
 
 ```bash
 docker compose up -d --wait
@@ -80,7 +83,7 @@ ticaret. Keep the original phrase as an alternative. Write full target phrases o
 the right-hand side: graph expansion is not recursive, so `enflasyon => tüfe`
 would not subsequently expand to a title containing only Tüketici Fiyat Endeksi.
 `ihracat` does not expand back to dış ticaret, and a CPI title does not expand back
-to enflasyon. The ambiguous `büyüme` is excluded pending human evaluation.
+to enflasyon. The ambiguous `büyüme` is excluded pending a separate relevance evaluation.
 
 Graphs appear only at search time. They preserve alternative multiword paths;
 the probe stores `positionLength` evidence. Rules are strict (`lenient: false`)
@@ -112,7 +115,9 @@ do not advertise them as a solution for ASCII-typed Turkish inflections.
 
 Compare a plain `multi_match` with `best_fields` over `title^4`, `title.ascii`,
 `description^2` and `body`, then the search-time graph variant. Those weights are
-starting hypotheses for #20, not measured defaults. Use exact keyword filters for
+initial hypotheses, held fixed in the full #20 comparison. That experiment
+retains the existing configuration for its highest nDCG@10/pooled recall; it does
+not establish optimal field weights. Use exact keyword filters for
 kind/theme/downloadable/date, separately from the text query. Retrieve highlights
 and preserve each document's source URL and index timestamp in #18.
 
@@ -136,8 +141,9 @@ Java toolkit. It is a feasibility option for an external preprocessing step or a
 custom analyzer plugin, adding deployment/version costs. It is not installed,
 benchmarked or required for this lexical milestone.
 
-The #11 preparation PR supplies the 48-query pooled judging workflow. Complete two
-independent human judgments and κ, then #20 evaluates baseline, built-in Turkish,
-multi-field and multi-field+synonym variants with one enlarged judged pool. Only
-that evidence chooses relevance defaults. #13 supplies the reproducible token
-contract that unblocks #14; it does not close #11 or #20.
+The #11 workflow and ADR 0004 supply the 48-query pooled AI assessment/source-review
+protocol; the independent human study remains available with blank judge slots.
+The [full #20 comparison](verification/issue-20-full-corpus-2026-11-05.md) evaluates
+all five systems on the enlarged pool and records the default decision and MRR
+tradeoff. No synonyms or field weights were tuned after those labels. #13's token
+contract remains linguistic evidence, separate from that relevance experiment.

@@ -1,0 +1,78 @@
+{
+  "scope": "Actual interrupted attempts; none advanced state. Failed year-partition experiment was removed from the implementation. Retained responses were reused with original timestamps.",
+  "attempts": [
+    {
+      "report": "tuik-full-eval-crawl-2026-11-05.json",
+      "status": "error",
+      "state_committed": false,
+      "started_at": "2026-11-05T05:17:13.942894+00:00",
+      "finished_at": "2026-11-05T05:22:16.204603+00:00",
+      "listed_bulletins": 1465,
+      "upstream_total": 1494,
+      "fetched_bulletins": 0,
+      "error": {
+        "type": "SourceError",
+        "message": "Listing row or unique bulletin count differs from the upstream total; retry full enumeration before committing state",
+        "code": "incomplete_listing",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/search"
+      }
+    },
+    {
+      "report": "tuik-full-eval-crawl-r2-2026-11-05.json",
+      "status": "incomplete",
+      "state_committed": false,
+      "started_at": "2026-11-05T05:25:13.006524+00:00",
+      "finished_at": "2026-11-05T05:32:26.099492+00:00",
+      "listed_bulletins": 1465,
+      "upstream_total": 1494,
+      "fetched_bulletins": 0,
+      "error": null
+    },
+    {
+      "report": "tuik-full-eval-crawl-year-2026-11-05.json",
+      "status": "error",
+      "state_committed": false,
+      "started_at": "2026-11-05T05:35:04.639424+00:00",
+      "finished_at": "2026-11-05T05:35:12.771017+00:00",
+      "listed_bulletins": 10,
+      "upstream_total": 1494,
+      "fetched_bulletins": 0,
+      "error": {
+        "type": "SourceError",
+        "message": "Year listing overlaps pages or changes a bulletin date",
+        "code": "incomplete_listing",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/data/search"
+      }
+    },
+    {
+      "report": "tuik-full-metadata-crawl-2026-11-05.json",
+      "status": "error",
+      "state_committed": false,
+      "started_at": "2026-11-05T05:47:30.157779+00:00",
+      "finished_at": "2026-11-05T05:49:55.533889+00:00",
+      "listed_bulletins": 1494,
+      "upstream_total": 1494,
+      "fetched_bulletins": 67,
+      "error": {
+        "type": "ValidationError",
+        "message": "1 validation error for IndexDocument\nformats\n  List should have at most 32 items after validation, not 33 [type=too_long, input_value=['xls', 'xls', 'xls', 'xl...s', 'xls', 'xls', 'pdf'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.14/v/too_long"
+      }
+    },
+    {
+      "report": "tuik-full-metadata-crawl-r2-2026-11-05.json",
+      "status": "error",
+      "state_committed": false,
+      "started_at": "2026-11-05T05:52:40.902185+00:00",
+      "finished_at": "2026-11-05T06:18:57.736300+00:00",
+      "listed_bulletins": 1494,
+      "upstream_total": 1494,
+      "fetched_bulletins": 797,
+      "error": {
+        "type": "SourceError",
+        "message": "TÜİK JSON has an unexpected schema",
+        "code": "malformed_response",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/press/53842"
+      }
+    }
+  ]
+}

@@ -54,3 +54,12 @@ corpus. Completing the AI baseline does not finish #20, select a winning default
 for the full corpus, or release v0.3.0. Full-corpus collection/review, final index
 acceptance, normal PR review/CI and publication steps remain required. For that
 reason `release_gate_satisfied` stays false in standalone AI reports.
+
+## Implementation evidence — 2026-11-05
+
+The [full-metadata comparison](../verification/issue-20-full-corpus-2026-11-05.md)
+now applies this protocol to 3,424 documents and 1,390 pooled pairs. It retains
+the original pilot/review files, records all new labels and source-based revisions,
+and passes `score-ai --require-reviewed`. The synonym default decision and MRR
+tradeoff are documented. This completes the comparison evidence for #20; the
+standalone release flag remains false and publication still follows #29/#24.

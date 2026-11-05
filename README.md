@@ -149,8 +149,8 @@ unsupported filters: the portal can apply only `kind`, within its first 50 resul
 `live: true` always selects the portal, including for dataset queries. Facets,
 scores, highlights and indexing times are unavailable on these paths; no page-only
 facet counts are presented as corpus totals. See [search backends](docs/SEARCH_BACKEND.md)
-for limitations and [search evaluation](docs/SEARCH_EVALUATION.md) for the pending
-human-judged relevance baseline.
+for limitations and [search evaluation](docs/SEARCH_EVALUATION.md) for the
+disclosed AI source-reviewed comparison and optional independent human study.
 
 To find datasets that can return rows, first call `search_tuik_datasets`:
 
@@ -693,8 +693,10 @@ title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
 The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
 indexed general MCP search are included on `develop`, and the dedicated cluster CI
-job (#19) runs on every PR. The full-corpus relevance comparison (#20) remains a
-v0.3.0 release gate; this is not a v0.2.0 release prerequisite. See the
+job (#19) runs on every PR. The [full-metadata comparison](docs/verification/issue-20-full-corpus-2026-11-05.md)
+(#20) covers 3,424 documents and 1,390 AI-reviewed pairs. It retains the existing
+synonym default for the best matched-corpus nDCG@10 (0.7304) and pooled recall,
+with the built-in analyzer's better MRR explicitly recorded. See the
 [v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
@@ -712,4 +714,6 @@ is retained as the first pass of the adopted
 [AI evaluation protocol](docs/adr/0004-ai-relevance-evaluation.md). A
 [source-checked second pass](docs/verification/issue-11-ai-source-review-2026-11-04.md)
 adds live MCP checks and documented grade revisions. Independent human validation
-has not been performed; the full-corpus v0.3.0 comparison remains pending.
+has not been performed. The [full-corpus follow-up](docs/verification/issue-20-full-corpus-2026-11-05.md)
+retains those prior labels, adds every new candidate, and records a real full-index
+MCP smoke. v0.3.0 preparation, reviewed promotion and publication remain separate.

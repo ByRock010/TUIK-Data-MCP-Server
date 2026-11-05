@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Full-metadata relevance comparison on 3,424 frozen documents and 1,390 pooled
+  AI-reviewed pairs, with all five systems' overall/category/type metrics,
+  retained source evidence and 55 documented revisions. The existing synonym
+  default has the best matched-corpus nDCG@10/pooled recall; built-in Turkish has
+  better MRR. A real full-index MCP smoke and live contracts passed. Independent
+  human validation and v0.3.0 publication are not implied (#20; acceptance evidence for #29).
 - `chart_tuik_data` draws CSV/XLS/XLSX rows as a PNG line or bar chart (MCP image
   content) with a JSON summary of each series' points, gaps and first/last/min/max.
   It shares `get_tuik_data`'s snapshot, filters and query. It adds label columns,

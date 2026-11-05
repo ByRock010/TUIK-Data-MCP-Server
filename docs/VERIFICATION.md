@@ -1,5 +1,32 @@
 # Verification
 
+## Full-metadata relevance and MCP acceptance — 2026-11-05
+
+The [full #20 report](verification/issue-20-full-corpus-2026-11-05.md) retains
+**3,424 documents**, all five systems' rankings, **1,390 reviewed AI pairs**,
+**667 real MCP source calls**, 55 documented revisions and exact reproduction.
+`score-ai --require-reviewed` passes with zero unjudged returned slots. The
+multi-field + synonyms default is retained: nDCG@10 **0.7304**, versus **0.6984**
+for built-in Turkish and **0.6762** for synonym-free multi-field. Built-in Turkish
+has better MRR; corpus boundaries, contextual matches and AI limitations remain
+explicit. There are zero human pairs and no applicable κ.
+
+Python 3.14 offline verification: **718 passed, 21 skipped, 6 deselected**.
+Ruff lint/format and **28 Node tests** passed. The runtime candidate's
+[five CI checks](https://github.com/ByRock010/TUIK-Data-MCP-Server/actions/runs/41979820417)
+passed, including Python 3.12/3.13, Docker and real OpenSearch 3.3.2 contracts.
+The remaining **5 live contracts passed**, and the separately executed
+[full real MCP smoke](verification/search-full-live-smoke-2026-11-05.json) passed
+with nine tools, PDF/Excel/CSV reads and ASCII indexed discovery through verified
+CSV rows. Its owned UUID index contained all 3,424 documents and was deleted
+afterwards; the application alias was not changed.
+
+The full crawl exposed and now covers overlapping listing pages, repeated format
+entries in many-file bulletins, and historical series links without display titles.
+The [retained failed attempts](verification/search-full-collection-errors-2026-11-05.json)
+never advanced state. Package 0.2.0 remains unchanged; v0.3.0 release preparation,
+reviewed promotion and publication follow the [release checklist](RELEASE_0.3.0.md).
+
 ## Source-checked AI baseline — 2026-11-04
 
 The owner-requested [AI evaluation method](adr/0004-ai-relevance-evaluation.md)

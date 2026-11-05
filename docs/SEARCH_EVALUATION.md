@@ -1,12 +1,46 @@
 # Turkish search evaluation
 
 Issue #11, preparation recorded on 2026-10-26 (Europe/Istanbul).
-Updated 2026-11-04 with the project owner's adopted
-[AI review protocol](adr/0004-ai-relevance-evaluation.md). The active baseline uses
+Updated 2026-11-05 with the full-metadata comparison under the owner's adopted
+[AI review protocol](adr/0004-ai-relevance-evaluation.md). The evaluation uses
 one AI assessment followed by a source-checked sequential review. The original
 independent human study remains available as an optional validation path.
 
-## Current evidence
+## Full-metadata comparison (#20)
+
+The [2026-11-05 report](verification/issue-20-full-corpus-2026-11-05.md) freezes
+**3,424 documents**: 510 dataflows, 1,494 bulletins and 1,420 metadata records.
+The same snapshot supplies the literal baseline's 341 downloadable flows.
+All five systems completed the 48 queries. The enlarged pool retains the prior
+917 pairs and adds 473: **1,390 pairs / 608 documents**. A sequential AI source
+review used **667 real MCP calls**, 602 resolved identities and 55 documented
+grade revisions; every revised passage also matched the exact live response.
+`score-ai --require-reviewed` passes, with zero unjudged returned slots.
+
+| System | nDCG@10 | MRR@10 | Pooled Recall@10 |
+| --- | ---: | ---: | ---: |
+| Portal, all public types | 0.8096 | 0.9362 | 0.3925 |
+| Literal, 341 downloadable flows | 0.1661 | 0.2552 | 0.1667 |
+| Built-in Turkish, full metadata | 0.6984 | 0.9075 | 0.4160 |
+| Multi-field, full metadata | 0.6762 | 0.8587 | 0.4125 |
+| Multi-field + synonyms, full metadata | 0.7304 | 0.8796 | 0.4296 |
+
+**Retain the existing multi-field + synonyms default**: it has the best graded
+ranking and pooled recall among the three matched-corpus variants. Built-in
+Turkish has better MRR, so the choice does not dominate every metric. Portal and
+literal overall scores have different corpus boundaries and are not controlled
+same-corpus comparisons. The dated report includes every category/resource-type
+metric, exact reproduction, raw snapshot/rankings, source evidence and limitations.
+
+This is one dependent AI assessor, with inherited prior labels, not independent
+human validation. κ remains null. Historical releases and methodology records
+count separately; undated queries do not test freshness or answer diversity.
+For the selected variant, 36/48 top-ten lists contain a grade-2 candidate and only
+23/48 first hits have grade 2. Contextual regional relevance does not establish
+the requested province's value. The standalone report's release flag stays false;
+normal PR acceptance and publication gates remain separate.
+
+## Historical baseline and pilot
 
 The [48-query suite and pooled candidates](../tests/fixtures/search_eval.json)
 cover eight categories, six queries each: exact titles, abbreviations, synonyms,
@@ -287,8 +321,9 @@ sheets without AI labels or scores to avoid anchoring their independent decision
 change for #11/#20. The [dated review](verification/issue-11-ai-source-review-2026-11-04.md)
 retains the live MCP evidence, exact-filter checks, complete second-pass grades,
 source references, and each revised score. The first-pass files remain immutable.
-The current 342-flow OpenSearch experiment remains a pilot for #20; the adopted
-method does not remove its full-corpus requirement.
+The 2026-11-04 342-flow experiment remains a historical pilot. The
+[full comparison above](#full-metadata-comparison-20) now satisfies the separate
+full-corpus requirement under the same disclosed method.
 
 Collect fresh evidence separately from the frozen ranking experiment:
 
