@@ -61,6 +61,8 @@ class DatasetSearchResponse(Provenance):
     truncated: bool
     # "opensearch" ranks by the index; "literal" requires every word in the catalog text.
     backend: Literal["opensearch", "literal"] = "literal"
+    # "hybrid" adds semantic (vector) similarity to the index's lexical ranking (#21).
+    ranking: Literal["lexical", "hybrid"] | None = None
     warnings: list[str] = Field(default_factory=list)
 
 

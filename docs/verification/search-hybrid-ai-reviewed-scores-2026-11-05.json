@@ -1,0 +1,1024 @@
+{
+  "status": "ai_reviewed",
+  "assessment_type": "single_model_ai_preliminary",
+  "release_gate_satisfied": false,
+  "pool_sha256": "e41c06ca4bed4e04944efa99143a39e446930bb9b2d2bdc5e7abe89971052014",
+  "assessor": "Anthropic Claude (Opus 5.5), one dependent AI assessor in this interactive session, for the 299 new hybrid candidates; the 1,390 inherited labels are the unchanged OpenAI Codex source-reviewed set. No human labels.",
+  "assessed_at": "2026-11-05T12:24:04.777767+00:00",
+  "evidence_scope": "First pass over all 299 new pairs using stored titles, types, descriptions and the first 330 characters of bulletin/metadata text from the frozen 3,424-document corpus, with the inherited grades of same-series releases shown for consistency. Live MCP evidence is reserved for the sequential review.",
+  "limitations": "A second, different AI model grades the new pairs while the inherited labels come from the earlier Codex review; neither is independent and both know the implementation. No human validation or inter-rater agreement. The assessor also implemented the hybrid systems and saw lower-bound pilot scores before grading. Pooled recall is not exhaustive corpus recall; repeated historical releases are separate IDs.",
+  "judgments": 1689,
+  "agreement": {
+    "paired": 0,
+    "cohen_kappa": null,
+    "agreement": null,
+    "reason": "Single AI assessor; no independent human judge pairs"
+  },
+  "systems": {
+    "portal": {
+      "corpus": "portal_all_types_non_archive",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.7769508962800846,
+        "mrr": 0.9361689814814814,
+        "recall_at_10": 0.3150027735032647,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 1.0,
+          "mrr": 1.0,
+          "recall_at_10": 0.3319733206701292,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.8190987852650382,
+          "mrr": 1.0,
+          "recall_at_10": 0.2758117639583157,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.7409058389430031,
+          "mrr": 0.8518518518518517,
+          "recall_at_10": 0.3353959748607626,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.58660523895689,
+          "mrr": 0.8541666666666666,
+          "recall_at_10": 0.32410842095751713,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.9169973261046206,
+          "mrr": 1.0,
+          "recall_at_10": 0.2810490087788938,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.7182324959744099,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.2744653119868637,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.679207168303548,
+          "mrr": 0.8666666666666667,
+          "recall_at_10": 0.33406665068306657,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.754560316693167,
+          "mrr": 1.0,
+          "recall_at_10": 0.36315173613056934,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.7143816894266726,
+          "mrr": 0.8640873015873015,
+          "recall_at_10": 0.5002468001257935,
+          "returned": 316,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.23467305324496388,
+          "mrr": 0.40625,
+          "recall_at_10": 0.18341907785841607,
+          "returned": 92,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 2
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.06588735615883975,
+          "mrr": 0.125,
+          "recall_at_10": 0.03974763662263662,
+          "returned": 13,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.020833333333333332,
+          "mrr": 0.020833333333333332,
+          "recall_at_10": 0.020833333333333332,
+          "returned": 6,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 47
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.17962809176295727,
+          "mrr": 0.17708333333333334,
+          "recall_at_10": 0.1875,
+          "returned": 51,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 39
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.041666666666666664,
+          "mrr": 0.041666666666666664,
+          "recall_at_10": 0.041666666666666664,
+          "returned": 2,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 46
+        }
+      }
+    },
+    "literal": {
+      "corpus": "downloadable_dataflows_from_frozen_metadata",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.16610132997372792,
+        "mrr": 0.2552083333333333,
+        "recall_at_10": 0.16669135262885262,
+        "returned": 76,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 5
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.6472213441956017,
+          "mrr": 0.8333333333333334,
+          "recall_at_10": 0.5861823361823362,
+          "returned": 27,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.4109887365695222,
+          "mrr": 0.7083333333333334,
+          "recall_at_10": 0.46401515151515155,
+          "returned": 27,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 1,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.10189027069672639,
+          "mrr": 0.16666666666666666,
+          "recall_at_10": 0.13333333333333333,
+          "returned": 10,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.14733053372442548,
+          "mrr": 0.16666666666666666,
+          "recall_at_10": 0.11666666666666665,
+          "returned": 7,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.021379754603547605,
+          "mrr": 0.16666666666666666,
+          "recall_at_10": 0.03333333333333333,
+          "returned": 4,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 2
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.16610132997372792,
+          "mrr": 0.2552083333333333,
+          "recall_at_10": 0.16669135262885262,
+          "returned": 76,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 5
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    },
+    "builtin_turkish": {
+      "corpus": "frozen_metadata_snapshot",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.6622937712350287,
+        "mrr": 0.9074652777777777,
+        "recall_at_10": 0.33024520331632473,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.7979524260593976,
+          "mrr": 0.8541666666666666,
+          "recall_at_10": 0.2809659946628032,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.7027110340737382,
+          "mrr": 1.0,
+          "recall_at_10": 0.3382346034644885,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.3568534717350356,
+          "mrr": 0.8333333333333334,
+          "recall_at_10": 0.2962420295621961,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.7308063525772145,
+          "mrr": 1.0,
+          "recall_at_10": 0.409515020583132,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.7452584863052927,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3008078754046496,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.6607940048932245,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3398689792008758,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.47150668794443074,
+          "mrr": 0.7388888888888889,
+          "recall_at_10": 0.2708298020728499,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.8324677062918963,
+          "mrr": 1.0,
+          "recall_at_10": 0.405497321579603,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.30273692237642646,
+          "mrr": 0.5052083333333334,
+          "recall_at_10": 0.19350704808241012,
+          "returned": 128,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.30146155401621605,
+          "mrr": 0.5130208333333334,
+          "recall_at_10": 0.28345682095682095,
+          "returned": 159,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 3
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.4676758733847893,
+          "mrr": 0.6041666666666666,
+          "recall_at_10": 0.38724655547410963,
+          "returned": 193,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    },
+    "multi_field": {
+      "corpus": "frozen_metadata_snapshot",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.640236651811525,
+        "mrr": 0.8587301587301588,
+        "recall_at_10": 0.32728613177358384,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.8091273739329652,
+          "mrr": 0.8571428571428572,
+          "recall_at_10": 0.28691837561518413,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.7027110340737382,
+          "mrr": 1.0,
+          "recall_at_10": 0.3382346034644885,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.34596391065418236,
+          "mrr": 0.6666666666666666,
+          "recall_at_10": 0.3029086962288628,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.6915044421762286,
+          "mrr": 1.0,
+          "recall_at_10": 0.409515020583132,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.5964980115263664,
+          "mrr": 0.6904761904761906,
+          "recall_at_10": 0.26302816020557956,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.6836518306380907,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3398689792008758,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.46085466913177275,
+          "mrr": 0.7388888888888889,
+          "recall_at_10": 0.2604131354061832,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.8315819423588562,
+          "mrr": 1.0,
+          "recall_at_10": 0.41740208348436497,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.369646371424029,
+          "mrr": 0.5885416666666666,
+          "recall_at_10": 0.24698478176847713,
+          "returned": 157,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.3101760186191211,
+          "mrr": 0.5863095238095238,
+          "recall_at_10": 0.2815454187696835,
+          "returned": 163,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 3
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.4158646506318325,
+          "mrr": 0.5833333333333334,
+          "recall_at_10": 0.3376113459124295,
+          "returned": 160,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    },
+    "multi_field_synonyms": {
+      "corpus": "frozen_metadata_snapshot",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.6944284761658875,
+        "mrr": 0.8795634920634922,
+        "recall_at_10": 0.3386702000880106,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.7714468093032614,
+          "mrr": 0.8571428571428572,
+          "recall_at_10": 0.28691837561518413,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.9110340259544576,
+          "mrr": 1.0,
+          "recall_at_10": 0.3549012701311552,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.620207200198685,
+          "mrr": 0.8333333333333334,
+          "recall_at_10": 0.3773145760776094,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.6915044421762286,
+          "mrr": 1.0,
+          "recall_at_10": 0.409515020583132,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.5851468895657487,
+          "mrr": 0.6904761904761906,
+          "recall_at_10": 0.26302816020557956,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.6836518306380907,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3398689792008758,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.46085466913177275,
+          "mrr": 0.7388888888888889,
+          "recall_at_10": 0.2604131354061832,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.8315819423588562,
+          "mrr": 1.0,
+          "recall_at_10": 0.41740208348436497,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.45208704038807523,
+          "mrr": 0.6510416666666666,
+          "recall_at_10": 0.2993141345622262,
+          "returned": 176,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.31483198746849805,
+          "mrr": 0.5654761904761905,
+          "recall_at_10": 0.27867927619765853,
+          "returned": 164,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 3
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.42452163919854025,
+          "mrr": 0.5833333333333334,
+          "recall_at_10": 0.33637860301463246,
+          "returned": 140,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    },
+    "hybrid_rrf_lexical_weighted": {
+      "corpus": "frozen_metadata_snapshot",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.7897765840082119,
+        "mrr": 0.9578373015873015,
+        "recall_at_10": 0.359528899200715,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.8502905530978438,
+          "mrr": 0.8888888888888888,
+          "recall_at_10": 0.29882313751994605,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.8881522599283106,
+          "mrr": 1.0,
+          "recall_at_10": 0.3549012701311552,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.6506131882019897,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3790792819599624,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.7375976661217388,
+          "mrr": 1.0,
+          "recall_at_10": 0.409515020583132,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.6092028025800854,
+          "mrr": 0.8571428571428572,
+          "recall_at_10": 0.27995368788379543,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.8357594806824978,
+          "mrr": 1.0,
+          "recall_at_10": 0.3508244389709907,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.9066815668349909,
+          "mrr": 1.0,
+          "recall_at_10": 0.409541796881897,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.8399151546182387,
+          "mrr": 1.0,
+          "recall_at_10": 0.3935925596748411,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.4927371258184845,
+          "mrr": 0.7135416666666666,
+          "recall_at_10": 0.2979319562257135,
+          "returned": 203,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.21670098829865878,
+          "mrr": 0.4270833333333333,
+          "recall_at_10": 0.1853500189897249,
+          "returned": 103,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 3
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.47610828785113823,
+          "mrr": 0.625,
+          "recall_at_10": 0.3782162137183422,
+          "returned": 174,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    },
+    "hybrid_rrf_equal": {
+      "corpus": "frozen_metadata_snapshot",
+      "overall": {
+        "queries": 48,
+        "ndcg_at_10": 0.8515993632298208,
+        "mrr": 0.9895833333333334,
+        "recall_at_10": 0.36533787579303784,
+        "returned": 480,
+        "unjudged_share": 0.0,
+        "queries_without_judged_relevant": 0
+      },
+      "by_category": {
+        "exact": {
+          "queries": 6,
+          "ndcg_at_10": 0.9855694431496288,
+          "mrr": 1.0,
+          "recall_at_10": 0.33453742323423175,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "abbreviation": {
+          "queries": 6,
+          "ndcg_at_10": 0.8330981399210239,
+          "mrr": 0.9166666666666666,
+          "recall_at_10": 0.3140062084027601,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "synonym": {
+          "queries": 6,
+          "ndcg_at_10": 0.7211178358589129,
+          "mrr": 1.0,
+          "recall_at_10": 0.3845736824492029,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "inflection": {
+          "queries": 6,
+          "ndcg_at_10": 0.7734251688289749,
+          "mrr": 1.0,
+          "recall_at_10": 0.4191223722957469,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "ascii": {
+          "queries": 6,
+          "ndcg_at_10": 0.723106290881148,
+          "mrr": 1.0,
+          "recall_at_10": 0.30221881014891766,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "typo": {
+          "queries": 6,
+          "ndcg_at_10": 0.9537026724303653,
+          "mrr": 1.0,
+          "recall_at_10": 0.35320539135194307,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "multi_concept": {
+          "queries": 6,
+          "ndcg_at_10": 0.9536111300770611,
+          "mrr": 1.0,
+          "recall_at_10": 0.409541796881897,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        },
+        "regional": {
+          "queries": 6,
+          "ndcg_at_10": 0.8691642246914513,
+          "mrr": 1.0,
+          "recall_at_10": 0.405497321579603,
+          "returned": 60,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 0
+        }
+      },
+      "by_resource_type": {
+        "bulletin": {
+          "queries": 48,
+          "ndcg_at_10": 0.5226461735523645,
+          "mrr": 0.6944444444444445,
+          "recall_at_10": 0.3184049396442271,
+          "returned": 209,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 1
+        },
+        "dataset": {
+          "queries": 48,
+          "ndcg_at_10": 0.15730542295645553,
+          "mrr": 0.3645833333333333,
+          "recall_at_10": 0.13962400616812382,
+          "returned": 66,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 3
+        },
+        "metadata": {
+          "queries": 48,
+          "ndcg_at_10": 0.5044851957953992,
+          "mrr": 0.5902777777777778,
+          "recall_at_10": 0.3942583604977181,
+          "returned": 205,
+          "unjudged_share": 0.0,
+          "queries_without_judged_relevant": 11
+        },
+        "publication": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "table": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        },
+        "unknown": {
+          "queries": 48,
+          "ndcg_at_10": 0.0,
+          "mrr": 0.0,
+          "recall_at_10": 0.0,
+          "returned": 0,
+          "unjudged_share": null,
+          "queries_without_judged_relevant": 48
+        }
+      }
+    }
+  },
+  "review_complete": true,
+  "review_type": "single_ai_sequential_source_review",
+  "source_checks": {
+    "live_metadata": 742,
+    "archived_metadata": 6
+  },
+  "revised_pairs": 9,
+  "reviewed_assessor": "Anthropic Claude (Opus 5.5), the same dependent AI assessor as the first pass, in a sequential source review of the 299 new pairs; the 1,390 inherited pairs keep the unchanged OpenAI Codex reviewed grades. No human assessors.",
+  "reviewed_at": "2026-11-05T12:45:19.507240+00:00",
+  "reviewed_evidence_scope": "All 1,689 pairs carried forward; the 299 new pairs were rechecked against 742 live get_tuik_resource responses plus 48 live portal replays and bounded probes collected on the enlarged pool. Every new candidate resolved with a title identical to the frozen corpus. Nine revisions each cite a frozen body passage that also occurs in the exact live response.",
+  "reviewed_limitations": "A second, different AI model grades the new pairs while the inherited labels come from the earlier Codex review; neither is independent and both know the implementation. No human validation or inter-rater agreement. The assessor also implemented the hybrid systems and saw lower-bound pilot scores before grading. Pooled recall is not exhaustive corpus recall; repeated historical releases are separate IDs. The review was performed by the same model that made the first pass and implemented the evaluated systems."
+}

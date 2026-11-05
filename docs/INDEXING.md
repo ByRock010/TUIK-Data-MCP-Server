@@ -43,6 +43,19 @@ completeness requirements and records that choice in the crawl report.
 Use `--listing-attempts 2 --alternate-listing-mode` to combine both official modes
 when their complete passes expose different overlapping pages.
 
+## Vectors for hybrid search (#21)
+
+`--embeddings` (needs the `semantic` extra) embeds every dataflow, bulletin and
+metadata document with multilingual-e5-small before writing. File content is not
+embedded. A full build embeds before creating the index, so a missing model never
+leaves an empty build. The model name is recorded in the index mapping's
+`_meta.embedding_model`. Incremental updates re-embed only new or changed documents
+and refuse a mismatch: vectors from another model, `--embeddings` on an index built
+without vectors, or omitting it on an index built with them. The report's
+`embeddings` object gives the model, the embedded count and seconds. Mapping schema 3
+adds the optional `embedding` field, so older indices need one full rebuild. See
+[ADR 0005](adr/0005-hybrid-semantic-search.md).
+
 ## Modes
 
 **Full** (`--full`) creates the next physical index `<alias>-v<n>` (one above the

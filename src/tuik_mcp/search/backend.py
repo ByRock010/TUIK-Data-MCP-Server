@@ -1,11 +1,16 @@
 """Interchangeable search backends behind one protocol (#17).
 
-`OpenSearchBackend` queries the indexed metadata alias over REST. `LiteralBackend`
+`OpenSearchBackend` queries the indexed metadata alias over REST, lexically or, when
+the index holds vectors from the configured model, as a hybrid lexical + k-NN query
+fused by weighted reciprocal rank (#21, ADR 0005). `LiteralBackend`
 is the pre-index dataset matching and covers dataflows only; `PortalBackend` is the
 live portal search. Callers choose the fallback; a backend never falls back itself.
 """
 
+import asyncio
+import time
 from collections.abc import Awaitable, Callable
+from copy import deepcopy
 from datetime import date
 from typing import Literal, Protocol
 
@@ -16,6 +21,7 @@ from tuik_mcp.models.search import SearchFacet, SearchFacets, SearchResponse
 from tuik_mcp.utils.normalization import turkish_casefold
 
 from .documents import CONTENT_KINDS
+from .embeddings import Embedder, EmbeddingUnavailable
 from .indexer import IndexerError, OpenSearchStore
 
 Kind = Literal["dataset", "bulletin", "metadata", "table", "document_chunk"]
@@ -26,6 +32,19 @@ HIGHLIGHT_FIELDS = ["title", "title.ascii", "description", "body"]
 # Highlighting analyzes at most this many characters of a long bulletin body.
 HIGHLIGHT_MAX_OFFSET = 100_000
 MAX_OFFSET = 1000
+# Hybrid fusion (#21): each subquery contributes its top HYBRID_DEPTH documents, and a
+# document scores sum(weight / (HYBRID_RANK_CONSTANT + rank)) over the lists it is in.
+# Weights are lexical, semantic. HYBRID_DEPTH bounds offset + limit for hybrid ranking.
+# Equal weights had the best reviewed nDCG@10/MRR of the two pre-registered settings
+# (docs/verification/issue-21-hybrid-search-2026-11-05.md).
+HYBRID_DEPTH = 50
+HYBRID_RANK_CONSTANT = 60
+HYBRID_WEIGHTS = (0.5, 0.5)
+# Kinds whose filtered searches were neither measured nor vector-indexed stay lexical:
+# datasets ranked lower in hybrid top tens, and file content has no vectors.
+LEXICAL_ONLY_KINDS = frozenset(("dataset", *CONTENT_KINDS))
+# How long a served index's vector model is trusted before the alias is rechecked.
+META_TTL_SECONDS = 60
 
 
 class SearchFilters(BaseModel):
@@ -68,6 +87,8 @@ class SearchHit(BaseModel):
 
 class SearchHits(BaseModel):
     backend: Literal["opensearch", "literal", "portal"]
+    # How an OpenSearch result list was ranked; None for the other backends.
+    ranking: Literal["lexical", "hybrid"] | None = None
     hits: list[SearchHit] = Field(default_factory=list)
     total: int | None = None
     limit: int
@@ -149,7 +170,7 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
             "theme": {"terms": {"field": "theme", "size": 50}},
             "indexed_at": {"max": {"field": "indexed_at"}},
         },
-        "_source": {"excludes": ["body", "description"]},
+        "_source": {"excludes": ["body", "description", "embedding"]},
         "highlight": {
             "fields": {field: {} for field in HIGHLIGHT_FIELDS},
             "max_analyzer_offset": HIGHLIGHT_MAX_OFFSET,
@@ -157,14 +178,119 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
     }
 
 
+def build_hybrid_query(
+    query: str,
+    filters: SearchFilters,
+    limit: int,
+    offset: int,
+    vector: list[float],
+    *,
+    weights: tuple[float, float] = HYBRID_WEIGHTS,
+) -> dict:
+    """The lexical query plus k-NN over the same filters, fused by weighted RRF.
+
+    The fusion pipeline travels in the request, so no cluster-side pipeline object
+    has to be created or kept in sync with this code.
+    """
+    if offset + limit > HYBRID_DEPTH:
+        raise ValueError(f"Hybrid ranking covers the first {HYBRID_DEPTH} results")
+    body = deepcopy(build_query(query, filters, limit, offset))
+    lexical = body["query"]
+    semantic = {
+        "knn": {
+            "embedding": {
+                "vector": vector,
+                "k": HYBRID_DEPTH,
+                "filter": {"bool": {"filter": lexical["bool"]["filter"]}},
+            }
+        }
+    }
+    body["query"] = {"hybrid": {"queries": [lexical, semantic], "pagination_depth": HYBRID_DEPTH}}
+    body["search_pipeline"] = {
+        "phase_results_processors": [
+            {
+                "score-ranker-processor": {
+                    "combination": {
+                        "technique": "rrf",
+                        "rank_constant": HYBRID_RANK_CONSTANT,
+                        "parameters": {"weights": list(weights)},
+                    }
+                }
+            }
+        ]
+    }
+    return body
+
+
+def semantic_scope(filters: SearchFilters) -> bool:
+    """Unfiltered metadata searches (the evaluated setting) and bulletin/metadata kinds."""
+    return not set(filters.kinds) & LEXICAL_ONLY_KINDS
+
+
 class OpenSearchBackend:
-    def __init__(self, store: OpenSearchStore, alias: str):
-        self.store, self.alias = store, alias
+    def __init__(self, store: OpenSearchStore, alias: str, embedder: Embedder | None = None):
+        self.store, self.alias, self.embedder = store, alias, embedder
+        self._model: tuple[float, str | None] | None = None
+
+    async def vector_model(self) -> str | None:
+        """The model whose vectors the served index holds; None if lexical-only."""
+        if self._model is not None and time.monotonic() - self._model[0] < META_TTL_SECONDS:
+            return self._model[1]
+        meta = await self.store.meta(self.alias)
+        models = {value.get("embedding_model") for value in meta.values()}
+        model = models.pop() if len(models) == 1 else None
+        self._model = (time.monotonic(), model)
+        return model
+
+    async def plan(
+        self, query: str, filters: SearchFilters, limit: int, offset: int
+    ) -> tuple[dict, list[str]]:
+        """The request body and any reason hybrid ranking was not used."""
+        lexical = build_query(query, filters, limit, offset)
+        if self.embedder is None or not semantic_scope(filters):
+            return lexical, []
+        model = await self.vector_model()
+        if model is None:
+            return lexical, []
+        if model != self.embedder.model:
+            return lexical, [
+                f"The index holds {model} vectors, not {self.embedder.model}; "
+                "results use lexical ranking."
+            ]
+        if offset + limit > HYBRID_DEPTH:
+            return lexical, [
+                f"Semantic ranking covers the first {HYBRID_DEPTH} results; "
+                "this page uses lexical ranking."
+            ]
+        try:
+            vector = await asyncio.to_thread(self.embedder.query, query)
+        except EmbeddingUnavailable as exc:
+            return lexical, [
+                f"Semantic ranking is unavailable ({exc}); results use lexical ranking."
+            ]
+        return build_hybrid_query(query, filters, limit, offset, vector), []
 
     async def search(
         self, query: str, filters: SearchFilters, limit: int, offset: int = 0
     ) -> SearchHits:
-        body = build_query(query, filters, limit, offset)
+        check_page(limit, offset)
+        try:
+            body, warnings = await self.plan(query, filters, limit, offset)
+        except (IndexerError, KeyError, TypeError, AttributeError) as exc:
+            raise BackendUnavailable(str(exc)) from exc
+        ranking = "hybrid" if "hybrid" in body["query"] else "lexical"
+        if ranking == "hybrid":
+            try:
+                return await self.execute(body, limit, offset, ranking, warnings)
+            except BackendUnavailable as exc:
+                # A cluster without the neural-search plugin still answers lexically.
+                warnings.append(f"Hybrid search failed ({exc}); results use lexical ranking.")
+                body, ranking = build_query(query, filters, limit, offset), "lexical"
+        return await self.execute(body, limit, offset, ranking, warnings)
+
+    async def execute(
+        self, body: dict, limit: int, offset: int, ranking: str, warnings: list[str]
+    ) -> SearchHits:
         try:
             response = await self.store.query(self.alias, body)
             # HTTP 200 does not mean complete: never report a partial search as no matches.
@@ -180,6 +306,8 @@ class OpenSearchBackend:
                 raise BackendUnavailable("the search returned only a lower-bound total")
             return SearchHits(
                 backend="opensearch",
+                ranking=ranking,
+                warnings=list(warnings),
                 hits=[self.hit(item) for item in hits["hits"]],
                 total=hits["total"]["value"],
                 limit=limit,

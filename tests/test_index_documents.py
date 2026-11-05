@@ -73,7 +73,16 @@ def test_model_mapping_covers_every_field_and_keeps_filters_unanalyzed():
     definition = index_definition()
     mapping = definition["mappings"]
     assert mapping["dynamic"] == "strict"
-    assert set(mapping["properties"]) == set(IndexDocument.model_fields)
+    # The optional vector is derived at index time (#21), not part of the document model.
+    assert set(mapping["properties"]) == set(IndexDocument.model_fields) | {"embedding"}
+    assert mapping["properties"]["embedding"]["dimension"] == 384
+    assert mapping["_meta"] == {
+        "schema_version": 3,
+        "scope": mapping["_meta"]["scope"],
+        "embedding_model": None,
+    }
+    assert definition["settings"]["knn"] is True
+    assert index_definition("m")["mappings"]["_meta"]["embedding_model"] == "m"
     assert mapping["properties"]["theme"]["type"] == "keyword"
     fields = mapping["properties"]["title"]["fields"]
     assert set(fields) == {"ascii", "keyword", "suggest"}

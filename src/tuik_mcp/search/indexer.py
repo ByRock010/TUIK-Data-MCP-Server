@@ -4,8 +4,10 @@ Uses the cluster REST API through httpx; the optional opensearch-py client is no
 imported. One indexer writes to an alias at a time.
 """
 
+import asyncio
 import json
 import re
+import time
 from collections import Counter
 from collections.abc import Iterable
 from datetime import datetime
@@ -13,6 +15,7 @@ from datetime import datetime
 import httpx
 
 from .documents import IndexDocument
+from .embeddings import Embedder, embed_payloads
 from .schema import SCHEMA_VERSION, index_definition, physical_index_name
 
 BULK_MAX_DOCUMENTS = 500
@@ -74,12 +77,19 @@ class OpenSearchStore:
                 versions[row["index"]] = int(match[1])
         return versions
 
-    async def schema_version(self, index: str) -> int | None:
-        body = (await self._request("GET", f"{index}/_mapping")).json()
-        return body[index]["mappings"].get("_meta", {}).get("schema_version")
+    async def meta(self, name: str) -> dict[str, dict]:
+        """Each physical index's mapping `_meta`; `name` may be an alias."""
+        body = (await self._request("GET", f"{name}/_mapping")).json()
+        return {index: value["mappings"].get("_meta", {}) for index, value in body.items()}
 
-    async def create(self, name: str) -> None:
-        await self._request("PUT", name, json=index_definition())
+    async def schema_version(self, index: str) -> int | None:
+        return (await self.meta(index))[index].get("schema_version")
+
+    async def embedding_model(self, index: str) -> str | None:
+        return (await self.meta(index))[index].get("embedding_model")
+
+    async def create(self, name: str, embedding_model: str | None = None) -> None:
+        await self._request("PUT", name, json=index_definition(embedding_model))
 
     async def delete(self, name: str) -> None:
         await self._request("DELETE", name, ok=(200, 404))
@@ -206,15 +216,47 @@ async def served_index(store: OpenSearchStore, alias: str) -> str:
     return index
 
 
+async def check_vectors(store: OpenSearchStore, index: str, embedder: Embedder | None) -> None:
+    """An incremental write must keep one vector model (or none) across the index."""
+    model = await store.embedding_model(index)
+    wanted = embedder.model if embedder is not None else None
+    if model == wanted:
+        return
+    if wanted is None:
+        raise IndexerError(f"{index} holds vectors from {model}; rerun with --embeddings")
+    if model is None:
+        raise IndexerError(f"{index} has no vectors; run a full build with --embeddings")
+    raise IndexerError(f"{index} holds vectors from {model}, not {wanted}; run a full build")
+
+
+def embed(payloads: list[dict], embedder: Embedder) -> dict:
+    """Vectors for the metadata payloads about to be written (#21)."""
+    started = time.monotonic()
+    count = embed_payloads(payloads, embedder)
+    return {
+        "model": embedder.model,
+        "embedded": count,
+        "seconds": round(time.monotonic() - started, 3),
+    }
+
+
 async def rebuild(
-    store: OpenSearchStore, alias: str, payloads: list[dict], *, dry_run: bool = False
+    store: OpenSearchStore,
+    alias: str,
+    payloads: list[dict],
+    *,
+    dry_run: bool = False,
+    embedder: Embedder | None = None,
 ) -> dict:
     """Load a new physical index, verify it, then atomically point the alias at it."""
     previous, index = await build_target(store, alias)
     result = {"index": index, "previous_indices": previous, "documents": len(payloads)}
     if dry_run:
         return result
-    await store.create(index)
+    if embedder is not None:
+        # Before creating the index: a missing model must not leave an empty build behind.
+        result["embeddings"] = await asyncio.to_thread(embed, payloads, embedder)
+    await store.create(index, embedder.model if embedder is not None else None)
     try:
         failures = await store.bulk(index, payloads)
         if failures:
@@ -238,14 +280,21 @@ async def rebuild(
 
 
 def comparable(payload: dict) -> dict:
-    return {key: value for key, value in payload.items() if key != "indexed_at"}
+    # Vectors derive from the compared fields; they are recomputed only for writes.
+    return {key: value for key, value in payload.items() if key not in ("indexed_at", "embedding")}
 
 
 async def update(
-    store: OpenSearchStore, alias: str, payloads: list[dict], *, dry_run: bool = False
+    store: OpenSearchStore,
+    alias: str,
+    payloads: list[dict],
+    *,
+    dry_run: bool = False,
+    embedder: Embedder | None = None,
 ) -> dict:
     """Upsert new or changed documents into the index the alias serves."""
     index = await served_index(store, alias)
+    await check_vectors(store, index, embedder)
     existing = {}
     for start in range(0, len(payloads), MGET_BATCH):
         batch = [payload["id"] for payload in payloads[start : start + MGET_BATCH]]
@@ -272,6 +321,8 @@ async def update(
     }
     if dry_run:
         return result
+    if embedder is not None:
+        result["embeddings"] = await asyncio.to_thread(embed, created + changed, embedder)
     failures = await store.bulk(index, created + changed)
     await store.refresh(index)
     if failures:

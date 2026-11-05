@@ -42,6 +42,9 @@ python -m pip install -e '.[dev,viz]'
 
 The `viz` extra installs matplotlib for `chart_tuik_data`. Without it, every
 other tool works and the chart tool returns `visualization_unavailable`.
+The optional `semantic` extra (`fastembed`, ONNX, no PyTorch) enables
+[hybrid semantic search](#hybrid-semantic-search) on an index built with
+`--embeddings`.
 
 Alternatively, with uv:
 
@@ -644,6 +647,39 @@ curl 'http://localhost:9200/_cat/aliases/tuik-resources?v'
 curl 'http://localhost:9200/tuik-resources/_search?q=title.ascii:issizlik&pretty'
 ```
 
+### Hybrid semantic search
+
+An index built with `--embeddings` also stores a multilingual-e5-small vector per
+dataflow, bulletin and metadata record (#21, [ADR 0005](docs/adr/0005-hybrid-semantic-search.md)).
+`search_tuik` then fuses the lexical query with k-NN similarity by equal-weight
+reciprocal rank. On the frozen 48-query evaluation this raised reviewed nDCG@10
+from 0.694 to 0.852 and MRR@10 from 0.880 to 0.990. See the
+[report](docs/verification/issue-21-hybrid-search-2026-11-05.md) for limitations:
+abbreviations regress, the gain mostly brings more releases of already relevant
+series, and grading is AI-only.
+
+```bash
+python -m pip install -e '.[semantic]'
+# Downloads the model (about 490 MB) once to ~/.cache/tuik-mcp/models.
+tuik-mcp-index --full --embeddings --listing-attempts 2 --alternate-listing-mode \
+  --report /tmp/index-full.json
+tuik-mcp-index --incremental --embeddings --report /tmp/index-incremental.json
+```
+
+The server uses the cached model files only and never downloads during a tool call.
+Responses report `ranking: "hybrid"` or `"lexical"`. Searches stay lexical with
+these settings:
+
+- the index has no vectors;
+- the extra or model is missing (with a warning);
+- `TUIK_SEMANTIC_SEARCH=false`;
+- the request filters to `dataset`, `table` or `document_chunk`;
+- `search_tuik_datasets`;
+- results beyond the first 50.
+
+Set `TUIK_EMBEDDING_CACHE_DIR` when the indexer and server use different caches.
+Mapping schema 3 adds the vector field, so rebuild older indices once with `--full`.
+
 A full build paces TÜİK requests two seconds apart and can take an hour or more.
 The bounded alternate-listing passes recover overlapping portal pages only when
 the advertised total and dates stay unchanged and the unique-ID union is exact;
@@ -704,7 +740,9 @@ synonym default for the best matched-corpus nDCG@10 (0.7304) and pooled recall,
 with the built-in analyzer's better MRR explicitly recorded. The
 [v0.3.0 notes](docs/releases/v0.3.0.md) describe the prepared release; the
 [checklist](docs/RELEASE_0.3.0.md) tracks reviewed promotion and publication.
-Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
+Optional hybrid lexical + semantic search (#21) is available for indices built with
+`--embeddings`; see [the hybrid evaluation](docs/verification/issue-21-hybrid-search-2026-11-05.md).
+Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
 "document_chunk")`, and best-effort PDF tables (#8) through `read_tuik_document`.
 A PostgreSQL canonical catalog and DOCX ingestion are outside the

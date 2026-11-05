@@ -100,7 +100,7 @@ def test_query_matches_all_fields_exactly_and_typos_only_weakly():
     # Without a kind, file content (#22) never mixes into metadata results.
     assert body["query"]["bool"]["filter"] == [EXCLUDE_CONTENT]
     assert (body["from"], body["size"], body["track_total_hits"]) == (10, 5, True)
-    assert body["_source"]["excludes"] == ["body", "description"]
+    assert body["_source"]["excludes"] == ["body", "description", "embedding"]
     assert body["highlight"]["max_analyzer_offset"] == HIGHLIGHT_MAX_OFFSET
     assert set(body["highlight"]["fields"]) == {"title", "title.ascii", "description", "body"}
 

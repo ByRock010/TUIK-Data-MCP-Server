@@ -26,6 +26,11 @@ class Settings(BaseModel):
     )
     # Searches fall back quickly when the cluster does not answer.
     opensearch_timeout_seconds: float = Field(default=5, ge=0.5, le=60)
+    # Hybrid lexical + semantic ranking when the served index holds vectors (#21);
+    # needs the `semantic` extra and locally cached model files.
+    semantic_search: bool = True
+    # Model cache shared by tuik-mcp-index --embeddings and the server.
+    embedding_cache_dir: str | None = None
 
     timeout_seconds: float = Field(default=20, ge=1, le=60)
     attempts: int = Field(default=3, ge=1, le=3)
@@ -56,7 +61,7 @@ class Settings(BaseModel):
     query_cache_bytes: int = Field(default=16 * 1024 * 1024, ge=1024, le=128 * 1024 * 1024)
     query_cursor_ttl_seconds: int = Field(default=900, ge=1, le=3600)
 
-    @field_validator("opensearch_url", mode="before")
+    @field_validator("opensearch_url", "embedding_cache_dir", mode="before")
     @classmethod
     def blank_search_url_is_unset(cls, value):
         return None if isinstance(value, str) and not value.strip() else value

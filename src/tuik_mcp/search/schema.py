@@ -6,7 +6,8 @@ from importlib.resources import files
 
 from . import analysis_settings
 
-SCHEMA_VERSION = 2
+# 3 adds the optional `embedding` vector field (#21); older indices need a full rebuild.
+SCHEMA_VERSION = 3
 
 
 def physical_index_name(alias: str, version: int) -> str:
@@ -20,9 +21,15 @@ def physical_index_name(alias: str, version: int) -> str:
     return name
 
 
-def index_definition() -> dict:
+def index_definition(embedding_model: str | None = None) -> dict:
+    """The packaged definition; `embedding_model` records which model filled the vectors.
+
+    Vectors are optional per document. An index built without embeddings has a null
+    model, so search and incremental updates never mix vectors from different models.
+    """
     settings = analysis_settings()
     settings.update(number_of_shards=1, number_of_replicas=0)
+    settings["knn"] = True
     # Prefix matching is isolated from full-text relevance and graph synonyms.
     settings["analysis"]["filter"]["tuik_prefix"] = {
         "type": "edge_ngram",
@@ -37,4 +44,5 @@ def index_definition() -> dict:
         "filter": ["apostrophe", "tuik_lowercase", "asciifolding", "tuik_prefix"],
     }
     mapping = json.loads(files(__package__).joinpath("mapping.json").read_text(encoding="utf-8"))
+    mapping["_meta"]["embedding_model"] = embedding_model
     return {"settings": settings, "mappings": mapping}
