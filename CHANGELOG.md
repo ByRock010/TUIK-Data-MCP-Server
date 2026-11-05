@@ -6,8 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-05
+
 ### Added
 
+- Versioned release candidate, installation/upgrade notes and final acceptance
+  evidence for the indexed-search milestone. Reviewed promotion, annotated tag
+  and GitHub release publication remain explicit release steps (#29, #24).
 - Full-metadata relevance comparison on 3,424 frozen documents and 1,390 pooled
   AI-reviewed pairs, with all five systems' overall/category/type metrics,
   retained source evidence and 55 documented revisions. The existing synonym
@@ -24,7 +29,7 @@ All notable changes to this project are documented here. The format follows
   replay, bounded table probes, retained first-pass grades and explicit revision
   reasons. `score-ai --require-reviewed` validates full-pool coverage and source
   references. ADR 0004 adopts the disclosed AI method for project acceptance;
-  independent human validation and full-corpus evaluation are not implied (#11, #20).
+  independent human validation is not implied (#11, #20).
 - Explicit single-AI relevance pilot over 917 pooled query–document pairs, with
   a source-bound `score-ai` path that cannot satisfy the human release gate.
   Blank CSV judge sheets support spreadsheet editing and validated import;
@@ -36,14 +41,14 @@ All notable changes to this project are documented here. The format follows
 - Frozen-corpus OpenSearch evaluation collection for built-in Turkish, multi-field
   and synonym variants, with engine/configuration provenance, deterministic ties,
   disposable indices and rejection of incomplete runs. Relevance judgments and
-  the default-configuration decision remain pending (#20).
+  the final full-corpus comparison is recorded above (#20).
 
 - `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
   with kind/theme/date/downloadability filters, scores, highlights, provenance,
   bounded full-match kind/theme facets and explicit source/backend reporting.
   Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
   the portal. Literal/portal fallbacks report unsupported filters and unavailable
-  facets, with null totals/truncation when unknown. Eight tools remain (#18).
+  facets, with null totals/truncation when unknown (#18).
 - `read_tuik_document(..., tables=true)` returns a PDF page's ruled tables, best
   effort, with page, title, header or positional columns, string rows and
   warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
@@ -240,6 +245,7 @@ All notable changes to this project are documented here. The format follows
 - Offline test suite, opt-in live tests and `scripts/live_smoke.py`.
 - Dockerfile.
 
-[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...develop
+[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.3.0...develop
+[0.3.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/releases/tag/v0.1.0
