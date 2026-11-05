@@ -22,6 +22,7 @@ from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
 from tuik_mcp.models.dataset import TuikResource
 from tuik_mcp.search.backend import OpenSearchBackend, SearchFilters, build_query
+from tuik_mcp.search.crawl import atomic_write
 from tuik_mcp.search.documents import IndexDocument
 from tuik_mcp.search.indexer import IndexerError, OpenSearchStore, prepare
 from tuik_mcp.search.schema import index_definition
@@ -38,8 +39,10 @@ def read_json(path):
 
 def write_json(path, data):
     path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    payload = (json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    if path.suffix == ".gz":
+        payload = gzip.compress(payload, mtime=0)
+    atomic_write(path, payload)
 
 
 def stable_id(value):
@@ -560,8 +563,43 @@ def score_ai(suite, runs, assessment, review=None, evidence=None):
     return report
 
 
-async def collect(suite, output, resume=False):
+def corpus_fingerprint(documents):
+    return hashlib.sha256(
+        json.dumps(
+            sorted((d.model_dump(mode="json") for d in documents), key=lambda d: d["id"]),
+            ensure_ascii=False,
+            sort_keys=True,
+        ).encode()
+    ).hexdigest()
+
+
+def frozen_catalog(documents):
+    """Retain the literal backend's fields and CSV eligibility from the shared crawl."""
+    prepare(documents, datetime.now(UTC))  # Reject empty/duplicate corpora before network I/O.
+    if any(d.kind not in ("dataset", "bulletin", "metadata") for d in documents):
+        raise ValueError("Relevance comparison requires a metadata-only corpus")
+    datasets = [
+        TuikResource(
+            id=d.id,
+            title=d.title,
+            description=d.description,
+            resource_type="dataset",
+            source_url=d.source_url,
+            theme=d.theme[0] if d.theme else None,
+            available_formats=d.formats,
+            retrieved_at=d.retrieved_at,
+        )
+        for d in documents
+        if d.kind == "dataset"
+    ]
+    if not datasets:
+        raise ValueError("Frozen baseline requires dataflow documents")
+    return max(d.retrieved_at for d in datasets), datasets
+
+
+async def collect(suite, output, resume=False, *, documents=None):
     validate_suite(suite)
+    snapshot = frozen_catalog(documents) if documents is not None else None
     report = {
         "version": 1,
         "collected_at": datetime.now(UTC).isoformat(),
@@ -574,6 +612,9 @@ async def collect(suite, output, resume=False):
         },
         "errors": {},
     }
+    if documents is not None:
+        report["corpus_sha256"] = corpus_fingerprint(documents)
+        report["systems"]["literal"]["corpus"] = "downloadable_dataflows_from_frozen_metadata"
     if resume:
         previous = read_json(output)
         if previous["queries"] != report["queries"]:
@@ -584,19 +625,21 @@ async def collect(suite, output, resume=False):
                     f"Cannot resume: {field} differs or is missing; "
                     "use the original code or collect a new run in a separate output file"
                 )
+        if previous.get("corpus_sha256") != report.get("corpus_sha256"):
+            raise ValueError("Cannot resume: frozen corpus differs or is missing")
         report = previous
-    http = HttpClient(Settings.from_env())
+    # A baseline must remain literal even in an index-enabled developer shell.
+    http = HttpClient(Settings.from_env().model_copy(update={"opensearch_url": None}))
     try:
         service = CatalogService(http)
         # Freeze the exact catalog used by all literal queries for reproducibility.
         if resume:
             datasets = [TuikResource.model_validate(d) for d in report["catalog"]]
-            service.cache.set(
-                "datasets",
-                (datetime.fromisoformat(report["catalog_retrieved_at"]), datasets),
-                3600,
-            )
+            snapshot = (datetime.fromisoformat(report["catalog_retrieved_at"]), datasets)
+        if snapshot is not None:
+            service.cache.set("datasets", snapshot, 3600)
         retrieved_at, datasets = await service._datasets()
+        snapshot = (retrieved_at, datasets)
         report["catalog_retrieved_at"] = retrieved_at.isoformat()
         catalog = [
             d.model_dump(
@@ -626,6 +669,8 @@ async def collect(suite, output, resume=False):
                 if query["id"] in report["systems"][name]["results"]:
                     continue
                 try:
+                    # Refresh TTL without refetching, including after slow portal queries.
+                    service.cache.set("datasets", snapshot, 3600)
                     response = await search(query["text"], limit=10)
                     hits, seen = [], set()
                     for result in response.results:
@@ -688,11 +733,9 @@ def variant_query(variant, text):
 
 def load_documents(path):
     """Read the crawler's full JSONL, not its redacted diagnostic summary."""
-    return [
-        IndexDocument.model_validate_json(line)
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", encoding="utf-8") as source:
+        return [IndexDocument.model_validate_json(line) for line in source if line.strip()]
 
 
 async def collect_index(suite, documents, output, url, *, store=None):
@@ -709,13 +752,7 @@ async def collect_index(suite, documents, output, url, *, store=None):
         "collected_at": stamp.isoformat(),
         "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "corpus_sha256": hashlib.sha256(
-            json.dumps(
-                sorted(originals.values(), key=lambda d: d["id"]),
-                ensure_ascii=False,
-                sort_keys=True,
-            ).encode()
-        ).hexdigest(),
+        "corpus_sha256": corpus_fingerprint(documents),
         "counts": dict(kinds),
         "queries": {q["id"]: q["text"] for q in suite["queries"]},
         "systems": {},
@@ -859,7 +896,14 @@ def main(argv=None):
             collect_index(suite, load_documents(args.documents), args.output, args.url)
         )
     if args.command == "collect":
-        return asyncio.run(collect(suite, args.output, args.resume))
+        return asyncio.run(
+            collect(
+                suite,
+                args.output,
+                args.resume,
+                documents=load_documents(args.documents) if args.documents else None,
+            )
+        )
     if args.command == "judge":
         if not args.judge:
             parser.error("judge requires --judge a or b")

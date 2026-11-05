@@ -19,6 +19,10 @@ exports. Source text stays data; MCP tool behavior is unchanged.
 # Lists every page; reuses unchanged details.
 .venv/bin/python scripts/crawl_metadata.py --incremental \
   --output /tmp/tuik-metadata.jsonl --report /tmp/crawl-incremental.json
+
+# If the portal overlaps pages, retry complete listing passes at normal pacing.
+.venv/bin/python scripts/crawl_metadata.py --full --listing-attempts 3 \
+  --output /tmp/tuik-metadata.jsonl --report /tmp/crawl-full.json
 ```
 
 Default state: `.tuik-crawl-state.json` (gitignored); override with `--state`.
@@ -48,6 +52,18 @@ must match the upstream total in both raw rows and unique IDs; otherwise it rais
 Partial previews may report overlaps but are never eligible for checkpoints.
 The source does not
 provide an atomic listing snapshot; changes during enumeration may require retry.
+
+Optional `--listing-attempts 2`–`5` (also accepted by `tuik-mcp-index`) makes bounded
+complete passes to recover unseen IDs from overlapping pages. The default stays
+one pass. Each completed pass must return the advertised row count, the upstream
+total must stay fixed across every page/pass, and repeated IDs must retain the
+same listing date. Only a union with **exactly that many unique IDs** permits detail
+fetching or checkpointing. Repeated identical pages, changing totals/dates, excess
+IDs and unresolved missing IDs still fail. This is not permission to accept an
+incomplete catalog or infer a snapshot the upstream API does not provide.
+Retries cannot be combined with a page-limited preview. `listing_passes` records
+each pass's pages, row count and cumulative unique count; `listing_rows` and
+`duplicate_listing_rows` include all attempts. Successful recovery emits a warning.
 
 Dataflows are fetched each run. Existing bulletin details are reused only when
 the listing date is unchanged. New IDs and changed dates fetch details. Revisions

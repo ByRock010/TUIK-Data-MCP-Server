@@ -59,6 +59,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Optional bounded listing retries recover overlapping portal pages only when
+  every pass retains the advertised total and dates and the union reaches the
+  exact unique-ID count. Unresolved or changing corpora still fail before detail
+  downloads, indexing or checkpointing (#20).
+- Relevance baseline collection explicitly disables the optional index, supports
+  the same frozen metadata JSONL as the OpenSearch variants and rejects resume
+  against a changed corpus. Atomic, optionally compressed checkpoints retain
+  reproducible full-corpus evidence (#20).
 - Search evaluation rejects orphaned or malformed document metadata before
   scoring or judge-sheet export. Resumable baseline collection records provenance
   in every checkpoint and rejects changed/missing source revisions or collector

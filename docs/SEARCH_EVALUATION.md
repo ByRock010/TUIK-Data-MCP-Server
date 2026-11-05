@@ -176,11 +176,30 @@ Use a disposable development cluster with room for one extra corpus at a time:
 docker compose up -d --wait opensearch
 # Freeze once; this command visits TÜİK metadata with normal crawl pacing.
 .venv/bin/python scripts/crawl_metadata.py --output /tmp/eval-documents.jsonl \
-  --state /tmp/eval-crawl-state.json --report /tmp/eval-crawl.json
+  --state /tmp/eval-crawl-state.json --report /tmp/eval-crawl.json \
+  --listing-attempts 3
 .venv/bin/python scripts/evaluate_search.py collect-index \
   --documents /tmp/eval-documents.jsonl --url http://127.0.0.1:9200 \
   --output /tmp/opensearch.json
+# Collect the portal and literal baselines for this experiment. Literal search
+# uses the same frozen dataflows, rather than fetching a newer export catalog.
+.venv/bin/python scripts/evaluate_search.py collect \
+  --documents /tmp/eval-documents.jsonl --output /tmp/baseline.json
 ```
+
+`collect --documents` records the same canonical corpus SHA-256 as `collect-index`.
+Its literal baseline retains the production title/description/theme matching and
+CSV eligibility rules. OpenSearch is disabled for baseline collection even if the
+shell configures `TUIK_OPENSEARCH_URL`. The frozen catalog is kept throughout the
+run; a slow portal request cannot expire it and silently fetch a newer catalog.
+Resume requires the same documents, queries, source revision and collector hash;
+a changed or omitted corpus fails before network access or checkpoint writes.
+The portal remains a live, broader-corpus baseline and is not claimed to search
+the frozen index. Record that corpus boundary when interpreting its scores.
+
+Frozen JSONL inputs and JSON outputs may end in `.gz`. Output checkpoints are
+atomic and gzip output is deterministic, so full-corpus evidence can be retained
+without storing large uncompressed metadata bodies in Git.
 
 Retain the JSONL with the run for reproducibility. Supply the **full JSONL**, not
 the redacted `crawl-sample-documents` diagnostic report. Input IDs are validated,

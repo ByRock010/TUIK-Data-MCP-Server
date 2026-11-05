@@ -227,11 +227,17 @@ class MetadataCrawler:
         self.next_state = None
         self.report = {}
 
-    async def documents(self, *, full=False, max_bulletins=None, page_limit=None):
+    async def documents(
+        self, *, full=False, max_bulletins=None, page_limit=None, listing_attempts=1
+    ):
         if max_bulletins is not None and (type(max_bulletins) is not int or max_bulletins < 1):
             raise ValueError("max_bulletins must be a positive integer")
         if page_limit is not None and (type(page_limit) is not int or not 1 <= page_limit <= 1000):
             raise ValueError("page_limit must be between 1 and 1000")
+        if type(listing_attempts) is not int or not 1 <= listing_attempts <= 5:
+            raise ValueError("listing_attempts must be between 1 and 5")
+        if page_limit is not None and listing_attempts != 1:
+            raise ValueError("Listing retries require an unlimited listing scope")
         self.next_state = None
         report = self.report = {
             "started_at": now().isoformat(),
@@ -261,41 +267,72 @@ class MetadataCrawler:
                     f"Theme tree unavailable ({exc.code}); "
                     "only confirmed linked-flow categories are used."
                 )
-            listing, signatures, complete, page_size, listing_rows = {}, set(), False, None, 0
-            for page in range(1, 1001):
-                batch = await self.source.listing(page)
-                report["pages"], report["upstream_total"] = page, batch.total
-                signature = tuple(item.url for item in batch.data)
-                if signature and signature in signatures:
-                    raise ValueError("Upstream repeated a listing page; enumeration is incomplete")
-                signatures.add(signature)
-                listing_rows += len(batch.data)
-                if page_size is None and batch.data:
-                    page_size = len(batch.data)
-                for item in batch.data:
-                    if item.type != 1:
-                        raise ValueError("Bulletin listing returned a different resource kind")
-                    listing[bulletin_id(item.url)] = item.date
-                    if len(listing) > MAX_RECORDS:
-                        raise ValueError("Bulletin listing exceeds the crawl budget")
-                if not batch.data or page * page_size >= batch.total:
-                    complete = True
+            listing, complete, listing_rows, expected_total = {}, False, 0, None
+            report["listing_passes"] = []
+            for attempt in range(1, listing_attempts + 1):
+                signatures, page_size, pass_rows = set(), None, 0
+                for page in range(1, 1001):
+                    batch = await self.source.listing(page)
+                    if expected_total is None:
+                        expected_total = batch.total
+                    if batch.total != expected_total:
+                        raise SourceError(
+                            "incomplete_listing",
+                            "Upstream total changed during enumeration; start a fresh crawl",
+                            PORTAL + "/api/tr/data/search",
+                        )
+                    report["pages"], report["upstream_total"] = page, batch.total
+                    signature = tuple(item.url for item in batch.data)
+                    if signature and signature in signatures:
+                        raise ValueError(
+                            "Upstream repeated a listing page; enumeration is incomplete"
+                        )
+                    signatures.add(signature)
+                    pass_rows += len(batch.data)
+                    listing_rows += len(batch.data)
+                    if page_size is None and batch.data:
+                        page_size = len(batch.data)
+                    for item in batch.data:
+                        if item.type != 1:
+                            raise ValueError("Bulletin listing returned a different resource kind")
+                        key = bulletin_id(item.url)
+                        if key in listing and listing[key] != item.date:
+                            raise SourceError(
+                                "incomplete_listing",
+                                "Bulletin date changed during enumeration; start a fresh crawl",
+                                PORTAL + "/api/tr/data/search",
+                            )
+                        listing[key] = item.date
+                        if len(listing) > MAX_RECORDS:
+                            raise ValueError("Bulletin listing exceeds the crawl budget")
+                    if not batch.data or page * page_size >= batch.total:
+                        complete = True
+                        break
+                    if page_limit is not None and page >= page_limit:
+                        break
+                if not complete and page_limit is None:
+                    raise ValueError("Bulletin listing exceeded 1000 pages")
+                report["listed_bulletins"] = len(listing)
+                report["listing_rows"] = listing_rows
+                report["duplicate_listing_rows"] = listing_rows - len(listing)
+                report["listing_passes"].append(
+                    {"attempt": attempt, "pages": page, "rows": pass_rows, "unique": len(listing)}
+                )
+                if not complete or (pass_rows == expected_total and len(listing) == expected_total):
                     break
-                if page_limit is not None and page >= page_limit:
-                    break
-            if not complete and page_limit is None:
-                raise ValueError("Bulletin listing exceeded 1000 pages")
-            report["listed_bulletins"] = len(listing)
-            report["listing_rows"] = listing_rows
-            report["duplicate_listing_rows"] = listing_rows - len(listing)
-            if complete and (
-                listing_rows != report["upstream_total"] or len(listing) != report["upstream_total"]
-            ):
+                if pass_rows != expected_total or len(listing) > expected_total:
+                    break  # A changed/inconsistent corpus cannot be repaired by unioning pages.
+            if complete and (pass_rows != expected_total or len(listing) != expected_total):
                 raise SourceError(
                     "incomplete_listing",
                     "Listing row or unique bulletin count differs from the upstream total; "
                     "retry full enumeration before committing state",
                     PORTAL + "/api/tr/data/search",
+                )
+            if len(report["listing_passes"]) > 1:
+                report["warnings"].append(
+                    f"Unstable listing overlap recovered in {len(report['listing_passes'])} "
+                    "complete passes with an unchanged upstream total and bulletin dates."
                 )
             selected = list(listing)[:max_bulletins]
             limited = not complete or len(selected) < len(listing)

@@ -69,7 +69,12 @@ async def run(args, *, source=None, store=None, content_service=None) -> int:
             source = CrawlSource(http)
         crawler = MetadataCrawler(source, state)
         try:
-            documents = [document async for document in crawler.documents(full=args.full)]
+            documents = [
+                document
+                async for document in crawler.documents(
+                    full=args.full, listing_attempts=getattr(args, "listing_attempts", 1)
+                )
+            ]
         finally:
             report["crawl"] = crawler.report
         if crawler.next_state is None:
@@ -148,6 +153,13 @@ def content_budget(value: str) -> int:
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="tuik-mcp-index", description=__doc__)
+    parser.add_argument(
+        "--listing-attempts",
+        type=int,
+        choices=range(1, 6),
+        default=1,
+        help="Bounded full-listing retries for overlapping pages (default: 1)",
+    )
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument(
         "--full", action="store_true", help="Refresh all details and rebuild the index"

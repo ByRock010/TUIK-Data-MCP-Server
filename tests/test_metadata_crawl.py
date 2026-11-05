@@ -205,6 +205,68 @@ async def test_overlapping_pages_cannot_commit_while_a_bulletin_is_unseen(has_pr
     assert not any(call.startswith("press:") for call in source.calls)
 
 
+async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_details():
+    source = Source()
+    a, b = await source.listing(1), await source.listing(2)
+    c = b.data[0].model_copy(update={"url": "/tr/press/99999"})
+    passes = 0
+    pages = []
+
+    async def listing(page):
+        nonlocal passes
+        passes += page == 1
+        pages.append((passes, page))
+        return SearchPage(
+            data=(a.data + b.data if passes == 1 else b.data + [c])
+            if page == 1
+            else (b.data if passes == 1 else a.data),
+            total=3,
+        )
+
+    async def press(number):
+        assert pages == [(1, 1), (1, 2), (2, 1), (2, 2)]
+        return (source.known if number == str(source.known.id) else source.other).model_copy(
+            update={"id": int(number)}
+        )
+
+    source.listing, source.press = listing, press
+    crawler = MetadataCrawler(source)
+    documents = await collect(crawler, listing_attempts=3)
+    assert {d.id for d in documents if d.kind == "bulletin"} == {
+        "press:57987",
+        "press:58058",
+        "press:99999",
+    }
+    assert crawler.next_state is not None
+    assert crawler.report["listing_rows"] == 6
+    assert crawler.report["listed_bulletins"] == crawler.report["upstream_total"] == 3
+    assert [p["unique"] for p in crawler.report["listing_passes"]] == [2, 3]
+    assert "recovered" in crawler.report["warnings"][0]
+
+
+@pytest.mark.parametrize("change", ["total", "date", "unseen"])
+async def test_listing_retries_reject_changing_or_still_incomplete_corpora(change):
+    source = Source()
+    a, b = await source.listing(1), await source.listing(2)
+    passes = 0
+
+    async def listing(page):
+        nonlocal passes
+        passes += page == 1
+        items = a.data + b.data if page == 1 else b.data
+        if passes == 2 and change == "date":
+            items = [item.model_copy(update={"date": "2026-11-05"}) for item in items]
+        return SearchPage(data=items, total=4 if passes == 2 and change == "total" else 3)
+
+    source.listing = listing
+    crawler = MetadataCrawler(source)
+    with pytest.raises(SourceError) as exc:
+        await collect(crawler, listing_attempts=2)
+    assert exc.value.code == "incomplete_listing"
+    assert crawler.next_state is None
+    assert not any(call.startswith("press:") for call in source.calls)
+
+
 async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(monkeypatch):
     calls = []
 

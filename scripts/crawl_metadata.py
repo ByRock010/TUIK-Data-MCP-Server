@@ -40,7 +40,10 @@ async def run(args):
             file = tempfile.NamedTemporaryFile(dir=args.output.parent, delete=False)
             temporary = Path(file.name)
         async for document in crawler.documents(
-            full=args.full, max_bulletins=args.max_bulletins, page_limit=args.max_pages
+            full=args.full,
+            max_bulletins=args.max_bulletins,
+            page_limit=args.max_pages,
+            listing_attempts=getattr(args, "listing_attempts", 1),
         ):
             if file:
                 file.write((document.model_dump_json() + "\n").encode())
@@ -90,6 +93,13 @@ def main(argv=None):
     parser.add_argument("--dry-run", action="store_true", help="Do not advance crawl state")
     parser.add_argument("--max-bulletins", type=int, help="Limit detail scope, dry-run only")
     parser.add_argument("--max-pages", type=int, help="Limit listing scope, dry-run only")
+    parser.add_argument(
+        "--listing-attempts",
+        type=int,
+        choices=range(1, 6),
+        default=1,
+        help="Bounded full-listing retries for overlapping pages (default: 1)",
+    )
     parser.add_argument("--state", type=Path, default=Path(".tuik-crawl-state.json"))
     parser.add_argument("--output", type=Path, help="Atomically write validated metadata JSONL")
     parser.add_argument("--report", type=Path, required=True)
