@@ -48,7 +48,7 @@ class ThemeNode(BaseModel):
 
 
 class PreviousPress(BaseModel):
-    title: str
+    title: str | None = None
     url: str
 
 

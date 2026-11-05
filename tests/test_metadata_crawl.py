@@ -122,6 +122,14 @@ def test_unique_format_budget_remains_enforced():
         press_snapshot(press, None, [])
 
 
+def test_previous_bulletin_link_needs_its_identity_but_not_an_optional_title():
+    raw = load("press.json")["data"]
+    raw["previousPresses"] = [{"url": "/tr/press/53835"}]
+    press = CrawlPress.model_validate(raw)
+    assert press.previousPresses[0].title is None
+    assert press_snapshot(press, None, []).previous_ids == ["press:53835"]
+
+
 async def test_incremental_lists_every_page_and_replays_all_cached_documents(tmp_path):
     source = Source()
     first = MetadataCrawler(source)

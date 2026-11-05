@@ -62,6 +62,8 @@ All notable changes to this project are documented here. The format follows
 - Metadata crawling deduplicates advertised formats before enforcing the unique
   format budget, so bulletins with many XLS attachments remain indexable. Recorded
   bulletin retrieval times can be preserved when replaying retained responses (#20).
+- Historical bulletin-series links may omit their display title; the crawler
+  retains their validated URL identity instead of rejecting the whole bulletin (#20).
 - Optional bounded listing retries recover overlapping portal pages only when
   every pass retains the advertised total and dates and the union reaches the
   exact unique-ID count. Unresolved or changing corpora still fail before detail
