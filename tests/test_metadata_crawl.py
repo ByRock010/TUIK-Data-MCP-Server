@@ -205,8 +205,10 @@ async def test_overlapping_pages_cannot_commit_while_a_bulletin_is_unseen(has_pr
     assert not any(call.startswith("press:") for call in source.calls)
 
 
-async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_details():
+@pytest.mark.parametrize("alternate", [False, True])
+async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_details(alternate):
     source = Source()
+    source.listing_auto_filter = False
     a, b = await source.listing(1), await source.listing(2)
     c = b.data[0].model_copy(update={"url": "/tr/press/99999"})
     passes = 0
@@ -215,6 +217,7 @@ async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_detail
     async def listing(page):
         nonlocal passes
         passes += page == 1
+        assert source.listing_auto_filter is (alternate and passes == 2)
         pages.append((passes, page))
         return SearchPage(
             data=(a.data + b.data if passes == 1 else b.data + [c])
@@ -231,7 +234,7 @@ async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_detail
 
     source.listing, source.press = listing, press
     crawler = MetadataCrawler(source)
-    documents = await collect(crawler, listing_attempts=3)
+    documents = await collect(crawler, listing_attempts=3, alternate_listing_mode=alternate)
     assert {d.id for d in documents if d.kind == "bulletin"} == {
         "press:57987",
         "press:58058",
@@ -242,6 +245,8 @@ async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_detail
     assert crawler.report["listed_bulletins"] == crawler.report["upstream_total"] == 3
     assert [p["unique"] for p in crawler.report["listing_passes"]] == [2, 3]
     assert "recovered" in crawler.report["warnings"][0]
+    assert source.listing_auto_filter is False
+    assert [p["auto_filter"] for p in crawler.report["listing_passes"]] == [False, alternate]
 
 
 @pytest.mark.parametrize("change", ["total", "date", "unseen"])
@@ -267,7 +272,10 @@ async def test_listing_retries_reject_changing_or_still_incomplete_corpora(chang
     assert not any(call.startswith("press:") for call in source.calls)
 
 
-async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(monkeypatch):
+@pytest.mark.parametrize("auto_filter", [False, True])
+async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(
+    monkeypatch, auto_filter
+):
     calls = []
 
     def handler(request):
@@ -280,6 +288,7 @@ async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter
         if path.endswith("/search"):
             body = json.loads(request.content)
             assert body["text"] == "" and body["typeIds"] == [1] and body["archive"] is False
+            assert body["autoFilter"] is auto_filter
             return httpx.Response(200, json=load("crawl/listing.json"))
         if path.endswith("/press/57987"):
             return httpx.Response(200, json=load("press.json"))
@@ -293,7 +302,7 @@ async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter
 
     monkeypatch.setattr(http, "_pace", no_wait)
     try:
-        source = CrawlSource(http)
+        source = CrawlSource(http, listing_auto_filter=auto_filter)
         assert await source.flows()
         assert await source.themes()
         assert (await source.listing(1)).data
@@ -397,7 +406,7 @@ async def test_cli_commits_only_success_and_preserves_state_and_output_on_failur
             pass
 
     monkeypatch.setattr(module, "CrawlHttpClient", lambda *args: Http())
-    monkeypatch.setattr(module, "CrawlSource", lambda http: source)
+    monkeypatch.setattr(module, "CrawlSource", lambda http, **kwargs: source)
     args = Namespace(
         state=tmp_path / "state.json",
         output=tmp_path / "docs.jsonl",

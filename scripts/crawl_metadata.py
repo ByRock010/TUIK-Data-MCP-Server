@@ -34,7 +34,10 @@ async def run(args):
         state = await asyncio.to_thread(CrawlState.load, args.state)
         transport = httpx.AsyncHTTPTransport(local_address="0.0.0.0") if args.ipv4 else None
         http = CrawlHttpClient(Settings.from_env(), transport)
-        crawler = MetadataCrawler(CrawlSource(http), state)
+        crawler = MetadataCrawler(
+            CrawlSource(http, listing_auto_filter=getattr(args, "listing_auto_filter", False)),
+            state,
+        )
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             file = tempfile.NamedTemporaryFile(dir=args.output.parent, delete=False)
@@ -44,6 +47,7 @@ async def run(args):
             max_bulletins=args.max_bulletins,
             page_limit=args.max_pages,
             listing_attempts=getattr(args, "listing_attempts", 1),
+            alternate_listing_mode=getattr(args, "alternate_listing_mode", False),
         ):
             if file:
                 file.write((document.model_dump_json() + "\n").encode())
@@ -93,6 +97,16 @@ def main(argv=None):
     parser.add_argument("--dry-run", action="store_true", help="Do not advance crawl state")
     parser.add_argument("--max-bulletins", type=int, help="Limit detail scope, dry-run only")
     parser.add_argument("--max-pages", type=int, help="Limit listing scope, dry-run only")
+    parser.add_argument(
+        "--alternate-listing-mode",
+        action="store_true",
+        help="Alternate autoFilter modes between complete listing attempts",
+    )
+    parser.add_argument(
+        "--listing-auto-filter",
+        action="store_true",
+        help="Use the portal's autoFilter listing mode; completeness checks still apply",
+    )
     parser.add_argument(
         "--listing-attempts",
         type=int,

@@ -177,7 +177,7 @@ docker compose up -d --wait opensearch
 # Freeze once; this command visits TÜİK metadata with normal crawl pacing.
 .venv/bin/python scripts/crawl_metadata.py --output /tmp/eval-documents.jsonl \
   --state /tmp/eval-crawl-state.json --report /tmp/eval-crawl.json \
-  --listing-attempts 3
+  --listing-attempts 2 --alternate-listing-mode
 .venv/bin/python scripts/evaluate_search.py collect-index \
   --documents /tmp/eval-documents.jsonl --url http://127.0.0.1:9200 \
   --output /tmp/opensearch.json

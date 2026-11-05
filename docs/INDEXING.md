@@ -33,6 +33,16 @@ so a full refresh of ~1,500 bulletins can take an hour or more. `--state` defaul
 to the crawler's `.tuik-crawl-state.json`; one writer per state file and alias is
 supported.
 
+If the portal overlaps listing pages, use `--listing-attempts 3` for bounded full
+passes at the same pacing. Recovery requires an unchanged total and dates and
+exactly the advertised unique-ID count; incomplete listings still write no index
+or state. The report retains each pass under `crawl.listing_passes`. See the
+[crawler's recovery constraints](METADATA_CRAWL.md#pacing-and-source-freshness).
+`--listing-auto-filter` selects the portal's alternate listing mode with the same
+completeness requirements and records that choice in the crawl report.
+Use `--listing-attempts 2 --alternate-listing-mode` to combine both official modes
+when their complete passes expose different overlapping pages.
+
 ## Modes
 
 **Full** (`--full`) creates the next physical index `<alias>-v<n>` (one above the

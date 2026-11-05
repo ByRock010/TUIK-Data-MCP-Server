@@ -56,8 +56,9 @@ class CrawlPress(Press):
 
 
 class CrawlSource:
-    def __init__(self, http: CrawlHttpClient):
+    def __init__(self, http: CrawlHttpClient, *, listing_auto_filter: bool = False):
         self.http = http
+        self.listing_auto_filter = listing_auto_filter
 
     async def flows(self) -> list[CrawlFlow]:
         url = PORTAL + "/api/tr/dataflows"
@@ -89,7 +90,7 @@ class CrawlSource:
                 "years": [],
                 "levels": [],
                 "archive": False,
-                "autoFilter": False,
+                "autoFilter": self.listing_auto_filter,
             },
         )
         return parse(SearchPage, envelope(data, url), url)

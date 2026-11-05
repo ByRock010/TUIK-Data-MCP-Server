@@ -228,7 +228,13 @@ class MetadataCrawler:
         self.report = {}
 
     async def documents(
-        self, *, full=False, max_bulletins=None, page_limit=None, listing_attempts=1
+        self,
+        *,
+        full=False,
+        max_bulletins=None,
+        page_limit=None,
+        listing_attempts=1,
+        alternate_listing_mode=False,
     ):
         if max_bulletins is not None and (type(max_bulletins) is not int or max_bulletins < 1):
             raise ValueError("max_bulletins must be a positive integer")
@@ -238,6 +244,13 @@ class MetadataCrawler:
             raise ValueError("listing_attempts must be between 1 and 5")
         if page_limit is not None and listing_attempts != 1:
             raise ValueError("Listing retries require an unlimited listing scope")
+        if alternate_listing_mode and (
+            listing_attempts < 2 or not hasattr(self.source, "listing_auto_filter")
+        ):
+            raise ValueError(
+                "Alternating listing modes requires at least two attempts and a mode-aware source"
+            )
+        initial_mode = getattr(self.source, "listing_auto_filter", False)
         self.next_state = None
         report = self.report = {
             "started_at": now().isoformat(),
@@ -250,6 +263,7 @@ class MetadataCrawler:
             "reused_bulletins": 0,
             "counts": {},
             "partial": True,
+            "listing_auto_filter": bool(getattr(self.source, "listing_auto_filter", False)),
         }
         try:
             flows = await self.source.flows()
@@ -270,6 +284,10 @@ class MetadataCrawler:
             listing, complete, listing_rows, expected_total = {}, False, 0, None
             report["listing_passes"] = []
             for attempt in range(1, listing_attempts + 1):
+                if alternate_listing_mode:
+                    self.source.listing_auto_filter = (
+                        initial_mode if attempt % 2 else not initial_mode
+                    )
                 signatures, page_size, pass_rows = set(), None, 0
                 for page in range(1, 1001):
                     batch = await self.source.listing(page)
@@ -316,7 +334,13 @@ class MetadataCrawler:
                 report["listing_rows"] = listing_rows
                 report["duplicate_listing_rows"] = listing_rows - len(listing)
                 report["listing_passes"].append(
-                    {"attempt": attempt, "pages": page, "rows": pass_rows, "unique": len(listing)}
+                    {
+                        "attempt": attempt,
+                        "pages": page,
+                        "rows": pass_rows,
+                        "unique": len(listing),
+                        "auto_filter": bool(getattr(self.source, "listing_auto_filter", False)),
+                    }
                 )
                 if not complete or (pass_rows == expected_total and len(listing) == expected_total):
                     break
@@ -440,6 +464,8 @@ class MetadataCrawler:
             report["error"] = error_details(exc)
             raise
         finally:
+            if alternate_listing_mode:
+                self.source.listing_auto_filter = initial_mode
             if report["status"] == "running":
                 report["status"] = "incomplete"
             report["finished_at"] = now().isoformat()
