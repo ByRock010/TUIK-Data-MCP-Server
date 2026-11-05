@@ -1,0 +1,49 @@
+{
+  "status": "ok",
+  "started_at": "2026-11-05T10:57:03.188558+00:00",
+  "source_revision": "4cde23b155d3104a4383fac242c7164874cb095e",
+  "package_version": "0.3.0",
+  "python_version": "3.14.0",
+  "mode": "full_rebuild_from_frozen_metadata",
+  "alias": "tuik-v030-acceptance-4471f5a0bbf5489fbce0d83a941a256e",
+  "scope": "Own UUID alias; application alias and crawl/content state unchanged; no second live crawl",
+  "input": "docs/verification/search-full-corpus-2026-11-05.jsonl.gz",
+  "input_sha256": "0b68c048b7b7543f8bff743f07176592479ebf73e37f2a5273a80bb6cf7ed04b",
+  "harness": "import asyncio\nimport gzip\nimport hashlib\nimport json\nimport os\nimport platform\nimport subprocess\nimport sys\nimport uuid\nfrom datetime import UTC, datetime\nfrom importlib.metadata import version\nfrom pathlib import Path\n\nimport httpx\nfrom tuik_mcp.search.documents import IndexDocument\nfrom tuik_mcp.search.indexer import OpenSearchStore, prepare, rebuild\n\nROOT = Path('/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project')\nOUT = ROOT / 'docs/verification'\nCORPUS = OUT / 'search-full-corpus-2026-11-05.jsonl.gz'\nREPORT = OUT / 'v0.3.0-final-index-2026-11-05.json'\nURL = 'http://127.0.0.1:9200'\n\nasync def main():\n    alias = 'tuik-v030-acceptance-' + uuid.uuid4().hex\n    stamp = datetime.now(UTC)\n    report = {\n        'status': 'running', 'started_at': stamp.isoformat(),\n        'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),\n        'package_version': version('tuik-mcp'), 'python_version': platform.python_version(),\n        'mode': 'full_rebuild_from_frozen_metadata', 'alias': alias,\n        'scope': 'Own UUID alias; application alias and crawl/content state unchanged; no second live crawl',\n        'input': str(CORPUS.relative_to(ROOT)),\n        'input_sha256': hashlib.sha256(CORPUS.read_bytes()).hexdigest(),\n        'harness': Path(__file__).read_text(),\n    }\n    store = OpenSearchStore(URL)\n    try:\n        with gzip.open(CORPUS, 'rt', encoding='utf-8') as stream:\n            documents = [IndexDocument.model_validate_json(line) for line in stream if line.strip()]\n        report['corpus_sha256'] = hashlib.sha256(json.dumps(\n            sorted((d.model_dump(mode='json') for d in documents), key=lambda d: d['id']),\n            ensure_ascii=False, sort_keys=True).encode()).hexdigest()\n        assert len(documents) == 3424\n        assert report['corpus_sha256'] == 'a1b800434e1679fa5d9d84c4997898eb7825090a56b52183f8cb5afcd0cecd86'\n        assert report['package_version'] == '0.3.0'\n        async with httpx.AsyncClient(trust_env=False) as client:\n            response = await client.get(URL)\n            response.raise_for_status()\n            report['engine'] = response.json()['version']\n        payloads, kinds = prepare(documents, stamp)\n        report.update(await rebuild(store, alias, payloads))\n        report.update(counts=dict(kinds), indexed_at=stamp.isoformat())\n        print(f\"Built {len(payloads)} documents in {alias}\", flush=True)\n        env = {key: value for key, value in os.environ.items() if not key.startswith('TUIK_')}\n        env.update(TUIK_OPENSEARCH_URL=URL, TUIK_OPENSEARCH_INDEX=alias, TUIK_MIN_INTERVAL_SECONDS='2')\n        command = [sys.executable, str(ROOT / 'scripts/live_smoke.py'), '--index-query',\n                   'altin haric dis ticaret hadleri', '--output', str(OUT / 'v0.3.0-final-mcp-2026-11-05.json')]\n        report['smoke_command'] = command\n        with Path('/tmp/tuik-v030-live.log').open('w') as log:\n            process = await asyncio.create_subprocess_exec(*command, env=env, cwd='/tmp', stdout=log, stderr=log)\n            code = await process.wait()\n        report['smoke_exit_code'] = code\n        if code:\n            raise RuntimeError(f'Smoke exited {code}; see /tmp/tuik-v030-live.log')\n        report['status'] = 'ok'\n    except Exception as exc:\n        report.update(status='error', error_type=type(exc).__name__, error=str(exc))\n        raise\n    finally:\n        try:\n            for name in await store.versions(alias):\n                await store.delete(name)\n            report['cleanup'] = {'status': 'deleted_owned_index_and_alias', 'at': datetime.now(UTC).isoformat()}\n        finally:\n            await store.close()\n            report['finished_at'] = datetime.now(UTC).isoformat()\n            REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\\n')\n            print(json.dumps({k: report[k] for k in ('status','source_revision','package_version','cleanup') if k in report}), flush=True)\n\nasyncio.run(main())\n",
+  "corpus_sha256": "a1b800434e1679fa5d9d84c4997898eb7825090a56b52183f8cb5afcd0cecd86",
+  "engine": {
+    "distribution": "opensearch",
+    "number": "3.3.2",
+    "build_type": "tar",
+    "build_hash": "6564992150e26aaa62d4522a220dfff5188aeb88",
+    "build_date": "2025-10-29T22:22:22.753988939Z",
+    "build_snapshot": false,
+    "lucene_version": "10.3.1",
+    "minimum_wire_compatibility_version": "2.19.0",
+    "minimum_index_compatibility_version": "2.0.0"
+  },
+  "index": "tuik-v030-acceptance-4471f5a0bbf5489fbce0d83a941a256e-v1",
+  "previous_indices": [],
+  "documents": 3424,
+  "written": 3424,
+  "counts": {
+    "dataset": 510,
+    "bulletin": 1494,
+    "metadata": 1420
+  },
+  "indexed_at": "2026-11-05T10:57:03.188558+00:00",
+  "smoke_command": [
+    "/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project/.venv/bin/python",
+    "/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project/scripts/live_smoke.py",
+    "--index-query",
+    "altin haric dis ticaret hadleri",
+    "--output",
+    "/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project/docs/verification/v0.3.0-final-mcp-2026-11-05.json"
+  ],
+  "smoke_exit_code": 0,
+  "cleanup": {
+    "status": "deleted_owned_index_and_alias",
+    "at": "2026-11-05T10:57:56.519210+00:00"
+  },
+  "finished_at": "2026-11-05T10:57:56.519303+00:00"
+}

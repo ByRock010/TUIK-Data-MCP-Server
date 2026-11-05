@@ -51,6 +51,48 @@ Git does not record where a branch was originally created: create it from
 6. Merge after CI is green and one teammate approves. Use **squash merge** so each
    feature lands on `develop` as one Conventional Commit. Delete the branch afterwards.
 
+## OpenSearch integration checks
+
+The separate **OpenSearch integration** CI job runs on every PR into `develop` or
+`master` and pushes to those branches, alongside the existing Python lint/test
+matrix and Docker build. It starts the same pinned OpenSearch **3.3.2** image as
+Compose, with a 512 MiB heap, security disabled and the REST port bound to loopback.
+CI disables mmap to avoid requiring host `vm.max_map_count` changes. The service
+health check waits for yellow/green before testing; startup or test failures fail
+the job. Its timeout is 15 minutes. It needs no credentials, secrets, production
+index, live TÜİK requests or branch protection changes.
+
+Tests marked `opensearch` are skipped unless `TUIK_OPENSEARCH_URL` is explicitly
+set. The normal lint/test jobs keep their existing commands and remain independent
+of Docker. The dedicated job sets that variable and runs **all** marked tests,
+including future ones. Do not set it globally in CI or in the regular test matrix.
+
+Reproduce locally:
+
+```bash
+docker compose up -d --wait opensearch
+TUIK_OPENSEARCH_URL=http://127.0.0.1:9200 \
+  .venv/bin/pytest -m opensearch -q --junitxml=/tmp/tuik-opensearch-results.xml
+# Without a configured URL, these tests are collected but skipped:
+env -u TUIK_OPENSEARCH_URL .venv/bin/pytest -m opensearch -q
+```
+
+The suite covers strict mappings, fixture crawl → full/incremental index and alias
+swap, Turkish case/ASCII/inflection, straight and curly apostrophes, abbreviations,
+typos, kind/theme/date/downloadability filters, highlights, paging, and both
+literal and portal fallback paths (unset configuration and a real missing alias).
+It uses recorded TÜİK adapters and synthetic metadata, not a live crawl or a
+relevance-quality measurement. Index-writing tests use UUID aliases, delete only their
+own physical indices and close HTTP clients in teardown. The configured
+application alias is never modified. Use a disposable development cluster.
+
+Inspect the **OpenSearch integration** job's cluster/version output and pytest
+tracebacks on failure. JUnit output is uploaded even when tests fail as the
+`opensearch-results-<run>-<attempt>` artifact, retained for 14 days. A service startup
+failure happens before tests can produce JUnit; GitHub's service-container logs
+are the evidence in that case. Existing branch protection requirements stay as
+documented below; maintainers can require this additional check separately.
+
 ## Issue closing on develop
 
 The `Close issues after develop merge` workflow closes completed issues after
@@ -109,6 +151,14 @@ See [GitHub's native issue-closing behavior](https://docs.github.com/en/issues/t
 and [push event workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#push).
 
 ## Releasing
+
+For v0.3.0, follow [`docs/RELEASE_0.3.0.md`](docs/RELEASE_0.3.0.md) and use
+[`docs/releases/v0.3.0.md`](docs/releases/v0.3.0.md) as the release notes.
+The preparation PR closes #29 and epic #24 on its reviewed `develop` merge,
+recording accepted development. Protected promotion to `master`, the annotated
+tag, tagged-source artifacts, GitHub release and milestone closure follow
+separately. The old `release/0.3.0` suggestion in #29 is superseded by this
+topic → `develop` → `master` policy; do not tag the preparation branch.
 
 For v0.2.0, use the issue-by-issue readiness and evidence checklist in
 [`docs/RELEASE_0.2.0.md`](docs/RELEASE_0.2.0.md). The v0.2.0 preparation PR closes

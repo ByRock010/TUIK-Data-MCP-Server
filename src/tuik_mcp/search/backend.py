@@ -9,15 +9,16 @@ from collections.abc import Awaitable, Callable
 from datetime import date
 from typing import Literal, Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from tuik_mcp.models.dataset import TuikResource
-from tuik_mcp.models.search import SearchResponse
+from tuik_mcp.models.search import SearchFacet, SearchFacets, SearchResponse
 from tuik_mcp.utils.normalization import turkish_casefold
 
+from .documents import CONTENT_KINDS
 from .indexer import IndexerError, OpenSearchStore
 
-Kind = Literal["dataset", "bulletin", "metadata"]
+Kind = Literal["dataset", "bulletin", "metadata", "table", "document_chunk"]
 # Exact (synonym-aware) matching on every field; typo tolerance only as a weaker clause.
 EXACT_FIELDS = ["title^4", "title.ascii", "description^2", "body", "theme"]
 FUZZY_FIELDS = ["title.ascii", "description", "body"]
@@ -28,20 +29,33 @@ MAX_OFFSET = 1000
 
 
 class SearchFilters(BaseModel):
-    kinds: list[Kind] = Field(default_factory=list, max_length=3)
+    # Empty means the metadata kinds; file content (#22) is searched only when named.
+    kinds: list[Kind] = Field(default_factory=list, max_length=5)
     # Exact stored theme names; any of them matches.
     themes: list[str] | None = Field(default=None, max_length=50)
     downloadable: bool | None = None
     published_after: date | None = None
     published_before: date | None = None
 
+    @model_validator(mode="after")
+    def ordered_dates(self):
+        if self.published_after and self.published_before:
+            if self.published_after > self.published_before:
+                raise ValueError("published_after must not be later than published_before")
+        return self
+
 
 class SearchHit(BaseModel):
     id: str
     kind: str
     title: str
+    description: str | None = None
     score: float | None = None
     source_url: str
+    # File content: the file ID to open and where in it the match is.
+    parent_id: str | None = None
+    page: int | None = None
+    sheet: str | None = None
     theme: list[str] = Field(default_factory=list)
     publication_date: str | None = None
     updated_at: str | None = None
@@ -59,6 +73,8 @@ class SearchHits(BaseModel):
     limit: int
     offset: int = 0
     warnings: list[str] = Field(default_factory=list)
+    facets: SearchFacets | None = None
+    indexed_at: str | None = None
 
 
 class BackendUnavailable(Exception):
@@ -84,6 +100,8 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
     clauses = []
     if filters.kinds:
         clauses.append({"terms": {"kind": filters.kinds}})
+    else:
+        clauses.append({"bool": {"must_not": {"terms": {"kind": list(CONTENT_KINDS)}}}})
     if filters.themes is not None:
         clauses.append({"terms": {"theme": filters.themes}})
     if filters.downloadable is not None:
@@ -126,6 +144,11 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
         "from": offset,
         "size": limit,
         "track_total_hits": True,
+        "aggs": {
+            "kind": {"terms": {"field": "kind", "size": 5}},
+            "theme": {"terms": {"field": "theme", "size": 50}},
+            "indexed_at": {"max": {"field": "indexed_at"}},
+        },
         "_source": {"excludes": ["body", "description"]},
         "highlight": {
             "fields": {field: {} for field in HIGHLIGHT_FIELDS},
@@ -161,9 +184,28 @@ class OpenSearchBackend:
                 total=hits["total"]["value"],
                 limit=limit,
                 offset=offset,
+                facets=self.facets(response.get("aggregations")),
+                indexed_at=(response.get("aggregations") or {})
+                .get("indexed_at", {})
+                .get("value_as_string"),
             )
-        except (IndexerError, KeyError, TypeError, ValueError) as exc:
+        except (IndexerError, KeyError, TypeError, ValueError, AttributeError) as exc:
             raise BackendUnavailable(str(exc)) from exc
+
+    @staticmethod
+    def facets(aggregations: dict | None) -> SearchFacets | None:
+        if aggregations is None:
+            return None
+        return SearchFacets(
+            **{
+                name: SearchFacet(
+                    counts={b["key"]: b["doc_count"] for b in aggregations[name]["buckets"]},
+                    truncated=aggregations[name]["sum_other_doc_count"] > 0,
+                    count_error_upper_bound=aggregations[name]["doc_count_error_upper_bound"],
+                )
+                for name in ("kind", "theme")
+            }
+        )
 
     @staticmethod
     def hit(item: dict) -> SearchHit:
@@ -182,6 +224,9 @@ class OpenSearchBackend:
             highlights=item.get("highlight") or {},
             retrieved_at=source.get("retrieved_at"),
             indexed_at=source.get("indexed_at"),
+            parent_id=source.get("parent_id") if source["kind"] in CONTENT_KINDS else None,
+            page=source.get("page"),
+            sheet=source.get("sheet"),
         )
 
     async def close(self) -> None:
@@ -296,6 +341,7 @@ class PortalBackend:
                     id=result.id,
                     kind=result.resource_type,
                     title=result.title,
+                    description=result.description,
                     source_url=result.source_url,
                     theme=[result.theme] if result.theme else [],
                     publication_date=result.publication_date,

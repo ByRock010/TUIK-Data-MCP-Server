@@ -24,6 +24,7 @@ from tuik_mcp.search.indexer import OpenSearchStore, prepare, rebuild
 from tuik_mcp.services.catalog import CatalogService
 
 THEME = "İstihdam, İşsizlik ve Ücret"
+EXCLUDE_CONTENT = {"bool": {"must_not": {"terms": {"kind": ["table", "document_chunk"]}}}}
 RECORDS = [
     {"id": "DF_ISSIZ+V1.0", "name": "İşsizlik Oranı", "downloadable": True,
      "category": {"name": THEME}},
@@ -96,7 +97,8 @@ def test_query_matches_all_fields_exactly_and_typos_only_weakly():
     # A typo must keep its first letter, so TÜFE never drifts to ÜFE.
     assert fuzzy["multi_match"]["prefix_length"] == 1 and fuzzy["multi_match"]["boost"] < 1
     assert body["query"]["bool"]["minimum_should_match"] == 1
-    assert body["query"]["bool"]["filter"] == []
+    # Without a kind, file content (#22) never mixes into metadata results.
+    assert body["query"]["bool"]["filter"] == [EXCLUDE_CONTENT]
     assert (body["from"], body["size"], body["track_total_hits"]) == (10, 5, True)
     assert body["_source"]["excludes"] == ["body", "description"]
     assert body["highlight"]["max_analyzer_offset"] == HIGHLIGHT_MAX_OFFSET
@@ -119,13 +121,18 @@ def test_query_filters_and_paging_are_validated():
     ]
     only_after = SearchFilters(published_after=date(2026, 5, 1))
     assert build_query("x", only_after, 1)["query"]["bool"]["filter"] == [
-        {"range": {"publication_date": {"gte": "2026-05-01"}}}
+        EXCLUDE_CONTENT,
+        {"range": {"publication_date": {"gte": "2026-05-01"}}},
+    ]
+    passages = SearchFilters(kinds=["document_chunk"])
+    assert build_query("x", passages, 1)["query"]["bool"]["filter"] == [
+        {"terms": {"kind": ["document_chunk"]}}
     ]
     for limit, offset in [(0, 0), (51, 0), (True, 0), (10, -1), (10, 1001)]:
         with pytest.raises(ValueError):
             build_query("x", SearchFilters(), limit, offset)
     with pytest.raises(ValueError):
-        SearchFilters(kinds=["table"])
+        SearchFilters(kinds=["publication"])
 
 
 async def test_opensearch_hits_keep_scores_highlights_and_provenance():

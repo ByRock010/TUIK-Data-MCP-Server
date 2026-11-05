@@ -4,6 +4,7 @@ import importlib.util
 import json
 import time
 from argparse import Namespace
+from datetime import UTC, datetime
 from pathlib import Path
 
 import httpx
@@ -18,6 +19,7 @@ from tuik_mcp.search.crawl import (
     MetadataCrawler,
     PressSnapshot,
     portal_date,
+    press_snapshot,
     state_bytes,
 )
 from tuik_mcp.search.documents import IndexDocument
@@ -93,6 +95,39 @@ async def test_full_crawl_documents_relations_categories_and_no_file_fetches():
     assert crawler.report["counts"]["bulletin"] == 2
     assert crawler.report["status"] == "ok" and crawler.next_state is not None
     assert source.calls == ["flows", "page:1", "page:2", "press:57987", "press:58058"]
+
+
+def test_many_files_deduplicate_formats_before_budget_and_keep_original_retrieval_time():
+    press = Source().known
+    press.tables = [
+        {"url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?p=test", "type": "xls"}
+    ] * 40
+    press.statisticalTables, press.reports = [], []
+    press.retrieved_at = datetime(2026, 11, 5, 5, 0, tzinfo=UTC)
+    snapshot = press_snapshot(press, None, [])
+    assert snapshot.bulletin.formats == ["xls"]
+    assert snapshot.bulletin.downloadable
+    assert snapshot.bulletin.retrieved_at == press.retrieved_at
+    assert snapshot.metadata.retrieved_at == press.retrieved_at
+
+
+def test_unique_format_budget_remains_enforced():
+    press = Source().known
+    press.tables = [
+        {"url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?p=test", "type": f"f{i}"}
+        for i in range(33)
+    ]
+    press.statisticalTables, press.reports = [], []
+    with pytest.raises(ValueError, match="at most 32"):
+        press_snapshot(press, None, [])
+
+
+def test_previous_bulletin_link_needs_its_identity_but_not_an_optional_title():
+    raw = load("press.json")["data"]
+    raw["previousPresses"] = [{"url": "/tr/press/53835"}]
+    press = CrawlPress.model_validate(raw)
+    assert press.previousPresses[0].title is None
+    assert press_snapshot(press, None, []).previous_ids == ["press:53835"]
 
 
 async def test_incremental_lists_every_page_and_replays_all_cached_documents(tmp_path):
@@ -205,7 +240,77 @@ async def test_overlapping_pages_cannot_commit_while_a_bulletin_is_unseen(has_pr
     assert not any(call.startswith("press:") for call in source.calls)
 
 
-async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(monkeypatch):
+@pytest.mark.parametrize("alternate", [False, True])
+async def test_bounded_listing_retry_recovers_overlap_before_fetching_any_details(alternate):
+    source = Source()
+    source.listing_auto_filter = False
+    a, b = await source.listing(1), await source.listing(2)
+    c = b.data[0].model_copy(update={"url": "/tr/press/99999"})
+    passes = 0
+    pages = []
+
+    async def listing(page):
+        nonlocal passes
+        passes += page == 1
+        assert source.listing_auto_filter is (alternate and passes == 2)
+        pages.append((passes, page))
+        return SearchPage(
+            data=(a.data + b.data if passes == 1 else b.data + [c])
+            if page == 1
+            else (b.data if passes == 1 else a.data),
+            total=3,
+        )
+
+    async def press(number):
+        assert pages == [(1, 1), (1, 2), (2, 1), (2, 2)]
+        return (source.known if number == str(source.known.id) else source.other).model_copy(
+            update={"id": int(number)}
+        )
+
+    source.listing, source.press = listing, press
+    crawler = MetadataCrawler(source)
+    documents = await collect(crawler, listing_attempts=3, alternate_listing_mode=alternate)
+    assert {d.id for d in documents if d.kind == "bulletin"} == {
+        "press:57987",
+        "press:58058",
+        "press:99999",
+    }
+    assert crawler.next_state is not None
+    assert crawler.report["listing_rows"] == 6
+    assert crawler.report["listed_bulletins"] == crawler.report["upstream_total"] == 3
+    assert [p["unique"] for p in crawler.report["listing_passes"]] == [2, 3]
+    assert "recovered" in crawler.report["warnings"][0]
+    assert source.listing_auto_filter is False
+    assert [p["auto_filter"] for p in crawler.report["listing_passes"]] == [False, alternate]
+
+
+@pytest.mark.parametrize("change", ["total", "date", "unseen"])
+async def test_listing_retries_reject_changing_or_still_incomplete_corpora(change):
+    source = Source()
+    a, b = await source.listing(1), await source.listing(2)
+    passes = 0
+
+    async def listing(page):
+        nonlocal passes
+        passes += page == 1
+        items = a.data + b.data if page == 1 else b.data
+        if passes == 2 and change == "date":
+            items = [item.model_copy(update={"date": "2026-11-05"}) for item in items]
+        return SearchPage(data=items, total=4 if passes == 2 and change == "total" else 3)
+
+    source.listing = listing
+    crawler = MetadataCrawler(source)
+    with pytest.raises(SourceError) as exc:
+        await collect(crawler, listing_attempts=2)
+    assert exc.value.code == "incomplete_listing"
+    assert crawler.next_state is None
+    assert not any(call.startswith("press:") for call in source.calls)
+
+
+@pytest.mark.parametrize("auto_filter", [False, True])
+async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter(
+    monkeypatch, auto_filter
+):
     calls = []
 
     def handler(request):
@@ -218,6 +323,7 @@ async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter
         if path.endswith("/search"):
             body = json.loads(request.content)
             assert body["text"] == "" and body["typeIds"] == [1] and body["archive"] is False
+            assert body["autoFilter"] is auto_filter
             return httpx.Response(200, json=load("crawl/listing.json"))
         if path.endswith("/press/57987"):
             return httpx.Response(200, json=load("press.json"))
@@ -231,7 +337,7 @@ async def test_new_adapter_uses_only_recorded_json_endpoints_and_bulletin_filter
 
     monkeypatch.setattr(http, "_pace", no_wait)
     try:
-        source = CrawlSource(http)
+        source = CrawlSource(http, listing_auto_filter=auto_filter)
         assert await source.flows()
         assert await source.themes()
         assert (await source.listing(1)).data
@@ -335,7 +441,7 @@ async def test_cli_commits_only_success_and_preserves_state_and_output_on_failur
             pass
 
     monkeypatch.setattr(module, "CrawlHttpClient", lambda *args: Http())
-    monkeypatch.setattr(module, "CrawlSource", lambda http: source)
+    monkeypatch.setattr(module, "CrawlSource", lambda http, **kwargs: source)
     args = Namespace(
         state=tmp_path / "state.json",
         output=tmp_path / "docs.jsonl",

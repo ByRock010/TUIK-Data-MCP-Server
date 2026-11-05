@@ -17,12 +17,31 @@ tuik-mcp-index --incremental --report /tmp/index-incremental.json
 
 # Plan only: crawl and read the cluster; write neither index nor crawl state.
 tuik-mcp-index --full --dry-run
+
+# File content (#22): tables and PDF pages, at most 25 downloads per run.
+tuik-mcp-index --incremental --content --max-content-files 25
 ```
+
+`--content`, `--content-file`, `--max-content-files` and `--content-state` index
+file content next to the metadata; see [file content index](CONTENT_INDEX.md). The
+report then has a `content` section with the files downloaded, reused, pending and
+failed. Schema version 2 (#22) added content locators: rebuild with `--full` once
+after upgrading.
 
 The command uses the crawler's pacing (two-second request spacing, 429 cooldown),
 so a full refresh of ~1,500 bulletins can take an hour or more. `--state` defaults
 to the crawler's `.tuik-crawl-state.json`; one writer per state file and alias is
 supported.
+
+If the portal overlaps listing pages, use `--listing-attempts 3` for bounded full
+passes at the same pacing. Recovery requires an unchanged total and dates and
+exactly the advertised unique-ID count; incomplete listings still write no index
+or state. The report retains each pass under `crawl.listing_passes`. See the
+[crawler's recovery constraints](METADATA_CRAWL.md#pacing-and-source-freshness).
+`--listing-auto-filter` selects the portal's alternate listing mode with the same
+completeness requirements and records that choice in the crawl report.
+Use `--listing-attempts 2 --alternate-listing-mode` to combine both official modes
+when their complete passes expose different overlapping pages.
 
 ## Modes
 

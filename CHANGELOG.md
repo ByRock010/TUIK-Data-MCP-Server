@@ -6,6 +6,88 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-05
+
+### Added
+
+- Versioned release candidate, installation/upgrade notes and final acceptance
+  evidence for the indexed-search milestone. Reviewed promotion, annotated tag
+  and GitHub release publication remain explicit release steps (#29, #24).
+- Full-metadata relevance comparison on 3,424 frozen documents and 1,390 pooled
+  AI-reviewed pairs, with all five systems' overall/category/type metrics,
+  retained source evidence and 55 documented revisions. The existing synonym
+  default has the best matched-corpus nDCG@10/pooled recall; built-in Turkish has
+  better MRR. A real full-index MCP smoke and live contracts passed. Independent
+  human validation and v0.3.0 publication are not implied (#20; acceptance evidence for #29).
+- `chart_tuik_data` draws CSV/XLS/XLSX rows as a PNG line or bar chart (MCP image
+  content) with a JSON summary of each series' points, gaps and first/last/min/max.
+  It shares `get_tuik_data`'s snapshot, filters and query. It adds label columns,
+  `series` splitting for long-format dataflows, `last` and line `labels`, and shows
+  the title, unit, source and retrieval date. Gaps are never drawn as zero.
+  matplotlib is the optional `viz` extra (#72).
+- Source-checked sequential AI relevance review with live stdio MCP query/resource
+  replay, bounded table probes, retained first-pass grades and explicit revision
+  reasons. `score-ai --require-reviewed` validates full-pool coverage and source
+  references. ADR 0004 adopts the disclosed AI method for project acceptance;
+  independent human validation is not implied (#11, #20).
+- Explicit single-AI relevance pilot over 917 pooled query–document pairs, with
+  a source-bound `score-ai` path that cannot satisfy the human release gate.
+  Blank CSV judge sheets support spreadsheet editing and validated import;
+  `score --require-complete` rejects pending human judgments/adjudication (#11, #20).
+- Indexed MCP release smoke (`--indexed-only`, optional `--index-query`) follows
+  a real OpenSearch dataset hit through resource resolution to verified bounded
+  CSV rows, rejecting fallbacks. Full smoke selects portal search explicitly for
+  tables/publications; v0.3.0 readiness documents remaining evaluation/release gates (#29).
+- Frozen-corpus OpenSearch evaluation collection for built-in Turkish, multi-field
+  and synonym variants, with engine/configuration provenance, deterministic ties,
+  disposable indices and rejection of incomplete runs. Relevance judgments and
+  the final full-corpus comparison is recorded above (#20).
+
+- `search_tuik` uses the optional metadata index for datasets, bulletins and metadata
+  with kind/theme/date/downloadability filters, scores, highlights, provenance,
+  bounded full-match kind/theme facets and explicit source/backend reporting.
+  Existing `results` and `query`/`limit` calls remain supported; `live=true` selects
+  the portal. Literal/portal fallbacks report unsupported filters and unavailable
+  facets, with null totals/truncation when unknown (#18).
+- `read_tuik_document(..., tables=true)` returns a PDF page's ruled tables, best
+  effort, with page, title, header or positional columns, string rows and
+  warnings. Zebra-striped fragments are joined and unruled rows rebuilt. Coverage
+  was measured on the recorded publication and methodology PDFs (#8).
+- File content index: `tuik-mcp-index --content` indexes the workbook tables
+  (titles, headers, notes) and PDF passages of the newest bulletin per series, and
+  `--content-file` adds files on demand. `search_tuik` with `kind="table"` or
+  `kind="document_chunk"` returns the file ID with the matching `sheet` or `page`.
+  Downloads are budgeted per run and cached in a content state (#22).
+- Separate OpenSearch 3.3.2 integration CI job with service health checks and retained
+  JUnit results. Opt-in real-cluster tests cover Turkish case/ASCII/inflection,
+  apostrophes, abbreviation synonyms, typos, combined filters, highlights and both
+  fallback routes, using UUID-isolated indices and recorded upstream fixtures (#19).
+
+### Changed
+
+- Index schema version 2 adds `page`/`sheet` locators; run one `--full` build after
+  upgrading (#22).
+
+### Fixed
+
+- Metadata crawling deduplicates advertised formats before enforcing the unique
+  format budget, so bulletins with many XLS attachments remain indexable. Recorded
+  bulletin retrieval times can be preserved when replaying retained responses (#20).
+- Historical bulletin-series links may omit their display title; the crawler
+  retains their validated URL identity instead of rejecting the whole bulletin (#20).
+- Optional bounded listing retries recover overlapping portal pages only when
+  every pass retains the advertised total and dates and the union reaches the
+  exact unique-ID count. Unresolved or changing corpora still fail before detail
+  downloads, indexing or checkpointing (#20).
+- Relevance baseline collection explicitly disables the optional index, supports
+  the same frozen metadata JSONL as the OpenSearch variants and rejects resume
+  against a changed corpus. Atomic, optionally compressed checkpoints retain
+  reproducible full-corpus evidence (#20).
+- Search evaluation rejects orphaned or malformed document metadata before
+  scoring or judge-sheet export. Resumable baseline collection records provenance
+  in every checkpoint and rejects changed/missing source revisions or collector
+  hashes before network access or checkpoint writes (#11).
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
@@ -163,6 +245,7 @@ All notable changes to this project are documented here. The format follows
 - Offline test suite, opt-in live tests and `scripts/live_smoke.py`.
 - Dockerfile.
 
-[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...develop
+[Unreleased]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.3.0...develop
+[0.3.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ByRock010/TUIK-Data-MCP-Server/releases/tag/v0.1.0

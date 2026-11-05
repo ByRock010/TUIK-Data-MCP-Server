@@ -99,6 +99,10 @@ def arguments(tmp_path, **overrides):
         dry_run=False,
         state=tmp_path / "state.json",
         report=tmp_path / "report.json",
+        content=False,
+        content_file=[],
+        max_content_files=25,
+        content_state=tmp_path / "content.json",
     )
     return Namespace(**(values | overrides))
 

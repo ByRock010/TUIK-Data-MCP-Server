@@ -111,8 +111,10 @@ class FileStore:
         async with self._parse_lock:
             return await finish_worker(function, *args, **kwargs)
 
-    async def document(self, resource_id: str, file: DownloadedFile, page: int) -> ParsedDocument:
-        key = f"pdf:{resource_id}:{file.digest}:{page}"
+    async def document(
+        self, resource_id: str, file: DownloadedFile, page: int, *, tables: bool = False
+    ) -> ParsedDocument:
+        key = f"pdf:{resource_id}:{file.digest}:{page}:{tables}"
         async with self._parse_lock:
             cached = self.cache.get(key)
             if cached is not None:
@@ -123,6 +125,7 @@ class FileStore:
                 file.link.source_url,
                 page=page,
                 budgets=self.limits,
+                tables=tables,
             )
             payload = await finish_worker(lambda: document.model_dump_json().encode())
             self.cache.set(key, payload)

@@ -4,11 +4,12 @@ import re
 import time
 
 import httpx
-from pydantic import BaseModel, Field
+from pydantic import AwareDatetime, BaseModel, Field
 
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.tuik_portal import Flow, Press, SearchPage, envelope, parse
 from tuik_mcp.config import PORTAL, Settings
+from tuik_mcp.models.common import now
 
 
 class CrawlHttpClient(HttpClient):
@@ -47,17 +48,19 @@ class ThemeNode(BaseModel):
 
 
 class PreviousPress(BaseModel):
-    title: str
+    title: str | None = None
     url: str
 
 
 class CrawlPress(Press):
     previousPresses: list[PreviousPress] = Field(default_factory=list)
+    retrieved_at: AwareDatetime | None = None
 
 
 class CrawlSource:
-    def __init__(self, http: CrawlHttpClient):
+    def __init__(self, http: CrawlHttpClient, *, listing_auto_filter: bool = False):
         self.http = http
+        self.listing_auto_filter = listing_auto_filter
 
     async def flows(self) -> list[CrawlFlow]:
         url = PORTAL + "/api/tr/dataflows"
@@ -89,7 +92,7 @@ class CrawlSource:
                 "years": [],
                 "levels": [],
                 "archive": False,
-                "autoFilter": False,
+                "autoFilter": self.listing_auto_filter,
             },
         )
         return parse(SearchPage, envelope(data, url), url)
@@ -102,4 +105,5 @@ class CrawlSource:
         press = parse(CrawlPress, data, url)
         if str(press.id) != number:
             raise SourceError("malformed_response", "Bulletin identifier mismatch", url)
+        press.retrieved_at = now()
         return press

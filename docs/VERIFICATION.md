@@ -1,5 +1,109 @@
 # Verification
 
+## Final v0.3.0 candidate — 2026-11-05
+
+Versioned source `4cde23b` prepares package **0.3.0** on accepted `develop`
+`c7bbf8d` (#74). The [final candidate report](verification/v0.3.0-final-2026-11-05.md)
+records **718 offline tests** on both Python 3.13.5 and 3.14.0, Ruff lint/format,
+**28 Node tests**, **21 real OpenSearch 3.3.2 tests**, and a byte-identical
+reproduction of the full-corpus AI-reviewed metrics.
+
+The [full-index rebuild](verification/v0.3.0-final-index-2026-11-05.json) contains
+all **3,424 frozen metadata documents**. The
+[actual full live MCP run](verification/v0.3.0-final-mcp-2026-11-05.json) uses
+installed package **0.3.0**, nine discovered tools and normal two-second/six-second
+pacing. ASCII indexed discovery resolves the same flow ID through verified CSV
+rows; portal, Excel, PDF, inspection and filter paths also pass. The owned UUID
+index was deleted; the application alias and crawl state were unchanged.
+The remaining **5 live contracts passed** separately, with
+[retained JUnit](verification/v0.3.0-final-live-contracts-2026-11-05.xml).
+
+A [clean base-only wheel installation](verification/v0.3.0-final-wheel-2026-11-05.json)
+outside the repository verifies version 0.3.0, both console entry points,
+nine tools, query/search schemas, invalid inputs and packaged schema-2 assets
+without the optional chart/search-client dependencies. Candidate acceptance
+does not imply publication: follow the [release checklist](RELEASE_0.3.0.md)
+for teammate review, green CI, protected promotion, tag and release assets.
+
+## Full-metadata relevance and MCP acceptance — 2026-11-05
+
+The [full #20 report](verification/issue-20-full-corpus-2026-11-05.md) retains
+**3,424 documents**, all five systems' rankings, **1,390 reviewed AI pairs**,
+**667 real MCP source calls**, 55 documented revisions and exact reproduction.
+`score-ai --require-reviewed` passes with zero unjudged returned slots. The
+multi-field + synonyms default is retained: nDCG@10 **0.7304**, versus **0.6984**
+for built-in Turkish and **0.6762** for synonym-free multi-field. Built-in Turkish
+has better MRR; corpus boundaries, contextual matches and AI limitations remain
+explicit. There are zero human pairs and no applicable κ.
+
+Python 3.14 offline verification: **718 passed, 21 skipped, 6 deselected**.
+Ruff lint/format and **28 Node tests** passed. The runtime candidate's
+[five CI checks](https://github.com/ByRock010/TUIK-Data-MCP-Server/actions/runs/41979820417)
+passed, including Python 3.12/3.13, Docker and real OpenSearch 3.3.2 contracts.
+The remaining **5 live contracts passed**, and the separately executed
+[full real MCP smoke](verification/search-full-live-smoke-2026-11-05.json) passed
+with nine tools, PDF/Excel/CSV reads and ASCII indexed discovery through verified
+CSV rows. Its owned UUID index contained all 3,424 documents and was deleted
+afterwards; the application alias was not changed.
+
+The full crawl exposed and now covers overlapping listing pages, repeated format
+entries in many-file bulletins, and historical series links without display titles.
+The [retained failed attempts](verification/search-full-collection-errors-2026-11-05.json)
+never advanced state. Package 0.2.0 remains unchanged; v0.3.0 release preparation,
+reviewed promotion and publication follow the [release checklist](RELEASE_0.3.0.md).
+
+## Source-checked AI baseline — 2026-11-04
+
+The owner-requested [AI evaluation method](adr/0004-ai-relevance-evaluation.md)
+uses one assessment followed by a source-checked sequential review. The
+[dated #11 report](verification/issue-11-ai-source-review-2026-11-04.md) records
+**416 actual MCP calls**, all **48** live portal query replays, **345** resolved
+resources, explained archival fallbacks and three nonempty exact-filter queries
+with matching inspect/data snapshots. All **917** pooled pairs were reviewed;
+**11** grades changed with documented source reasons. AI portal/literal nDCG@10
+is **0.8555 / 0.1661** on their respective corpora. There are zero human judge
+pairs; independent human validation is not claimed and κ is not applicable.
+
+The complete AI source-review check passes and the first-pass labels remain
+unchanged. Python **3.14.0** offline verification passed **674 tests**, with
+**21 skipped / 6 deselected**; Ruff and **28 Node tests** passed. Local OpenSearch
+was unavailable; the existing 342-flow variant results remain a pilot and #20's
+full-corpus comparison is still required. See the [release checklist](RELEASE_0.3.0.md).
+
+## Historical first AI pilot and human handoff — 2026-11-04
+
+This first-pass record predates the adopted AI method and source review above.
+
+The [dated #11/#20 report](verification/issue-11-20-ai-pilot-2026-11-04.md)
+records single-AI metadata relevance grades for **917** pooled query–document
+pairs, with per-query rationale, source fingerprints and reproducible metrics.
+On the shared 342-flow subset, preliminary nDCG@10 is **0.6357** (built-in Turkish),
+**0.6193** (multi-field) and **0.7332** (with synonyms). These are AI pilot scores,
+not independent human findings or a full-corpus comparison. κ is undefined and
+the human release gate stays unsatisfied. No production default was changed.
+
+Blank spreadsheet judge exports and validated imports support the human study;
+strict human scoring fails until labels/adjudication are complete. The offline
+suite passed **653 tests**, Ruff passed and **28 Node tests** passed. Local
+OpenSearch checks were skipped with the Docker daemon unavailable. See the
+[release checklist](RELEASE_0.3.0.md) for the remaining human/full-corpus gates.
+
+## Indexed MCP development increment — 2026-11-03
+
+The #29 acceptance path now checks real indexed discovery → stable resource
+resolution → verified bounded CSV rows, rejecting literal/portal fallbacks.
+The [dated verification](verification/issue-29-2026-11-03.md) records **578 offline
+tests** on Python 3.13/3.14, **5 real-cluster tests**, lint/format and **28 Node
+tests**, plus a separate live TÜİK run through a UUID-isolated, one-flow OpenSearch
+3.3.2 index. The [unaltered live JSON](verification/indexed-live-smoke-2026-11-03.json)
+contains the ASCII query, exact flow ID, indexing/source provenance and **2 of
+11,564 CSV rows**. The temporary index was deleted after the check.
+
+This is bounded development evidence. Human relevance measurements, full-corpus
+acceptance and the final v0.3.0 version/tag are still pending; see the
+[release readiness checklist](RELEASE_0.3.0.md). The recorded package version is
+0.2.0, not a claim that v0.3.0 has been released.
+
 ## Final v0.2.0 candidate — 2026-10-29
 
 The combined accepted implementation at `8e566bf` includes PRs #59 and #60.

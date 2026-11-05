@@ -1,0 +1,23 @@
+{
+  "scope": "Descriptive AI-grade2 coverage, not independently verified answer accuracy. Each query has its frozen top10; no backfill.",
+  "formula": "Count queries whose first hit has grade2, and queries with at least one grade2 in top10.",
+  "queries": 48,
+  "systems": {
+    "builtin_turkish": {
+      "top_one_grade2": 21,
+      "queries_with_grade2_top10": 34
+    },
+    "multi_field": {
+      "top_one_grade2": 19,
+      "queries_with_grade2_top10": 34
+    },
+    "multi_field_synonyms": {
+      "top_one_grade2": 23,
+      "queries_with_grade2_top10": 36
+    }
+  },
+  "inputs": {
+    "search-full-ai-reviewed-assessment-2026-11-05.json": "147450ea18b311e545ccbdba92c28319e81509ac8b14d6147b2ab3e1f85aad01",
+    "search-full-variants-2026-11-05.json.gz": "f54c5fd6b66372889a3bc1814311eda1b901f05356458536a02089a52ff0051b"
+  }
+}

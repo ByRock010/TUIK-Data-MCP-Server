@@ -1,0 +1,40 @@
+{
+  "status": "ok",
+  "checked_at": "2026-11-05T10:57:39.617421+00:00",
+  "package_version": "0.3.0",
+  "python_version": "3.13.5",
+  "module_path": "/private/tmp/tuik-v030-wheel/lib/python3.13/site-packages/tuik_mcp/__init__.py",
+  "cwd": "/private/tmp",
+  "tools": [
+    "chart_tuik_data",
+    "get_tuik_data",
+    "get_tuik_resource",
+    "inspect_tuik_data",
+    "list_tuik_themes",
+    "read_tuik_document",
+    "search_tuik",
+    "search_tuik_classifications",
+    "search_tuik_datasets"
+  ],
+  "console_entry_points": [
+    "tuik-mcp",
+    "tuik-mcp-index"
+  ],
+  "invalid_id_code": "invalid_input",
+  "invalid_cursor_code": "invalid_cursor",
+  "schema_version": 2,
+  "packaged_assets_sha256": {
+    "analysis.json": "5dc0c996e63f8a2ce8d29aca2e24d47695c8232a34ce8fbe1e92449c80014158",
+    "mapping.json": "5512239a329ee8d338ca86c1b2ede85ebf3f525b40124f3d7e4ab077937edca1",
+    "synonyms.txt": "62c9b1765337a27507c50ebb2d2fd520773bd8536a910d2e9a0684f263d38690"
+  },
+  "optional_viz_installed": false,
+  "optional_search_client_installed": false,
+  "candidate_artifacts_sha256": {
+    ".gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "tuik_mcp-0.3.0-py3-none-any.whl": "eb5ae447202903cd4a8c24f9d1ac28695ac6efa71d136f6b4cf2ecfb900d3e6a",
+    "tuik_mcp-0.3.0.tar.gz": "41a8fcd04a2154a19a486d903fc29abd09211c6d3f622b4097330edd947cd9a6"
+  },
+  "artifact_scope": "Candidate build, not published/tagged artifacts; rebuild from the accepted tag",
+  "harness": "import asyncio\nimport hashlib\nimport importlib.util\nimport json\nimport platform\nimport subprocess\nimport sys\nfrom datetime import UTC, datetime\nfrom importlib.metadata import version\nfrom importlib.resources import files\nfrom pathlib import Path\n\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\nimport tuik_mcp\nfrom tuik_mcp.search.schema import index_definition\n\nOUT = Path('/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project/docs/verification/v0.3.0-final-wheel-2026-11-05.json')\nROOT = Path('/Users/baha/Desktop/All/Ders/4.1/CMPE492/Project')\n\nasync def main():\n    module_path = Path(tuik_mcp.__file__).resolve()\n    assert not module_path.is_relative_to(ROOT)\n    assert 'site-packages' in str(module_path)\n    assert version('tuik-mcp') == '0.3.0'\n    assert importlib.util.find_spec('matplotlib') is None\n    assert importlib.util.find_spec('opensearchpy') is None\n    assets = {name: hashlib.sha256(files('tuik_mcp.search').joinpath(name).read_bytes()).hexdigest()\n              for name in ['analysis.json', 'mapping.json', 'synonyms.txt']}\n    mapping = index_definition()['mappings']\n    assert mapping['dynamic'] == 'strict' and mapping['_meta']['schema_version'] == 2\n    executable = str(Path(sys.executable).parent / 'tuik-mcp')\n    async with stdio_client(StdioServerParameters(command=executable)) as (read, write):\n        async with ClientSession(read, write) as session:\n            await session.initialize()\n            tools = (await session.list_tools()).tools\n            names = {tool.name for tool in tools}\n            assert names == {'search_tuik','search_tuik_datasets','get_tuik_resource','get_tuik_data',\n                             'inspect_tuik_data','chart_tuik_data','read_tuik_document',\n                             'list_tuik_themes','search_tuik_classifications'}\n            schemas = {tool.name: tool.inputSchema for tool in tools}\n            assert {'query','cursor'} <= set(schemas['get_tuik_data']['properties'])\n            assert {'kind','theme','live','published_after','published_before','downloadable_only'} <= set(schemas['search_tuik']['properties'])\n            invalid = await session.call_tool('get_tuik_resource', {'resource_id':'invalid'})\n            assert invalid.structuredContent['code'] == 'invalid_input'\n            cursor = await session.call_tool('get_tuik_data', {'resource_id':'flow:DF_ALTINSIZ_DTH+V1.0','cursor':'malformed'})\n            assert cursor.structuredContent['code'] == 'invalid_cursor'\n    index_help = subprocess.run([str(Path(sys.executable).parent / 'tuik-mcp-index'), '--help'], capture_output=True, text=True, check=True)\n    assert '--full' in index_help.stdout and '--alternate-listing-mode' in index_help.stdout\n    hashes = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()\n              for path in sorted(Path('/tmp/tuik-v030-dist').iterdir()) if path.is_file()}\n    OUT.write_text(json.dumps({\n        'status':'ok','checked_at':datetime.now(UTC).isoformat(),\n        'package_version':version('tuik-mcp'),'python_version':platform.python_version(),\n        'module_path':str(module_path),'cwd':str(Path.cwd()),'tools':sorted(names),\n        'console_entry_points':['tuik-mcp','tuik-mcp-index'],\n        'invalid_id_code':invalid.structuredContent['code'],\n        'invalid_cursor_code':cursor.structuredContent['code'],\n        'schema_version':mapping['_meta']['schema_version'], 'packaged_assets_sha256':assets,\n        'optional_viz_installed':False,'optional_search_client_installed':False,\n        'candidate_artifacts_sha256':hashes,\n        'artifact_scope':'Candidate build, not published/tagged artifacts; rebuild from the accepted tag',\n        'harness':Path(__file__).read_text(),\n    },ensure_ascii=False,indent=2)+'\\n')\n    print('Wheel acceptance passed: 0.3.0, nine tools, entry points, schema/assets, invalid inputs, base-only install')\n\nasyncio.run(main())\n"
+}

@@ -5,21 +5,23 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
-Version 0.2.0 includes eight tools, Excel/PDF reading, bounded table inspection,
-typed table queries and snapshot-bound pagination. See the
-[release notes](docs/releases/v0.2.0.md) for scope and upgrade details, and the
-[release checklist](docs/RELEASE_0.2.0.md) for verification and publication status.
+Version 0.3.0 prepares nine tools with optional Turkish OpenSearch discovery,
+filters, highlights and facets, alongside Excel/PDF reading, bounded table queries
+and optional PNG charts. See the [release notes](docs/releases/v0.3.0.md) for scope
+and upgrade details, and the [release checklist](docs/RELEASE_0.3.0.md) for candidate
+verification and pending reviewed promotion/publication.
 
 ## Implemented tools
 
 | Tool | Purpose |
 | --- | --- |
-| `search_tuik(query, limit=10)` | Turkish portal search; tables, datasets, bulletins, metadata and publications |
+| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False)` | Turkish indexed discovery with filters, highlights and facets; table/PDF-page content search; optional live portal search |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
-| `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0)` | Read a PDF page with bounded text and continuation |
+| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra) |
+| `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
 
@@ -35,14 +37,17 @@ Requires Python 3.12 or newer. From the directory containing `pyproject.toml`:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,viz]'
 ```
+
+The `viz` extra installs matplotlib for `chart_tuik_data`. Without it, every
+other tool works and the chart tool returns `visualization_unavailable`.
 
 Alternatively, with uv:
 
 ```bash
 uv venv .venv
-uv pip install --python .venv/bin/python -e '.[dev]'
+uv pip install --python .venv/bin/python -e '.[dev,viz]'
 ```
 
 The implementation uses FastMCP from the **official MCP Python SDK 1.x**
@@ -95,6 +100,58 @@ NACE sınıflamasını TÜİK'te ara.
 {"resource_id": "press:57987"}
 {"resource_id": "flow:DF_ALTINSIZ_DTH+V1.0", "filters": {}, "limit": 5}
 ```
+
+`search_tuik` uses the metadata index when configured. It covers dataflows,
+bulletins and bulletin metadata; set `live: true` to search the current portal,
+including tables and publications outside the index. No additional tool is needed.
+Existing `query`/`limit` calls and the `results` collection remain supported.
+
+```json
+{"query": "issizlik", "kind": "bulletin", "theme": "İstihdam, İşsizlik ve Ücret", "published_after": "2026-01-01", "limit": 5}
+{"query": "TÜFE", "downloadable_only": true, "limit": 5}
+{"query": "metodoloji", "live": true, "limit": 5}
+```
+
+`kind` accepts `dataset`, `bulletin` or `metadata`, or `table` / `document_chunk` to
+search inside indexed files (#22): workbook table titles, headers and notes, or PDF
+passages. Such a result's `id` is the file, with `sheet` or `page` locating the
+match for `get_tuik_data` or `read_tuik_document`; without a kind, file content is
+never returned. See [file content index](docs/CONTENT_INDEX.md).
+
+```json
+{"query": "CATI telefonla görüşme", "kind": "document_chunk", "limit": 3}
+```
+
+`theme` is an exact full stored
+name (case-sensitive for this tool; use `list_tuik_themes`). Publication bounds are
+inclusive ISO dates (`YYYY-MM-DD`, UTC); dataflows without a publication date do
+not match a date range. `downloadable_only` means advertised availability, which
+is verified only when fetching data.
+
+Each indexed result adds `score`, `highlights`, `indexed_at`, all `themes`,
+`downloadable` and `formats`; existing `id`, `resource_type`, `theme` (first theme),
+`source_url` and provenance remain available. IDs resolve through
+`get_tuik_resource` in a fresh session while the upstream resource exists.
+`source` (`index`, `portal`, `catalog`) and `backend` (`opensearch`, `portal`,
+`literal`) identify what actually answered. `total` counts matches before `limit`;
+`truncated` says whether some were omitted. Both may be null when a kind-filtered
+portal sample cannot establish the full total.
+
+`facets.kind` and `facets.theme` count the entire filtered match set, before the
+result limit. Each has `counts`, `truncated` and `count_error_upper_bound`; at most
+3 kinds and 50 themes are returned. Top-level `indexed_at` is the latest document
+indexing time among all matches (null for no matches). Hits keep their own indexing
+times, so incremental updates do not imply a single snapshot timestamp.
+Highlights contain untrusted source text, including `<em>` markers.
+
+Without a configured/reachable index, dataset-only requests use literal catalog
+matching; other requests use the portal. Warnings name the fallback and any
+unsupported filters: the portal can apply only `kind`, within its first 50 results.
+`live: true` always selects the portal, including for dataset queries. Facets,
+scores, highlights and indexing times are unavailable on these paths; no page-only
+facet counts are presented as corpus totals. See [search backends](docs/SEARCH_BACKEND.md)
+for limitations and [search evaluation](docs/SEARCH_EVALUATION.md) for the
+disclosed AI source-reviewed comparison and optional independent human study.
 
 To find datasets that can return rows, first call `search_tuik_datasets`:
 
@@ -171,7 +228,7 @@ restart, expiration (one hour), or cache eviction.
   No table is selected automatically; existing file downloads remain in the response.
 - `download_available`: an actual file has been downloaded within the size bound
   and its signature/media type checked. `download_links` includes its official URL,
-  format, verification flag and byte count. PDF and ZIP remain downloads in this tool; read PDF pages with `read_tuik_document`.
+  format, verification flag and byte count. PDF and ZIP remain downloads in this tool; read PDF pages, and best-effort PDF tables, with `read_tuik_document`.
 - `not_structured`: no supported public export is advertised.
 - `unsupported_filters`: filters were requested for a resource without CSV/Excel rows; none applied.
 - `error`: a structured `code`, `message`, and source URL, for example an upstream
@@ -285,6 +342,50 @@ or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
 The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
 missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
 
+## Chart a table
+
+`chart_tuik_data` draws the rows `get_tuik_data` would read as a PNG image, so a
+trend over hundreds of rows reaches the conversation as one picture instead of a
+long table. It uses the same file selection, snapshot, `sheet`, `filters` and
+`query`. Call `inspect_tuik_data` first for the exact column names.
+
+```json
+{
+  "resource_id": "press:57987:file:<key>",
+  "x": ["Yıllar - Years [column 1]", "column_2"],
+  "y": [
+    "İşsizlik oranı Unemployment rate (%) [column 10]",
+    "İşsizlik oranı Unemployment rate (%) [column 21]"
+  ],
+  "labels": ["Toplam", "Erkek"],
+  "last": 24
+}
+```
+
+- **Axes.** `x` lists 1–3 label columns, joined per row (e.g. year and month). `y`
+  lists 1–6 numeric columns, one line or bar group each. `labels` renames them in order.
+- **Long-format dataflows.** Set `series` to a dimension column to draw one line per
+  value, with exactly one `y` column and at most 8 values. Narrow the rest with
+  `filters` or predicates.
+- **Order and range.** When every x label is a date or period (`2026`, `2026-03`,
+  `2026M03`, `2026-Q2`, `2026-03-15`, or a year plus a month name such as
+  `2026 Ağustos - August`), points run oldest to newest whatever the row order, and
+  `last` keeps the most recent N. The summary reports `x_order: "chronological"`.
+  Other labels keep row order (`x_order: "source"`); sort with `query`. In that case
+  `last` keeps the final N rows, and a warning says they are not necessarily the newest.
+- **Gap counts.** `missing` and `invalid` count gaps inside the plotted window only.
+- **Numbers.** Values are parsed with the table-query rules. Set `decimal_separator`
+  when a column's notation is ambiguous. Empty cells, placeholders and other text
+  become gaps, never zero, and are counted in the summary.
+
+The response holds the image and a JSON summary. The summary repeats the provenance
+and lists each series' plotted points, gaps and first/last/min/max values, so the
+assistant can describe the trend without reading the pixels. The image shows the
+title, unit, retrieval date and the resource's page. Download URLs change within
+hours, so the summary's `source_url` names the downloaded file instead. `chart="bar"` is meant for a few points
+(a warning appears above 60). Bulletins with related datasets return
+`related_datasets`, and PDFs return `download_available`; neither includes an image.
+
 ## Read PDF documents
 
 Search for a publication/report, then pass its returned ID to `read_tuik_document`.
@@ -307,10 +408,24 @@ of the text is read does it advance. This avoids silently skipping text. Offsets
 count characters in the normalized extracted text. `truncated` applies to the
 current page; `has_more` also accounts for later pages.
 
-PDF text is deduplicated and whitespace/line-end hyphenation normalized. Layout
-and tables are not reconstructed. `no_text_layer` means no extractable text on
-the requested page, which may be blank or scanned; OCR is not performed. Source
-text remains untrusted data. PDF table extraction is a later stretch goal.
+PDF text is deduplicated and whitespace/line-end hyphenation normalized; `text`
+does not reconstruct layout. `no_text_layer` means no extractable text on the
+requested page, which may be blank or scanned; OCR is not performed. Source text
+remains untrusted data.
+
+**PDF tables are best effort.** Pass `tables: true` to also receive the page's
+ruled tables (`extraction: "pdf"`, with `page`, `title`, `columns`, string `rows`,
+`total_rows`, `layout` and `warnings`). Only tables drawn with ruling lines are
+detected; whitespace-aligned text, charts and scanned pages yield none. A table
+without a recognizable header row has `layout: "raw"` and positional columns
+(`column_1`, ...), which usually means it continues a table from an earlier page.
+Values are never typed or normalized, and every table carries a warning to verify
+it against the page text. Prefer a dataset's CSV or a bulletin's XLS file whenever
+one exists. Measured coverage and known failure modes: [PDF tables](docs/PDF_TABLES.md).
+
+```json
+{"resource_id": "press:57987", "page": 9, "tables": true}
+```
 
 See [file reading design](docs/FILE_READING_DESIGN.md) for the scope decisions,
 limits, cache policy, research sources and verification strategy.
@@ -434,7 +549,7 @@ pyproject.toml, README.md, .env.example, Dockerfile
   unverified TÜİK subdomains are excluded from the allowlist.
 - Download links listed in metadata are advertised, not necessarily verified.
   `get_tuik_data` verifies one selected file (preferring CSV); other links retain
-  `verified: false`. Excel tables and PDF text pages are parsed on demand; OCR and PDF table extraction are not implemented.
+  `verified: false`. Excel tables and PDF text pages are parsed on demand. PDF tables are best effort (ruled grids only) and OCR is not implemented.
 - Transport is local stdio. HTTP transport can be added to the SDK entrypoint
   later with explicit deployment constraints.
 
@@ -463,10 +578,12 @@ the alias (#16).
 
 OpenSearch is optional. The base install and every MCP tool work without it. With
 `TUIK_OPENSEARCH_URL` set and an index built, `search_tuik_datasets` searches the
-index through the [search backend](docs/SEARCH_BACKEND.md) (#17); if the cluster or
-alias is unavailable it falls back to literal catalog matching with a warning
-(`TUIK_OPENSEARCH_TIMEOUT_SECONDS`, default 5, bounds the wait). Other tools are
-unchanged until #18 exposes indexed search for bulletins and metadata.
+index through the [search backend](docs/SEARCH_BACKEND.md) (#17). `search_tuik`
+also uses that index for general discovery, with filters, highlights and facets
+(#18). If the cluster or alias is unavailable, dataset-only search falls back to
+literal matching and general search to the portal, with warnings.
+`TUIK_OPENSEARCH_TIMEOUT_SECONDS` (default 5) bounds the wait. `search_tuik` with
+`live: true` bypasses the index to query the current portal.
 
 ```bash
 # Requires Docker Compose v2 and a running Docker daemon
@@ -503,8 +620,9 @@ settings or configure them in the MCP client's environment.
 whitespace-only values also leave the optional backend disabled;
 `TUIK_OPENSEARCH_INDEX` defaults to the future `tuik-resources` alias. The client
 extra is never imported by the base server. For a separate CI instance use
-`docker compose -p tuik-ci up -d --wait` with port 9200 free. Search integration
-checks are tracked in #19.
+`docker compose -p tuik-ci up -d --wait` with port 9200 free. The separate
+**OpenSearch integration** CI job runs the real-cluster tests on every PR (#19); see
+[CONTRIBUTING.md](CONTRIBUTING.md#opensearch-integration-checks).
 
 ### Build the index locally
 
@@ -512,10 +630,14 @@ With the cluster running and `TUIK_OPENSEARCH_URL` exported as above:
 
 ```bash
 # First build: crawl every bulletin detail, load tuik-resources-v1, point the alias at it.
-tuik-mcp-index --full --report /tmp/index-full.json
+tuik-mcp-index --full --listing-attempts 2 --alternate-listing-mode \
+  --report /tmp/index-full.json
 
 # Later refreshes: reuse unchanged details and upsert new/changed documents.
 tuik-mcp-index --incremental --report /tmp/index-incremental.json
+
+# Also index tables and PDF pages of the newest bulletin per series (#22).
+tuik-mcp-index --incremental --content --max-content-files 25
 
 # Inspect the result
 curl 'http://localhost:9200/_cat/aliases/tuik-resources?v'
@@ -523,34 +645,79 @@ curl 'http://localhost:9200/tuik-resources/_search?q=title.ascii:issizlik&pretty
 ```
 
 A full build paces TÜİK requests two seconds apart and can take an hour or more.
+The bounded alternate-listing passes recover overlapping portal pages only when
+the advertised total and dates stay unchanged and the unique-ID union is exact;
+an incomplete or changing listing fails before index/state writes.
 `--dry-run` crawls and plans without writing the index or crawl state. Crawl state
 advances only after the index write succeeds; full builds keep previous versions
 for rollback. See [docs/INDEXING.md](docs/INDEXING.md) for modes, failure handling
 and the JSON report.
+
+### Verify indexed discovery through MCP
+
+After a successful build, keep `TUIK_OPENSEARCH_URL` and `TUIK_OPENSEARCH_INDEX`
+exported and run:
+
+```bash
+.venv/bin/python scripts/live_smoke.py --indexed-only \
+  --output /tmp/indexed-live-report.json
+# Optional: choose a different query whose top hit has a small public CSV export.
+.venv/bin/python scripts/live_smoke.py --indexed-only \
+  --index-query 'altin haric dis ticaret hadleri' \
+  --output /tmp/indexed-ascii-report.json
+```
+
+This starts the real stdio MCP server and follows `search_tuik(kind="dataset",
+downloadable_only=true)` → `get_tuik_resource` → `get_tuik_data(limit=2)` using the
+exact same `flow:` ID. It requires `source: index`, `backend: opensearch`, indexing
+provenance, rows, a content snapshot and a verified CSV link. A literal/portal
+fallback fails the indexed check even when it returns useful rows; failure still
+writes JSON and exits nonzero. Select a bounded export: the row limit does not
+avoid downloading the whole CSV within the configured download limit.
+
+The full smoke also runs this indexed path whenever the cluster URL is configured.
+Its legacy table/publication checks explicitly use live portal search, since those
+resource types are outside the v0.3 metadata index. Without a cluster URL, the
+full smoke remains available for upstream contracts; `--indexed-only` fails before
+starting the server. The [v0.3.0 release checklist](docs/RELEASE_0.3.0.md) separates
+these operational checks from the adopted AI relevance evaluation and release/tag gates.
 
 See the [official OpenSearch Docker instructions](https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/)
 for host prerequisites and production security configuration.
 
 ## Future roadmap
 
-The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the current issue
-dependencies and sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) provides
-the 48-query baseline snapshot, independent judging workflow and metric commands;
-human relevance judgments and baseline quality scores remain pending (#11).
+The [post-demo work plan](docs/NEXT_STEPS_2026-10-26.md) records the original issue
+sequence. [Search evaluation](docs/SEARCH_EVALUATION.md) now records the 48-query
+AI baseline, source-checked sequential review and metric commands (#11), alongside
+the optional independent human-study workflow.
 
 Dataset discovery now searches public export availability and returns catalog-backed
 identities, and downloadable tables, reports, publications and bulletin files have
 title-derived stable IDs. The plan for the next phases is tracked in
 [roadmap #25](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25).
-The optional OpenSearch stack, analysis, crawler, indexer and dataset backend are
-already included. The v0.3.0 work still covers indexed general MCP search, dedicated
-cluster CI and independently judged relevance measurements; these are not v0.2.0
-release prerequisites.
-Hybrid search, table/PDF content indexing and best-effort PDF tables are v0.4.0
-stretch goals. A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Version 0.2.0 also includes
+The optional OpenSearch stack, analysis, crawler, indexer, dataset backend and
+indexed general MCP search are included on `develop`, and the dedicated cluster CI
+job (#19) runs on every PR. The [full-metadata comparison](docs/verification/issue-20-full-corpus-2026-11-05.md)
+(#20) covers 3,424 documents and 1,390 AI-reviewed pairs. It retains the existing
+synonym default for the best matched-corpus nDCG@10 (0.7304) and pooled recall,
+with the built-in analyzer's better MRR explicitly recorded. The
+[v0.3.0 notes](docs/releases/v0.3.0.md) describe the prepared release; the
+[checklist](docs/RELEASE_0.3.0.md) tracks reviewed promotion and publication.
+Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
+available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
+"document_chunk")`, and best-effort PDF tables (#8) through `read_tuik_document`.
+A PostgreSQL canonical catalog and DOCX ingestion are outside the
+current roadmap. The file-reading workflow retains
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
-(#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
-#52 on `develop`. Publication follows the
-[v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
-reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
+(#52), first released in v0.2.0. See its
+[historical notes](docs/releases/v0.2.0.md) for that release's scope.
+
+A separately identified [single-AI relevance pilot](docs/verification/issue-11-20-ai-pilot-2026-11-04.md)
+is retained as the first pass of the adopted
+[AI evaluation protocol](docs/adr/0004-ai-relevance-evaluation.md). A
+[source-checked second pass](docs/verification/issue-11-ai-source-review-2026-11-04.md)
+adds live MCP checks and documented grade revisions. Independent human validation
+has not been performed. The [full-corpus follow-up](docs/verification/issue-20-full-corpus-2026-11-05.md)
+retains those prior labels, adds every new candidate, and records a real full-index
+MCP smoke. v0.3.0 preparation, reviewed promotion and publication remain separate.

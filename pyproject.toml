@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tuik-mcp"
-version = "0.2.0"
+version = "0.3.0"
 description = "MCP access to public TÜİK statistical resources"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -20,6 +20,8 @@ dependencies = [
 
 [project.optional-dependencies]
 search = ["opensearch-py>=3,<4"]
+# PNG charts for chart_tuik_data (#72); the other tools never import it.
+viz = ["matplotlib>=3.9,<4"]
 fixtures = []  # Compatibility extra; all corpus readers are now runtime dependencies.
 dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 
