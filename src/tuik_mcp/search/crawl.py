@@ -119,7 +119,7 @@ def category_names(flow):
 
 
 def press_snapshot(press, listing_date, warnings):
-    key, retrieved = f"press:{press.id}", now()
+    key, retrieved = f"press:{press.id}", press.retrieved_at or now()
     previous = []
     for item in press.previousPresses:
         try:
@@ -163,7 +163,7 @@ def press_snapshot(press, listing_date, warnings):
         kind="bulletin",
         source_url=f"{PORTAL}/tr/press/{press.id}",
         body=plain_text(press.content),
-        formats=formats,
+        formats=list(dict.fromkeys(formats)),
         downloadable=has_download,
         related_ids=list(related),
         category_path=paths,

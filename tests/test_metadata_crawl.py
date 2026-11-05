@@ -4,6 +4,7 @@ import importlib.util
 import json
 import time
 from argparse import Namespace
+from datetime import UTC, datetime
 from pathlib import Path
 
 import httpx
@@ -18,6 +19,7 @@ from tuik_mcp.search.crawl import (
     MetadataCrawler,
     PressSnapshot,
     portal_date,
+    press_snapshot,
     state_bytes,
 )
 from tuik_mcp.search.documents import IndexDocument
@@ -93,6 +95,31 @@ async def test_full_crawl_documents_relations_categories_and_no_file_fetches():
     assert crawler.report["counts"]["bulletin"] == 2
     assert crawler.report["status"] == "ok" and crawler.next_state is not None
     assert source.calls == ["flows", "page:1", "page:2", "press:57987", "press:58058"]
+
+
+def test_many_files_deduplicate_formats_before_budget_and_keep_original_retrieval_time():
+    press = Source().known
+    press.tables = [
+        {"url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?p=test", "type": "xls"}
+    ] * 40
+    press.statisticalTables, press.reports = [], []
+    press.retrieved_at = datetime(2026, 11, 5, 5, 0, tzinfo=UTC)
+    snapshot = press_snapshot(press, None, [])
+    assert snapshot.bulletin.formats == ["xls"]
+    assert snapshot.bulletin.downloadable
+    assert snapshot.bulletin.retrieved_at == press.retrieved_at
+    assert snapshot.metadata.retrieved_at == press.retrieved_at
+
+
+def test_unique_format_budget_remains_enforced():
+    press = Source().known
+    press.tables = [
+        {"url": "https://veriportali.tuik.gov.tr/api/tr/data/downloads?p=test", "type": f"f{i}"}
+        for i in range(33)
+    ]
+    press.statisticalTables, press.reports = [], []
+    with pytest.raises(ValueError, match="at most 32"):
+        press_snapshot(press, None, [])
 
 
 async def test_incremental_lists_every_page_and_replays_all_cached_documents(tmp_path):
