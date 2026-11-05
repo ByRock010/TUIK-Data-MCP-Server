@@ -1,5 +1,6 @@
 """Frozen-corpus ablations, error propagation and disposable-index lifecycle (#20)."""
 
+import gzip
 import importlib.util
 import json
 import os
@@ -157,6 +158,7 @@ def test_jsonl_validation_and_output_collision_fail_before_cluster_writes(
     source = tmp_path / "documents.jsonl"
     source.write_text(documents[0].model_dump_json() + "\n")
     assert evaluation.load_documents(source) == documents
+
     suite_file = tmp_path / "suite.json"
     evaluation.write_json(suite_file, suite)
     with pytest.raises(SystemExit):
@@ -174,6 +176,93 @@ def test_jsonl_validation_and_output_collision_fail_before_cluster_writes(
             ]
         )
     assert evaluation.load_documents(source) == documents
+
+
+def test_compressed_corpus_and_checkpoints_round_trip(documents, tmp_path):
+    source = tmp_path / "documents.jsonl.gz"
+    source.write_bytes(gzip.compress((documents[0].model_dump_json() + "\n").encode()))
+    assert evaluation.load_documents(source) == documents
+    output = tmp_path / "run.json.gz"
+    evaluation.write_json(output, {"title": "İşsizlik"})
+    assert evaluation.read_json(output) == {"title": "İşsizlik"}
+    before = output.read_bytes()
+    evaluation.write_json(output, {"title": "İşsizlik"})
+    assert output.read_bytes() == before  # Reproducible compression; no timestamp headers.
+
+
+async def test_frozen_baseline_uses_same_corpus_and_never_configured_index(
+    suite, documents, tmp_path, monkeypatch
+):
+    from tuik_mcp.models.search import SearchResponse
+    from tuik_mcp.services.catalog import CatalogService
+
+    documents[0].formats = ["csv"]
+    documents[0].downloadable = True
+    documents.append(
+        IndexDocument(
+            id="press:1", kind="bulletin", title="TÜFE", source_url=documents[0].source_url
+        )
+    )
+    suite["queries"][0]["text"] = "Tüketici"
+    monkeypatch.setenv("TUIK_OPENSEARCH_URL", "http://must-not-be-used")
+
+    class Http:
+        def __init__(self, settings):
+            assert settings.opensearch_url is None
+            self.settings = settings
+
+        async def close(self):
+            pass
+
+    class Service(CatalogService):
+        async def search(self, query, limit):
+            return SearchResponse(query=query, results=[], source_url=documents[0].source_url)
+
+    monkeypatch.setattr(evaluation, "HttpClient", Http)
+    monkeypatch.setattr(evaluation, "CatalogService", Service)
+    output = tmp_path / "baseline.json.gz"
+    assert await evaluation.collect(suite, output, documents=documents) == 0
+    report = evaluation.read_json(output)
+    assert report["corpus_sha256"] == evaluation.corpus_fingerprint(documents)
+    literal = report["systems"]["literal"]
+    assert literal["corpus_ids"] == [documents[0].id]
+    assert [h["id"] for h in literal["results"]["q1"]] == [documents[0].id]
+    assert report["catalog"][0]["retrieved_at"] == "2026-10-26T10:00:00Z"
+    evaluation.validate_run(report, suite)
+
+    def unexpected_http(*args):
+        raise AssertionError("Changed frozen corpus contacted the network")
+
+    monkeypatch.setattr(evaluation, "HttpClient", unexpected_http)
+    before = output.read_bytes()
+    documents[0].title = "Changed source title"
+    with pytest.raises(ValueError, match="Cannot resume: frozen corpus"):
+        await evaluation.collect(suite, output, resume=True, documents=documents)
+    with pytest.raises(ValueError, match="Cannot resume: frozen corpus"):
+        await evaluation.collect(suite, output, resume=True)
+    assert output.read_bytes() == before
+
+
+@pytest.mark.parametrize("problem", ["empty", "duplicate", "no_dataflows"])
+async def test_invalid_frozen_baseline_fails_before_network(
+    suite, documents, tmp_path, monkeypatch, problem
+):
+    def unexpected_http(*args):
+        raise AssertionError("Invalid frozen corpus contacted the network")
+
+    monkeypatch.setattr(evaluation, "HttpClient", unexpected_http)
+    if problem == "empty":
+        documents = []
+    elif problem == "duplicate":
+        documents *= 2
+    else:
+        documents = [
+            IndexDocument(
+                id="press:1", kind="bulletin", title="TÜFE", source_url=documents[0].source_url
+            )
+        ]
+    with pytest.raises((ValueError, evaluation.IndexerError)):
+        await evaluation.collect(suite, tmp_path / "run.json", documents=documents)
 
 
 @pytest.mark.opensearch

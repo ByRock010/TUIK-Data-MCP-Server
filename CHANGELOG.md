@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Full-metadata relevance comparison on 3,424 frozen documents and 1,390 pooled
+  AI-reviewed pairs, with all five systems' overall/category/type metrics,
+  retained source evidence and 55 documented revisions. The existing synonym
+  default has the best matched-corpus nDCG@10/pooled recall; built-in Turkish has
+  better MRR. A real full-index MCP smoke and live contracts passed. Independent
+  human validation and v0.3.0 publication are not implied (#20; acceptance evidence for #29).
 - `chart_tuik_data` draws CSV/XLS/XLSX rows as a PNG line or bar chart (MCP image
   content) with a JSON summary of each series' points, gaps and first/last/min/max.
   It shares `get_tuik_data`'s snapshot, filters and query. It adds label columns,
@@ -59,6 +65,19 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Metadata crawling deduplicates advertised formats before enforcing the unique
+  format budget, so bulletins with many XLS attachments remain indexable. Recorded
+  bulletin retrieval times can be preserved when replaying retained responses (#20).
+- Historical bulletin-series links may omit their display title; the crawler
+  retains their validated URL identity instead of rejecting the whole bulletin (#20).
+- Optional bounded listing retries recover overlapping portal pages only when
+  every pass retains the advertised total and dates and the union reaches the
+  exact unique-ID count. Unresolved or changing corpora still fail before detail
+  downloads, indexing or checkpointing (#20).
+- Relevance baseline collection explicitly disables the optional index, supports
+  the same frozen metadata JSONL as the OpenSearch variants and rejects resume
+  against a changed corpus. Atomic, optionally compressed checkpoints retain
+  reproducible full-corpus evidence (#20).
 - Search evaluation rejects orphaned or malformed document metadata before
   scoring or judge-sheet export. Resumable baseline collection records provenance
   in every checkpoint and rejects changed/missing source revisions or collector

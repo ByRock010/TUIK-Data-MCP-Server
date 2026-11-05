@@ -1,0 +1,37 @@
+{
+  "status": "ok",
+  "started_at": "2026-11-05T06:58:21.587852+00:00",
+  "source_revision": "7bd94206daacc09ab24b88efa4c16784d01f90ec",
+  "mode": "full_rebuild_from_frozen_metadata",
+  "scope": "Own UUID alias for real MCP acceptance, not the application alias and not a second live crawl",
+  "alias": "tuik-relevance-acceptance-4f2bbfcc191448648cc02ec103e3031e",
+  "input": "docs/verification/search-full-corpus-2026-11-05.jsonl.gz",
+  "input_sha256": "0b68c048b7b7543f8bff743f07176592479ebf73e37f2a5273a80bb6cf7ed04b",
+  "corpus_sha256": "a1b800434e1679fa5d9d84c4997898eb7825090a56b52183f8cb5afcd0cecd86",
+  "engine": {
+    "distribution": "opensearch",
+    "number": "3.3.2",
+    "build_type": "tar",
+    "build_hash": "6564992150e26aaa62d4522a220dfff5188aeb88",
+    "build_date": "2025-10-29T22:22:22.753988939Z",
+    "build_snapshot": false,
+    "lucene_version": "10.3.1",
+    "minimum_wire_compatibility_version": "2.19.0",
+    "minimum_index_compatibility_version": "2.0.0"
+  },
+  "index": "tuik-relevance-acceptance-4f2bbfcc191448648cc02ec103e3031e-v1",
+  "previous_indices": [],
+  "documents": 3424,
+  "written": 3424,
+  "counts": {
+    "dataset": 510,
+    "bulletin": 1494,
+    "metadata": 1420
+  },
+  "indexed_at": "2026-11-05T06:58:21.745771+00:00",
+  "finished_at": "2026-11-05T06:58:24.136611+00:00",
+  "cleanup": {
+    "status": "deleted_owned_index_and_alias",
+    "at": "2026-11-05T07:15:11.432801+00:00"
+  }
+}

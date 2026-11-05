@@ -66,10 +66,19 @@ async def run(args, *, source=None, store=None, content_service=None) -> int:
         state = await asyncio.to_thread(CrawlState.load, args.state)
         if source is None:
             http = CrawlHttpClient(settings)
-            source = CrawlSource(http)
+            source = CrawlSource(
+                http, listing_auto_filter=getattr(args, "listing_auto_filter", False)
+            )
         crawler = MetadataCrawler(source, state)
         try:
-            documents = [document async for document in crawler.documents(full=args.full)]
+            documents = [
+                document
+                async for document in crawler.documents(
+                    full=args.full,
+                    listing_attempts=getattr(args, "listing_attempts", 1),
+                    alternate_listing_mode=getattr(args, "alternate_listing_mode", False),
+                )
+            ]
         finally:
             report["crawl"] = crawler.report
         if crawler.next_state is None:
@@ -148,6 +157,23 @@ def content_budget(value: str) -> int:
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="tuik-mcp-index", description=__doc__)
+    parser.add_argument(
+        "--alternate-listing-mode",
+        action="store_true",
+        help="Alternate autoFilter modes between complete listing attempts",
+    )
+    parser.add_argument(
+        "--listing-auto-filter",
+        action="store_true",
+        help="Use the portal's autoFilter listing mode; completeness checks still apply",
+    )
+    parser.add_argument(
+        "--listing-attempts",
+        type=int,
+        choices=range(1, 6),
+        default=1,
+        help="Bounded full-listing retries for overlapping pages (default: 1)",
+    )
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument(
         "--full", action="store_true", help="Refresh all details and rebuild the index"
