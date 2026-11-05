@@ -152,6 +152,14 @@ and [push event workflows](https://docs.github.com/en/actions/reference/workflow
 
 ## Releasing
 
+For v0.3.0, follow [`docs/RELEASE_0.3.0.md`](docs/RELEASE_0.3.0.md) and use
+[`docs/releases/v0.3.0.md`](docs/releases/v0.3.0.md) as the release notes.
+The preparation PR closes #29 and epic #24 on its reviewed `develop` merge,
+recording accepted development. Protected promotion to `master`, the annotated
+tag, tagged-source artifacts, GitHub release and milestone closure follow
+separately. The old `release/0.3.0` suggestion in #29 is superseded by this
+topic → `develop` → `master` policy; do not tag the preparation branch.
+
 For v0.2.0, use the issue-by-issue readiness and evidence checklist in
 [`docs/RELEASE_0.2.0.md`](docs/RELEASE_0.2.0.md). The v0.2.0 preparation PR closes
 #10 and its tracking epic #23 automatically when merged into `develop`, using

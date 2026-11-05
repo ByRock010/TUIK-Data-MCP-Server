@@ -5,10 +5,11 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
-Version 0.2.0 includes eight tools, Excel/PDF reading, bounded table inspection,
-typed table queries and snapshot-bound pagination. See the
-[release notes](docs/releases/v0.2.0.md) for scope and upgrade details, and the
-[release checklist](docs/RELEASE_0.2.0.md) for verification and publication status.
+Version 0.3.0 prepares nine tools with optional Turkish OpenSearch discovery,
+filters, highlights and facets, alongside Excel/PDF reading, bounded table queries
+and optional PNG charts. See the [release notes](docs/releases/v0.3.0.md) for scope
+and upgrade details, and the [release checklist](docs/RELEASE_0.3.0.md) for candidate
+verification and pending reviewed promotion/publication.
 
 ## Implemented tools
 
@@ -629,7 +630,8 @@ With the cluster running and `TUIK_OPENSEARCH_URL` exported as above:
 
 ```bash
 # First build: crawl every bulletin detail, load tuik-resources-v1, point the alias at it.
-tuik-mcp-index --full --report /tmp/index-full.json
+tuik-mcp-index --full --listing-attempts 2 --alternate-listing-mode \
+  --report /tmp/index-full.json
 
 # Later refreshes: reuse unchanged details and upsert new/changed documents.
 tuik-mcp-index --incremental --report /tmp/index-incremental.json
@@ -643,6 +645,9 @@ curl 'http://localhost:9200/tuik-resources/_search?q=title.ascii:issizlik&pretty
 ```
 
 A full build paces TÜİK requests two seconds apart and can take an hour or more.
+The bounded alternate-listing passes recover overlapping portal pages only when
+the advertised total and dates stay unchanged and the unique-ID union is exact;
+an incomplete or changing listing fails before index/state writes.
 `--dry-run` crawls and plans without writing the index or crawl state. Crawl state
 advances only after the index write succeeds; full builds keep previous versions
 for rollback. See [docs/INDEXING.md](docs/INDEXING.md) for modes, failure handling
@@ -696,18 +701,17 @@ indexed general MCP search are included on `develop`, and the dedicated cluster 
 job (#19) runs on every PR. The [full-metadata comparison](docs/verification/issue-20-full-corpus-2026-11-05.md)
 (#20) covers 3,424 documents and 1,390 AI-reviewed pairs. It retains the existing
 synonym default for the best matched-corpus nDCG@10 (0.7304) and pooled recall,
-with the built-in analyzer's better MRR explicitly recorded. See the
-[v0.3.0 checklist](docs/RELEASE_0.3.0.md) for the remaining evidence and promotion steps.
+with the built-in analyzer's better MRR explicitly recorded. The
+[v0.3.0 notes](docs/releases/v0.3.0.md) describe the prepared release; the
+[checklist](docs/RELEASE_0.3.0.md) tracks reviewed promotion and publication.
 Hybrid search is a v0.4.0 stretch goal. Table/PDF content indexing (#22) is
 available through `tuik-mcp-index --content` and `search_tuik(kind="table" |
 "document_chunk")`, and best-effort PDF tables (#8) through `read_tuik_document`.
 A PostgreSQL canonical catalog and DOCX ingestion are outside the
-current roadmap. Version 0.2.0 also includes
+current roadmap. The file-reading workflow retains
 [advanced row queries and snapshot-bound cursor pagination](docs/TABLE_QUERIES.md)
-(#52) in the file-reading workflow. Accepted PRs #59 and #60 closed #10, #23 and
-#52 on `develop`. Publication follows the
-[v0.2.0 release checklist](docs/RELEASE_0.2.0.md):
-reviewed promotion to `master`, the `v0.2.0` tag, then milestone closure.
+(#52), first released in v0.2.0. See its
+[historical notes](docs/releases/v0.2.0.md) for that release's scope.
 
 A separately identified [single-AI relevance pilot](docs/verification/issue-11-20-ai-pilot-2026-11-04.md)
 is retained as the first pass of the adopted
