@@ -57,6 +57,16 @@ evaluation set.
    `search_tuik_datasets` stays lexical: dataset-filtered retrieval was not measured,
    and datasets ranked lower in hybrid top tens. Responses report
    `ranking: "lexical" | "hybrid"`.
+8. **Lexical evidence required (amendment, 2026-11-06):** k-NN always returns its
+   50 nearest neighbours, so a gibberish query (`xqzvkj`) used to return 50
+   unrelated import-index datasets. A similarity floor cannot fix this: on the frozen
+   corpus the top e5 cosine scores were 0.9185 for `xqzvkj`, 0.8990 for `asdf qwer`,
+   0.9187 for `issizlik orani` and 0.9211 for `kaç çift ayrıldı`. The hybrid request
+   therefore carries a `filter` aggregation that counts the lexical query's matches
+   in the same round trip. When the count is zero, the response has no hits, total 0,
+   empty facets and a warning. None of the 48 evaluation queries is affected, so the
+   measured metrics stand. A response that lacks the count falls back to lexical
+   search rather than skipping the check.
 
 ## Consequences
 
@@ -64,6 +74,11 @@ evaluation set.
   search costs one model download of about 490 MB for the indexer and the server,
   plus about 90 s of CPU embedding for 3,424 documents on an Apple M4.
 - Hybrid `score` values are RRF sums (about 0.01–0.03), not BM25 scores.
+- Because of the lexical-evidence rule, semantic search refines queries that share
+  at least one word (or a close spelling) with the index; it does not rescue a
+  query with no lexical match. English queries such as `unemployment rate` match
+  nothing lexically and now return no results, with a warning to retry in Turkish.
+  Before the rule they returned relevant labour bulletins through k-NN alone.
 - OpenSearch rejects a `_score` tie-breaker sort on hybrid queries. Ties keep the
   engine's internal order, which is deterministic for a freshly loaded
   single-shard index but not across arbitrary rebuilds.
