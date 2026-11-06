@@ -23,6 +23,14 @@ All notable changes to this project are documented here. The format follows
 - Index mapping schema 3 adds the optional `embedding` vector field; rebuild older
   indices once with `tuik-mcp-index --full`.
 
+### Fixed
+
+- Hybrid `search_tuik` no longer returns semantic neighbours for a query with no
+  lexical match. Gibberish such as `xqzvkj` returned 50 unrelated datasets; it now
+  returns no results and a warning. English-only queries such as
+  `unemployment rate` are affected in the same way. None of the 48 evaluation
+  queries changes (ADR 0005, decision 8).
+
 ## [0.3.0] - 2026-11-05
 
 ### Added

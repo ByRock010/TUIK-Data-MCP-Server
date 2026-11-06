@@ -40,6 +40,15 @@ MAX_OFFSET = 1000
 HYBRID_DEPTH = 50
 HYBRID_RANK_CONSTANT = 60
 HYBRID_WEIGHTS = (0.5, 0.5)
+# k-NN always returns its nearest neighbours, and e5 similarities do not separate an
+# unrelated query from a real one (gibberish and "issizlik orani" both score ~0.92),
+# so no score threshold is used. Instead, the hybrid request counts the documents the
+# lexical query matches; with none, semantic neighbours alone are not returned.
+LEXICAL_MATCHES_AGG = "lexical_matches"
+NO_LEXICAL_MATCH = (
+    "No indexed document contains the query's words or a close spelling; semantic "
+    "neighbours alone are not returned. Try other Turkish terms or live=true."
+)
 # Kinds whose filtered searches were neither measured nor vector-indexed stay lexical:
 # datasets ranked lower in hybrid top tens, and file content has no vectors.
 LEXICAL_ONLY_KINDS = frozenset(("dataset", *CONTENT_KINDS))
@@ -206,6 +215,8 @@ def build_hybrid_query(
         }
     }
     body["query"] = {"hybrid": {"queries": [lexical, semantic], "pagination_depth": HYBRID_DEPTH}}
+    # Every lexical match is in the hybrid result set, so this counts all of them.
+    body["aggs"][LEXICAL_MATCHES_AGG] = {"filter": lexical}
     body["search_pipeline"] = {
         "phase_results_processors": [
             {
@@ -304,6 +315,20 @@ class OpenSearchBackend:
             hits = response["hits"]
             if hits["total"].get("relation", "eq") != "eq":
                 raise BackendUnavailable("the search returned only a lower-bound total")
+            aggregations = response.get("aggregations") or {}
+            if ranking == "hybrid" and aggregations[LEXICAL_MATCHES_AGG]["doc_count"] == 0:
+                return SearchHits(
+                    backend="opensearch",
+                    ranking=ranking,
+                    warnings=[*warnings, NO_LEXICAL_MATCH],
+                    total=0,
+                    limit=limit,
+                    offset=offset,
+                    facets=SearchFacets(
+                        **{name: SearchFacet(counts={}) for name in ("kind", "theme")}
+                    ),
+                    indexed_at=aggregations.get("indexed_at", {}).get("value_as_string"),
+                )
             return SearchHits(
                 backend="opensearch",
                 ranking=ranking,
