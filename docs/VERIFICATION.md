@@ -1,5 +1,24 @@
 # Verification
 
+## MCP vs web vs closed-book benchmark — 2026-11-08
+
+The [benchmark report](verification/mcp-benchmark-2026-11-08.md) asks
+`claude-opus-5-5` 10 hard TÜİK questions three times: with only the TÜİK MCP
+tools, with only web search and fetch, and with no tools. Answers were graded
+against ground truth taken from TÜİK's raw files and bulletins. The scores
+were **10 / 8 / 2** out of 10.
+
+- **MCP:** 44 tool calls with no errors. Every number in its answers is in its
+  tool output or is a labelled calculation.
+- **Web:** found headline figures through news sites but missed revised series.
+- **Closed-book:** in 2 of 10 sessions it wrote fake tool calls.
+
+These are single runs graded by a model of the same family, not independent
+human review. The MCP server ran from PR #81 (`2243c2e`) with the local hybrid
+index. The [evidence JSON](verification/mcp-benchmark-2026-11-08.json) and the
+[raw session streams](verification/mcp-benchmark-runs-2026-11-08.jsonl.gz) are
+retained.
+
 ## Final v0.3.0 candidate — 2026-11-05
 
 Versioned source `4cde23b` prepares package **0.3.0** on accepted `develop`

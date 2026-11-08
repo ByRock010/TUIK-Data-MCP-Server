@@ -17,6 +17,11 @@ All notable changes to this project are documented here. The format follows
   - Dataset-only, file-content and deep-page searches stay lexical.
   - The new grades come from a second, non-independent AI assessor.
 - `collect-index --variants` collects the hybrid evaluation systems.
+- `scripts/mcp_benchmark.py` runs the same prompts through Claude Code with the
+  TÜİK MCP, with web tools only and with no tools, and summarizes tool calls, costs
+  and which answer numbers occur in tool output. The
+  [2026-11-08 run](docs/verification/mcp-benchmark-2026-11-08.md) scored 10 / 8 / 2
+  of 10 on hard TÜİK questions (single runs, AI-graded).
 
 ### Changed
 
