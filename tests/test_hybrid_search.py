@@ -16,6 +16,8 @@ from tuik_mcp.search import embeddings
 from tuik_mcp.search.backend import (
     HYBRID_DEPTH,
     HYBRID_WEIGHTS,
+    LEXICAL_MATCHES_AGG,
+    NO_LEXICAL_MATCH,
     OpenSearchBackend,
     SearchFilters,
     build_hybrid_query,
@@ -166,11 +168,14 @@ def test_hybrid_query_fuses_the_lexical_query_with_filtered_knn():
     assert combination["parameters"]["weights"] == list(HYBRID_WEIGHTS) == [0.5, 0.5]
     assert "embedding" in body["_source"]["excludes"] and "sort" not in body
     assert "aggs" in body and "highlight" in body
+    # Counts lexical matches in the same request; the lexical query itself has no such agg.
+    assert body["aggs"][LEXICAL_MATCHES_AGG] == {"filter": lexical}
+    assert LEXICAL_MATCHES_AGG not in build_query("nüfus", filters, 10)["aggs"]
     with pytest.raises(ValueError, match="first 50"):
         build_hybrid_query("nüfus", filters, 10, 45, vector)
 
 
-def cluster(model=MODEL, fail_hybrid=False, models=None):
+def cluster(model=MODEL, fail_hybrid=False, models=None, lexical_matches=1):
     requests = []
 
     def handler(request):
@@ -209,12 +214,17 @@ def cluster(model=MODEL, fail_hybrid=False, models=None):
                 },
                 "aggregations": {
                     name: {
-                        "buckets": [],
+                        "buckets": [{"key": "bulletin", "doc_count": 1}],
                         "sum_other_doc_count": 0,
                         "doc_count_error_upper_bound": 0,
                     }
                     for name in ("kind", "theme")
-                },
+                }
+                | (
+                    {LEXICAL_MATCHES_AGG: {"doc_count": lexical_matches}}
+                    if body["aggs"].get(LEXICAL_MATCHES_AGG)
+                    else {}
+                ),
             },
         )
 
@@ -254,6 +264,43 @@ async def test_backend_uses_hybrid_only_when_vectors_model_and_scope_match(
         assert hits.warnings == []
     if ranking == "hybrid":
         assert embedder.queries == ["iş bulamayanlar"]
+
+
+async def test_hybrid_without_lexical_matches_returns_no_semantic_neighbours():
+    # k-NN always finds neighbours; with no lexical match they are not evidence.
+    store, requests = cluster(lexical_matches=0)
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", FakeEmbedder()).search(
+            "xqzvkj", SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert ["hybrid" in body["query"] for body in requests] == [True]
+    assert hits.ranking == "hybrid" and hits.hits == [] and hits.total == 0
+    assert hits.warnings == [NO_LEXICAL_MATCH]
+    assert hits.facets.kind.counts == hits.facets.theme.counts == {}
+
+
+async def test_hybrid_response_without_the_lexical_count_falls_back_lexically():
+    # A cluster that drops the aggregation must not silently skip the guard.
+    store, requests = cluster()
+    original = store.query
+
+    async def query(index, body):
+        response = await original(index, body)
+        response["aggregations"].pop(LEXICAL_MATCHES_AGG, None)
+        return response
+
+    store.query = query
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", FakeEmbedder()).search(
+            "nüfus", SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert ["hybrid" in body["query"] for body in requests] == [True, False]
+    assert hits.ranking == "lexical" and hits.hits
+    assert any("Hybrid search failed" in w for w in hits.warnings)
 
 
 async def test_failed_hybrid_request_retries_lexically_and_meta_is_cached():
@@ -497,6 +544,9 @@ async def test_real_cluster_hybrid_query_with_inline_rrf_pipeline():
         assert hits.ranking == "hybrid" and hits.warnings == []
         assert {hit.id for hit in hits.hits} <= {"flow:DF_ISSIZ+V1.0", "press:57987"}
         assert hits.hits and hits.facets is not None
+        nonsense = await backend.search("xqzvkj", SearchFilters(), 10)
+        assert nonsense.ranking == "hybrid" and nonsense.hits == [] and nonsense.total == 0
+        assert nonsense.warnings == [NO_LEXICAL_MATCH]
         filtered = await backend.search("işsizlik", SearchFilters(downloadable=True), 10)
         assert [hit.id for hit in filtered.hits] == ["flow:DF_ISSIZ+V1.0"]
         content = await backend.search("tablo", SearchFilters(kinds=["document_chunk"]), 10)

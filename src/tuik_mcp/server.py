@@ -86,7 +86,8 @@ async def search_tuik(
     count all matches after filters, before limit; inspect their truncation/error fields.
     source/backend identify what answered; ranking="hybrid" means an index built with
     embeddings also ranked by meaning (scores are then small fused-rank values), else
-    "lexical". Without the index, dataset-only searches use
+    "lexical". Meaning only reranks: a query sharing no word or close spelling with the
+    index returns no results (query in Turkish). Without the index, dataset-only searches use
     literal catalog matching; general/bulletin searches use the live portal with warnings
     for unsupported filters. Missing facets and unknown totals/truncated are null.
 
