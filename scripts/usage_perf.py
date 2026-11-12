@@ -86,6 +86,23 @@ def error(code):
     )
 
 
+# Steps whose arguments come from another group's result (link() reads the bulletin).
+PREREQUISITES = {"excel": "bulletin", "pdf": "bulletin"}
+
+
+def select(plan: list[Step], only: list[str] | None) -> list[Step]:
+    """The steps of the chosen groups plus the prerequisite steps they read results from."""
+    if not only:
+        return plan
+    needed = {PREREQUISITES[group] for group in only if group in PREREQUISITES}
+    return [step for step in plan if step.group in only or step.id in needed]
+
+
+def passed(entry: dict) -> bool:
+    """A step passes only if its cold call and every warm repeat passed."""
+    return entry["cold"]["ok"] and entry.get("warm", {}).get("ok", True)
+
+
 def within_budget(result, _):
     """A call with default arguments stays inside the 64 KiB output budget."""
     expect(result["status"] == "ok" and result["rows"], "no rows")
@@ -276,6 +293,21 @@ class Recorder:
         return sample
 
 
+def summarize(entries: list[dict]) -> dict:
+    ran = [entry for entry in entries if "cold" in entry]
+    return {
+        "steps": len(entries),
+        "passed": sum(passed(entry) for entry in ran),
+        "failed": [entry["id"] for entry in ran if not passed(entry)],
+        "skipped": len(entries) - len(ran),
+        "cold_total_s": round(sum(entry["cold"]["ms"] for entry in ran) / 1000, 1),
+        "warm_median_sum_ms": round(
+            sum(entry["warm"]["median_ms"] for entry in ran if "warm" in entry), 1
+        ),
+        "response_bytes": sum(entry["cold"]["bytes"] for entry in ran),
+    }
+
+
 async def run(args) -> dict:
     opensearch = os.environ.get("TUIK_OPENSEARCH_URL")
     index_host = urlsplit(opensearch).netloc if opensearch else None
@@ -304,7 +336,7 @@ async def run(args) -> dict:
                         "rss_mb": server_rss_mb(),
                     }
                     recorder = Recorder(session, log, index_host)
-                    plan = [s for s in steps() if not args.only or s.group in args.only]
+                    plan = select(steps(), args.only)
                     entries = {}
                     for step in plan:
                         entry = {"id": step.id, "group": step.group, "tool": step.tool}
@@ -325,24 +357,14 @@ async def run(args) -> dict:
                         samples = [await recorder.call(step) for _ in range(args.repeats)]
                         entry["warm"] = spread([s["ms"] for s in samples]) | {
                             "ok": all(s["ok"] for s in samples),
+                            "failure": next((s["failure"] for s in samples if not s["ok"]), None),
                             "requests": {
                                 kind: sum(s["requests"][kind] for s in samples)
                                 for kind in ("tuik", "index")
                             },
                         }
                     report["rss_after_warm_mb"] = server_rss_mb()
-    ran = [entry for entry in report["steps"] if "cold" in entry]
-    report["summary"] = {
-        "steps": len(report["steps"]),
-        "passed": sum(entry["cold"]["ok"] for entry in ran),
-        "failed": [entry["id"] for entry in ran if not entry["cold"]["ok"]],
-        "skipped": len(report["steps"]) - len(ran),
-        "cold_total_s": round(sum(entry["cold"]["ms"] for entry in ran) / 1000, 1),
-        "warm_median_sum_ms": round(
-            sum(entry["warm"]["median_ms"] for entry in ran if "warm" in entry), 1
-        ),
-        "response_bytes": sum(entry["cold"]["bytes"] for entry in ran),
-    }
+    report["summary"] = summarize(report["steps"])
     return report
 
 
@@ -360,7 +382,7 @@ def table(report: dict, before: dict | None = None) -> str:
         cold, warm = entry["cold"], entry.get("warm", {})
         requests = cold["requests"]
         row = (
-            f"| {entry['id']} | {entry['tool']} | {'ok' if cold['ok'] else 'FAIL'} | "
+            f"| {entry['id']} | {entry['tool']} | {'ok' if passed(entry) else 'FAIL'} | "
             f"{cold['ms']:.0f} | {warm.get('median_ms', '')} | {warm.get('max_ms', '')} | "
             f"{cold['bytes']} | {requests['tuik']} TÜİK, {requests['index']} index |"
         )

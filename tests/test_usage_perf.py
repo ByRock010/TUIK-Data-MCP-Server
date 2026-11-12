@@ -64,3 +64,69 @@ def test_table_marks_failures_skips_and_earlier_medians():
     assert lines[0].endswith("| Warm before |") and lines[1].count("---") == 9
     assert lines[2] == "| a | get_tuik_data | FAIL | 12 | 2.0 | 3.0 | 100 | 1 TÜİK, 0 index | 9.5 |"
     assert "| b | search_tuik | skipped |" in lines[3]
+
+
+def entry(step_id, warm_ok=True):
+    cold = {"ms": 5.0, "bytes": 10, "requests": {"tuik": 0, "index": 0}, "ok": True}
+    warm = perf.spread([1.0, 2.0]) | {"ok": warm_ok, "failure": None if warm_ok else "boom"}
+    return {"id": step_id, "group": "csv", "tool": "get_tuik_data", "cold": cold, "warm": warm}
+
+
+def test_a_failed_warm_repeat_fails_the_step_the_summary_the_table_and_the_exit_code(
+    monkeypatch,
+):
+    steps = [entry("fine"), entry("cache_regression", warm_ok=False)]
+    summary = perf.summarize(steps)
+    assert summary["passed"] == 1 and summary["failed"] == ["cache_regression"]
+    rows = perf.table({"steps": steps}).splitlines()
+    assert "| fine | get_tuik_data | ok |" in rows[2]
+    assert "| cache_regression | get_tuik_data | FAIL |" in rows[3]
+
+    async def fake_run(args):
+        return {
+            "steps": steps,
+            "summary": summary,
+            "startup": {},
+            "rss_after_cold_mb": None,
+            "rss_after_warm_mb": None,
+        }
+
+    monkeypatch.setattr(perf, "run", fake_run)
+    assert perf.main([]) == 1
+    steps[1] = entry("cache_regression")
+    fake_summary = perf.summarize(steps)
+    monkeypatch.setattr(perf, "run", lambda args: _ok(steps, fake_summary))
+    assert perf.main([]) == 0
+
+
+async def _ok(steps, summary):
+    return {
+        "steps": steps,
+        "summary": summary,
+        "startup": {},
+        "rss_after_cold_mb": None,
+        "rss_after_warm_mb": None,
+    }
+
+
+@pytest.mark.parametrize("group", ["excel", "pdf"])
+def test_focused_excel_and_pdf_runs_keep_the_bulletin_they_read_links_from(group):
+    plan = perf.select(perf.steps(), [group])
+    ids = [step.id for step in plan]
+    assert ids[0] == "bulletin" and {s.group for s in plan} == {"bulletin", group}
+    # Every selected step can resolve its arguments from the earlier selected results.
+    done = {"bulletin": {"download_links": [
+        {"format": "xls", "resource_id": "press:1:file:a"},
+        {"format": "pdf", "resource_id": "press:1:file:b"},
+    ]}}  # fmt: skip
+    for step in plan:
+        if callable(step.arguments):
+            step.arguments(done)
+
+
+def test_other_selections_and_the_full_plan_are_unchanged():
+    everything = perf.steps()
+    assert perf.select(everything, None) == everything
+    assert {s.group for s in perf.select(everything, ["csv"])} == {"csv"}
+    both = [s.id for s in perf.select(everything, ["excel", "pdf"])]
+    assert both.count("bulletin") == 1
