@@ -90,18 +90,20 @@ answer are in [the evidence JSON](mcp-benchmark-2026-11-08.json).
 | P05 | search_tuik (document_chunk, metadata) → read_tuik_document ×2 | 33 s | $0.22 | 2/2 |
 | P06 | search_tuik ×3, get_tuik_resource ×2 → inspect_tuik_data → get_tuik_data | 33 s | $0.73 | 15/15 |
 | P07 | search_tuik → search_tuik_classifications → search_tuik → get_tuik_resource | 39 s | $0.42 | 11/11 |
-| P08 | search_tuik → get_tuik_resource | 23 s | $0.28 | 21/28 |
-| P09 | search_tuik → get_tuik_resource → read_tuik_document → get_tuik_data | 28 s | $0.27 | 12/15 |
+| P08 | search_tuik → get_tuik_resource | 23 s | $0.28 | 16/28 |
+| P09 | search_tuik → get_tuik_resource → read_tuik_document → get_tuik_data | 28 s | $0.27 | 11/15 |
 | P10 | 4 searches → get_tuik_resource ×2 → inspect_tuik_data → get_tuik_data | 39 s | $0.85 | 16/16 |
 
 "Numbers traced" counts decimal and four-digit-plus numbers in the answer, after
 removing years and dates, that occur verbatim (or in a TÜİK spelling such as
-`2 967` or `25 milyar 967 milyon`) in the session's tool output. Every untraced
+`2 967` or `25 milyar 967 milyon`) in the session's tool output. A number must
+occur whole: a match inside a longer number does not count. Every untraced
 MCP number was checked by hand:
 
 - **Calculations:** ratios, means and differences, such as 2,967 / 35,412 = 8.38 %
   and the 12-month mean of 14.525.
-- **Roundings:** traced values written shorter, such as 23 milyar 506 milyon → 23.51.
+- **Roundings:** traced values written shorter, such as 23 milyar 506 milyon → 23.51
+  and 31 milyar 130 milyon → 31.13.
 - **One spelling the check misses:** "8,0" where the source wrote "8".
 
 No MCP tool call returned an error. The PDF passage search (`kind="document_chunk"`)

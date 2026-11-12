@@ -49,7 +49,7 @@ def write_configs(out: Path, server: str, opensearch_url: str | None) -> None:
 
 
 def run_one(args, condition: str, prompt: dict) -> dict:
-    out = Path(args.out)
+    out = args.out
     target = out / "runs" / f"{condition}-{prompt['id']}.jsonl"
     command = ["claude", "-p", prompt["text"], "--model", args.model, "--strict-mcp-config",
                "--no-session-persistence", "--output-format", "stream-json", "--verbose",
@@ -72,7 +72,8 @@ def run_one(args, condition: str, prompt: dict) -> dict:
 
 
 def run(args) -> int:
-    out = Path(args.out)
+    # Absolute: the child runs in out/work, where a relative config path would not resolve.
+    out = args.out = Path(args.out).resolve()
     (out / "runs").mkdir(parents=True, exist_ok=True)
     (out / "work").mkdir(exist_ok=True)
     write_configs(out, args.server, args.opensearch_url)
@@ -83,7 +84,10 @@ def run(args) -> int:
         futures = [(mcp if c == "mcp" else other).submit(run_one, args, c, p) for c, p in jobs]
         metas = [future.result() for future in futures]
     (out / "run-meta.json").write_text(json.dumps(metas, indent=2))
-    return 0
+    failed = [f"{meta['condition']}-{meta['id']}" for meta in metas if meta["status"] != 0]
+    if failed:
+        print(f"{len(failed)} run(s) did not exit cleanly: {', '.join(failed)}", file=sys.stderr)
+    return 1 if failed else 0
 
 
 def number_forms(token: str) -> set[str]:
@@ -99,19 +103,29 @@ def number_forms(token: str) -> set[str]:
     return forms
 
 
+def occurs(form: str, evidence: str) -> bool:
+    """Whether the evidence holds `form` as a whole number, not inside a longer one.
+
+    "8,4" is not evidence in "18,45", nor "193.793" in "1.193.793".
+    """
+    pattern = rf"(?<!\d)(?<!\d[.,]){re.escape(form)}(?!\d)(?![.,]\d)"
+    return re.search(pattern, evidence) is not None
+
+
 DATE = re.compile(r"\b\d{1,2}[./]\d{1,2}[./]\d{4}\b")
 
 
 def traceable(answer: str, evidence: str) -> dict:
     """Decimal or 4+ digit numbers in the answer and which occur in the tool output.
 
-    Years and dates are not value claims. Numbers the model computed or rounded are
-    reported as missing and need a manual look.
+    Years and dates are not value claims. A number must occur whole: a match inside
+    a longer number does not count. Numbers the model computed or rounded are reported
+    as missing and need a manual look.
     """
     answer = DATE.sub(" ", answer)
     tokens = set(re.findall(r"\d+[.,]\d+(?:\.\d{3})*|\d{4,}", answer))
     tokens = {t for t in tokens if not re.fullmatch(r"(19|20)\d\d", t)}
-    found = {t for t in tokens if any(form in evidence for form in number_forms(t))}
+    found = {t for t in tokens if any(occurs(form, evidence) for form in number_forms(t))}
     return {"total": len(tokens), "found": len(found), "missing": sorted(tokens - found)}
 
 

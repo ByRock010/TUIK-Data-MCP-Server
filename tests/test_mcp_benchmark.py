@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -32,6 +33,52 @@ def test_traceable_ignores_years_and_dates_and_reports_computed_values():
     evidence = "İşsizlik oranı 8,4 ... işsiz 2 967 bin, işgücü 35 412 bin"
     result = benchmark.traceable(answer, evidence)
     assert result == {"total": 4, "found": 3, "missing": ["8,38"]}
+
+
+@pytest.mark.parametrize(
+    ("answer", "evidence", "found"),
+    [
+        ("Oran %8,4", "Oran 18,45", 0),  # inside a longer number
+        ("Oran %8,4", "Oran 8,45", 0),
+        ("Oran %8,4", "Oran 118,4", 0),
+        ("Oran %8,4", "Oran %8,4.", 1),  # sentence end
+        ("Oran %8,4", '{"Gözlem Değeri":"8,4"}', 1),
+        ("193.793 çift", "1.193.793 kişi", 0),
+        ("193.793 çift", "193 bin 793 çift", 1),
+        ("2.967 bin işsiz", "işsiz 32 967", 0),
+        ("kimlik 4567", "id-1234567", 0),  # digits of an identifier
+    ],
+)
+def test_traceable_matches_whole_numbers_only(answer, evidence, found):
+    result = benchmark.traceable(answer, evidence)
+    assert (result["total"], result["found"]) == (1, found)
+
+
+def test_relative_output_directory_reaches_the_child_and_failures_set_the_exit_code(
+    tmp_path, monkeypatch
+):
+    # A stand-in for the claude CLI: it must find the MCP config from its own cwd.
+    stub = tmp_path / "claude"
+    stub.write_text(
+        "#!/bin/sh\n"
+        'while [ "$#" -gt 0 ]; do [ "$1" = "--mcp-config" ] && config="$2"; shift; done\n'
+        'cat "$config" > /dev/null || exit 2\n'
+        'case "$PWD" in */work) echo \'{"type":"result","result":"ok"}\';; *) exit 3;; esac\n'
+    )
+    stub.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{tmp_path}:{os.environ['PATH']}")
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "prompts.json").write_text(json.dumps([{"id": "P01", "text": "soru"}]))
+    arguments = ["run", "--prompts", "prompts.json", "--out", "bench", "--server", "tuik-mcp"]
+    assert benchmark.main(arguments) == 0
+    metas = json.loads((tmp_path / "bench" / "run-meta.json").read_text())
+    assert [meta["status"] for meta in metas] == [0, 0, 0]
+    streams = sorted(path.name for path in (tmp_path / "bench" / "runs").iterdir())
+    assert streams == ["closed-P01.jsonl", "mcp-P01.jsonl", "web-P01.jsonl"]
+    assert "ok" in (tmp_path / "bench" / "runs" / "mcp-P01.jsonl").read_text()
+    # A child that fails makes the harness exit non-zero.
+    stub.write_text("#!/bin/sh\nexit 2\n")
+    assert benchmark.main([*arguments, "--conditions", "closed"]) == 1
 
 
 def test_summarize_run_extracts_calls_errors_cost_and_answer(tmp_path):

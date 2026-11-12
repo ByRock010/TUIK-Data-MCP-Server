@@ -1063,14 +1063,19 @@
    "tool_errors": 0,
    "numbers": {
     "total": 28,
-    "found": 21,
+    "found": 16,
     "missing": [
+     "210,95",
      "23,39",
      "23,51",
      "23,93",
      "25,97",
+     "28,85",
      "281,92",
+     "31,13",
+     "5,16",
      "5,35",
+     "7,0",
      "70,97"
     ]
    },
@@ -1126,10 +1131,11 @@
    "tool_errors": 0,
    "numbers": {
     "total": 15,
-    "found": 12,
+    "found": 11,
     "missing": [
      "0,05",
      "2,6",
+     "3,4",
      "4.830"
     ]
    },
@@ -1863,8 +1869,10 @@
    "tool_errors": 0,
    "numbers": {
     "total": 4,
-    "found": 4,
-    "missing": []
+    "found": 3,
+    "missing": [
+     "3,2"
+    ]
    },
    "answer": "Toparlıyorum: ana kaynak olarak TÜİK'in güncel mikro veri belgesini buldum ve ilgili bölümleri birebir okudum.\n\n## Kısaca\n\nHİA'da veri, anketörlerin cevapları doğrudan bilgisayara girdiği bilgisayar destekli görüşmeyle toplanıyor. Her hanehalkıyla dört görüşme yapılıyor: ilki her zaman evde yüz yüze, sonrakiler uygun olduğunda telefonla. Dönemlik örnek hacmi 2021'den beri **58.560 hanehalkı**. Yılda yaklaşık **760 bin kişiyle** görüşülüyor; bunların **580 bini 15 yaş ve üstü**.\n\n## Ana kaynak\n\n**Belge:** TÜİK, *İşgücü İstatistikleri Mikro Veri Seti, 2025*, Yayın No: 4820 (Mayıs 2026)\n**Bağlantı:** https://www.tuik.gov.tr/media/microdata/pdf/isgucu.pdf\n\n**1) Veri derleme yöntemi — Bölüm 3.4 \"Yöntem\", \"Veri derleme yöntemi\" alt başlığı, s. 7**\n\n> \"HİA alan uygulaması bilgisayar destekli görüşme yöntemleri ile gerçekleştirilmekte ve alınan cevaplar anketörler tarafından doğrudan bilgisayara kaydedilmektedir. Bir hane ile gerçekleştirilecek dört görüşmenin ilki her zaman hane ziyaret edilerek yüz yüze gerçekleştirilirken, diğer görüşmeler uygunluğa göre telefon ile yapılmaktadır. Araştırma kapsamında, TÜİK'in 26 Bölge Müdürlüğü aracılığıyla tüm Türkiye'de yılda yaklaşık 760 bin fert (15 ve daha yukarı yaşta 580 bin fert) ile anket gerçekleştirilmektedir.\"\n\n**2) Örneklem — Bölüm 3.4 \"Yöntem\", \"Örnekleme tasarımı\" alt başlığı, s. 6**\n\n> \"Hanehalkı İşgücü Araştırmasında iki aşamalı, tabakalı küme örneklemesi yöntemi kullanılmıştır. Ardışık iki dönem arası ve ardışık iki yılın aynı dönemlerinde adres bazında %50 çakışma sağlayacak şekilde rotasyon kalıbı oluşturulmuş ve her dönemde 8 alt örnek kullanılmıştır. […] Araştırmanın 2021 yılı itibariyle dönemlik örnek hacmi 58 560 hanehalkıdır. Örnek hacminin belirlenmesi aşamasında Eurostat 577/98 numaralı regülasyon temel alınmıştır. […] Çalışmanın dönemsel tahmin boyutu Türkiye toplamı, yıllık tahmin boyutu ise Türkiye toplamı ve İBBS 2. Düzeydir.\"\n\n## Dikkat edilmesi gerekenler\n\n- **Sayfa numaraları:** PDF'i doğrudan açamadım, metni bir dönüştürme servisiyle (r.jina.ai) okudum. Metinler birebir alıntı. Sayfa numaralarını (s. 6 ve s. 7) ise dönüştürme aracı verdi. Atıf yapacaksanız PDF'i açıp kontrol etmeniz iyi olur.\n- **\"Dönem\" ay mı, çeyrek mi?** Belge bunu bu bölümde tanımlamıyor. Kendi hesabıma göre çeyrek olması daha tutarlı: yılda 760 bin kişi, hane başına yaklaşık 3,2 kişiyle yılda yaklaşık 237 bin hane görüşmesi eder. Bu da çeyrekte yaklaşık 59 bin, ayda yaklaşık 20 bin haneye karşılık gelir. Ancak bu benim çıkarımım, belgede yazmıyor.\n- **CAPI ve CATI terimleri:** Yukarıdaki belge bu kısaltmaları kullanmıyor, sadece \"bilgisayar destekli görüşme\" ve \"telefon\" diyor. Bir arama özetine göre TÜİK, 2020'ye kadar yalnızca CAPI (bilgisayar destekli yüz yüze görüşme) kullanmış. Covid-19 sonrasında CAPI ile CATI'yi (bilgisayar destekli telefon görüşmesi) birlikte kullanan karma yönteme geçmiş. Bu ifadenin geçtiği TÜİK belgesini ve sayfasını kendim açıp göremedim, bu yüzden doğrulanmamış sayın.\n- **Destekleyici kaynak:** TÜİK'in [hanehalkı araştırmaları SSS sayfası](https://www.tuik.gov.tr/Kurumsal/Cbm_Sss_Hane) da görüşmelerin adreste dizüstü bilgisayar veya tabletle yüz yüze ya da Alo 124 çağrı merkezinden telefonla yapıldığını söylüyor. Örneklemin ADNKS'den seçildiğini de belirtiyor. Bu sayfadaki \"yaklaşık 600 bin kişi\" rakamı TÜİK'in tüm hanehalkı araştırmalarına ait, sadece HİA'ya değil.\n\nKaynaklar:\n- [TÜİK – İşgücü İstatistikleri Mikro Veri Seti, 2025 (Yayın No: 4820)](https://www.tuik.gov.tr/media/microdata/pdf/isgucu.pdf)\n- [TÜİK – Hanehalkı araştırmaları SSS](https://www.tuik.gov.tr/Kurumsal/Cbm_Sss_Hane)",
    "exit_status": 0,
@@ -2058,9 +2066,11 @@
    "tool_errors": 0,
    "numbers": {
     "total": 19,
-    "found": 16,
+    "found": 14,
     "missing": [
      "25,97",
+     "31,13",
+     "5,16",
      "71,0",
      "74,8"
     ]
@@ -2127,9 +2137,10 @@
    "tool_errors": 0,
    "numbers": {
     "total": 23,
-    "found": 21,
+    "found": 20,
     "missing": [
      "0,07",
+     "2,2",
      "2,6"
     ]
    },
