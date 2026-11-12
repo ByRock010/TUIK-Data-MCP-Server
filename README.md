@@ -302,7 +302,7 @@ Inspection and queries share the one-hour file snapshot: inspecting again or cal
 confirms both read the same version. Budgets (`TUIK_INSPECT_*` in `.env.example`)
 bound rows scanned (100,000), columns profiled (100; pass `columns` for others),
 distinct values tracked per column (10,000) and column-profile output (64 KiB,
-measured as UTF-8 bytes of the indented JSON the MCP response carries). When output
+measured as UTF-8 bytes of the compact JSON the MCP response carries). When output
 is limited, listed values shrink first, then trailing columns are omitted, with
 warnings; a single profile that cannot fit is omitted rather than exceeding the
 limit. `max_values` (1–200) and `columns` (1–50 names) are validated.
@@ -449,7 +449,8 @@ page, waits for its countdown and retries within the attempt budget. If the limi
 persists, `get_tuik_data` returns `download_throttled`. Dataflow CSV exports are not
 limited this way and keep the normal request pacing.
 
-The User-Agent is `Mozilla/5.0 (compatible; tuik-mcp/0.1; public statistical research)`.
+The User-Agent is `Mozilla/5.0 (compatible; tuik-mcp/<major.minor>; public statistical research)`,
+with the installed package's version.
 The public portal rejected curl's default User-Agent during investigation; this
 compatible agent explicitly identifies the project. No login or credentials are
 used. See [source research](docs/TUIK_SOURCES.md).
@@ -487,6 +488,9 @@ or process-memory sandbox for malicious library inputs.
 
 # Slower requests for a release acceptance run (file downloads keep their 6 s spacing)
 TUIK_MIN_INTERVAL_SECONDS=2 .venv/bin/python scripts/live_smoke.py --output /tmp/tuik-release.json
+
+# 32 usage checks with latency, response size and upstream requests per call
+.venv/bin/python scripts/usage_perf.py --output /tmp/tuik-usage-perf.json
 ```
 
 Offline tests use reduced real response fixtures and mocked HTTP, plus an actual

@@ -124,6 +124,32 @@ def check_page(limit: int, offset: int) -> None:
         raise ValueError(f"offset must be an integer between 0 and {MAX_OFFSET}")
 
 
+def match_clauses(query: str) -> list[dict]:
+    """Exact (synonym-aware) matching, plus typo tolerance as a weaker clause."""
+    return [
+        {"multi_match": {"query": query, "type": "best_fields", "fields": EXACT_FIELDS}},
+        {
+            "multi_match": {
+                "query": query,
+                "type": "best_fields",
+                "fields": FUZZY_FIELDS,
+                "fuzziness": "AUTO",
+                # A different first letter is a different word: "tufe" ≠ "ufe".
+                "prefix_length": 1,
+                "max_expansions": 50,
+                "boost": 0.5,
+            }
+        },
+    ]
+
+
+def highlight_settings() -> dict:
+    return {
+        "fields": {field: {} for field in HIGHLIGHT_FIELDS},
+        "max_analyzer_offset": HIGHLIGHT_MAX_OFFSET,
+    }
+
+
 def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0) -> dict:
     """The OpenSearch request body; analyzers come from the index mapping."""
     check_page(limit, offset)
@@ -146,27 +172,7 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
     return {
         "query": {
             "bool": {
-                "should": [
-                    {
-                        "multi_match": {
-                            "query": query,
-                            "type": "best_fields",
-                            "fields": EXACT_FIELDS,
-                        }
-                    },
-                    {
-                        "multi_match": {
-                            "query": query,
-                            "type": "best_fields",
-                            "fields": FUZZY_FIELDS,
-                            "fuzziness": "AUTO",
-                            # A different first letter is a different word: "tufe" ≠ "ufe".
-                            "prefix_length": 1,
-                            "max_expansions": 50,
-                            "boost": 0.5,
-                        }
-                    },
-                ],
+                "should": match_clauses(query),
                 "minimum_should_match": 1,
                 "filter": clauses,
             }
@@ -180,10 +186,23 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
             "indexed_at": {"max": {"field": "indexed_at"}},
         },
         "_source": {"excludes": ["body", "description", "embedding"]},
-        "highlight": {
-            "fields": {field: {} for field in HIGHLIGHT_FIELDS},
-            "max_analyzer_offset": HIGHLIGHT_MAX_OFFSET,
-        },
+        "highlight": highlight_settings(),
+    }
+
+
+def build_highlight_query(query: str, ids: list[str]) -> dict:
+    """The lexical query's highlights for documents another request already ranked.
+
+    Inside a hybrid request the highlighter cannot read the query's terms and re-runs
+    the query per document: about 20 ms per hit on the 3,440-document index, against
+    about 1 ms here. Documents without a lexical match come back without highlights.
+    """
+    return {
+        "query": {"bool": {"filter": [{"ids": {"values": ids}}], "should": match_clauses(query)}},
+        "size": len(ids),
+        "track_total_hits": False,
+        "_source": False,
+        "highlight": highlight_settings(),
     }
 
 
@@ -204,6 +223,8 @@ def build_hybrid_query(
     if offset + limit > HYBRID_DEPTH:
         raise ValueError(f"Hybrid ranking covers the first {HYBRID_DEPTH} results")
     body = deepcopy(build_query(query, filters, limit, offset))
+    # Highlights come from build_highlight_query: they are slow inside a hybrid request.
+    del body["highlight"]
     lexical = body["query"]
     semantic = {
         "knn": {
@@ -292,15 +313,27 @@ class OpenSearchBackend:
         ranking = "hybrid" if "hybrid" in body["query"] else "lexical"
         if ranking == "hybrid":
             try:
-                return await self.execute(body, limit, offset, ranking, warnings)
+                return await self.execute(query, body, limit, offset, ranking, warnings)
             except BackendUnavailable as exc:
                 # A cluster without the neural-search plugin still answers lexically.
                 warnings.append(f"Hybrid search failed ({exc}); results use lexical ranking.")
                 body, ranking = build_query(query, filters, limit, offset), "lexical"
-        return await self.execute(body, limit, offset, ranking, warnings)
+        return await self.execute(query, body, limit, offset, ranking, warnings)
+
+    async def add_highlights(self, query: str, items: list[dict]) -> list[str]:
+        """Fill each hybrid hit's highlight from a lexical request; hits stand without it."""
+        try:
+            ids = [item["_source"]["id"] for item in items]
+            response = await self.store.query(self.alias, build_highlight_query(query, ids))
+            found = {hit["_id"]: hit.get("highlight") or {} for hit in response["hits"]["hits"]}
+        except (IndexerError, KeyError, TypeError, AttributeError) as exc:
+            return [f"Highlights are unavailable ({exc})."]
+        for item in items:
+            item["highlight"] = found.get(item["_source"]["id"], {})
+        return []
 
     async def execute(
-        self, body: dict, limit: int, offset: int, ranking: str, warnings: list[str]
+        self, query: str, body: dict, limit: int, offset: int, ranking: str, warnings: list[str]
     ) -> SearchHits:
         try:
             response = await self.store.query(self.alias, body)
@@ -329,10 +362,13 @@ class OpenSearchBackend:
                     ),
                     indexed_at=aggregations.get("indexed_at", {}).get("value_as_string"),
                 )
+            warnings = list(warnings)
+            if ranking == "hybrid" and hits["hits"]:
+                warnings += await self.add_highlights(query, hits["hits"])
             return SearchHits(
                 backend="opensearch",
                 ranking=ranking,
-                warnings=list(warnings),
+                warnings=warnings,
                 hits=[self.hit(item) for item in hits["hits"]],
                 total=hits["total"]["value"],
                 limit=limit,

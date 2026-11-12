@@ -1,4 +1,5 @@
 import os
+from importlib import metadata
 
 from pydantic import BaseModel, Field, HttpUrl, field_validator
 
@@ -15,7 +16,17 @@ ALLOWED_HOSTS = frozenset(
         "biruni.tuik.gov.tr",
     }
 )
-USER_AGENT = "Mozilla/5.0 (compatible; tuik-mcp/0.2; public statistical research)"
+
+
+def _release() -> str:
+    """Major.minor of the installed package, so the User-Agent cannot go stale."""
+    try:
+        return ".".join(metadata.version("tuik-mcp").split(".")[:2])
+    except metadata.PackageNotFoundError:
+        return "dev"
+
+
+USER_AGENT = f"Mozilla/5.0 (compatible; tuik-mcp/{_release()}; public statistical research)"
 
 
 class Settings(BaseModel):
