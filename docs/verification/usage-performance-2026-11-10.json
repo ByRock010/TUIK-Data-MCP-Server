@@ -1,0 +1,5972 @@
+{
+ "version": 1,
+ "date": "2026-11-10",
+ "harness": "scripts/usage_perf.py, 32 steps, cold pass + 5 warm repeats, 3 runs per side",
+ "machine": "Apple M4, macOS 26, Python 3.13.5, mcp 1.30.0, OpenSearch 3.3.2 (local Docker)",
+ "index": "frozen 3,424-document corpus (2026-11-05) + 16 content documents, e5-small vectors",
+ "before": "develop + PR #81 (2243c2e)",
+ "after": "this change on top of 2243c2e",
+ "medians_of_three_runs": {
+  "steps": [
+   {
+    "id": "themes",
+    "tool": "list_tuik_themes",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 559.3,
+     "warm_median_ms": 1.3,
+     "warm_max_ms": 2.2,
+     "bytes": 5086,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 504.0,
+     "warm_median_ms": 0.9,
+     "warm_max_ms": 1.5,
+     "bytes": 4116,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "search_ascii",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 827.7,
+     "warm_median_ms": 202.0,
+     "warm_max_ms": 256.1,
+     "bytes": 8255,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 2
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 645.9,
+     "warm_median_ms": 33.0,
+     "warm_max_ms": 55.9,
+     "bytes": 6508,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 3
+     }
+    }
+   },
+   {
+    "id": "search_typo",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 176.6,
+     "warm_median_ms": 176.9,
+     "warm_max_ms": 198.0,
+     "bytes": 5565,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 38.5,
+     "warm_median_ms": 32.9,
+     "warm_max_ms": 40.2,
+     "bytes": 4273,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 2
+     }
+    }
+   },
+   {
+    "id": "search_paraphrase",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 304.0,
+     "warm_median_ms": 306.1,
+     "warm_max_ms": 314.9,
+     "bytes": 8462,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 36.2,
+     "warm_median_ms": 34.1,
+     "warm_max_ms": 40.4,
+     "bytes": 6776,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 2
+     }
+    }
+   },
+   {
+    "id": "search_filtered",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 26.3,
+     "warm_median_ms": 16.9,
+     "warm_max_ms": 31.4,
+     "bytes": 5613,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 16.9,
+     "warm_median_ms": 15.4,
+     "warm_max_ms": 16.7,
+     "bytes": 4402,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 2
+     }
+    }
+   },
+   {
+    "id": "search_passage",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 10.5,
+     "warm_median_ms": 9.1,
+     "warm_max_ms": 21.0,
+     "bytes": 3973,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 9.9,
+     "warm_median_ms": 8.2,
+     "warm_max_ms": 8.6,
+     "bytes": 3115,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    }
+   },
+   {
+    "id": "search_table",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 9.4,
+     "warm_median_ms": 8.4,
+     "warm_max_ms": 14.9,
+     "bytes": 2439,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 8.2,
+     "warm_median_ms": 7.5,
+     "warm_max_ms": 13.2,
+     "bytes": 1937,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    }
+   },
+   {
+    "id": "search_gibberish",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 33.1,
+     "warm_median_ms": 31.4,
+     "warm_max_ms": 59.5,
+     "bytes": 779,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 14.2,
+     "warm_median_ms": 14.3,
+     "warm_max_ms": 18.4,
+     "bytes": 641,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    }
+   },
+   {
+    "id": "search_wrong_theme",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": false,
+     "failure": "AssertionError: no hint for an unknown theme",
+     "cold_ms": 13.8,
+     "warm_median_ms": 11.0,
+     "warm_max_ms": 25.5,
+     "bytes": 762,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 9.2,
+     "warm_median_ms": 10.3,
+     "warm_max_ms": 15.9,
+     "bytes": 749,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 1
+     }
+    }
+   },
+   {
+    "id": "search_live",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 32.8,
+     "warm_median_ms": 1.4,
+     "warm_max_ms": 4.6,
+     "bytes": 5005,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 34.1,
+     "warm_median_ms": 1.0,
+     "warm_max_ms": 1.7,
+     "bytes": 4167,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "search_bad_date",
+    "tool": "search_tuik",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1.6,
+     "warm_median_ms": 1.0,
+     "warm_max_ms": 4.1,
+     "bytes": 478,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 0.9,
+     "warm_median_ms": 0.6,
+     "warm_max_ms": 0.7,
+     "bytes": 453,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "datasets_ascii",
+    "tool": "search_tuik_datasets",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 586.8,
+     "warm_median_ms": 18.2,
+     "warm_max_ms": 80.8,
+     "bytes": 11545,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 1
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 590.1,
+     "warm_median_ms": 16.5,
+     "warm_max_ms": 40.6,
+     "bytes": 8888,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 1
+     }
+    }
+   },
+   {
+    "id": "classifications",
+    "tool": "search_tuik_classifications",
+    "group": "discovery",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 489.6,
+     "warm_median_ms": 1.7,
+     "warm_max_ms": 2.0,
+     "bytes": 6515,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 483.6,
+     "warm_median_ms": 1.1,
+     "warm_max_ms": 1.3,
+     "bytes": 5097,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "bulletin",
+    "tool": "get_tuik_resource",
+    "group": "bulletin",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 503.6,
+     "warm_median_ms": 2.5,
+     "warm_max_ms": 5.3,
+     "bytes": 46791,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 472.4,
+     "warm_median_ms": 1.8,
+     "warm_max_ms": 2.1,
+     "bytes": 44444,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "bulletin_missing",
+    "tool": "get_tuik_resource",
+    "group": "bulletin",
+    "before": {
+     "ok": false,
+     "failure": "AssertionError: expected error not_found, got error/malformed_response",
+     "cold_ms": 436.7,
+     "warm_median_ms": 502.9,
+     "warm_max_ms": 538.8,
+     "bytes": 302,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 436.4,
+     "warm_median_ms": 502.1,
+     "warm_max_ms": 523.9,
+     "bytes": 255,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "bulletin_choice",
+    "tool": "get_tuik_data",
+    "group": "bulletin",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 5.3,
+     "warm_median_ms": 4.5,
+     "warm_max_ms": 5.8,
+     "bytes": 7441,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 3.2,
+     "warm_median_ms": 2.6,
+     "warm_max_ms": 4.1,
+     "bytes": 6472,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_inspect",
+    "tool": "inspect_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1634.2,
+     "warm_median_ms": 2.4,
+     "warm_max_ms": 3.2,
+     "bytes": 11405,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1653.4,
+     "warm_median_ms": 2.0,
+     "warm_max_ms": 3.2,
+     "bytes": 7411,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_rows",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 42.2,
+     "warm_median_ms": 42.1,
+     "warm_max_ms": 53.4,
+     "bytes": 5166,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 41.0,
+     "warm_median_ms": 40.0,
+     "warm_max_ms": 56.1,
+     "bytes": 4141,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_default",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 43.8,
+     "warm_median_ms": 44.1,
+     "warm_max_ms": 45.4,
+     "bytes": 60076,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 42.7,
+     "warm_median_ms": 42.2,
+     "warm_max_ms": 44.5,
+     "bytes": 46701,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_filter",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 41.5,
+     "warm_median_ms": 42.8,
+     "warm_max_ms": 53.2,
+     "bytes": 5165,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 40.3,
+     "warm_median_ms": 41.1,
+     "warm_max_ms": 41.8,
+     "bytes": 4140,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_query",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 100.6,
+     "warm_median_ms": 44.2,
+     "warm_max_ms": 48.2,
+     "bytes": 2727,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 47.8,
+     "warm_median_ms": 42.0,
+     "warm_max_ms": 45.6,
+     "bytes": 2208,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_cursor",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1.7,
+     "warm_median_ms": 1.4,
+     "warm_max_ms": 1.6,
+     "bytes": 2727,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1.2,
+     "warm_median_ms": 0.9,
+     "warm_max_ms": 1.1,
+     "bytes": 2208,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_bad_filter",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 4.7,
+     "warm_median_ms": 4.5,
+     "warm_max_ms": 5.1,
+     "bytes": 336,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 4.4,
+     "warm_median_ms": 4.1,
+     "warm_max_ms": 4.5,
+     "bytes": 311,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "csv_bad_cursor",
+    "tool": "get_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 1.1,
+     "warm_median_ms": 1.0,
+     "warm_max_ms": 1.1,
+     "bytes": 288,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 0.7,
+     "warm_median_ms": 0.6,
+     "warm_max_ms": 0.7,
+     "bytes": 263,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "chart",
+    "tool": "chart_tuik_data",
+    "group": "csv",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 231.6,
+     "warm_median_ms": 73.7,
+     "warm_max_ms": 75.6,
+     "bytes": 107859,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 239.4,
+     "warm_median_ms": 86.5,
+     "warm_max_ms": 89.3,
+     "bytes": 38028,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "xls_rows",
+    "tool": "get_tuik_data",
+    "group": "excel",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 154.6,
+     "warm_median_ms": 2.2,
+     "warm_max_ms": 2.7,
+     "bytes": 11034,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 144.3,
+     "warm_median_ms": 1.8,
+     "warm_max_ms": 2.2,
+     "bytes": 9683,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "xls_default",
+    "tool": "get_tuik_data",
+    "group": "excel",
+    "before": {
+     "ok": false,
+     "failure": "AssertionError: 222562 bytes",
+     "cold_ms": 9.4,
+     "warm_median_ms": 8.3,
+     "warm_max_ms": 8.7,
+     "bytes": 222562,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 6.3,
+     "warm_median_ms": 5.6,
+     "warm_max_ms": 5.8,
+     "bytes": 64164,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "xls_inspect",
+    "tool": "inspect_tuik_data",
+    "group": "excel",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 10.1,
+     "warm_median_ms": 2.6,
+     "warm_max_ms": 3.0,
+     "bytes": 47415,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 9.7,
+     "warm_median_ms": 2.8,
+     "warm_max_ms": 4.9,
+     "bytes": 40547,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "xls_query",
+    "tool": "get_tuik_data",
+    "group": "excel",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 3.9,
+     "warm_median_ms": 3.6,
+     "warm_max_ms": 4.0,
+     "bytes": 11183,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 3.4,
+     "warm_median_ms": 3.1,
+     "warm_max_ms": 3.3,
+     "bytes": 9832,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "pdf_page",
+    "tool": "read_tuik_document",
+    "group": "pdf",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 6434.5,
+     "warm_median_ms": 1.2,
+     "warm_max_ms": 1.3,
+     "bytes": 1527,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 6386.4,
+     "warm_median_ms": 0.8,
+     "warm_max_ms": 0.8,
+     "bytes": 1377,
+     "requests_cold": {
+      "tuik": 1,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "pdf_tables",
+    "tool": "read_tuik_document",
+    "group": "pdf",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 210.3,
+     "warm_median_ms": 1.2,
+     "warm_max_ms": 1.3,
+     "bytes": 3610,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 208.7,
+     "warm_median_ms": 0.8,
+     "warm_max_ms": 0.8,
+     "bytes": 3460,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   },
+   {
+    "id": "pdf_from_bulletin",
+    "tool": "read_tuik_document",
+    "group": "pdf",
+    "before": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 176.0,
+     "warm_median_ms": 1.3,
+     "warm_max_ms": 1.4,
+     "bytes": 3572,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    },
+    "after": {
+     "ok": true,
+     "failure": null,
+     "cold_ms": 173.2,
+     "warm_median_ms": 1.0,
+     "warm_max_ms": 1.0,
+     "bytes": 3422,
+     "requests_cold": {
+      "tuik": 0,
+      "index": 0
+     }
+    }
+   }
+  ],
+  "totals": {
+   "before": {
+    "passed": 29,
+    "steps": 32,
+    "failed": [
+     "bulletin_missing",
+     "search_wrong_theme",
+     "xls_default"
+    ],
+    "cold_total_s": 13.0,
+    "warm_median_sum_ms": 1573.3,
+    "response_bytes": 615663,
+    "startup_ms": 303.2,
+    "tool_schema_bytes": 21848,
+    "rss_startup_mb": 76.5,
+    "rss_after_cold_mb": [
+     1231.4,
+     297.8,
+     563.9
+    ],
+    "rss_after_warm_mb": [
+     1247.8,
+     488.4,
+     616.1
+    ]
+   },
+   "after": {
+    "passed": 32,
+    "steps": 32,
+    "failed": [],
+    "cold_total_s": 12.6,
+    "warm_median_sum_ms": 957.4,
+    "response_bytes": 340189,
+    "startup_ms": 281.1,
+    "tool_schema_bytes": 21173,
+    "rss_startup_mb": 74.3,
+    "rss_after_cold_mb": [
+     1146.3,
+     1146.4,
+     1162.0
+    ],
+    "rss_after_warm_mb": [
+     1166.3,
+     1189.1,
+     1183.4
+    ]
+   }
+  }
+ },
+ "runs": {
+  "before": [
+   {
+    "date": "2026-11-10T17:38:58+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 482.0,
+       "bytes": 5086,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.2,
+       "max_ms": 2.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 827.7,
+       "bytes": 8255,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 192.5,
+       "min_ms": 190.6,
+       "max_ms": 212.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 176.6,
+       "bytes": 5565,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 171.6,
+       "min_ms": 169.7,
+       "max_ms": 179.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 300.6,
+       "bytes": 8462,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 297.9,
+       "min_ms": 294.7,
+       "max_ms": 309.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 26.3,
+       "bytes": 5613,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 16.8,
+       "min_ms": 15.2,
+       "max_ms": 23.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 10.5,
+       "bytes": 3973,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.5,
+       "min_ms": 8.2,
+       "max_ms": 9.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.4,
+       "bytes": 2439,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.0,
+       "min_ms": 7.8,
+       "max_ms": 9.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 33.1,
+       "bytes": 779,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 29.5,
+       "min_ms": 29.1,
+       "max_ms": 30.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 13.8,
+       "bytes": 762,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": false,
+       "failure": "AssertionError: no hint for an unknown theme"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 10.3,
+       "min_ms": 9.5,
+       "max_ms": 11.5,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 29.0,
+       "bytes": 5005,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.3,
+       "max_ms": 1.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 1.6,
+       "bytes": 478,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 586.8,
+       "bytes": 11545,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 18.2,
+       "min_ms": 16.7,
+       "max_ms": 40.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 487.7,
+       "bytes": 6515,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.7,
+       "min_ms": 1.6,
+       "max_ms": 1.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 503.6,
+       "bytes": 46791,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.5,
+       "min_ms": 2.4,
+       "max_ms": 5.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 429.7,
+       "bytes": 302,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: expected error not_found, got error/malformed_response"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 502.9,
+       "min_ms": 31.0,
+       "max_ms": 509.9,
+       "ok": false,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 5.4,
+       "bytes": 7441,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.8,
+       "min_ms": 2.3,
+       "max_ms": 4.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 1634.2,
+       "bytes": 11405,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.2,
+       "min_ms": 1.9,
+       "max_ms": 2.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 42.2,
+       "bytes": 5166,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.2,
+       "min_ms": 40.5,
+       "max_ms": 48.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 43.8,
+       "bytes": 60076,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 43.0,
+       "min_ms": 42.4,
+       "max_ms": 43.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 41.2,
+       "bytes": 5165,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.9,
+       "min_ms": 41.0,
+       "max_ms": 43.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 94.9,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 44.2,
+       "min_ms": 42.5,
+       "max_ms": 44.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.7,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.4,
+       "min_ms": 1.3,
+       "max_ms": 1.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.7,
+       "bytes": 336,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.4,
+       "min_ms": 4.2,
+       "max_ms": 4.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.0,
+       "bytes": 288,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 231.6,
+       "bytes": 107859,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 72.2,
+       "min_ms": 70.1,
+       "max_ms": 75.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 137.3,
+       "bytes": 11034,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.2,
+       "min_ms": 2.0,
+       "max_ms": 2.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 9.7,
+       "bytes": 222562,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: 222562 bytes"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.3,
+       "min_ms": 8.1,
+       "max_ms": 8.7,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 10.1,
+       "bytes": 47415,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.7,
+       "min_ms": 2.4,
+       "max_ms": 2.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.9,
+       "bytes": 11183,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.6,
+       "min_ms": 3.5,
+       "max_ms": 3.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6355.5,
+       "bytes": 1527,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.2,
+       "min_ms": 1.1,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 198.8,
+       "bytes": 3610,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.2,
+       "min_ms": 1.1,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 173.1,
+       "bytes": 3572,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.3,
+       "max_ms": 1.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 307.4,
+     "tools": 9,
+     "tool_schema_bytes": 21848,
+     "rss_mb": 76.5
+    },
+    "rss_after_cold_mb": 1231.4,
+    "rss_after_warm_mb": 1247.8,
+    "summary": {
+     "steps": 32,
+     "passed": 29,
+     "failed": [
+      "search_wrong_theme",
+      "bulletin_missing",
+      "xls_default"
+     ],
+     "skipped": 0,
+     "cold_total_s": 12.9,
+     "warm_median_sum_ms": 1538.8,
+     "response_bytes": 615663
+    }
+   },
+   {
+    "date": "2026-11-10T17:39:20+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 559.3,
+       "bytes": 5086,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.1,
+       "max_ms": 2.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 825.7,
+       "bytes": 8255,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 206.4,
+       "min_ms": 195.6,
+       "max_ms": 229.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 186.1,
+       "bytes": 5565,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 181.3,
+       "min_ms": 175.1,
+       "max_ms": 198.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 304.0,
+       "bytes": 8462,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 306.1,
+       "min_ms": 304.9,
+       "max_ms": 309.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 19.4,
+       "bytes": 5613,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 16.9,
+       "min_ms": 16.6,
+       "max_ms": 31.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.7,
+       "bytes": 3973,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 13.1,
+       "min_ms": 12.1,
+       "max_ms": 21.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.7,
+       "bytes": 2439,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 10.8,
+       "min_ms": 10.0,
+       "max_ms": 14.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 33.2,
+       "bytes": 779,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 46.3,
+       "min_ms": 42.9,
+       "max_ms": 59.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 14.8,
+       "bytes": 762,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": false,
+       "failure": "AssertionError: no hint for an unknown theme"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 17.1,
+       "min_ms": 13.1,
+       "max_ms": 25.5,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 32.8,
+       "bytes": 5005,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.7,
+       "min_ms": 2.6,
+       "max_ms": 4.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 1.5,
+       "bytes": 478,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.5,
+       "min_ms": 1.2,
+       "max_ms": 4.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 585.0,
+       "bytes": 11545,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 22.3,
+       "min_ms": 21.2,
+       "max_ms": 80.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 489.6,
+       "bytes": 6515,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.7,
+       "min_ms": 1.6,
+       "max_ms": 2.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 498.2,
+       "bytes": 46791,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.9,
+       "min_ms": 2.4,
+       "max_ms": 4.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 436.7,
+       "bytes": 302,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: expected error not_found, got error/malformed_response"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 516.8,
+       "min_ms": 27.4,
+       "max_ms": 538.8,
+       "ok": false,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.9,
+       "bytes": 7441,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.6,
+       "min_ms": 3.3,
+       "max_ms": 5.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 1548.7,
+       "bytes": 11405,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.4,
+       "min_ms": 2.1,
+       "max_ms": 3.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 40.7,
+       "bytes": 5166,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.1,
+       "min_ms": 41.6,
+       "max_ms": 53.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 42.2,
+       "bytes": 60076,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 44.2,
+       "min_ms": 43.5,
+       "max_ms": 44.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 41.5,
+       "bytes": 5165,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.8,
+       "min_ms": 42.2,
+       "max_ms": 43.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 100.6,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 45.4,
+       "min_ms": 43.6,
+       "max_ms": 48.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.7,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.4,
+       "min_ms": 1.3,
+       "max_ms": 1.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.6,
+       "bytes": 336,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.5,
+       "min_ms": 4.4,
+       "max_ms": 4.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.1,
+       "bytes": 288,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 229.1,
+       "bytes": 107859,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 73.7,
+       "min_ms": 73.0,
+       "max_ms": 75.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 154.6,
+       "bytes": 11034,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.2,
+       "min_ms": 2.1,
+       "max_ms": 2.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 8.8,
+       "bytes": 222562,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: 222562 bytes"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.2,
+       "min_ms": 8.1,
+       "max_ms": 8.4,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 10.1,
+       "bytes": 47415,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.6,
+       "min_ms": 2.4,
+       "max_ms": 3.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.8,
+       "bytes": 11183,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.6,
+       "min_ms": 3.5,
+       "max_ms": 3.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6434.5,
+       "bytes": 1527,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.2,
+       "min_ms": 1.1,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 210.3,
+       "bytes": 3610,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.2,
+       "min_ms": 1.1,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 176.0,
+       "bytes": 3572,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.3,
+       "max_ms": 1.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 300.8,
+     "tools": 9,
+     "tool_schema_bytes": 21848,
+     "rss_mb": 76.5
+    },
+    "rss_after_cold_mb": 297.8,
+    "rss_after_warm_mb": 488.4,
+    "summary": {
+     "steps": 32,
+     "passed": 29,
+     "failed": [
+      "search_wrong_theme",
+      "bulletin_missing",
+      "xls_default"
+     ],
+     "skipped": 0,
+     "cold_total_s": 13.0,
+     "warm_median_sum_ms": 1631.6,
+     "response_bytes": 615663
+    }
+   },
+   {
+    "date": "2026-11-10T17:39:41+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 723.3,
+       "bytes": 5086,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.2,
+       "max_ms": 2.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 1045.6,
+       "bytes": 8255,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 202.0,
+       "min_ms": 197.6,
+       "max_ms": 256.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 174.1,
+       "bytes": 5565,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 176.9,
+       "min_ms": 173.0,
+       "max_ms": 191.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 305.1,
+       "bytes": 8462,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 310.6,
+       "min_ms": 305.4,
+       "max_ms": 314.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 26.4,
+       "bytes": 5613,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 17.8,
+       "min_ms": 15.3,
+       "max_ms": 27.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 11.0,
+       "bytes": 3973,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 9.1,
+       "min_ms": 8.6,
+       "max_ms": 9.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.3,
+       "bytes": 2439,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.4,
+       "min_ms": 8.2,
+       "max_ms": 8.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 32.6,
+       "bytes": 779,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 31.4,
+       "min_ms": 30.6,
+       "max_ms": 35.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 11.7,
+       "bytes": 762,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": false,
+       "failure": "AssertionError: no hint for an unknown theme"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 11.0,
+       "min_ms": 10.4,
+       "max_ms": 14.0,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 49.5,
+       "bytes": 5005,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.4,
+       "min_ms": 1.3,
+       "max_ms": 1.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 1.6,
+       "bytes": 478,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 607.3,
+       "bytes": 11545,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 17.3,
+       "min_ms": 17.0,
+       "max_ms": 41.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 505.1,
+       "bytes": 6515,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.5,
+       "min_ms": 1.4,
+       "max_ms": 1.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 523.1,
+       "bytes": 46791,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.4,
+       "min_ms": 2.1,
+       "max_ms": 3.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 437.6,
+       "bytes": 302,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: expected error not_found, got error/malformed_response"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 497.9,
+       "min_ms": 28.7,
+       "max_ms": 508.1,
+       "ok": false,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 5.3,
+       "bytes": 7441,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.5,
+       "min_ms": 2.7,
+       "max_ms": 5.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 2020.0,
+       "bytes": 11405,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.7,
+       "min_ms": 2.2,
+       "max_ms": 2.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 50.3,
+       "bytes": 5166,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.2,
+       "min_ms": 41.3,
+       "max_ms": 50.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 56.8,
+       "bytes": 60076,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 44.1,
+       "min_ms": 43.3,
+       "max_ms": 45.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 72.3,
+       "bytes": 5165,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 44.1,
+       "min_ms": 42.9,
+       "max_ms": 53.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 106.0,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 43.9,
+       "min_ms": 43.7,
+       "max_ms": 44.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.9,
+       "bytes": 2727,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.4,
+       "min_ms": 1.3,
+       "max_ms": 1.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 6.1,
+       "bytes": 336,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.6,
+       "min_ms": 4.5,
+       "max_ms": 5.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.3,
+       "bytes": 288,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 263.0,
+       "bytes": 107859,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 74.1,
+       "min_ms": 72.2,
+       "max_ms": 75.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 163.5,
+       "bytes": 11034,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.2,
+       "min_ms": 2.1,
+       "max_ms": 2.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 9.4,
+       "bytes": 222562,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": false,
+       "failure": "AssertionError: 222562 bytes"
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.4,
+       "min_ms": 8.2,
+       "max_ms": 8.7,
+       "ok": false,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 10.4,
+       "bytes": 47415,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.6,
+       "min_ms": 2.5,
+       "max_ms": 3.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.0,
+       "bytes": 11183,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.6,
+       "min_ms": 3.6,
+       "max_ms": 4.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6568.9,
+       "bytes": 1527,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.3,
+       "min_ms": 1.2,
+       "max_ms": 1.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 215.5,
+       "bytes": 3610,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.2,
+       "min_ms": 1.2,
+       "max_ms": 1.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 194.2,
+       "bytes": 3572,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.4,
+       "min_ms": 1.3,
+       "max_ms": 1.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 303.2,
+     "tools": 9,
+     "tool_schema_bytes": 21848,
+     "rss_mb": 75.6
+    },
+    "rss_after_cold_mb": 563.9,
+    "rss_after_warm_mb": 616.1,
+    "summary": {
+     "steps": 32,
+     "passed": 29,
+     "failed": [
+      "search_wrong_theme",
+      "bulletin_missing",
+      "xls_default"
+     ],
+     "skipped": 0,
+     "cold_total_s": 14.2,
+     "warm_median_sum_ms": 1573.3,
+     "response_bytes": 615663
+    }
+   }
+  ],
+  "after": [
+   {
+    "date": "2026-11-10T17:38:05+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 839.9,
+       "bytes": 4116,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.9,
+       "min_ms": 0.8,
+       "max_ms": 1.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 716.2,
+       "bytes": 6508,
+       "requests": {
+        "tuik": 0,
+        "index": 3
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 33.9,
+       "min_ms": 31.0,
+       "max_ms": 55.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 35.4,
+       "bytes": 4273,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 32.9,
+       "min_ms": 32.0,
+       "max_ms": 40.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 38.9,
+       "bytes": 6776,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 34.2,
+       "min_ms": 33.6,
+       "max_ms": 36.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 17.5,
+       "bytes": 4402,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 15.8,
+       "min_ms": 14.4,
+       "max_ms": 16.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.9,
+       "bytes": 3115,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.2,
+       "min_ms": 8.0,
+       "max_ms": 8.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 8.2,
+       "bytes": 1937,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 10.6,
+       "min_ms": 7.8,
+       "max_ms": 13.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 13.7,
+       "bytes": 641,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 14.3,
+       "min_ms": 13.4,
+       "max_ms": 18.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.9,
+       "bytes": 749,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 10.3,
+       "min_ms": 8.6,
+       "max_ms": 10.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 34.1,
+       "bytes": 4167,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.1,
+       "min_ms": 0.9,
+       "max_ms": 1.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 0.9,
+       "bytes": 453,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.6,
+       "min_ms": 0.6,
+       "max_ms": 0.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 584.6,
+       "bytes": 8888,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 17.1,
+       "min_ms": 16.4,
+       "max_ms": 40.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 685.9,
+       "bytes": 5097,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.1,
+       "min_ms": 1.0,
+       "max_ms": 1.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 301.7,
+       "bytes": 44444,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.7,
+       "min_ms": 1.6,
+       "max_ms": 1.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 439.0,
+       "bytes": 255,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 503.1,
+       "min_ms": 29.8,
+       "max_ms": 523.9,
+       "ok": true,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.5,
+       "bytes": 6472,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.6,
+       "min_ms": 2.1,
+       "max_ms": 4.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 1572.4,
+       "bytes": 7411,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.0,
+       "min_ms": 1.7,
+       "max_ms": 3.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 41.0,
+       "bytes": 4141,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 39.6,
+       "min_ms": 39.5,
+       "max_ms": 55.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 41.3,
+       "bytes": 46701,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.9,
+       "min_ms": 41.6,
+       "max_ms": 42.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 40.3,
+       "bytes": 4140,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.0,
+       "min_ms": 40.2,
+       "max_ms": 41.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 46.2,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.6,
+       "min_ms": 39.6,
+       "max_ms": 45.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.2,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.5,
+       "bytes": 311,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.1,
+       "min_ms": 4.0,
+       "max_ms": 4.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 0.7,
+       "bytes": 263,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.6,
+       "min_ms": 0.6,
+       "max_ms": 0.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 258.3,
+       "bytes": 38028,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 88.6,
+       "min_ms": 84.5,
+       "max_ms": 89.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 154.7,
+       "bytes": 9683,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.8,
+       "min_ms": 1.7,
+       "max_ms": 2.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 6.3,
+       "bytes": 64164,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 5.6,
+       "min_ms": 5.4,
+       "max_ms": 5.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 10.0,
+       "bytes": 40547,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.8,
+       "min_ms": 2.6,
+       "max_ms": 4.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.3,
+       "bytes": 9832,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.0,
+       "min_ms": 3.0,
+       "max_ms": 3.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6317.6,
+       "bytes": 1377,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 200.5,
+       "bytes": 3460,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 172.6,
+       "bytes": 3422,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 267.0,
+     "tools": 9,
+     "tool_schema_bytes": 21173,
+     "rss_mb": 73.9
+    },
+    "rss_after_cold_mb": 1146.3,
+    "rss_after_warm_mb": 1166.3,
+    "summary": {
+     "steps": 32,
+     "passed": 32,
+     "failed": [],
+     "skipped": 0,
+     "cold_total_s": 12.6,
+     "warm_median_sum_ms": 964.6,
+     "response_bytes": 340189
+    }
+   },
+   {
+    "date": "2026-11-10T17:38:23+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 504.0,
+       "bytes": 4116,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.9,
+       "min_ms": 0.8,
+       "max_ms": 1.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 615.5,
+       "bytes": 6508,
+       "requests": {
+        "tuik": 0,
+        "index": 3
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 32.1,
+       "min_ms": 29.8,
+       "max_ms": 55.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 38.7,
+       "bytes": 4273,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 32.8,
+       "min_ms": 31.2,
+       "max_ms": 39.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 35.4,
+       "bytes": 6776,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 33.9,
+       "min_ms": 33.2,
+       "max_ms": 35.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 16.9,
+       "bytes": 4402,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 15.1,
+       "min_ms": 14.8,
+       "max_ms": 16.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 10.7,
+       "bytes": 3115,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.1,
+       "min_ms": 7.7,
+       "max_ms": 8.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 8.4,
+       "bytes": 1937,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 7.3,
+       "min_ms": 6.8,
+       "max_ms": 7.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 14.3,
+       "bytes": 641,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 14.6,
+       "min_ms": 13.0,
+       "max_ms": 16.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.2,
+       "bytes": 749,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 12.3,
+       "min_ms": 9.3,
+       "max_ms": 15.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 45.8,
+       "bytes": 4167,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 0.9,
+       "bytes": 453,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.7,
+       "min_ms": 0.6,
+       "max_ms": 0.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 624.4,
+       "bytes": 8888,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 16.4,
+       "min_ms": 15.7,
+       "max_ms": 38.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 461.2,
+       "bytes": 5097,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.1,
+       "min_ms": 1.0,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 472.4,
+       "bytes": 44444,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.8,
+       "min_ms": 1.6,
+       "max_ms": 2.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 432.7,
+       "bytes": 255,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 502.1,
+       "min_ms": 26.3,
+       "max_ms": 507.6,
+       "ok": true,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.2,
+       "bytes": 6472,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.1,
+       "min_ms": 1.9,
+       "max_ms": 3.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 1967.2,
+       "bytes": 7411,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.7,
+       "min_ms": 1.4,
+       "max_ms": 2.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 40.9,
+       "bytes": 4141,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 40.0,
+       "min_ms": 39.5,
+       "max_ms": 51.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 42.7,
+       "bytes": 46701,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.2,
+       "min_ms": 41.3,
+       "max_ms": 43.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 40.2,
+       "bytes": 4140,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.1,
+       "min_ms": 40.5,
+       "max_ms": 41.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 47.8,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.5,
+       "min_ms": 41.2,
+       "max_ms": 43.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.2,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.9,
+       "min_ms": 0.9,
+       "max_ms": 1.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.2,
+       "bytes": 311,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 4.1,
+       "min_ms": 3.7,
+       "max_ms": 4.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 0.6,
+       "bytes": 263,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.6,
+       "min_ms": 0.6,
+       "max_ms": 0.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 239.4,
+       "bytes": 38028,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 86.1,
+       "min_ms": 83.2,
+       "max_ms": 87.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 130.4,
+       "bytes": 9683,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.9,
+       "min_ms": 1.8,
+       "max_ms": 2.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 6.3,
+       "bytes": 64164,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 5.5,
+       "min_ms": 5.3,
+       "max_ms": 5.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 9.5,
+       "bytes": 40547,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.8,
+       "min_ms": 2.6,
+       "max_ms": 4.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.4,
+       "bytes": 9832,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.1,
+       "min_ms": 3.0,
+       "max_ms": 3.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6386.4,
+       "bytes": 1377,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 223.1,
+       "bytes": 3460,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 184.6,
+       "bytes": 3422,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 281.1,
+     "tools": 9,
+     "tool_schema_bytes": 21173,
+     "rss_mb": 74.3
+    },
+    "rss_after_cold_mb": 1146.4,
+    "rss_after_warm_mb": 1189.1,
+    "summary": {
+     "steps": 32,
+     "passed": 32,
+     "failed": [],
+     "skipped": 0,
+     "cold_total_s": 12.6,
+     "warm_median_sum_ms": 957.4,
+     "response_bytes": 340189
+    }
+   },
+   {
+    "date": "2026-11-10T17:38:41+00:00",
+    "version": "0.3.0",
+    "python": "3.13.5",
+    "indexed": true,
+    "repeats": 5,
+    "steps": [
+     {
+      "id": "themes",
+      "group": "discovery",
+      "tool": "list_tuik_themes",
+      "cold": {
+       "ms": 475.9,
+       "bytes": 4116,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.9,
+       "min_ms": 0.8,
+       "max_ms": 1.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_ascii",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 645.9,
+       "bytes": 6508,
+       "requests": {
+        "tuik": 0,
+        "index": 3
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 33.0,
+       "min_ms": 30.3,
+       "max_ms": 54.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_typo",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 38.5,
+       "bytes": 4273,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 32.9,
+       "min_ms": 31.9,
+       "max_ms": 37.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_paraphrase",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 36.2,
+       "bytes": 6776,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 34.1,
+       "min_ms": 34.0,
+       "max_ms": 40.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_filtered",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 16.6,
+       "bytes": 4402,
+       "requests": {
+        "tuik": 0,
+        "index": 2
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 15.4,
+       "min_ms": 15.0,
+       "max_ms": 16.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 10
+       }
+      }
+     },
+     {
+      "id": "search_passage",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 8.8,
+       "bytes": 3115,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 8.3,
+       "min_ms": 8.1,
+       "max_ms": 8.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_table",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 7.7,
+       "bytes": 1937,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 7.5,
+       "min_ms": 7.2,
+       "max_ms": 7.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_gibberish",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 14.2,
+       "bytes": 641,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 13.9,
+       "min_ms": 12.8,
+       "max_ms": 14.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_wrong_theme",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 9.0,
+       "bytes": 749,
+       "requests": {
+        "tuik": 0,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 9.4,
+       "min_ms": 8.7,
+       "max_ms": 10.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "search_live",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 28.7,
+       "bytes": 4167,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "search_bad_date",
+      "group": "discovery",
+      "tool": "search_tuik",
+      "cold": {
+       "ms": 0.9,
+       "bytes": 453,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.6,
+       "min_ms": 0.6,
+       "max_ms": 0.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "datasets_ascii",
+      "group": "discovery",
+      "tool": "search_tuik_datasets",
+      "cold": {
+       "ms": 590.1,
+       "bytes": 8888,
+       "requests": {
+        "tuik": 1,
+        "index": 1
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 16.5,
+       "min_ms": 16.1,
+       "max_ms": 37.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 5
+       }
+      }
+     },
+     {
+      "id": "classifications",
+      "group": "discovery",
+      "tool": "search_tuik_classifications",
+      "cold": {
+       "ms": 483.6,
+       "bytes": 5097,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 1.0,
+       "max_ms": 1.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 510.7,
+       "bytes": 44444,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.8,
+       "min_ms": 1.5,
+       "max_ms": 1.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_missing",
+      "group": "bulletin",
+      "tool": "get_tuik_resource",
+      "cold": {
+       "ms": 436.4,
+       "bytes": 255,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 498.9,
+       "min_ms": 24.2,
+       "max_ms": 512.1,
+       "ok": true,
+       "requests": {
+        "tuik": 5,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "bulletin_choice",
+      "group": "bulletin",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 2.9,
+       "bytes": 6472,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.7,
+       "min_ms": 2.0,
+       "max_ms": 3.9,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_inspect",
+      "group": "csv",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 1653.4,
+       "bytes": 7411,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.3,
+       "min_ms": 1.9,
+       "max_ms": 3.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_rows",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 41.7,
+       "bytes": 4141,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 40.7,
+       "min_ms": 39.3,
+       "max_ms": 56.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_default",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 43.7,
+       "bytes": 46701,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 43.5,
+       "min_ms": 42.0,
+       "max_ms": 44.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 42.1,
+       "bytes": 4140,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 41.1,
+       "min_ms": 40.7,
+       "max_ms": 41.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_query",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 49.5,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 42.0,
+       "min_ms": 41.8,
+       "max_ms": 43.5,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 1.2,
+       "bytes": 2208,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.9,
+       "min_ms": 0.9,
+       "max_ms": 1.1,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_filter",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 4.4,
+       "bytes": 311,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.9,
+       "min_ms": 3.7,
+       "max_ms": 4.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "csv_bad_cursor",
+      "group": "csv",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 0.7,
+       "bytes": 263,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.6,
+       "min_ms": 0.6,
+       "max_ms": 0.6,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "chart",
+      "group": "csv",
+      "tool": "chart_tuik_data",
+      "cold": {
+       "ms": 237.7,
+       "bytes": 38028,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 86.5,
+       "min_ms": 84.2,
+       "max_ms": 89.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_rows",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 144.3,
+       "bytes": 9683,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.8,
+       "min_ms": 1.7,
+       "max_ms": 2.2,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_default",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 7.2,
+       "bytes": 64164,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 5.7,
+       "min_ms": 5.5,
+       "max_ms": 5.7,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_inspect",
+      "group": "excel",
+      "tool": "inspect_tuik_data",
+      "cold": {
+       "ms": 9.7,
+       "bytes": 40547,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 2.8,
+       "min_ms": 2.6,
+       "max_ms": 4.4,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "xls_query",
+      "group": "excel",
+      "tool": "get_tuik_data",
+      "cold": {
+       "ms": 3.7,
+       "bytes": 9832,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 3.1,
+       "min_ms": 3.0,
+       "max_ms": 3.3,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_page",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 6412.2,
+       "bytes": 1377,
+       "requests": {
+        "tuik": 1,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_tables",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 208.7,
+       "bytes": 3460,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 0.8,
+       "min_ms": 0.8,
+       "max_ms": 0.8,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     },
+     {
+      "id": "pdf_from_bulletin",
+      "group": "pdf",
+      "tool": "read_tuik_document",
+      "cold": {
+       "ms": 173.2,
+       "bytes": 3422,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       },
+       "ok": true
+      },
+      "warm": {
+       "n": 5,
+       "median_ms": 1.0,
+       "min_ms": 0.9,
+       "max_ms": 1.0,
+       "ok": true,
+       "requests": {
+        "tuik": 0,
+        "index": 0
+       }
+      }
+     }
+    ],
+    "startup": {
+     "ms": 286.9,
+     "tools": 9,
+     "tool_schema_bytes": 21173,
+     "rss_mb": 74.3
+    },
+    "rss_after_cold_mb": 1162.0,
+    "rss_after_warm_mb": 1183.4,
+    "summary": {
+     "steps": 32,
+     "passed": 32,
+     "failed": [],
+     "skipped": 0,
+     "cold_total_s": 12.3,
+     "warm_median_sum_ms": 955.4,
+     "response_bytes": 340189
+    }
+   }
+  ]
+ }
+}

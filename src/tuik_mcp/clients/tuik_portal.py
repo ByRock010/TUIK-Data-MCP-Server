@@ -248,7 +248,15 @@ class TuikPortal:
     async def press(self, resource_id: str) -> TuikResource:
         number = resource_id.split(":")[1]
         url = f"{PORTAL}/api/tr/press/{number}"
-        payload = envelope(await self.http.json("GET", url), url)
+        raw = await self.http.json("GET", url)
+        # A missing bulletin is HTTP 200 with isError and "Bülten bulunamadı".
+        if (
+            isinstance(raw, dict)
+            and raw.get("isError") is True
+            and "bulunamad" in str(raw.get("message", "")).casefold()
+        ):
+            raise SourceError("not_found", "TÜİK has no bulletin with this number", url)
+        payload = envelope(raw, url)
         if payload is None:
             raise SourceError("not_found", "Bulletin not found", url)
         press = parse(Press, payload, url)

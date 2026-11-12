@@ -2,6 +2,7 @@
 
 import base64
 import builtins
+import io
 import json
 import sys
 from pathlib import Path
@@ -21,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from test_inspect_data import FILES, FIXTURES, FLOW, ID, service  # noqa: E402
 
 pytest.importorskip("matplotlib")
+from PIL import Image  # noqa: E402  (a matplotlib dependency)
 
 PNG = b"\x89PNG\r\n\x1a\n"
 X = ["Yıllar - Years [column 1]", "column_2"]
@@ -43,6 +45,9 @@ async def test_xls_line_chart_reads_the_snapshot_and_summarizes_recent_points():
             "Tablo",
         )
         assert (result.width_px, result.height_px) == (1100, 616)
+        # A palette PNG at the reported size: about a third of the RGBA bytes.
+        picture = Image.open(io.BytesIO(image))
+        assert picture.mode == "P" and picture.size == (1100, 616)
         assert result.title.startswith("Mevsim etkisinden arındırılmış")
         assert result.unit and result.snapshot_id.startswith("sha256:")
         assert result.matched_rows == 260 and result.x_points == 36

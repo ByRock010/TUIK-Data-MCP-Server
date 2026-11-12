@@ -16,8 +16,11 @@ from tuik_mcp.search import embeddings
 from tuik_mcp.search.backend import (
     HYBRID_DEPTH,
     HYBRID_WEIGHTS,
+    LEXICAL_MATCHES_AGG,
+    NO_LEXICAL_MATCH,
     OpenSearchBackend,
     SearchFilters,
+    build_highlight_query,
     build_hybrid_query,
     build_query,
 )
@@ -165,12 +168,34 @@ def test_hybrid_query_fuses_the_lexical_query_with_filtered_knn():
     assert combination["technique"] == "rrf"
     assert combination["parameters"]["weights"] == list(HYBRID_WEIGHTS) == [0.5, 0.5]
     assert "embedding" in body["_source"]["excludes"] and "sort" not in body
-    assert "aggs" in body and "highlight" in body
+    # Highlighting inside a hybrid request is slow: a second request fetches it.
+    assert "aggs" in body and "highlight" not in body
+    # Counts lexical matches in the same request; the lexical query itself has no such agg.
+    assert body["aggs"][LEXICAL_MATCHES_AGG] == {"filter": lexical}
+    assert LEXICAL_MATCHES_AGG not in build_query("nüfus", filters, 10)["aggs"]
     with pytest.raises(ValueError, match="first 50"):
         build_hybrid_query("nüfus", filters, 10, 45, vector)
 
 
-def cluster(model=MODEL, fail_hybrid=False, models=None):
+def test_highlight_query_restricts_the_lexical_clauses_to_the_ranked_documents():
+    lexical = build_query("nüfus", SearchFilters(), 10)
+    body = build_highlight_query("nüfus", ["press:1", "flow:DF_A+V1.0"])
+    assert body["query"]["bool"] == {
+        "filter": [{"ids": {"values": ["press:1", "flow:DF_A+V1.0"]}}],
+        # No minimum_should_match: a semantic-only hit returns without highlights.
+        "should": lexical["query"]["bool"]["should"],
+    }
+    assert body["highlight"] == lexical["highlight"]
+    assert body["size"] == 2 and body["_source"] is False and "aggs" not in body
+
+
+def request_kind(body):
+    if "hybrid" in body["query"]:
+        return "hybrid"
+    return "highlight" if "ids" in str(body["query"]["bool"]["filter"]) else "lexical"
+
+
+def cluster(model=MODEL, fail_hybrid=False, models=None, lexical_matches=1, fail_highlight=False):
     requests = []
 
     def handler(request):
@@ -190,6 +215,13 @@ def cluster(model=MODEL, fail_hybrid=False, models=None):
         requests.append(body)
         if fail_hybrid and "hybrid" in body["query"]:
             return httpx.Response(400, json={"error": "no such query [hybrid]"})
+        if request_kind(body) == "highlight":
+            if fail_highlight:
+                return httpx.Response(500, json={"error": "highlight phase failed"})
+            highlight = {"title": ["<em>İşgücü</em> İstatistikleri"]}
+            return httpx.Response(
+                200, json={"hits": {"hits": [{"_id": "press:57987", "highlight": highlight}]}}
+            )
         return httpx.Response(
             200,
             json={
@@ -209,12 +241,17 @@ def cluster(model=MODEL, fail_hybrid=False, models=None):
                 },
                 "aggregations": {
                     name: {
-                        "buckets": [],
+                        "buckets": [{"key": "bulletin", "doc_count": 1}],
                         "sum_other_doc_count": 0,
                         "doc_count_error_upper_bound": 0,
                     }
                     for name in ("kind", "theme")
-                },
+                }
+                | (
+                    {LEXICAL_MATCHES_AGG: {"doc_count": lexical_matches}}
+                    if body["aggs"].get(LEXICAL_MATCHES_AGG)
+                    else {}
+                ),
             },
         )
 
@@ -246,7 +283,13 @@ async def test_backend_uses_hybrid_only_when_vectors_model_and_scope_match(
     finally:
         await store.close()
     assert hits.ranking == ranking
-    assert ("hybrid" in requests[-1]["query"]) is (ranking == "hybrid")
+    kinds = [request_kind(body) for body in requests]
+    if ranking == "hybrid":
+        assert kinds == ["hybrid", "highlight"]
+        assert requests[1]["query"]["bool"]["filter"] == [{"ids": {"values": ["press:57987"]}}]
+        assert hits.hits[0].highlights == {"title": ["<em>İşgücü</em> İstatistikleri"]}
+    else:
+        assert kinds == ["lexical"] and "highlight" in requests[0]
     assert hits.hits[0].id == "press:57987" and hits.facets is not None
     if warning:
         assert any(warning in w for w in hits.warnings)
@@ -254,6 +297,58 @@ async def test_backend_uses_hybrid_only_when_vectors_model_and_scope_match(
         assert hits.warnings == []
     if ranking == "hybrid":
         assert embedder.queries == ["iş bulamayanlar"]
+
+
+async def test_failed_highlight_request_keeps_the_ranked_hits_with_a_warning():
+    store, requests = cluster(fail_highlight=True)
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", FakeEmbedder()).search(
+            "nüfus", SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert [request_kind(body) for body in requests] == ["hybrid", "highlight"]
+    assert hits.ranking == "hybrid" and hits.hits[0].id == "press:57987"
+    assert hits.hits[0].highlights == {} and hits.total == 1
+    (warning,) = hits.warnings
+    assert warning.startswith("Highlights are unavailable")
+
+
+async def test_hybrid_without_lexical_matches_returns_no_semantic_neighbours():
+    # k-NN always finds neighbours; with no lexical match they are not evidence.
+    store, requests = cluster(lexical_matches=0)
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", FakeEmbedder()).search(
+            "xqzvkj", SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert ["hybrid" in body["query"] for body in requests] == [True]
+    assert hits.ranking == "hybrid" and hits.hits == [] and hits.total == 0
+    assert hits.warnings == [NO_LEXICAL_MATCH]
+    assert hits.facets.kind.counts == hits.facets.theme.counts == {}
+
+
+async def test_hybrid_response_without_the_lexical_count_falls_back_lexically():
+    # A cluster that drops the aggregation must not silently skip the guard.
+    store, requests = cluster()
+    original = store.query
+
+    async def query(index, body):
+        response = await original(index, body)
+        response["aggregations"].pop(LEXICAL_MATCHES_AGG, None)
+        return response
+
+    store.query = query
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", FakeEmbedder()).search(
+            "nüfus", SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert ["hybrid" in body["query"] for body in requests] == [True, False]
+    assert hits.ranking == "lexical" and hits.hits
+    assert any("Hybrid search failed" in w for w in hits.warnings)
 
 
 async def test_failed_hybrid_request_retries_lexically_and_meta_is_cached():
@@ -496,7 +591,14 @@ async def test_real_cluster_hybrid_query_with_inline_rrf_pipeline():
         hits = await backend.search("işsizlik", SearchFilters(), 10)
         assert hits.ranking == "hybrid" and hits.warnings == []
         assert {hit.id for hit in hits.hits} <= {"flow:DF_ISSIZ+V1.0", "press:57987"}
+        # Highlights arrive through the second, lexical request.
+        by_id = {hit.id: hit.highlights for hit in hits.hits}
+        assert any("<em>" in text for text in by_id["flow:DF_ISSIZ+V1.0"]["title"])
+        assert any("<em>" in text for text in by_id["press:57987"]["body"])
         assert hits.hits and hits.facets is not None
+        nonsense = await backend.search("xqzvkj", SearchFilters(), 10)
+        assert nonsense.ranking == "hybrid" and nonsense.hits == [] and nonsense.total == 0
+        assert nonsense.warnings == [NO_LEXICAL_MATCH]
         filtered = await backend.search("işsizlik", SearchFilters(downloadable=True), 10)
         assert [hit.id for hit in filtered.hits] == ["flow:DF_ISSIZ+V1.0"]
         content = await backend.search("tablo", SearchFilters(kinds=["document_chunk"]), 10)

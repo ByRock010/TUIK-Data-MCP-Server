@@ -22,11 +22,41 @@ All notable changes to this project are documented here. The format follows
   and which answer numbers occur in tool output. The
   [2026-11-08 run](docs/verification/mcp-benchmark-2026-11-08.md) scored 10 / 8 / 2
   of 10 on hard TÜİK questions (single runs, AI-graded).
+- `scripts/usage_perf.py` runs 32 usage checks over real MCP stdio and records
+  latency, response size and upstream requests per call. The
+  [2026-11-10 report](docs/verification/usage-performance-2026-11-10.md) has the
+  before and after numbers for the changes below.
 
 ### Changed
 
 - Index mapping schema 3 adds the optional `embedding` vector field; rebuild older
   indices once with `tuik-mcp-index --full`.
+- `get_tuik_data` pages read without `query` now share the 64 KiB output budget
+  (`TUIK_QUERY_MAX_OUTPUT_BYTES`). A page that would exceed it returns the rows that
+  fit, with `truncated: true` and a warning naming `query={}`. A default read of a
+  37-column workbook was 222 KB before.
+- Tool results are compact JSON instead of indented JSON (20–35 % fewer bytes for
+  row responses); `structuredContent` is unchanged and output budgets measure the
+  compact form. Tools no longer declare a generic output schema.
+- Hybrid search fetches highlights in a second, lexical request: warm searches take
+  about 33 ms instead of 180–300 ms. Rankings, totals and facets are unchanged;
+  multi-word synonyms are now highlighted as phrases, as in lexical mode.
+- Chart images are 256-colour palette PNGs, about a third of the previous size.
+- `inspect_tuik_data` reads the same parsed CSV snapshot as queries and charts: one
+  parse and one cached copy per file instead of two.
+- The User-Agent carries the installed package's major.minor version.
+
+### Fixed
+
+- A bulletin number that does not exist returns `not_found` instead of
+  `malformed_response`.
+- A `search_tuik` theme filter that matches nothing adds a warning that themes match
+  a full `list_tuik_themes` name exactly.
+- Hybrid `search_tuik` no longer returns semantic neighbours for a query with no
+  lexical match. Gibberish such as `xqzvkj` returned 50 unrelated datasets; it now
+  returns no results and a warning. English-only queries such as
+  `unemployment rate` are affected in the same way. None of the 48 evaluation
+  queries changes (ADR 0005, decision 8).
 
 ## [0.3.0] - 2026-11-05
 

@@ -1,3 +1,4 @@
+import json
 import sys
 
 from mcp import ClientSession, StdioServerParameters
@@ -31,6 +32,10 @@ async def test_stdio_discovery_and_input_validation():
             result = await session.call_tool("get_tuik_resource", {"resource_id": "invalid"})
             assert result.structuredContent["code"] == "invalid_input"
             assert result.structuredContent["source_url"]
+            # The text is the same payload as compact JSON: indentation only costs tokens.
+            (text,) = result.content
+            assert json.loads(text.text) == result.structuredContent
+            assert "\n" not in text.text and '": ' not in text.text
             result = await session.call_tool("search_tuik", {"query": "", "limit": 0})
             assert result.isError
             result = await session.call_tool("search_tuik_datasets", {"query": " "})

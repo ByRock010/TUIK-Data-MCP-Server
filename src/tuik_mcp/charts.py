@@ -272,7 +272,7 @@ def render(
             "Charts need matplotlib: install the viz extra (pip install 'tuik-mcp[viz]').",
         ) from exc
     figure = Figure(figsize=(WIDTH_IN, HEIGHT_IN), dpi=DPI, layout="constrained")
-    FigureCanvasAgg(figure)
+    canvas = FigureCanvasAgg(figure)
     axes = figure.add_subplot()
     count = len(plot.labels)
     positions = list(range(count))
@@ -334,9 +334,21 @@ def render(
     if subtitle:
         axes.set_title(display(subtitle, 140), fontsize=9, loc="left", color="#555555")
     figure.supxlabel(footer, fontsize=7.5, x=0.01, ha="left", color="#666666")
+    figure.set_facecolor("white")
+    canvas.draw()
+    width, height = canvas.get_width_height()
+    return palette_png(canvas.buffer_rgba(), width, height), width, height
+
+
+def palette_png(rgba, width: int, height: int) -> bytes:
+    """PNG with a 256-colour palette: flat-colour charts need a third of the RGBA bytes."""
+    from PIL import Image  # A matplotlib dependency.
+
+    image = Image.frombuffer("RGBA", (width, height), rgba, "raw", "RGBA", 0, 1).convert("RGB")
+    palette = image.quantize(256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
     buffer = io.BytesIO()
-    figure.savefig(buffer, format="png", facecolor="white")
-    return buffer.getvalue(), round(WIDTH_IN * DPI), round(HEIGHT_IN * DPI)
+    palette.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()
 
 
 def annotate_last(axes, line: Line, color: str) -> None:

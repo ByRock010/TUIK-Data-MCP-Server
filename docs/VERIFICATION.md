@@ -1,5 +1,24 @@
 # Verification
 
+## Usage checks and performance — 2026-11-10
+
+The [usage and performance report](verification/usage-performance-2026-11-10.md)
+runs 32 usage steps through real MCP stdio with `scripts/usage_perf.py`, on
+`develop` plus PR #81 and again with the fixes it led to. Medians of three runs:
+
+- **Checks:** 29 of 32 passed before, 32 of 32 after. The three failures were a
+  missing bulletin reported as `malformed_response`, a 222 KB default workbook
+  read, and a silent non-matching theme filter.
+- **Hybrid search:** warm latency fell from 177–306 ms to 33–34 ms by moving
+  highlights to a second lexical request. Rankings are unchanged.
+- **Response size:** 615,663 bytes over the 32 steps before, 340,189 after.
+- **Memory:** about 1 GB once the embedding model loads, 91 MB without semantic
+  search; unchanged.
+
+Offline tests: **757 passed**; **22 real OpenSearch 3.3.2 tests** passed. Numbers
+are from one machine with live TÜİK. The
+[run reports](verification/usage-performance-2026-11-10.json) are retained.
+
 ## MCP vs web vs closed-book benchmark — 2026-11-08
 
 The [benchmark report](verification/mcp-benchmark-2026-11-08.md) asks

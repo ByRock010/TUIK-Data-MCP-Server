@@ -18,6 +18,7 @@ from tuik_mcp.config import PORTAL
 from tuik_mcp.models.common import now
 from tuik_mcp.models.dataset import DataResponse
 from tuik_mcp.parsers.query import QueryError, QueryLimits, evaluate
+from tuik_mcp.utils.rendering import rendered
 
 QUERY_VERSION = 1
 
@@ -85,9 +86,7 @@ class QueryService:
             )
 
         def fits(response):
-            return len(pydantic_core.to_json(response.model_dump(mode="json"), indent=2)) <= (
-                self.limits.max_output_bytes
-            )
+            return len(rendered(response.model_dump(mode="json"))) <= self.limits.max_output_bytes
 
         low, high = 0, min(limit, len(rows) - offset)
         # The final page drops its cursor, so its size can be smaller than the
@@ -108,6 +107,39 @@ class QueryService:
                 "Metadata or a single row exceeds the output budget; project fewer columns.",
             )
         return result
+
+    def bounded(self, response: DataResponse) -> DataResponse:
+        """Shorten a page read without `query` to the output budget; at least one row.
+
+        Without this, a default call on a wide workbook returned over 200 KB. The
+        exact total stays; `truncated` and a warning say how to read the rest.
+        """
+        rows, budget = response.rows, self.limits.max_output_bytes
+        if len(rows) < 2 or len(rendered(response.model_dump(mode="json"))) <= budget:
+            return response
+
+        def candidate(count):
+            warning = (
+                f"The {budget // 1024} KB output budget shortened this page to {count} of "
+                f"{len(rows)} rows. Pass query={{}} to page through all rows, or "
+                "query.columns to select fewer columns."
+            )
+            return response.model_copy(
+                update={
+                    "rows": rows[:count],
+                    "truncated": True,
+                    "warnings": [*response.warnings, warning],
+                }
+            )
+
+        low, high = 1, len(rows) - 1
+        while low < high:
+            middle = (low + high + 1) // 2
+            if len(rendered(candidate(middle).model_dump(mode="json"))) <= budget:
+                low = middle
+            else:
+                high = middle - 1
+        return candidate(max(low, 1))
 
     async def start(self, resource_id, cache_id, file, base, query, filters, sheet, limit):
         async with self.lock:

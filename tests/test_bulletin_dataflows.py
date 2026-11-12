@@ -215,3 +215,21 @@ def test_dataflow_links_keep_every_category_level(path):
     assert dataset is not None
     assert dataset.id == "flow:DF_UCRETLI_CALISAN_ISTATISTIKLERI_C+V1.0"
     assert dataset.category_path == path.strip("/").split("/")
+
+
+@pytest.mark.parametrize(
+    ("message", "code"),
+    [("Bülten bulunamadı", "not_found"), ("Beklenmeyen bir hata oluştu", "malformed_response")],
+)
+async def test_missing_bulletin_is_not_found_and_other_portal_errors_keep_their_code(message, code):
+    # The portal answers a missing bulletin with HTTP 200 and an error envelope.
+    def handler(request):
+        return httpx.Response(200, json={"isError": True, "message": message})
+
+    http = HttpClient(Settings(min_interval_seconds=0), httpx.MockTransport(handler))
+    try:
+        error = await respond(CatalogService(http).resource("press:999999999"))
+        assert error["status"] == "error" and error["code"] == code
+        assert error["source_url"].endswith("/api/tr/press/999999999")
+    finally:
+        await http.close()
