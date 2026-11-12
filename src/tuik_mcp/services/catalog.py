@@ -210,6 +210,11 @@ class CatalogService:
             else await self.search_index(args.query, filters, args.limit)
         )
         warnings = list(hits.warnings)
+        if args.theme and hits.backend == "opensearch" and hits.total == 0:
+            warnings.append(
+                f"No results with theme {args.theme!r}. The filter needs a full theme name "
+                "exactly as list_tuik_themes returns it (case-sensitive)."
+            )
         if hits.backend != "opensearch":
             warnings.append(
                 "Facets, scores, highlights and indexed_at are unavailable without the index."
@@ -555,7 +560,7 @@ class CatalogService:
                     if len(rows) < limit:
                         rows.append(row)
             base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
-            return DataResponse(
+            response = DataResponse(
                 **base,
                 status="ok",
                 format=verified.format,
@@ -579,6 +584,7 @@ class CatalogService:
                     "Spreadsheet values preserve source precision. Exact filters apply locally."
                 ),
             )
+            return await self.files.work(self.queries.bounded, response)
         if sheet is not None:
             raise ValueError("sheet applies only to XLS/XLSX files")
         if filters and verified.format != "csv":
@@ -601,7 +607,7 @@ class CatalogService:
         )
         columns, rows, total = table.columns, table.rows, table.total_rows
         base.update(source_url=verified.source_url, retrieved_at=file.retrieved_at)
-        return DataResponse(
+        response = DataResponse(
             **base,
             status="ok",
             columns=columns,
@@ -614,6 +620,7 @@ class CatalogService:
                 "locally after bounded download."
             ),
         )
+        return await self.files.work(self.queries.bounded, response)
 
     async def inspect(
         self,

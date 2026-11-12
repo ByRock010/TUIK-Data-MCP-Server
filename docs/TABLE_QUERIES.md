@@ -120,7 +120,7 @@ No snapshot is pinned indefinitely to satisfy a cursor.
 | `TUIK_QUERY_MAX_CELLS` | 2,000,000 | Source rows × columns |
 | `TUIK_QUERY_MAX_SORT_ROWS` | 50,000 | Matching rows retained for sorting |
 | `TUIK_QUERY_MAX_SNAPSHOT_BYTES` | 8 MiB | One serialized result/query/provenance snapshot |
-| `TUIK_QUERY_MAX_OUTPUT_BYTES` | 64 KiB | Entire response, UTF-8 indented JSON as rendered by FastMCP |
+| `TUIK_QUERY_MAX_OUTPUT_BYTES` | 64 KiB | Entire response as rendered (compact UTF-8 JSON), with or without `query` |
 | `TUIK_QUERY_CACHE_BYTES` | 16 MiB | Combined immutable result-state payloads, at most 128 entries |
 | `TUIK_QUERY_CURSOR_TTL_SECONDS` | 900 | Fixed process-local continuation lifetime |
 

@@ -10,10 +10,9 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import date
 
-import pydantic_core
-
 from tuik_mcp.config import Settings
 from tuik_mcp.utils.normalization import turkish_casefold
+from tuik_mcp.utils.rendering import rendered
 
 from .models import ColumnProfile, ObservedValue, ParsedTable, TableProfile
 
@@ -163,9 +162,8 @@ def profile_column(
 
 
 def size(profiles: list[ColumnProfile]) -> int:
-    """UTF-8 bytes of the profiles as FastMCP renders tool results (indented JSON)."""
-    payload = {"columns": [p.model_dump(mode="json") for p in profiles]}
-    return len(pydantic_core.to_json(payload, indent=2))
+    """UTF-8 bytes of the profiles as the server renders tool results."""
+    return len(rendered({"columns": [p.model_dump(mode="json") for p in profiles]}))
 
 
 def profile_table(

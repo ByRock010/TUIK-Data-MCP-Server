@@ -16,6 +16,7 @@ from tuik_mcp.models.dataset import DownloadLink
 from tuik_mcp.parsers.limits import ParseLimits
 from tuik_mcp.parsers.models import ParsedDocument, ParsedTable, TableProfile
 from tuik_mcp.parsers.profile import InspectLimits, profile_table
+from tuik_mcp.parsers.query import QueryLimits
 from tuik_mcp.services.parsing import parse_document_source, parse_source
 
 TABLES = TypeAdapter(list[ParsedTable])
@@ -53,6 +54,7 @@ class FileStore:
         self.portal = portal
         self.limits = ParseLimits.from_settings(portal.http.settings)
         self.inspect = InspectLimits.from_settings(portal.http.settings)
+        self.scan = QueryLimits.from_settings(portal.http.settings)
         self.cache = BytesTTLCache(portal.http.settings.parse_cache_bytes)
         self.metadata = MemoryTTLCache(max_entries=256)
         self._download_lock = asyncio.Lock()
@@ -106,6 +108,24 @@ class FileStore:
             self.cache.set(key, payload)
             return tables
 
+    async def csv_table(self, resource_id: str, file: DownloadedFile) -> list[ParsedTable]:
+        """The CSV table to profile: the complete one queries and charts read, if it fits.
+
+        Sharing that snapshot means one parse and one cached copy per file instead of
+        two. A CSV beyond the query budgets is profiled from its first rows as before.
+        """
+        try:
+            return await self.tables(
+                resource_id,
+                file,
+                scan_max_rows=self.scan.max_rows,
+                scan_max_cells=self.scan.max_cells,
+            )
+        except SourceError as exc:
+            if exc.code != "parse_limit_exceeded":
+                raise
+            return await self.tables(resource_id, file, self.inspect.max_rows)
+
     async def work(self, function, *args, **kwargs):
         """Query evaluation/serialization shares the parser's cancellation-safe slot."""
         async with self._parse_lock:
@@ -149,7 +169,9 @@ class FileStore:
         if cached is not None:
             return PROFILE.validate_json(cached)
         csv = file.link.format == "csv"
-        tables = await self.tables(resource_id, file, self.inspect.max_rows if csv else None)
+        tables = await (
+            self.csv_table(resource_id, file) if csv else self.tables(resource_id, file)
+        )
         if not tables:
             raise SourceError(
                 "parse_failed", "Workbook contains no worksheets", file.link.source_url

@@ -8,7 +8,6 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import httpx
-import pydantic_core
 import pytest
 from openpyxl import Workbook
 from pydantic import ValidationError
@@ -22,6 +21,7 @@ from tuik_mcp.parsers.query import QueryError, QueryLimits, evaluate
 from tuik_mcp.server import respond
 from tuik_mcp.services import files
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.utils.rendering import rendered
 
 FIXTURES = Path(__file__).parent / "fixtures"
 FLOW = "flow:DF_ALTINSIZ_DTH+V1.0"
@@ -511,7 +511,7 @@ async def test_utf8_output_budget_shortens_pages_without_skipping_rows():
         assert 0 < len(page.rows) < 12
         rows = []
         while True:
-            assert len(pydantic_core.to_json(page.model_dump(mode="json"), indent=2)) <= 4096
+            assert len(rendered(page.model_dump(mode="json"))) <= 4096
             rows.extend(page.rows)
             if not page.has_more:
                 break
@@ -550,6 +550,57 @@ async def test_legacy_first_rows_and_explicit_query_with_legacy_filters_remain_c
         first = await catalog.data(FLOW, filters={"b": "x"}, query={}, limit=1)
         second = await catalog.data(FLOW, cursor=first.next_cursor, filters={"b": "x"}, query={})
         assert first.total_rows == second.total_rows == 2 and second.rows[0]["a"] == "3"
+    finally:
+        await http.close()
+
+
+async def test_pages_read_without_query_share_the_output_budget():
+    body = ("a;b\n" + "".join(f"{n};{'ş' * 150}\n" for n in range(40))).encode()
+    http, catalog, _, _ = service(body, query_max_output_bytes=4096)
+    try:
+        page = await catalog.data(FLOW, limit=40)
+        assert 0 < len(page.rows) < 40 and page.truncated and page.total_rows == 40
+        assert [row["a"] for row in page.rows] == [str(n) for n in range(len(page.rows))]
+        assert len(rendered(page.model_dump(mode="json"))) <= 4096
+        (warning,) = page.warnings
+        assert f"shortened this page to {len(page.rows)} of 40 rows" in warning
+        assert "query={}" in warning and page.next_cursor is None
+        # One more row would not fit: the budget is used, not merely respected.
+        longer = page.model_copy(update={"rows": page.rows + [page.rows[-1]]})
+        assert len(rendered(longer.model_dump(mode="json"))) > 4096
+        filtered = await catalog.data(FLOW, limit=40, filters={"a": "7"})
+        assert filtered.rows == [{"a": "7", "b": "ş" * 150}] and filtered.warnings == []
+        assert not filtered.truncated
+    finally:
+        await http.close()
+    # A single row larger than the budget is still returned rather than nothing.
+    http, catalog, _, _ = service(
+        ("a;b\n1;" + "ş" * 3000 + "\n2;x\n").encode(), query_max_output_bytes=2048
+    )
+    try:
+        page = await catalog.data(FLOW)
+        assert [row["a"] for row in page.rows] == ["1"] and page.truncated
+        # Nothing can be dropped from a one-row page, so it is not marked shortened.
+        alone = await catalog.data(FLOW, filters={"a": "1"})
+        assert len(alone.rows) == 1 and not alone.truncated and alone.warnings == []
+    finally:
+        await http.close()
+
+
+async def test_workbook_pages_read_without_query_share_the_output_budget():
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.append(["il", "açıklama"])
+    for n in range(60):
+        sheet.append([f"il-{n}", "ş" * 120])
+    stream = io.BytesIO()
+    workbook.save(stream)
+    http, catalog, _, _ = service(stream.getvalue(), "xlsx", query_max_output_bytes=4096)
+    try:
+        page = await catalog.data(FILE, limit=100)
+        assert 0 < len(page.rows) < page.total_rows <= 61 and page.truncated
+        assert len(rendered(page.model_dump(mode="json"))) <= 4096
+        assert any("output budget" in warning for warning in page.warnings)
     finally:
         await http.close()
 

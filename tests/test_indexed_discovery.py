@@ -197,3 +197,24 @@ def test_date_ranges_and_bounded_facets():
     aggs = build_query("x", SearchFilters(), 1)["aggs"]
     assert aggs["kind"]["terms"] == {"field": "kind", "size": 5}
     assert aggs["theme"]["terms"] == {"field": "theme", "size": 50}
+
+
+async def test_theme_filter_without_results_says_how_themes_match(catalog):
+    service, _ = catalog
+    empty = response()
+    empty["hits"] = {"total": {"value": 0, "relation": "eq"}, "hits": []}
+    service.index = OpenSearchBackend(
+        OpenSearchStore(
+            "http://cluster",
+            transport=httpx.MockTransport(lambda _: httpx.Response(200, json=empty)),
+        ),
+        "fixture",
+    )
+    try:
+        wrong = await service.discover("nüfus", theme="nufus")
+        assert wrong.total == 0 and "list_tuik_themes" in wrong.warnings[-1]
+        assert "'nufus'" in wrong.warnings[-1]
+        plain = await service.discover("nüfus")
+        assert plain.total == 0 and plain.warnings == []
+    finally:
+        await service.close()

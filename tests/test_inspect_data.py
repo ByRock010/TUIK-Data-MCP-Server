@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 
 import httpx
-import pydantic_core
 import pytest
 from openpyxl import Workbook
 
@@ -18,6 +17,7 @@ from tuik_mcp.parsers.profile import InspectLimits, profile_table, shape, type_h
 from tuik_mcp.server import respond
 from tuik_mcp.services import files
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.utils.rendering import rendered
 
 FIXTURES = Path(__file__).parent / "fixtures"
 FILES = FIXTURES / "files"
@@ -288,6 +288,37 @@ def table(columns, rows, **extra):
     )
 
 
+async def test_csv_profile_query_and_chart_share_one_parsed_snapshot(monkeypatch):
+    parses = []
+    original = files.parse_source
+    monkeypatch.setattr(
+        files, "parse_source", lambda *a, **k: parses.append(a[1]) or original(*a, **k)
+    )
+    http, catalog, _ = service(b"yil;deger\n2024;1\n2025;2\n2026;3\n", "csv")
+    try:
+        profile = await catalog.inspect(FLOW)
+        page = await catalog.data(FLOW, query={"sort": [{"column": "yil", "direction": "desc"}]})
+        assert profile.total_rows == page.total_rows == 3 and profile.complete
+        assert [row["yil"] for row in page.rows] == ["2026", "2025", "2024"]
+        # The complete table is parsed and retained once for both tools.
+        assert parses == ["csv"]
+        assert sum(key.startswith("tables:") for key in catalog.files.cache._items) == 1
+    finally:
+        await http.close()
+
+
+async def test_csv_beyond_the_query_budget_is_still_profiled_from_its_first_rows():
+    body = b"a;b\n" + b"".join(f"{n};x\n".encode() for n in range(6))
+    http, catalog, _ = service(body, "csv", query_max_rows=4, inspect_max_rows=5)
+    try:
+        profile = await catalog.inspect(FLOW)
+        assert (profile.total_rows, profile.rows_examined, profile.complete) == (6, 5, False)
+        error = await respond(catalog.data(FLOW, query={}))
+        assert error["code"] in {"query_limit_exceeded", "parse_limit_exceeded"}
+    finally:
+        await http.close()
+
+
 def test_output_and_column_budgets_shrink_values_then_columns():
     names = [f"c{i}" for i in range(12)]
     rows = [[f"{name}-{n:03d}-" + "v" * 40 for name in names] for n in range(30)]
@@ -306,8 +337,7 @@ def test_output_and_column_budgets_shrink_values_then_columns():
 
 
 def rendered_bytes(profile):
-    payload = {"columns": [c.model_dump(mode="json") for c in profile.columns]}
-    return len(pydantic_core.to_json(payload, indent=2))
+    return len(rendered({"columns": [c.model_dump(mode="json") for c in profile.columns]}))
 
 
 def test_partial_scan_never_claims_a_complete_value_list():

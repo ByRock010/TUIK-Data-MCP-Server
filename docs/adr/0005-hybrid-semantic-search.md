@@ -73,6 +73,15 @@ evaluation set.
 - Base installation, Docker image and unconfigured servers are unchanged. Semantic
   search costs one model download of about 490 MB for the indexer and the server,
   plus about 90 s of CPU embedding for 3,424 documents on an Apple M4.
+- The loaded model takes about 1 GB of resident memory in the server (measured
+  2026-11-10; 91 MB with `TUIK_SEMANTIC_SEARCH=false`). It loads on the first hybrid
+  search, which takes 0.5–0.8 s longer.
+- Highlights come from a second, lexical request restricted to the ranked IDs.
+  Inside the hybrid request, highlighting took about 20 ms per returned document
+  (238 ms median at `limit=10`); the two requests together take about 27 ms. Hybrid
+  highlights now equal lexical-mode highlights, which match multi-word synonyms as
+  phrases. See the
+  [usage and performance report](../verification/usage-performance-2026-11-10.md).
 - Hybrid `score` values are RRF sums (about 0.01–0.03), not BM25 scores.
 - Because of the lexical-evidence rule, semantic search refines queries that share
   at least one word (or a close spelling) with the index; it does not rescue a
