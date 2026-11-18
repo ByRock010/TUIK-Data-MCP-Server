@@ -57,6 +57,24 @@ def test_model_cache_is_not_declared_ready_from_nonempty_directory(monkeypatch, 
     assert str(tmp_path) not in json.dumps(report)
 
 
+def test_unresolvable_model_cache_does_not_echo_path_or_crash(monkeypatch):
+    monkeypatch.setenv("TUIK_OPENSEARCH_URL", "http://localhost:9200")
+    monkeypatch.setenv("TUIK_EMBEDDING_CACHE_DIR", "~private-path-must-not-print/cache")
+    original = Path.expanduser
+
+    def expand(path):
+        if str(path).startswith("~private"):
+            raise RuntimeError("secret")
+        return original(path)
+
+    monkeypatch.setattr(Path, "expanduser", expand)
+    report = doctor.diagnose()
+    assert report["ok"]
+    assert check(report, "embedding_cache")["status"] == "warning"
+    assert "secret" not in json.dumps(report)
+    assert "private-path" not in json.dumps(report)
+
+
 def test_missing_runtime_sdk_mismatch_and_unwritable_storage(monkeypatch, tmp_path):
     real = doctor.version
     monkeypatch.setattr(

@@ -151,14 +151,14 @@ def diagnose(*, online=False, storage_dir=None):
             else "No index configured; literal dataset/live portal discovery remains available.",
         )
         if settings.semantic_search and configured:
-            cache = (
-                Path(settings.embedding_cache_dir).expanduser()
-                if settings.embedding_cache_dir
-                else Path.home() / ".cache" / "tuik-mcp" / "models"
-            )
             try:
+                cache = (
+                    Path(settings.embedding_cache_dir).expanduser()
+                    if settings.embedding_cache_dir
+                    else Path.home() / ".cache" / "tuik-mcp" / "models"
+                )
                 present = cache.is_dir() and any(cache.iterdir())
-            except OSError:
+            except (OSError, RuntimeError, ValueError):
                 present = False
             add(
                 "embedding_cache",
@@ -211,7 +211,11 @@ def main(argv=None):
             print(f"[{check['status']}] {check['name']}: {check['message']}")
             if check["action"]:
                 print(f"  Next: {check['action']}")
-        print("Ready for core startup." if report["ok"] else "Fix the errors above before startup.")
+        print(
+            "No core installation errors detected."
+            if report["ok"]
+            else "Fix the errors above before startup."
+        )
     return 0 if report["ok"] else 1
 
 
