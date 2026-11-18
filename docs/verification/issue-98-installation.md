@@ -59,9 +59,8 @@ value; missing visualization yields the named optional-feature error.
 
 This is a reproducible onboarding scenario, **not independent novice-user
 research**. Independent sector-user evaluation belongs to #85/#100. Windows and
-Linux results come from the separate `Package installation` CI matrix, rather
-than simulated platform checks. Add its completed run link below after the first
-PR run; do not claim those jobs passed before observing their results.
+Linux results come from the separate `Package installation` CI matrix below,
+rather than simulated platform checks.
 
 ## Read-only and diagnostic limits
 
@@ -77,3 +76,31 @@ followed. No network request happens without `--online`.
 Persistent report artifacts are not implemented in #98. Installation docs state
 current MCP image/source-download behavior and link the future #88 scope rather
 than offering a nonexistent reports extra.
+
+## Hosted acceptance — accepted code `c9311c2`
+
+All 13 checks on PR #111 completed successfully for code commit
+`c9311c265ea90795072c0fa778a443ab6564e67f`:
+
+- [Package installation run 44358277940](https://github.com/ByRock010/TUIK-Data-MCP-Server/actions/runs/44358277940): wheel/sdist build and metadata checks; all seven clean-install profiles passed.
+- [CI run 44358277951](https://github.com/ByRock010/TUIK-Data-MCP-Server/actions/runs/44358277951): branch policy, Python 3.12 and 3.13 lint/tests, Docker build and real OpenSearch integration passed.
+
+| Runner | Accepted clean installs |
+| --- | --- |
+| `ubuntu-latest` | core wheel, viz wheel, core sdist |
+| `macos-latest` | core wheel, viz wheel |
+| `windows-latest` | core wheel, viz wheel |
+
+Both Python jobs report **792 passed, 22 skipped, 6 deselected** (39.88 s on
+3.12; 58.72 s on 3.13). Real OpenSearch integration reports **22 passed,
+798 deselected** (12.77 s). No live TÜİK data tests were run in these jobs.
+
+The first Windows smoke exposed `WinError 32` during cleanup because its process
+was still inside the temporary directory. The script now restores its original
+working directory with `contextlib.chdir` before cleanup on both success and
+failure. Both Windows profiles then passed, including actual server connection
+and input-error calls. The failure was fixed rather than skipped/ignored.
+
+This evidence records the accepted code hash explicitly. The documentation-only
+commit that adds these observations does not alter the tested runtime or smoke
+logic; its own PR checks remain visible on GitHub.
