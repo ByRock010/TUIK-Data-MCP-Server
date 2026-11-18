@@ -74,7 +74,8 @@ class Embedder:
             from fastembed.common.model_description import ModelSource, PoolingType
         except ImportError as exc:
             raise EmbeddingUnavailable(
-                "install the optional extra: pip install 'tuik-mcp[semantic]'"
+                "install this repository's wheel with [semantic] "
+                "(or pip install -e '.[semantic]' from its checkout); see docs/INSTALLATION.md"
             ) from exc
         try:
             if not any(m["model"] == MODEL for m in TextEmbedding.list_supported_models()):

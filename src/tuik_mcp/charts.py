@@ -269,7 +269,8 @@ def render(
     except ImportError as exc:
         raise QueryError(
             "visualization_unavailable",
-            "Charts need matplotlib: install the viz extra (pip install 'tuik-mcp[viz]').",
+            "Charts need matplotlib: install this repository's wheel with [viz] "
+            "(or pip install -e '.[viz]' from its checkout); see docs/INSTALLATION.md.",
         ) from exc
     figure = Figure(figsize=(WIDTH_IN, HEIGHT_IN), dpi=DPI, layout="constrained")
     canvas = FigureCanvasAgg(figure)
