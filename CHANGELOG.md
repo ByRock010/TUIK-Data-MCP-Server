@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `tuik-mcp-doctor` reports local installation/settings errors, optional extras,
+  prospective storage permissions and unverified model-cache state without
+  changing configuration or provisioning a model. Network reachability probes
+  require `--online`; their diagnostics redact URLs/credentials. Wheel/sdist
+  installation CI checks core/viz profiles, packaged resources and nine-tool
+  stdio discovery outside the checkout on Linux, macOS and Windows (#98).
 - Optional hybrid lexical + semantic search (#21, ADR 0005).
   `tuik-mcp-index --embeddings` stores multilingual-e5-small vectors (`semantic`
   extra, ONNX). `search_tuik` fuses the lexical query with filtered k-NN by
