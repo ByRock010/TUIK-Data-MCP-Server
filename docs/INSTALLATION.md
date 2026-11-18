@@ -116,7 +116,7 @@ Claude Code project `.mcp.json` (a new server may require client approval):
 {"mcpServers":{"tuik":{"command":"/absolute/venv/bin/tuik-mcp","args":[]}}}
 ```
 
-Codex MCP configuration:
+Codex `~/.codex/config.toml` (Windows: `%USERPROFILE%\.codex\config.toml`):
 
 ```toml
 [mcp_servers.tuik]

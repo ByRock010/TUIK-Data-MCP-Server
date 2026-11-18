@@ -11,6 +11,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from contextlib import chdir
 from importlib import metadata, resources
 from pathlib import Path
 
@@ -122,8 +123,10 @@ def main():
     parser.add_argument("--profile", choices=("core", "viz"), required=True)
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix="tuik-installed-") as directory:
-        os.chdir(directory)
-        check(args.profile)
+        # Windows cannot delete a directory while it is the process's cwd.
+        # Restore cwd on success or failure before TemporaryDirectory cleans up.
+        with chdir(directory):
+            check(args.profile)
 
 
 if __name__ == "__main__":
