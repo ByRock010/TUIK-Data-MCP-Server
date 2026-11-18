@@ -29,6 +29,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Retain existing PR review approvals after new commits on `develop` and `master`.
+  The required approval count, CI checks and conversation-resolution requirement
+  remain unchanged; the checked-in ruleset payloads match this policy.
 - Index mapping schema 3 adds the optional `embedding` vector field; rebuild older
   indices once with `tuik-mcp-index --full`.
 - `get_tuik_data` pages read without `query` now share the 64 KiB output budget
