@@ -295,7 +295,7 @@ def test_missing_matplotlib_is_an_actionable_error(monkeypatch):
 
     monkeypatch.setattr(builtins, "__import__", without_matplotlib)
     plot = charts.Plot(labels=["a"], lines=[charts.Line("b", "b", [1.0], ["ok"])])
-    with pytest.raises(QueryError, match=r"tuik-mcp\[viz\]") as error:
+    with pytest.raises(QueryError, match=r"wheel with \[viz\]") as error:
         charts.render(plot, "line", "t", None, "f")
     assert error.value.code == "visualization_unavailable"
 

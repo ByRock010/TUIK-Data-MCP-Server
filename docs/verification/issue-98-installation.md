@@ -26,6 +26,8 @@ change or automatic client-configuration migration was performed.
   This dated check establishes neither ownership nor a reservation. Installation
   examples use a supplied/built wheel, never an unverified package-index name.
 - Unit/offline suite: **791 passed, 22 skipped, 6 deselected** in 42.89 s.
+  After cache-path hardening and revised extra-install guidance, the targeted
+  doctor/chart/hybrid suite passes **70 tests, 1 skipped** (20.05 s).
   The skips retain the optional real-index/live contracts; no new full live-data
   test is claimed. Ruff checks/format pass. Node workflow tests: 28 passed.
 

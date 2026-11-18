@@ -125,7 +125,7 @@ def test_only_metadata_payloads_receive_vectors():
 def test_missing_runtime_is_reported_once_per_ttl(monkeypatch, tmp_path):
     monkeypatch.setitem(sys.modules, "fastembed", None)
     embedder = Embedder(cache_dir=str(tmp_path), local_files_only=True)
-    with pytest.raises(EmbeddingUnavailable, match=r"tuik-mcp\[semantic\]"):
+    with pytest.raises(EmbeddingUnavailable, match=r"wheel with \[semantic\]"):
         embedder.query("enflasyon")
     calls = []
     monkeypatch.setattr(embedder, "_create", lambda: calls.append(1))
