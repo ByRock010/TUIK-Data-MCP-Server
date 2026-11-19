@@ -7,6 +7,7 @@ name = "tuik-mcp"
 version = "0.3.0"
 description = "MCP access to public TÜİK statistical resources"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
   "mcp>=1.26,<2",
@@ -30,6 +31,18 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 [project.scripts]
 tuik-mcp = "tuik_mcp.server:main"
 tuik-mcp-index = "tuik_mcp.search.index_cli:main"
+tuik-mcp-doctor = "tuik_mcp.doctor:main"
+
+[project.urls]
+Repository = "https://github.com/ByRock010/TUIK-Data-MCP-Server"
+Issues = "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tuik_mcp"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/scripts", "/docs", "/README.md", "/CONTRIBUTING.md", "/CHANGELOG.md", "/LICENSE", "/pyproject.toml", "/.env.example"]
+exclude = ["/docs/research", "/output", "/tmp", "/.env"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

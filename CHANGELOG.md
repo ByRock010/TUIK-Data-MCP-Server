@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `tuik-mcp-doctor` reports local installation/settings errors, optional extras,
+  prospective storage permissions and unverified model-cache state without
+  changing configuration or provisioning a model. Network reachability probes
+  require `--online`; their diagnostics redact URLs/credentials. Wheel/sdist
+  installation CI checks core/viz profiles, packaged resources and nine-tool
+  stdio discovery outside the checkout on Linux, macOS and Windows (#98).
 - Archived midterm report PDFs, editable LaTeX sources, original template
   distribution notices and recorded verification under `output/pdf/`, with an
   artifact index in `output/README.md`. The submitted PDF is the V2 revision.
