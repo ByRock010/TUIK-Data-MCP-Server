@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from typing import Literal
 
@@ -17,6 +18,26 @@ ResourceType = Literal[
 ]
 
 
+SERIES_ID = re.compile(r"series:press:[1-9][0-9]{0,9}")
+
+
+class SeriesRelease(BaseModel):
+    id: str
+    title: str
+    publication_date: str | None = None
+    source_url: str | None = None
+
+
+class SeriesGroup(BaseModel):
+    """A grouped result (#78): other matching documents of its bulletin series."""
+
+    # Matching releases or their metadata folded into this result.
+    collapsed: int = 0
+    # Bulletin releases of the series in the index and the newest of them.
+    releases: int | None = None
+    latest: SeriesRelease | None = None
+
+
 class TuikSearchResult(Provenance):
     id: str
     title: str
@@ -34,6 +55,9 @@ class TuikSearchResult(Provenance):
     # Indexed file content (#22): open `id` at this PDF page or workbook sheet.
     page: int | None = None
     sheet: str | None = None
+    # Bulletins and their metadata: the release series; `series` when grouped (#78).
+    series_id: str | None = None
+    series: SeriesGroup | None = None
 
 
 class SearchResponse(Provenance):
@@ -72,6 +96,15 @@ class IndexedSearchInput(SearchInput):
     published_before: date | None = None
     downloadable_only: bool = Field(default=False, strict=True)
     live: bool = Field(default=False, strict=True)
+    group_series: bool = Field(default=False, strict=True)
+    series: str | None = Field(default=None, max_length=40)
+
+    @field_validator("series")
+    @classmethod
+    def series_id(cls, value):
+        if value is not None and not SERIES_ID.fullmatch(value):
+            raise ValueError("series must be a series ID such as series:press:45554")
+        return value
 
     @field_validator("theme")
     @classmethod

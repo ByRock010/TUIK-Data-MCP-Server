@@ -56,6 +56,29 @@ source review. The inherited, dependent AI grades and known historical pool do
 not establish held-out generalization or independent human validation. NACE and
 spelling variants are covered by routing tests, not this six-query relevance set.
 
+## Bulletin-series grouping (#78, 2026-11-19)
+
+The [fixed plan](verification/issue-78-series-grouping-plan-2026-11-19.md) set the
+candidate, window and thresholds before implementation. The
+[report](verification/issue-78-series-grouping-2026-11-19.md) collects grouped and
+ungrouped rankings through the production `OpenSearchBackend.search` path
+(`collect-production`) from one disposable index of the frozen corpus. The pool grows
+to **1,913 pairs** (224 new, graded and source-reviewed by Claude under ADR 0004,
+one revision). `score-ai --documents` adds series-collapsed nDCG@10 and repeated-series slots.
+
+| System | Plain nDCG@10 | Series-collapsed nDCG@10 | Repeated slots | MRR@10 |
+| --- | ---: | ---: | ---: | ---: |
+| Multi-field + synonyms (v0.3.0) | 0.6918 | 0.4293 | 252 | 0.8796 |
+| Production, ungrouped | 0.8560 | 0.4251 | 330 | 1.0000 |
+| Production, grouped | 0.5529 | **0.7407** | **0** | 1.0000 |
+
+**Rubric decision.** Grades stay per document: a historical release is as relevant as
+its series. Whether releases are separate answers depends on the task, so both
+metrics are reported. Grouping passes the diversity criteria but fails the fixed
+plain-nDCG floor (≥ v0.3.0 default), so it ships as `group_series=true`, not as the
+default. Hybrid top tens also differ between index builds (9/48 identical to the
+#79 archive), so comparisons use one build.
+
 ## Dataset-filtered hybrid ranking (#80, 2026-11-19)
 
 The [fixed plan](verification/issue-80-dataset-hybrid-plan-2026-11-19.md) and

@@ -18,6 +18,7 @@ from tuik_mcp.search.backend import (
     PortalBackend,
     SearchFilters,
     build_query,
+    check_page,
 )
 from tuik_mcp.search.documents import IndexDocument
 from tuik_mcp.search.indexer import OpenSearchStore, prepare, rebuild
@@ -128,9 +129,13 @@ def test_query_filters_and_paging_are_validated():
     assert build_query("x", passages, 1)["query"]["bool"]["filter"] == [
         {"terms": {"kind": ["document_chunk"]}}
     ]
-    for limit, offset in [(0, 0), (51, 0), (True, 0), (10, -1), (10, 1001)]:
+    # Grouped searches (#78) fetch up to a 200-document window; callers stay within 50.
+    for limit, offset in [(0, 0), (201, 0), (True, 0), (10, -1), (10, 1001)]:
         with pytest.raises(ValueError):
             build_query("x", SearchFilters(), limit, offset)
+    for limit, offset in [(0, 0), (51, 0), (True, 0), (10, -1), (10, 1001)]:
+        with pytest.raises(ValueError):
+            check_page(limit, offset)
     with pytest.raises(ValueError):
         SearchFilters(kinds=["publication"])
 

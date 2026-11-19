@@ -17,7 +17,13 @@ from typing import Literal, Protocol
 from pydantic import BaseModel, Field, model_validator
 
 from tuik_mcp.models.dataset import TuikResource
-from tuik_mcp.models.search import SearchFacet, SearchFacets, SearchResponse
+from tuik_mcp.models.search import (
+    SearchFacet,
+    SearchFacets,
+    SearchResponse,
+    SeriesGroup,
+    SeriesRelease,
+)
 from tuik_mcp.utils.normalization import turkish_casefold
 
 from .documents import CONTENT_KINDS
@@ -64,6 +70,17 @@ ABBREVIATION_RANKING = (
 )
 # How long a served index's vector model is trusted before the alias is rechecked.
 META_TTL_SECONDS = 60
+# Series grouping (#78): releases of one bulletin series (a bulletin and its metadata
+# share `series_id`) are folded into their best-ranked document. Grouping regroups the
+# first GROUP_WINDOW documents of the normal ranking; hybrid fusion then also uses this
+# depth, so one large series (up to 94 documents) cannot exhaust the window. OpenSearch's
+# native collapse is not used: with hybrid queries it collapses each subquery before
+# fusion and splits a series whose best lexical and semantic members differ.
+GROUP_WINDOW = 200
+# Grouped pages cover offset + limit <= MAX_GROUPED groups.
+MAX_GROUPED = 50
+SERIES_KINDS = frozenset(("bulletin", "metadata"))
+SERIES_AGG = "series"
 
 
 class SearchFilters(BaseModel):
@@ -71,6 +88,8 @@ class SearchFilters(BaseModel):
     kinds: list[Kind] = Field(default_factory=list, max_length=5)
     # Exact stored theme names; any of them matches.
     themes: list[str] | None = Field(default=None, max_length=50)
+    # Exact series IDs (#78), e.g. to list every release of one bulletin series.
+    series_ids: list[str] | None = Field(default=None, max_length=10)
     downloadable: bool | None = None
     published_after: date | None = None
     published_before: date | None = None
@@ -102,6 +121,9 @@ class SearchHit(BaseModel):
     highlights: dict[str, list[str]] = Field(default_factory=dict)
     retrieved_at: str | None = None
     indexed_at: str | None = None
+    # Bulletins and their metadata: the series key; grouped results also carry `series`.
+    series_id: str | None = None
+    series: SeriesGroup | None = None
 
 
 class SearchHits(BaseModel):
@@ -123,13 +145,13 @@ class BackendUnavailable(Exception):
 
 class SearchBackend(Protocol):
     async def search(
-        self, query: str, filters: SearchFilters, limit: int, offset: int = 0
+        self, query: str, filters: SearchFilters, limit: int, offset: int = 0, group: bool = False
     ) -> SearchHits: ...
 
 
-def check_page(limit: int, offset: int) -> None:
-    if type(limit) is not int or not 1 <= limit <= 50:
-        raise ValueError("limit must be an integer between 1 and 50")
+def check_page(limit: int, offset: int, max_limit: int = 50) -> None:
+    if type(limit) is not int or not 1 <= limit <= max_limit:
+        raise ValueError(f"limit must be an integer between 1 and {max_limit}")
     if type(offset) is not int or not 0 <= offset <= MAX_OFFSET:
         raise ValueError(f"offset must be an integer between 0 and {MAX_OFFSET}")
 
@@ -161,8 +183,11 @@ def highlight_settings() -> dict:
 
 
 def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0) -> dict:
-    """The OpenSearch request body; analyzers come from the index mapping."""
-    check_page(limit, offset)
+    """The OpenSearch request body; analyzers come from the index mapping.
+
+    `limit` may reach GROUP_WINDOW: grouped searches fetch a window of documents.
+    """
+    check_page(limit, offset, GROUP_WINDOW)
     clauses = []
     if filters.kinds:
         clauses.append({"terms": {"kind": filters.kinds}})
@@ -170,6 +195,8 @@ def build_query(query: str, filters: SearchFilters, limit: int, offset: int = 0)
         clauses.append({"bool": {"must_not": {"terms": {"kind": list(CONTENT_KINDS)}}}})
     if filters.themes is not None:
         clauses.append({"terms": {"theme": filters.themes}})
+    if filters.series_ids is not None:
+        clauses.append({"terms": {"series_id": filters.series_ids}})
     if filters.downloadable is not None:
         clauses.append({"term": {"downloadable": filters.downloadable}})
     if filters.published_after or filters.published_before:
@@ -216,6 +243,61 @@ def build_highlight_query(query: str, ids: list[str]) -> dict:
     }
 
 
+def build_followup_query(query: str, ids: list[str], series_ids: list[str]) -> dict:
+    """Highlights for grouped representatives plus their series' size and newest release.
+
+    The series aggregation is global: it counts bulletin releases regardless of the
+    query and filters, so `latest` is the series' newest indexed release.
+    """
+    body = build_highlight_query(query, ids)
+    if series_ids:
+        body["aggs"] = {
+            SERIES_AGG: {
+                "global": {},
+                "aggs": {
+                    "releases": {
+                        "filter": {
+                            "bool": {
+                                "filter": [
+                                    {"terms": {"series_id": series_ids}},
+                                    {"term": {"kind": "bulletin"}},
+                                ]
+                            }
+                        },
+                        "aggs": {
+                            "by_series": {
+                                "terms": {"field": "series_id", "size": len(series_ids)},
+                                "aggs": {
+                                    "latest": {
+                                        "top_hits": {
+                                            "size": 1,
+                                            "sort": [
+                                                {
+                                                    "publication_date": {
+                                                        "order": "desc",
+                                                        "missing": "_last",
+                                                    }
+                                                },
+                                                {"id": "asc"},
+                                            ],
+                                            "_source": [
+                                                "id",
+                                                "title",
+                                                "publication_date",
+                                                "source_url",
+                                            ],
+                                        }
+                                    }
+                                },
+                            }
+                        },
+                    }
+                },
+            }
+        }
+    return body
+
+
 def build_hybrid_query(
     query: str,
     filters: SearchFilters,
@@ -224,14 +306,16 @@ def build_hybrid_query(
     vector: list[float],
     *,
     weights: tuple[float, float] = HYBRID_WEIGHTS,
+    depth: int = HYBRID_DEPTH,
 ) -> dict:
     """The lexical query plus k-NN over the same filters, fused by weighted RRF.
 
     The fusion pipeline travels in the request, so no cluster-side pipeline object
-    has to be created or kept in sync with this code.
+    has to be created or kept in sync with this code. `depth` is how many documents
+    each subquery contributes; grouped searches (#78) use GROUP_WINDOW.
     """
-    if offset + limit > HYBRID_DEPTH:
-        raise ValueError(f"Hybrid ranking covers the first {HYBRID_DEPTH} results")
+    if offset + limit > depth:
+        raise ValueError(f"Hybrid ranking covers the first {depth} results")
     body = deepcopy(build_query(query, filters, limit, offset))
     # Highlights come from build_highlight_query: they are slow inside a hybrid request.
     del body["highlight"]
@@ -240,12 +324,12 @@ def build_hybrid_query(
         "knn": {
             "embedding": {
                 "vector": vector,
-                "k": HYBRID_DEPTH,
+                "k": depth,
                 "filter": {"bool": {"filter": lexical["bool"]["filter"]}},
             }
         }
     }
-    body["query"] = {"hybrid": {"queries": [lexical, semantic], "pagination_depth": HYBRID_DEPTH}}
+    body["query"] = {"hybrid": {"queries": [lexical, semantic], "pagination_depth": depth}}
     # Every lexical match is in the hybrid result set, so this counts all of them.
     body["aggs"][LEXICAL_MATCHES_AGG] = {"filter": lexical}
     body["search_pipeline"] = {
@@ -267,6 +351,32 @@ def build_hybrid_query(
 def semantic_scope(filters: SearchFilters) -> bool:
     """Metadata searches, unfiltered or by kind (#21, #80); file content stays lexical."""
     return not set(filters.kinds) & LEXICAL_ONLY_KINDS
+
+
+def groupable(filters: SearchFilters) -> bool:
+    """Grouping applies when bulletins or metadata can match and no series is named."""
+    return filters.series_ids is None and (
+        not filters.kinds or bool(SERIES_KINDS & set(filters.kinds))
+    )
+
+
+def series_key(source: dict) -> str:
+    """The grouping key: a bulletin's or its metadata's series, else the document itself."""
+    if source.get("kind") in SERIES_KINDS and source.get("series_id"):
+        return source["series_id"]
+    return source["id"]
+
+
+def regroup(items: list[dict]) -> list[tuple[dict, int]]:
+    """Keep each group's first (best-ranked) document and count the ones folded into it."""
+    groups: dict[str, list] = {}
+    for item in items:
+        key = series_key(item["_source"])
+        if key in groups:
+            groups[key][1] += 1
+        else:
+            groups[key] = [item, 0]
+    return [(item, folded) for item, folded in groups.values()]
 
 
 def is_statistical_abbreviation(query: str) -> bool:
@@ -291,7 +401,13 @@ class OpenSearchBackend:
         return model
 
     async def plan(
-        self, query: str, filters: SearchFilters, limit: int, offset: int
+        self,
+        query: str,
+        filters: SearchFilters,
+        limit: int,
+        offset: int,
+        *,
+        depth: int = HYBRID_DEPTH,
     ) -> tuple[dict, list[str]]:
         """The request body and any reason hybrid ranking was not used."""
         lexical = build_query(query, filters, limit, offset)
@@ -314,9 +430,9 @@ class OpenSearchBackend:
                 f"The index holds {model} vectors, not {self.embedder.model}; "
                 "results use lexical ranking."
             ]
-        if offset + limit > HYBRID_DEPTH:
+        if offset + limit > depth:
             return lexical, [
-                f"Semantic ranking covers the first {HYBRID_DEPTH} results; "
+                f"Semantic ranking covers the first {depth} results; "
                 "this page uses lexical ranking."
             ]
         try:
@@ -325,41 +441,97 @@ class OpenSearchBackend:
             return lexical, [
                 f"Semantic ranking is unavailable ({exc}); results use lexical ranking."
             ]
-        return build_hybrid_query(query, filters, limit, offset, vector), []
+        return build_hybrid_query(query, filters, limit, offset, vector, depth=depth), []
 
     async def search(
-        self, query: str, filters: SearchFilters, limit: int, offset: int = 0
+        self,
+        query: str,
+        filters: SearchFilters,
+        limit: int,
+        offset: int = 0,
+        group: bool = False,
     ) -> SearchHits:
+        """Rank documents; with `group`, fold each bulletin series into its best release."""
         check_page(limit, offset)
+        notes = []
+        grouped = group and groupable(filters)
+        if grouped and offset + limit > MAX_GROUPED:
+            grouped = False
+            notes.append(
+                f"Series grouping covers the first {MAX_GROUPED} results; "
+                "this page lists releases separately."
+            )
+        # A grouped page is cut from the first GROUP_WINDOW documents of the ranking.
+        fetch_limit, fetch_offset = (GROUP_WINDOW, 0) if grouped else (limit, offset)
+        depth = GROUP_WINDOW if grouped else HYBRID_DEPTH
         try:
-            body, warnings = await self.plan(query, filters, limit, offset)
+            body, warnings = await self.plan(query, filters, fetch_limit, fetch_offset, depth=depth)
         except (IndexerError, KeyError, TypeError, AttributeError) as exc:
             raise BackendUnavailable(str(exc)) from exc
+        warnings = notes + warnings
+        page = (limit, offset, grouped)
+        if grouped:
+            # Only the page's representatives are highlighted, in the follow-up request.
+            body.pop("highlight", None)
         ranking = "hybrid" if "hybrid" in body["query"] else "lexical"
         if ranking == "hybrid":
             try:
-                return await self.execute(query, body, limit, offset, ranking, warnings)
+                return await self.execute(query, body, page, ranking, warnings)
             except BackendUnavailable as exc:
                 # A cluster without the neural-search plugin still answers lexically.
                 warnings.append(f"Hybrid search failed ({exc}); results use lexical ranking.")
-                body, ranking = build_query(query, filters, limit, offset), "lexical"
-        return await self.execute(query, body, limit, offset, ranking, warnings)
+                body, ranking = build_query(query, filters, fetch_limit, fetch_offset), "lexical"
+                if grouped:
+                    body.pop("highlight", None)
+        return await self.execute(query, body, page, ranking, warnings)
 
-    async def add_highlights(self, query: str, items: list[dict]) -> list[str]:
-        """Fill each hybrid hit's highlight from a lexical request; hits stand without it."""
+    async def add_highlights(
+        self, query: str, items: list[dict], series_ids: list[str] | None = None
+    ) -> tuple[list[str], dict | None]:
+        """Fill each hit's highlight from a lexical request; hits stand without it.
+
+        With `series_ids`, the same request also returns each series' release count
+        and newest release (None when the request failed).
+        """
         try:
             ids = [item["_source"]["id"] for item in items]
-            response = await self.store.query(self.alias, build_highlight_query(query, ids))
+            body = (
+                build_followup_query(query, ids, series_ids)
+                if series_ids is not None
+                else build_highlight_query(query, ids)
+            )
+            response = await self.store.query(self.alias, body)
             found = {hit["_id"]: hit.get("highlight") or {} for hit in response["hits"]["hits"]}
-        except (IndexerError, KeyError, TypeError, AttributeError) as exc:
-            return [f"Highlights are unavailable ({exc})."]
+            series = None
+            if series_ids:
+                buckets = response["aggregations"][SERIES_AGG]["releases"]["by_series"]["buckets"]
+                series = {}
+                for bucket in buckets:
+                    latest = bucket["latest"]["hits"]["hits"]
+                    series[bucket["key"]] = (
+                        bucket["doc_count"],
+                        SeriesRelease(**latest[0]["_source"]) if latest else None,
+                    )
+            elif series_ids is not None:
+                series = {}
+        except (IndexerError, KeyError, TypeError, AttributeError, ValueError) as exc:
+            message = "Highlights are unavailable"
+            if series_ids:
+                message = "Highlights and series details are unavailable"
+            return [f"{message} ({exc})."], None
         for item in items:
             item["highlight"] = found.get(item["_source"]["id"], {})
-        return []
+        return [], series
 
     async def execute(
-        self, query: str, body: dict, limit: int, offset: int, ranking: str, warnings: list[str]
+        self,
+        query: str,
+        body: dict,
+        page: tuple[int, int, bool],
+        ranking: str,
+        warnings: list[str],
     ) -> SearchHits:
+        limit, offset, grouped = page
         try:
             response = await self.store.query(self.alias, body)
             # HTTP 200 does not mean complete: never report a partial search as no matches.
@@ -388,13 +560,39 @@ class OpenSearchBackend:
                     indexed_at=aggregations.get("indexed_at", {}).get("value_as_string"),
                 )
             warnings = list(warnings)
-            if ranking == "hybrid" and hits["hits"]:
-                warnings += await self.add_highlights(query, hits["hits"])
+            items, folded, series = hits["hits"], {}, None
+            if grouped:
+                groups = regroup(items)
+                if len(groups) < offset + limit and hits["total"]["value"] > len(items):
+                    warnings.append(
+                        f"Series grouping covers the first {len(items)} ranked documents; "
+                        f"they hold {len(groups)} distinct results."
+                    )
+                groups = groups[offset : offset + limit]
+                items = [item for item, _ in groups]
+                folded = {item["_source"]["id"]: count for item, count in groups}
+            if (ranking == "hybrid" or grouped) and items:
+                series_ids = (
+                    sorted(
+                        {
+                            series_key(item["_source"])
+                            for item in items
+                            if series_key(item["_source"]) != item["_source"]["id"]
+                        }
+                    )
+                    if grouped
+                    else None
+                )
+                notes, series = await self.add_highlights(query, items, series_ids)
+                warnings += notes
             return SearchHits(
                 backend="opensearch",
                 ranking=ranking,
                 warnings=warnings,
-                hits=[self.hit(item) for item in hits["hits"]],
+                hits=[
+                    self.hit(item, folded.get(item["_source"]["id"]), series, grouped)
+                    for item in items
+                ],
                 total=hits["total"]["value"],
                 limit=limit,
                 offset=offset,
@@ -422,9 +620,23 @@ class OpenSearchBackend:
         )
 
     @staticmethod
-    def hit(item: dict) -> SearchHit:
+    def hit(
+        item: dict,
+        folded: int | None = None,
+        series: dict | None = None,
+        grouped: bool = False,
+    ) -> SearchHit:
         source = item["_source"]
+        series_id = source.get("series_id") if source["kind"] in SERIES_KINDS else None
+        group = None
+        if grouped and series_id:
+            releases, latest = (series or {}).get(series_id, (None, None))
+            if series is not None and releases is None:
+                releases = 0  # The series has no bulletin release in the index.
+            group = SeriesGroup(collapsed=folded or 0, releases=releases, latest=latest)
         return SearchHit(
+            series_id=series_id,
+            series=group,
             id=source["id"],
             kind=source["kind"],
             title=source["title"],
@@ -454,8 +666,9 @@ class LiteralBackend:
         self.datasets = datasets
 
     async def search(
-        self, query: str, filters: SearchFilters, limit: int, offset: int = 0
+        self, query: str, filters: SearchFilters, limit: int, offset: int = 0, group: bool = False
     ) -> SearchHits:
+        # `group` is accepted for the protocol; these results carry no series.
         check_page(limit, offset)
         if filters.kinds and "dataset" not in filters.kinds:
             raise ValueError("Literal search covers datasets only")
@@ -469,7 +682,12 @@ class LiteralBackend:
             else None
         )
         matches = []
-        if filters.published_after or filters.published_before:
+        if filters.series_ids is not None:
+            # Consistent with the index: dataflows belong to no bulletin series.
+            warnings.append(
+                "Datasets belong to no bulletin series; the series filter matched none."
+            )
+        elif filters.published_after or filters.published_before:
             # Consistent with the index: dataflows carry no publication date.
             warnings.append("Datasets have no publication date; the date range matched none.")
         else:
@@ -526,8 +744,9 @@ class PortalBackend:
         self.portal_search = search
 
     async def search(
-        self, query: str, filters: SearchFilters, limit: int, offset: int = 0
+        self, query: str, filters: SearchFilters, limit: int, offset: int = 0, group: bool = False
     ) -> SearchHits:
+        # `group` is accepted for the protocol; these results carry no series.
         check_page(limit, offset)
         if offset + limit > 50:
             raise ValueError("Portal search returns at most 50 results; reduce offset or limit")
@@ -536,6 +755,7 @@ class PortalBackend:
             name
             for name, value in (
                 ("theme", filters.themes),
+                ("series", filters.series_ids),
                 ("downloadable", filters.downloadable),
                 ("published_after", filters.published_after),
                 ("published_before", filters.published_before),
