@@ -203,8 +203,8 @@ API/import payloads in [`.github/rulesets/`](.github/rulesets/). Changes to thes
 files alone do not update GitHub; an administrator must apply the payload with
 the repository rulesets API or import it in Settings → Rules → Rulesets.
 
-- Require a pull request before merging, with at least 1 approval; dismiss stale
-  approvals when reviewable changes are pushed and resolve review conversations
+- Require a pull request before merging, with at least 1 approval; retain approvals
+  when new commits are pushed and require review conversations to be resolved
 - Require `Lint and test (Python 3.12)`, `Lint and test (Python 3.13)`,
   `Docker build`, and `Branch policy`, all from the GitHub Actions app
 - Require topic branches to be up to date with `develop` before merging

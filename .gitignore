@@ -7,3 +7,6 @@ dist/
 .env
 docs/research/
 .tuik-crawl-state.json
+.DS_Store
+/tmp/
+/output/research/**/evidence/

@@ -1,0 +1,346 @@
+{
+  "date": "2026-11-18",
+  "repository": "ByRock010/TUIK-Data-MCP-Server",
+  "epic": {
+    "number": 84,
+    "id": 6468460227,
+    "html_url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/84",
+    "title": "epic: post-midterm roadmap for evidence-backed analysis and institutional outputs"
+  },
+  "work_issues": 25,
+  "first_slice": 14,
+  "expansion": 11,
+  "native_dependency_edges": 32,
+  "native_sub_issues": 25,
+  "roadmap_comment": {
+    "id": 6980315762,
+    "html_url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/25#issuecomment-6980315762"
+  },
+  "verified": [
+    {
+      "key": "baseline",
+      "number": 85,
+      "title": "research: extend the existing MCP benchmark into sector and artifact workflows",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/85",
+      "phase": "0 — evidence",
+      "scope": "first-slice",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "f447b789072cddfb7ad3bfee5a76b0394b17ad6e159de36b356dbb1ac2917e9d"
+    },
+    {
+      "key": "coverage",
+      "number": 86,
+      "title": "research: audit table extraction and source-cell lineage beyond the fixture corpus",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/86",
+      "phase": "0 — evidence",
+      "scope": "first-slice",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "7356239d587d6f4129f6a186ce95d878836b055ff38be6e2e02a6757c625bc37"
+    },
+    {
+      "key": "semantics",
+      "number": 87,
+      "title": "feat: add an explicit observation model for units, periods, geography and source lineage",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/87",
+      "phase": "1 — foundations",
+      "scope": "first-slice",
+      "blocked_by": [
+        86
+      ],
+      "parent": 84,
+      "body_sha256": "3ca1a50ad7254779fc1174c6e78dc8528c3735b838b579db7fd0a2389726aea0"
+    },
+    {
+      "key": "artifacts",
+      "number": 88,
+      "title": "feat: deliver immutable report artifacts with provenance manifests and MCP resource links",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/88",
+      "phase": "1 — foundations",
+      "scope": "first-slice",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "30c911724bda9a51a008e9dd4044b0fc4737101f8ca0e9005fd401e3421e1028"
+    },
+    {
+      "key": "analytics",
+      "number": 89,
+      "title": "feat: compute auditable statistical changes and comparisons on complete series",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/89",
+      "phase": "1 — foundations",
+      "scope": "first-slice",
+      "blocked_by": [
+        87,
+        88
+      ],
+      "parent": 84,
+      "body_sha256": "5f9292cdb70a62193dc359268e819c70c99d6a8d913fc143541f558fc9aa3f4e"
+    },
+    {
+      "key": "charts",
+      "number": 90,
+      "title": "feat: extend charts with reusable specifications, vector export and accessible presentation",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/90",
+      "phase": "2 — institutional outputs",
+      "scope": "first-slice",
+      "blocked_by": [
+        87,
+        88
+      ],
+      "parent": 84,
+      "body_sha256": "b106a95a6660accafef77322a6d5eef2f55c5cb47b1896b91495e9941ab074ac"
+    },
+    {
+      "key": "reportspec",
+      "number": 91,
+      "title": "feat: define evidence-bound report sections and numeric claim validation",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/91",
+      "phase": "2 — institutional outputs",
+      "scope": "first-slice",
+      "blocked_by": [
+        89,
+        90
+      ],
+      "parent": 84,
+      "body_sha256": "18e6b43fc489c5347add39c8b61b1a73da32717eed2195cd4f58e2ba311831d3"
+    },
+    {
+      "key": "xlsx",
+      "number": 92,
+      "title": "feat: export analyst-ready Excel workbooks with data, calculations and sources",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/92",
+      "phase": "2 — institutional outputs",
+      "scope": "first-slice",
+      "blocked_by": [
+        87,
+        88
+      ],
+      "parent": 84,
+      "body_sha256": "45e7f8693558ef83cd0fccef2b2419232c9c8b1f9a13ef3470b9100d6694cd38"
+    },
+    {
+      "key": "pptx",
+      "number": 93,
+      "title": "feat: generate editable PowerPoint briefings from validated TÜİK reports",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/93",
+      "phase": "2 — institutional outputs",
+      "scope": "first-slice",
+      "blocked_by": [
+        91
+      ],
+      "parent": 84,
+      "body_sha256": "84e1886c838f9619ddc7240260390e0a61ac80aa74bd6ad97d67feebfef97f1b"
+    },
+    {
+      "key": "pdf",
+      "number": 94,
+      "title": "feat: export printable PDF statistical briefs with traceable figures",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/94",
+      "phase": "2 — institutional outputs",
+      "scope": "first-slice",
+      "blocked_by": [
+        91
+      ],
+      "parent": 84,
+      "body_sha256": "d9878a8b0728814eb0ab52c9dfec8f495b4270649ee297599297cdad7a88d2a5"
+    },
+    {
+      "key": "docx",
+      "number": 95,
+      "title": "feat: export editable Word briefs from the shared report model",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/95",
+      "phase": "2b — editable documents",
+      "scope": "expansion",
+      "blocked_by": [
+        91
+      ],
+      "parent": 84,
+      "body_sha256": "1ac5e8edbfcad707ccb4eb79a8bdbd0d1efaf5b83ed0db9e65eb4e8ad5862cdf"
+    },
+    {
+      "key": "guided",
+      "number": 96,
+      "title": "feat: add guided MCP workflows for finding, validating and presenting statistics",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/96",
+      "phase": "1b — guided use",
+      "scope": "first-slice",
+      "blocked_by": [
+        85
+      ],
+      "parent": 84,
+      "body_sha256": "dec521f05af888d055f797df7c1aea96166d5e7d6a0a5c80bbce2ec04b9f4c61"
+    },
+    {
+      "key": "templates",
+      "number": 97,
+      "title": "feat: ship sector briefing recipes and configurable institutional themes",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/97",
+      "phase": "3 — vertical product",
+      "scope": "first-slice",
+      "blocked_by": [
+        92,
+        93,
+        94,
+        96
+      ],
+      "parent": 84,
+      "body_sha256": "913e789e53982b718900773de79e4191b84f8ea5275353f482d65c02a2ea1157"
+    },
+    {
+      "key": "install",
+      "number": 98,
+      "title": "infra: package a clean-install client setup and non-destructive doctor command",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/98",
+      "phase": "1b — guided use",
+      "scope": "first-slice",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "8b028ef8e6fa6d6e0894d5e78e2dab0167211cc8c75582caaa6da567cfd79ba5"
+    },
+    {
+      "key": "revision",
+      "number": 99,
+      "title": "feat: refresh saved report recipes and explain source revisions",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/99",
+      "phase": "3b — repeatable reporting",
+      "scope": "expansion",
+      "blocked_by": [
+        91
+      ],
+      "parent": 84,
+      "body_sha256": "b4f9b844a826d4f8d3c0107da5b27eae433656d2bb446c85559de993f64d34c5"
+    },
+    {
+      "key": "acceptance",
+      "number": 100,
+      "title": "test: validate the first sector reporting release across clients and file formats",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/100",
+      "phase": "3 — vertical product",
+      "scope": "first-slice",
+      "blocked_by": [
+        85,
+        97,
+        98
+      ],
+      "parent": 84,
+      "body_sha256": "b88dd8433c3928cf03a3b10f8a55aa830440c52b5ea95e0200480588759b24dd"
+    },
+    {
+      "key": "apps",
+      "number": 101,
+      "title": "feat: add an optional MCP App for visual table and chart exploration",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/101",
+      "phase": "4 — interactive expansion",
+      "scope": "expansion",
+      "blocked_by": [
+        90,
+        96
+      ],
+      "parent": 84,
+      "body_sha256": "3ee311efe482a35f767fcf66f161615d3e497541262434cd763e0c4509c8d174"
+    },
+    {
+      "key": "http_design",
+      "number": 102,
+      "title": "research: define a hosted MCP transport, isolation and operating-cost plan",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/102",
+      "phase": "4 — operational expansion",
+      "scope": "expansion",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "e3621d5c5411376eac74c1a23a9742d0989c63268848eac83f397014e78baa8e"
+    },
+    {
+      "key": "http",
+      "number": 103,
+      "title": "infra: implement the approved hosted MCP pilot with isolated artifact delivery",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/103",
+      "phase": "4 — operational expansion",
+      "scope": "expansion",
+      "blocked_by": [
+        88,
+        102
+      ],
+      "parent": 84,
+      "body_sha256": "4cd8b8023d0e3125006a06ee5bba273d7b26b0a6f1af5e67785c46b958a87dbd"
+    },
+    {
+      "key": "sdmx_design",
+      "number": 104,
+      "title": "research: compare public DataBrowser dimension access with optional authenticated SDMX",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/104",
+      "phase": "4 — coverage expansion",
+      "scope": "expansion",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "83f847274265199e8c264e1ec57ddf643c4278bf1d6cbb3cb665be193198f466"
+    },
+    {
+      "key": "sdmx",
+      "number": 105,
+      "title": "feat: implement the approved dimensional data adapter with bounded server-side filters",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/105",
+      "phase": "4 — coverage expansion",
+      "scope": "expansion",
+      "blocked_by": [
+        87,
+        104
+      ],
+      "parent": 84,
+      "body_sha256": "62cea6056cffc02c37cbcd3d0716d3cc0635cfca2fbd6572fe136663d2c419a3"
+    },
+    {
+      "key": "geo_design",
+      "number": 106,
+      "title": "research: verify regional indicator coverage and official geography boundaries",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/106",
+      "phase": "4 — coverage expansion",
+      "scope": "expansion",
+      "blocked_by": [],
+      "parent": 84,
+      "body_sha256": "692ae7c4beecf85bcb8038afaed492c719f6b03abb70d96e8f9d5e2488edce49"
+    },
+    {
+      "key": "maps",
+      "number": 107,
+      "title": "feat: add a validated regional comparison and choropleth pilot",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/107",
+      "phase": "4 — visual expansion",
+      "scope": "expansion",
+      "blocked_by": [
+        90,
+        106
+      ],
+      "parent": 84,
+      "body_sha256": "908967a474fd0fa5b83fcf9e3bbe36018a470db470fe741be45d6a8eee0bd1cf"
+    },
+    {
+      "key": "office",
+      "number": 108,
+      "title": "research: validate Google Workspace and Microsoft 365 handoffs with one connector pilot",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/108",
+      "phase": "4 — institutional integrations",
+      "scope": "expansion",
+      "blocked_by": [
+        92,
+        93
+      ],
+      "parent": 84,
+      "body_sha256": "efc634908809e447bbf67cbc70ca90bbcb6a384e8e7c81e5424a0244d2946199"
+    },
+    {
+      "key": "multisource",
+      "number": 109,
+      "title": "research: prototype a provenance-preserving TÜİK and official EVDS reporting workflow",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/109",
+      "phase": "4 — institutional integrations",
+      "scope": "expansion",
+      "blocked_by": [
+        87
+      ],
+      "parent": 84,
+      "body_sha256": "8e432b7df26521ac4f2723dc510a429ee8a5907918e32781cb73b03ec7c79f47"
+    }
+  ]
+}

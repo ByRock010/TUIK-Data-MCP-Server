@@ -14,6 +14,13 @@ All notable changes to this project are documented here. The format follows
   require `--online`; their diagnostics redact URLs/credentials. Wheel/sdist
   installation CI checks core/viz profiles, packaged resources and nine-tool
   stdio discovery outside the checkout on Linux, macOS and Windows (#98).
+- Archived midterm report PDFs, editable LaTeX sources, original template
+  distribution notices and recorded verification under `output/pdf/`, with an
+  artifact index in `output/README.md`. The submitted PDF is the V2 revision.
+- Post-midterm competitive research and the evidence-backed institutional-output
+  roadmap (#84), with retained issue plans and GitHub dependency verification.
+  Downloaded third-party source snapshots and temporary render/build files remain
+  local working artifacts.
 - Optional hybrid lexical + semantic search (#21, ADR 0005).
   `tuik-mcp-index --embeddings` stores multilingual-e5-small vectors (`semantic`
   extra, ONNX). `search_tuik` fuses the lexical query with filtered k-NN by
@@ -35,6 +42,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Retain existing PR review approvals after new commits on `develop` and `master`.
+  The required approval count, CI checks and conversation-resolution requirement
+  remain unchanged; the checked-in ruleset payloads match this policy.
 - Index mapping schema 3 adds the optional `embedding` vector field; rebuild older
   indices once with `tuik-mcp-index --full`.
 - `get_tuik_data` pages read without `query` now share the 64 KiB output budget
