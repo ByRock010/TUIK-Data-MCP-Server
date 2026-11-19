@@ -1,0 +1,65 @@
+{
+  "report_cutoff": "2026-11-11",
+  "repository_revision": "e3e991b",
+  "offline_verification": {
+    "date": "2026-11-11",
+    "command": ".venv/bin/pytest -q",
+    "passed": 718,
+    "skipped": 21,
+    "deselected": 6,
+    "seconds": 45.23
+  },
+  "retained_evidence_date": "2026-11-05",
+  "live_or_cluster_checks_rerun_for_report": false,
+  "numerical_relevance_method": "Lexical pool: Codex assessment and dependent review; hybrid additions: Claude implementation-aware assessment and dependent review; no independent human study.",
+  "manual_trials": "team-reported limited qualitative trials, no quantitative human study",
+  "template_style_source": "https://mediastore.cc.bogazici.edu.tr/web/userfiles/files/fbe_adv_thesis_template_2022_2.zip",
+  "style_files_unchanged": {
+    "fbe_tez.sty": "75b0496a2428667a5d0206415ae062a1b27d6609b28cf8ecc2bfe481694ac9e1",
+    "fbe_tez_v11.bst": "fb6e9b44189fe3b774e9f17f7a59fbba02fea937f618cdd704b71c0b064760a5"
+  },
+  "pdf_verification": {
+    "pages": 34,
+    "bytes": 119848,
+    "sha256": "8f463b274e586210a6d322a7720537a34f707ff14e62a805005aaffdf3030f35",
+    "replacement_glyphs": 0,
+    "unresolved_citations": 0,
+    "overfull_boxes": 0,
+    "visual_review": "all revised pages rendered and inspected; detailed methodology, testing, ranking and plan pages checked",
+    "renderer": "PyMuPDF",
+    "compiler": "Tectonic 0.15.0 (XeTeX with BibTeX)",
+    "bookmarks": 40,
+    "links": 101
+  },
+  "github_verification": {
+    "date": "2026-11-11",
+    "source": "GitHub API via gh; merged PR descriptions plus actual merge source archive and Git commit",
+    "development_revision": "759c26e08e86e7a8f0f7ab4c7ffa4c2d97274daf",
+    "pr_77": {
+      "state": "MERGED",
+      "base": "develop",
+      "merged_at": "2026-11-05T16:37:29Z",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/pull/77"
+    },
+    "release_v0.3.0": {
+      "published_at": "2026-11-05T12:58:47Z",
+      "url": "https://github.com/ByRock010/TUIK-Data-MCP-Server/releases/tag/v0.3.0"
+    },
+    "open_followups": [
+      78,
+      79,
+      80
+    ],
+    "schedule": "proposed estimates, not GitHub due dates or confirmed team commitments"
+  },
+  "revision_note": "Corrects initial stale-local-snapshot scope: includes already merged hybrid work and published v0.3.0; aligns remaining work with GitHub issues 78-80.",
+  "github_snapshot_offline_verification": {
+    "revision": "759c26e08e86e7a8f0f7ab4c7ffa4c2d97274daf",
+    "passed": 742,
+    "skipped": 22,
+    "deselected": 6,
+    "seconds": 43.62,
+    "environment": "temporary checkout, workspace virtualenv with source PYTHONPATH",
+    "archive_only_initial_attempt": "10 provenance tests required Git metadata; rerun after fetching the actual merge commit passed all offline tests"
+  }
+}

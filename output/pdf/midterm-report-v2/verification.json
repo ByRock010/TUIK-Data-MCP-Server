@@ -1,0 +1,24 @@
+{
+  "revision": "V2",
+  "date": "2026-11-16",
+  "scope": "Horizontal centering and student name separators only",
+  "pdf": "Bayrakcioglu_Ahmet_Baha_and_Acer_Okkes_Berkay_MidtermReport_V2.pdf",
+  "pages": 34,
+  "bytes": 118947,
+  "sha256": "47856722945e93c26b22de4c3093953c6fa584243cc034a141a648ed1fcf8d18",
+  "horizontal_margins_mm": {
+    "left": 27.5,
+    "right": 27.5
+  },
+  "text_width_mm": 155,
+  "student_separator": "|",
+  "em_dash_count": 0,
+  "replacement_glyph_count": 0,
+  "non_cover_text_unchanged_on_all_pages": true,
+  "original_pdf_unchanged": true,
+  "overfull_boxes": 0,
+  "unresolved_references": 0,
+  "visual_review": "All 34 pages rendered and checked in contact sheets; cover, milestone table, entity diagram and hybrid results inspected at full size.",
+  "compiler": "XeLaTeX (TeX Live 2026) with BibTeX",
+  "style_files_unchanged": true
+}

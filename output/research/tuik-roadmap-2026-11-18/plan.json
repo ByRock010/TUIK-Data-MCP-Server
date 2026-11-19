@@ -1,0 +1,716 @@
+[
+  {
+    "key": "baseline",
+    "title": "research: extend the existing MCP benchmark into sector and artifact workflows",
+    "phase": "0 — evidence",
+    "priority": "high",
+    "goal": "Measure whether people can complete useful, source-correct work, building on the existing 8 November benchmark.",
+    "context": "`develop` already contains `scripts/mcp_benchmark.py` and a 10-question MCP/web/closed-book comparison. Its single-run, same-family grading does not measure exported files, novice setup or different sectors. Do not recreate that harness or describe it as absent.",
+    "proposal": "Freeze 24 tasks across finance/research, manufacturing/export, local government and academic/journalistic use (six per persona). Include current-data discovery, revisions, unavailable monthly provincial unemployment, ambiguous units, a calculation, and an artifact request. Reuse the existing prompts, logs and source-ground-truth method where applicable. Separate source correctness, model behavior, setup friction and document usability. Fix scoring, budgets and stop conditions before collecting results; retain a held-out subset.",
+    "acceptance": [
+      "Publish the task matrix, dated official ground truth, expected supported/unsupported outcomes and a reproducible runner extension plan.",
+      "Every task has a numeric/period/unit/source rubric and artifact tasks additionally specify editability and layout checks.",
+      "Record a baseline against the current nine tools; mark missing capabilities as unsupported instead of scoring hypothetical implementations.",
+      "Run or document availability of at least two named/versioned clients; model/provider, search index, warm/cold state and tool permissions are recorded separately.",
+      "Distinguish independent human review from model-assisted grading; plan at least one external sector-user review per persona and disclose any unfilled recruitment.",
+      "Pre-register candidate acceptance targets: zero critical numeric/source errors, >=90% supported-task success, and no concealed unsupported cases; publish denominators and uncertainty."
+    ],
+    "sources": "[Existing benchmark](https://github.com/ByRock010/TUIK-Data-MCP-Server/blob/ea26bb4e8e1fd05eed815e4def469b527da9191a/docs/verification/mcp-benchmark-2026-11-08.md); official portal, tables and methodology PDFs used by the tasks.",
+    "deps": [],
+    "related": [
+      78,
+      79,
+      80
+    ],
+    "kind": "research",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "coverage",
+    "title": "research: audit table extraction and source-cell lineage beyond the fixture corpus",
+    "phase": "0 — evidence",
+    "priority": "high",
+    "goal": "Establish which real TÜİK table families are safe to use for automated analysis and reporting.",
+    "context": "The current parser corpus is deliberately small. A competitor publishes a much broader istab probe, including medium-confidence and rejected tables. File reading alone does not establish that every period, unit and value label was interpreted correctly.",
+    "proposal": "Create a bounded, stratified audit of at least 60 public files across six initial domains: prices, labour, population, foreign trade, housing sales and industry. Include wide/long, merged headers, multi-sheet, bilingual, revised and ambiguous layouts. Keep at least 20 files held out from rule changes. Retain source hashes and sheet/cell coordinates, independently sample value-to-header mappings, and classify exact, inferred, partial and unsupported extraction. This issue measures and prioritizes gaps; it does not introduce a universal tidy converter.",
+    "acceptance": [
+      "Publish selection rules, file manifest, sample counts and source dates; pace downloads and reuse retained files.",
+      "Trace at least five sampled numeric outputs per file to their source cells and header/period/unit context using an independent checking path.",
+      "Report layout, labeling, unit, period, missing-marker and coverage errors separately, including held-out outcomes.",
+      "Preserve evidence for ambiguous/rejected tables and rank concrete parser follow-ups by the sector tasks they block.",
+      "Identify at least one verified source family in each initial domain, or state the domain is not yet eligible for normalized automated reports.",
+      "Do not advertise whole-portal accuracy from this sample or treat inferred structure as official metadata."
+    ],
+    "sources": "Public CSV/XLS/XLSX exports; [competitor probe](https://github.com/ahmthamza/turkiye-veri-mcp/blob/ebb2fa3b7d1363545c7eca1165eee037121fdb03/ISTAB_PROBE.md).",
+    "deps": [],
+    "related": [
+      3,
+      4,
+      5,
+      6,
+      51,
+      52
+    ],
+    "kind": "research",
+    "area": "area: ingestion",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "semantics",
+    "title": "feat: add an explicit observation model for units, periods, geography and source lineage",
+    "phase": "1 — foundations",
+    "priority": "high",
+    "goal": "Give calculations and exporters an unambiguous statistical input while preserving source values and legacy table tools.",
+    "context": "Profiles currently infer types and table queries preserve strings. They do not declare a universal time-series schema, official dimensions, revision vintage or comparable statistical concepts. The chart tool already handles explicit columns and formats; retain that lower-level path.",
+    "proposal": "Add a versioned, opt-in normalized observation contract and reviewed mapping recipes for eligible audited families. Carry original value, validated numeric value, source row/cell locator, period and frequency, geography code/level, unit/multiplier/currency, measure type (level/index/rate), base year, seasonal/calendar adjustment, dimensions, status/notes and exact snapshot. Mark source-declared, recipe-defined, user-selected and unknown fields separately. Preserve constant dimensions as metadata. Never infer that a series is provincial or seasonally adjusted solely from a column name.",
+    "acceptance": [
+      "Define and validate the schema, mapping version and unsupported/ambiguous results; existing tools and raw strings remain compatible.",
+      "Mappings cover verified examples from the six initial domains; failed audit domains remain explicitly unavailable.",
+      "CSV observations retain original row identity; XLS/XLSX observations retain sheet/cell and header context, including merged-header expansion lineage.",
+      "Tests distinguish percent from percentage points, persons from thousands, month from year, national from NUTS/province, and original from adjusted series.",
+      "Unknown units, missing markers, duplicates and incomplete coverage cannot become valid numeric inputs silently.",
+      "Provide a bounded discovery/inspection path for mappings and examples; do not create one tool per indicator."
+    ],
+    "sources": "Existing public exports and classification metadata; the eligible source families from @coverage.",
+    "deps": [
+      "coverage"
+    ],
+    "related": [
+      51,
+      52,
+      72
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "artifacts",
+    "title": "feat: deliver immutable report artifacts with provenance manifests and MCP resource links",
+    "phase": "1 — foundations",
+    "priority": "high",
+    "goal": "Make exported files retrievable by the user and reproducible from a pinned evidence bundle.",
+    "context": "Existing one-hour file snapshots and query cursors are bounded transient state. A report must not silently mix files downloaded at different times, or return a hosted server path that the user cannot open. `develop` already returns structuredContent; reuse it.",
+    "proposal": "Introduce a versioned artifact/bundle manifest containing source IDs, official URLs, retrieval/publication dates when available, source hashes, selection/query, locators, extraction/mapping versions, transformations, warnings, generated files, MIME types, sizes and hashes. Define server-owned storage, retention and restart behavior separately from query caches. Use opaque artifact IDs and MCP resource links/read support with explicit size limits, plus a documented local download route. Never let caller-supplied arbitrary paths determine writes.",
+    "acceptance": [
+      "An export bundle pins all inputs and records differing retrieval times; available source bytes/derived inputs are retained within an explicit quota and reuse-rights policy.",
+      "Stdio client can retrieve a real binary artifact; results contain valid MIME/name/size/hash and never imply a server-local path is a public download.",
+      "Expiration, eviction, restart and unavailable original snapshots produce actionable outcomes; regeneration never substitutes fresh data without a new bundle/version.",
+      "Budget total bytes, file count, lifetime and concurrent jobs; reject traversal/symlink escapes and unsafe filenames.",
+      "Include checks for large-file delivery and clients that do not display resource links; keep model-visible summaries small.",
+      "Provenance and warnings survive every output page/slide/sheet through a compact visible citation plus the full manifest."
+    ],
+    "sources": "Existing public-source snapshots; [MCP tool results and resource links](https://modelcontextprotocol.io/specification/2025-11-25/server/tools).",
+    "deps": [],
+    "related": [
+      9,
+      27,
+      52
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "analytics",
+    "title": "feat: compute auditable statistical changes and comparisons on complete series",
+    "phase": "1 — foundations",
+    "priority": "high",
+    "goal": "Compute common analyst operations deterministically before numbers enter prose, charts or Office files.",
+    "context": "The client currently performs calculations itself. Competitors already expose growth/normalization utilities, so correctness and evidence linkage must accompany equivalent convenience.",
+    "proposal": "Support a small typed operation set: absolute difference, percentage change, percentage-point difference, m/m and y/y period matching, explicitly selected moving averages, min/max with ties, and rebasing to an explicitly shared period. Validate unit/frequency/adjustment compatibility. Read the complete selected bounded snapshot, never just a displayed first page. Return formula, exact input observation IDs, output unit, rounding and valid/missing counts in an artifact-ready result.",
+    "acceptance": [
+      "Hand-calculated fixtures verify every operation, leap/year/quarter boundaries, missing periods, zero denominators and all tied extrema.",
+      "Y/y uses the corresponding prior-year period, not the twelfth available row; duplicate periods require explicit dimension selection.",
+      "No sums of rates/indexes, silent resampling, extrapolation, imputation or combining incompatible adjusted/base-year series.",
+      "Partial scans/truncated selections cannot claim population-wide extrema or averages; fail or label the exact selected coverage.",
+      "Rebasing several series uses a declared common period and refuses a missing/zero base; original official values remain available.",
+      "Each result can be independently recomputed from its bundle and operation specification; tool docs distinguish derived from published values."
+    ],
+    "sources": "Eligible normalized public TÜİK observations from @semantics.",
+    "deps": [
+      "semantics",
+      "artifacts"
+    ],
+    "related": [
+      52,
+      72
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "charts",
+    "title": "feat: extend charts with reusable specifications, vector export and accessible presentation",
+    "phase": "2 — institutional outputs",
+    "priority": "high",
+    "goal": "Produce publication-quality charts whose data, labels and scale choices can be reused in every renderer.",
+    "context": "`chart_tuik_data` already produces PNG line/bar charts and summaries (#72). Extend that capability rather than opening a duplicate implementation. An image alone is insufficient for editable Office charts or audit.",
+    "proposal": "Separate a validated ChartSpec/data specification from rendering. Keep current PNG and signature behavior; add SVG and vector PDF output through the artifact service. Support line, horizontal/ranked/grouped bar, scatter and a bounded heatmap where their inputs are valid. Specify sorting, units, gaps, labels, title, source notes, color palette and alt text. Use a shared theme contract; charts remain deterministic and use real data rather than generative-image numbers.",
+    "acceptance": [
+      "Existing PNG calls remain compatible and new formats reference the same selected observations and snapshot.",
+      "Bar baselines, time ordering, ties, negative values, missing gaps, misleading numeric locale and multiple-series units have explicit validated behavior.",
+      "Accessible palettes and text descriptions are included; scatter/correlation views do not imply causation; no automatic dual-axis chart.",
+      "Vector files preserve legible Turkish glyphs and text; long titles/notes and dense series are rendered and visually checked.",
+      "ChartSpec includes the underlying bounded data and a portable fallback for formats without native support.",
+      "Point/series/pixel/byte limits, unsupported chart combinations and optional dependency failures are tested and documented."
+    ],
+    "sources": "Existing CSV/XLS/XLSX sources and [current chart implementation](https://github.com/ByRock010/TUIK-Data-MCP-Server/issues/72).",
+    "deps": [
+      "semantics",
+      "artifacts"
+    ],
+    "related": [
+      72
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "reportspec",
+    "title": "feat: define evidence-bound report sections and numeric claim validation",
+    "phase": "2 — institutional outputs",
+    "priority": "high",
+    "goal": "Build one report model that PowerPoint, PDF and Word render without drifting numbers or citations.",
+    "context": "Independent exporters tend to repeat analysis, lose footnotes or let prose introduce unsupported numbers. The server should own validated evidence and layout inputs; the host model may propose text.",
+    "proposal": "Define a versioned ReportSpec with title, audience, language, source cutoff, findings, tables, charts, methods, limitations and citation registry. Numeric findings refer to published observation IDs or deterministic calculation IDs. Validate any supplied narrative using explicit claim bindings; unresolved values are rejected or visibly marked as unverified draft content. Provide deterministic evidence-backed summary templates and optional host-provided commentary. Escape source/host text as data; do not require model keys or server-side arbitrary code.",
+    "acceptance": [
+      "The same report specification drives all renderers; schema validation covers section limits, asset references and unsupported layouts.",
+      "Every factual numeric claim has a resolvable source/calculation, period and unit; tested examples reject changed signs, percentages, dates and unsupported comparisons.",
+      "Latest release, latest observation, retrieval time and data cutoff remain distinct; missing release dates are unknown.",
+      "Methodology/adjustment changes and incomplete source coverage propagate into visible limitations.",
+      "Untrusted text cannot introduce executable HTML/templates, remote asset fetches or instructions.",
+      "A sample report is reproducible without an external LLM; optional narrative is explicitly identified and must pass the same claim checks."
+    ],
+    "sources": "Public TÜİK observations, chart specifications and relevant bulletin/methodology locators.",
+    "deps": [
+      "analytics",
+      "charts"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "xlsx",
+    "title": "feat: export analyst-ready Excel workbooks with data, calculations and sources",
+    "phase": "2 — institutional outputs",
+    "priority": "high",
+    "goal": "Let analysts open and inspect the complete selected evidence in Excel without copy/pasting chat tables.",
+    "context": "XLS/XLSX reading already exists; this issue adds output workbooks. Excel is also a practical handoff to Power Query and BI tools.",
+    "proposal": "Export bounded XLSX with separate raw data, normalized data, analysis and Sources/Methods sheets. Preserve codes as text, dates/period semantics and source flags. Include typed numeric cells, usable tables/filters, frozen headers and supported native charts. Raw strings remain available for audit. If formulas are emitted, use a small allowlisted generator with defined cached-value/recalculation behavior; otherwise materialize the verified calculations and label them clearly.",
+    "acceptance": [
+      "Workbook totals, typed values and chart data match the pinned inputs and selected result, including selections spanning multiple query pages.",
+      "Turkish decimals, leading-zero geography codes, missing/confidential markers and percent scales survive opening in Excel/LibreOffice.",
+      "Source strings beginning with =, +, -, @ or dangerous control characters remain literal text where appropriate, without corrupting legitimate numeric cells.",
+      "Visible source/period/unit/adjustment notes and full manifest links identify derived values and extraction uncertainty.",
+      "Round-trip inspection and a rendered workbook check detect clipped labels, broken charts and unintended external links/macros.",
+      "Export goes through @artifacts with quotas and a client-retrievable file; openpyxl remains shared with existing input support."
+    ],
+    "sources": "Existing public CSV/XLS/XLSX snapshots; [openpyxl chart documentation](https://openpyxl.readthedocs.io/en/stable/charts/introduction.html).",
+    "deps": [
+      "semantics",
+      "artifacts"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "pptx",
+    "title": "feat: generate editable PowerPoint briefings from validated TÜİK reports",
+    "phase": "2 — institutional outputs",
+    "priority": "high",
+    "goal": "Turn an evidence-backed report into a presentation that a professional can edit and present.",
+    "context": "The current product has PNG charts but no presentation output. Editable objects and source-preserving layout create more value than placing screenshots on slides.",
+    "proposal": "Add an optional PPTX renderer for ReportSpec. Ship a small 16:9 briefing template: title/key messages, KPI table, trend, comparison, methods/limitations and sources. Use native editable text, tables and PowerPoint charts with embedded data for supported chart types. Use a declared image fallback for unsupported visuals, preserving underlying data in the bundle. Renderers do not recalculate or invent prose.",
+    "acceptance": [
+      "Generate a six-slide Turkish briefing containing real validated values and source references; support an English label example.",
+      "At least line and bar charts are native editable charts with embedded data; all ordinary text/tables remain editable.",
+      "Every analytical slide has a legible compact source/period/unit note; speaker notes carry fuller citations and calculation/method context.",
+      "Read-back verifies numeric cells/chart series against ReportSpec and checks missing asset references.",
+      "Render all slides with a documented tool and visually inspect Turkish glyphs, long text, legends, clipping, overlap and readable minimum font size.",
+      "Confirm opening/editing in PowerPoint or a named compatible editor; record editor/version and known fidelity differences.",
+      "Dependency is optional and failures do not break the current nine tools; deliver through @artifacts."
+    ],
+    "sources": "Validated ReportSpec; [python-pptx native charts](https://python-pptx.readthedocs.io/en/latest/user/charts.html). Library choice is confirmed in implementation.",
+    "deps": [
+      "reportspec"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "pdf",
+    "title": "feat: export printable PDF statistical briefs with traceable figures",
+    "phase": "2 — institutional outputs",
+    "priority": "high",
+    "goal": "Deliver a polished, searchable report that can be shared and printed without a presentation editor.",
+    "context": "PDF reading is already supported; PDF authoring is a separate output capability. A document that opens successfully can still have wrong pagination, unreadable notes or missing glyphs.",
+    "proposal": "Implement an optional PDF renderer for ReportSpec with executive summary, figures, tables, methods, limitations and linked sources. Compare a small ReportLab and HTML/CSS renderer prototype against the actual layout needs, then record one dependency choice. Embed usable Turkish fonts; preserve vector charts where supported. Page-break rules must repeat table headers and keep headings/captions with content. Asset loading is restricted to the validated artifact bundle.",
+    "acceptance": [
+      "A 3–5 page brief is searchable and includes visible date cutoff, units, source citations and distinguishing notes for computed values.",
+      "Read-back/extracted text and chart/table data agree with ReportSpec; links target actual official sources.",
+      "Render every page to images and verify no overflow, clipped tables, orphan headings, blank surprise pages or illegible footnotes.",
+      "Stress cases cover long Turkish titles, multi-page tables, missing observations and unavailable source assets.",
+      "No remote URL/file-system fetches from source text or templates; time/memory/output budgets are enforced.",
+      "Record accessibility support and limitations without claiming PDF/UA conformance unless validated; export remains optional and client-retrievable."
+    ],
+    "sources": "Validated ReportSpec; [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/) and [ReportLab](https://docs.reportlab.com/) are candidate libraries.",
+    "deps": [
+      "reportspec"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "docx",
+    "title": "feat: export editable Word briefs from the shared report model",
+    "phase": "2b — editable documents",
+    "priority": "medium",
+    "goal": "Provide editable institutional text for users who need to revise a brief before circulation.",
+    "context": "PDF and PPTX solve sharing and presentation; policy, academic and consulting users also need editable narrative and tables. Keep this renderer independent so it does not delay the first PPTX/PDF slice.",
+    "proposal": "Render ReportSpec as DOCX using real heading styles, editable paragraphs/tables, page headers/footers, captions and a source bibliography. Reuse theme tokens and chart assets. Define supported template placeholders instead of attempting arbitrary Word-template execution. Keep chart editability limitations explicit; provide underlying data through the same bundle.",
+    "acceptance": [
+      "The exported document opens in a named Word-compatible editor with editable text and tables and preserved Turkish characters.",
+      "Values, periods, methods and citations agree with the PDF/PPTX version of the identical ReportSpec.",
+      "Headings/navigation, repeated table headers, page breaks and source links work; long text and multi-page tables are rendered and visually verified.",
+      "Template content is constrained and source text is escaped; unsupported template features fail clearly.",
+      "Optional dependencies and bundle retrieval behave like the other renderers."
+    ],
+    "sources": "Validated ReportSpec and official citations retained in its bundle.",
+    "deps": [
+      "reportspec"
+    ],
+    "related": [
+      "pdf",
+      "pptx"
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "guided",
+    "title": "feat: add guided MCP workflows for finding, validating and presenting statistics",
+    "phase": "1b — guided use",
+    "priority": "medium",
+    "goal": "Help users express their task and make the required statistical choices with fewer failed calls.",
+    "context": "Tool descriptions already guide search → inspect → query. A novice still has to choose adjusted/original, period, geography, unit and output. The new workflow should build on these tools and remain usable in clients without prompt menus.",
+    "proposal": "Add a small set of MCP prompts and plain-language recipes: latest indicator brief, regional comparison, trend analysis and source/methodology audit. Ask only when choices materially affect meaning; expose reasonable explicit defaults. Detect unsupported requests such as monthly provincial unemployment. Offer a compact next-step/error recovery structure. Register the actual available output capabilities rather than advertising future tools as installed.",
+    "acceptance": [
+      "Workflow examples correspond to the frozen task definitions in @baseline and use inspected IDs/columns rather than guessed fields.",
+      "Actual MCP stdio checks cover prompts/list/get, relevant tool calls and a text-only client fallback.",
+      "Two named/versioned clients can complete a current-data task and correctly report an unsupported task, with transcripts.",
+      "Users can inspect selected adjustment, period, geography, units, source cutoff and output format before a report is generated.",
+      "Optional search, visualization or export dependencies do not strand a user; guidance identifies the supported alternative.",
+      "No provider API secret is requested as a conversational tool argument."
+    ],
+    "sources": "Existing nine tools and official metadata/methodology notes; [MCP prompts](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts).",
+    "deps": [
+      "baseline"
+    ],
+    "related": [
+      78,
+      79
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "templates",
+    "title": "feat: ship sector briefing recipes and configurable institutional themes",
+    "phase": "3 — vertical product",
+    "priority": "medium",
+    "goal": "Demonstrate complete professional workflows with consistent branding and domain-specific statistical checks.",
+    "context": "A generic exporter is useful but still leaves the user to design a report and choose safe comparisons. Sector recipes make the new capabilities concrete and reviewable.",
+    "proposal": "Ship three evidence-based packs: finance/macro (prices and labour), manufacturing/export (industry and trade), and local policy/research (population and available annual regional indicators). Each pack defines supported indicators, geography/frequency, expected source/method notes, default outputs and refusal cases. Add a small validated theme schema for logo, colors, typography and page/slide headers, using the existing ChartSpec/ReportSpec. Treat unsupported sector needs as a measured gap rather than filling them with unrelated proxies.",
+    "acceptance": [
+      "Each pack has one reproducible end-to-end example producing XLSX, PPTX and PDF from a shared pinned bundle.",
+      "User can select Turkish/English labels and one alternate institutional theme; fonts/logos are bounded validated assets.",
+      "Finance examples distinguish rates, index levels and percentage points; industry examples distinguish adjusted/original and index base years.",
+      "Local examples keep province/NUTS and annual/monthly coverage explicit and do not invent provincial monthly unemployment.",
+      "Actual or recruited representative users review examples under the @baseline rubric; record who reviewed what, outcomes and unresolved feedback.",
+      "Renders are inspected and all source/calculation claims validated; no arbitrary code or uncontrolled external template assets."
+    ],
+    "sources": "Audited source families and current bulletin/methodology documentation for the three packs.",
+    "deps": [
+      "guided",
+      "xlsx",
+      "pptx",
+      "pdf"
+    ],
+    "related": [
+      "docx"
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "install",
+    "title": "infra: package a clean-install client setup and non-destructive doctor command",
+    "phase": "1b — guided use",
+    "priority": "high",
+    "goal": "Reduce the installation and diagnosis burden for people outside the development team.",
+    "context": "The README currently starts from a source checkout and Python environment. Other servers promote uvx/npx or hosted URLs. Ease of setup is already a competitive baseline.",
+    "proposal": "Verify ownership/name collisions before selecting a distribution name; build and test wheel/sdist with declared optional extras. Add a read-only doctor command that reports Python/runtime version, writable artifact storage, installed extras, optional index/model readiness and endpoint availability without exposing secrets. Document tested stdio setup for two selected clients and an explicit Windows path. Keep search/model services optional and distinguish startup errors from upstream outages.",
+    "acceptance": [
+      "Clean machines/environments can install the built artifact without the repository checkout and discover the current tool set.",
+      "CI exercises core-only, visualization/report extras and a no-index path; installation never silently downloads embedding models on an ordinary tool call.",
+      "Test setup on Windows and macOS/Linux (actual platform or CI evidence) and record client versions.",
+      "Doctor prints actionable next steps, preserves existing config, performs no credential writes and redacts secret values/headers.",
+      "Public package publication is a separate release action after artifact checks and name ownership are verified; no claimed install command points to another project.",
+      "Docs include artifact retrieval and optional dependency behavior, with a short novice setup trial."
+    ],
+    "sources": "Current package and distribution metadata; existing official TÜİK endpoints for opt-in connectivity checks.",
+    "deps": [],
+    "related": [
+      "artifacts",
+      "baseline"
+    ],
+    "kind": "infra",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "revision",
+    "title": "feat: refresh saved report recipes and explain source revisions",
+    "phase": "3b — repeatable reporting",
+    "priority": "medium",
+    "goal": "Let recurring users update the same report without losing the prior numbers or confusing new observations with revisions.",
+    "context": "Title-based file IDs follow current TÜİK files. An old retrieval timestamp does not make historical as-of data reconstructible; immutable bundles are needed first.",
+    "proposal": "Save a validated selection/analysis/report recipe separate from its evidence bundle. A user-triggered refresh resolves current official inputs, creates a new bundle, reruns the approved deterministic operations and reports added/removed/revised observations, schema and methodology changes. Keep the original report retrievable until its stated retention expires. Detect fresh indexing vs fresh data independently; expose last successful upstream retrieval and unavailable inputs. Scheduling and email delivery are outside this first implementation.",
+    "acceptance": [
+      "Recorded upstream changes show new periods separately from changed historical values and missing/deleted rows.",
+      "Old artifacts are not overwritten and manifests explain the exact old/new snapshots and mapping/recipe versions.",
+      "A changed unit/base year/classification/column schema interrupts unsafe automatic comparisons and requests a recipe update.",
+      "No earlier vintage is claimed unless its source snapshot was actually retained; expired evidence has a clear unreproducible status.",
+      "Refresh is idempotent for unchanged inputs apart from explicitly defined generation metadata; upstream failures do not present stale results as current.",
+      "Document index-freshness warnings and the source cutoff on regenerated files."
+    ],
+    "sources": "Current official CSV/Excel files, bulletin release metadata and retained artifact manifests.",
+    "deps": [
+      "reportspec"
+    ],
+    "related": [
+      27,
+      28,
+      78
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "acceptance",
+    "title": "test: validate the first sector reporting release across clients and file formats",
+    "phase": "3 — vertical product",
+    "priority": "high",
+    "goal": "Close the first institutional-output milestone only with measured task success and usable files.",
+    "context": "Passing parser tests and opening a PPTX do not establish an end-to-end professional workflow. The existing benchmark is useful prior evidence but cannot certify capabilities introduced by this roadmap.",
+    "proposal": "Apply the frozen @baseline rubric to the first release slice: audited observations, deterministic calculations, chart/claim validation, XLSX/PPTX/PDF, sector recipes and installation. Repeat each supported task at least three times in two named/versioned clients with fixed model/settings; cap cost and upstream traffic and distinguish mocked/offline from live runs. Use recorded artifacts for deterministic validation and a small paced live acceptance subset. Keep raw tool traces and render previews, with secrets redacted.",
+    "acceptance": [
+      "Publish per-task outcomes, denominators, client/model versions, source/index versions, median and tail time, calls/token or cost usage, and upstream failures separately.",
+      "Zero unresolved critical numeric, period, unit, citation or confidential-marker errors; >=90% supported-task success under the predeclared rubric.",
+      "Unsupported tasks return the expected limitation; no fabricated report fills missing data.",
+      "All candidate XLSX/PPTX/PDF files pass read-back and complete visual review; any additionally shipped DOCX/UI features receive their own checks.",
+      "Compare with the original baseline and disclose regressions, excluded tasks and any missing independent user review.",
+      "Clean-install instructions and optional dependency fallbacks pass; no unsupported claim of universal client compatibility or market supremacy.",
+      "Publish candidate release notes/checklist and a go/no-go conclusion; tagging/promotion follow CONTRIBUTING.md after review."
+    ],
+    "sources": "Frozen official-source fixtures and small paced live samples defined by @baseline.",
+    "deps": [
+      "baseline",
+      "templates",
+      "install"
+    ],
+    "related": [
+      78,
+      79,
+      80,
+      "docx"
+    ],
+    "kind": "testing",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "apps",
+    "title": "feat: add an optional MCP App for visual table and chart exploration",
+    "phase": "4 — interactive expansion",
+    "priority": "medium",
+    "goal": "Let users inspect filters, compare series and export selections inside a compatible chat client.",
+    "context": "MCP Apps is an official extension for embedded interactive interfaces. Its host support and SDK compatibility must be checked; a UI must not become a prerequisite for existing stdio tools.",
+    "proposal": "Build a small self-contained table/chart explorer backed by existing typed selections and artifacts. Show unit/frequency/adjustment, source, coverage and selected filters; expose exact values and an accessible data table. UI changes call validated server tools through the host bridge. Use ui:// resources and the official extension contract after verifying compatibility with the pinned Python SDK or a thin isolated UI adapter. Preserve PNG/structured/text fallbacks.",
+    "acceptance": [
+      "A named/versioned compatible host loads the resource and can filter an audited table, update the chart and retrieve a selected artifact.",
+      "A second named client without UI support completes the equivalent workflow using tools/text.",
+      "ChartSpec and selection IDs guarantee the UI view and exported artifact use the same data; no browser-only calculations change official values.",
+      "Keyboard operation, focus, accessible labels, contrast, responsive layout and Turkish labels are checked.",
+      "CSP, origin/bridge messaging and allowed tool calls are constrained; assets need no public CDN or arbitrary outbound domains.",
+      "Document tested host capabilities and SDK choice; no broad SDK upgrade or existing protocol break is hidden in UI work."
+    ],
+    "sources": "[Official MCP Apps overview](https://apps.extensions.modelcontextprotocol.io/api/); existing validated table/chart data.",
+    "deps": [
+      "charts",
+      "guided"
+    ],
+    "related": [
+      "xlsx"
+    ],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": null
+  },
+  {
+    "key": "http_design",
+    "title": "research: define a hosted MCP transport, isolation and operating-cost plan",
+    "phase": "4 — operational expansion",
+    "priority": "medium",
+    "goal": "Decide how a shared endpoint can preserve the local product guarantees before committing to hosting.",
+    "context": "The product is currently local stdio. Hosted competitors reduce setup friction but introduce server-local export paths, shared quotas and credential/session concerns. Production HTTP is more than selecting a transport flag.",
+    "proposal": "Write an ADR comparing a stateless public read-only endpoint and authenticated institutional access. Verify the current Python SDK transport/auth support and intended clients. Specify identity/session/cursor/artifact isolation, source pacing across users, limits/abuse controls, cancellation, storage TTL, uptime/diagnosis and secret handling. Estimate small pilot costs at documented load assumptions. Prototype locally against recorded sources; do not deploy a paid or public service as part of this research.",
+    "acceptance": [
+      "ADR records the selected mode, alternatives, supported clients and a go/no-go criterion for @http.",
+      "Define public-vs-private source/result/artifact sharing and how one user cannot retrieve another user’s retained reports or cursors.",
+      "Budget requests, parsed bytes, concurrent jobs and artifact storage per caller plus globally; source download pacing remains shared.",
+      "If HTTP authentication is offered, follow current MCP authorization discovery/audience rules; never forward one token to a different upstream.",
+      "Plan Origin validation, TLS/reverse proxy, log redaction and health checks, with a deterministic local threat/compatibility test.",
+      "Publish capacity assumptions, cost envelope and an operator runbook outline without buying infrastructure."
+    ],
+    "sources": "[MCP transports](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports), [authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization); existing official-source adapters.",
+    "deps": [],
+    "related": [
+      "artifacts",
+      "install"
+    ],
+    "kind": "research",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "http",
+    "title": "infra: implement the approved hosted MCP pilot with isolated artifact delivery",
+    "phase": "4 — operational expansion",
+    "priority": "medium",
+    "goal": "Offer a tested shared-service deployment option for nontechnical users and institutional pilots.",
+    "context": "Implementation is conditional on the hosted-design ADR. This issue does not authorize spending, purchasing a domain or publishing an unreviewed live endpoint.",
+    "proposal": "Implement the ADR’s Streamable HTTP profile while preserving stdio. Reuse all read/analysis/export services behind it. Add session/user isolation, controlled binary artifact delivery, global source pacing, quotas, structured diagnostics and clean shutdown. Supply a local container/reverse-proxy deployment recipe and operational smoke tests; separate any real rollout into the reviewed release process.",
+    "acceptance": [
+      "HTTP initialize/list/call and artifact retrieval work in two selected client versions; reconnect, cancellation, disconnect and process restart have defined behavior.",
+      "Two concurrent test identities cannot access each other’s artifacts/cursors; public caches share only source-derived data permitted by the ADR.",
+      "Origin/auth policy, invalid credentials, expiration, download authorization and quota exhaustion are tested.",
+      "A bounded concurrent load test measures latency/memory and confirms paced source requests and no unbounded job queue.",
+      "Logs and health endpoints expose no secrets or private report contents; operational docs include backup/retention/rollback where applicable.",
+      "Local container verification is complete before any deployment request; all existing stdio workflows pass."
+    ],
+    "sources": "Existing TÜİK adapters; approved transport/authorization profile in @http_design.",
+    "deps": [
+      "http_design",
+      "artifacts"
+    ],
+    "related": [
+      "install"
+    ],
+    "kind": "infra",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": "Proceed only if @http_design records a go decision and an accepted operating envelope. A no-go is a planning decision, not completed implementation."
+  },
+  {
+    "key": "sdmx_design",
+    "title": "research: compare public DataBrowser dimension access with optional authenticated SDMX",
+    "phase": "4 — coverage expansion",
+    "priority": "medium",
+    "goal": "Choose the safest useful route to official dimensions and server-filtered observations without sacrificing the key-free workflow.",
+    "context": "Competitors use two distinct surfaces: authenticated nsiws SDMX and key-free DataBrowser backend endpoints. Our current public exports already work; authenticated access should be optional and justified by measured coverage or efficiency.",
+    "proposal": "Compare both routes on the six initial domains: catalogue identity/version, dimensions/codelists, observation attributes, server-side filters, output bounds, licensing/terms, freshness and failure behavior. Use documented official APIs where possible; identify internal portal endpoints explicitly. Reuse existing stable IDs and avoid a parallel inconsistent catalogue. Test no-key paths with bounded samples; authenticated live testing is contingent on a legitimately configured secret outside chat.",
+    "acceptance": [
+      "ADR includes reproducible endpoints/fixtures and a coverage/call-size table; catalogue counts are dated observations, not universal completeness claims.",
+      "Official SDMX documentation is cited for API-key/token requirements and lifecycle; no-key vs authenticated routes are accurately separated.",
+      "Dimension/code mapping preserves adjustment, geography, units, confidential/provisional flags and dataflow version.",
+      "Compare exact values for overlapping public samples and retain discrepancies rather than silently preferring one route.",
+      "Define go/no-go and selected implementation scope for @sdmx, including missing-key behavior and evidence still requiring credentials.",
+      "No login credentials or SMS interaction are collected by a conversational tool."
+    ],
+    "sources": "[Official SDMX access documentation](https://veriportali.tuik.gov.tr/en/sdmx-web-service-documentation); public DataBrowser and export catalogue.",
+    "deps": [],
+    "related": [
+      26,
+      51,
+      52,
+      "semantics"
+    ],
+    "kind": "research",
+    "area": "area: ingestion",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "sdmx",
+    "title": "feat: implement the approved dimensional data adapter with bounded server-side filters",
+    "phase": "4 — coverage expansion",
+    "priority": "medium",
+    "goal": "Add verified official dimension-aware queries where the research establishes a clear coverage or efficiency benefit.",
+    "context": "This is a gated adapter implementation, not a promise that all TÜİK data will become retrievable. Existing public CSV/Excel access remains a valid route.",
+    "proposal": "Implement the route selected in @sdmx_design. Provide inspectable dimensions/code labels and typed bounded filters whose resolved codes are visible. Reuse stable identity/provenance and normalized observation contracts. If authenticated SDMX is selected, isolate credentials in environment/secret configuration, cache tokens in memory with refresh/retry, and expose a clear not-configured outcome. Internal DataBrowser use must retain explicit upstream-change risk.",
+    "acceptance": [
+      "Recorded structure/data fixtures cover code order, multilingual labels, constant dimensions, empty results and invalid codes.",
+      "Filters demonstrably reduce upstream selection where supported; returned row/byte caps and completeness are explicit.",
+      "Normalized values/attributes agree with overlapping verified CSV/Excel samples and retain source/version/coverage distinctions.",
+      "Auth, timeout, 401/403, 404-vs-empty and rate limiting have differentiated actionable outcomes without leaking secrets.",
+      "Existing tools/IDs retain documented behavior; any additive tool/schema choice is recorded and tested over MCP.",
+      "A small paced live check verifies the selected route; auth-only checks remain explicitly unverified until legitimate credentials are available."
+    ],
+    "sources": "The official endpoints and access profile chosen in @sdmx_design.",
+    "deps": [
+      "sdmx_design",
+      "semantics"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: ingestion",
+    "effort": "L",
+    "gate": "Proceed only if @sdmx_design demonstrates useful additional coverage/efficiency and approves a supported access profile."
+  },
+  {
+    "key": "geo_design",
+    "title": "research: verify regional indicator coverage and official geography boundaries",
+    "phase": "4 — coverage expansion",
+    "priority": "medium",
+    "goal": "Determine which regional comparisons and maps can be produced faithfully before shipping a map tool.",
+    "context": "The geographic portal and a competitor already expose boundary/data surfaces. A map that joins a province label to the wrong regional code can look persuasive while being statistically wrong.",
+    "proposal": "Audit a small cross-section of CIP indicators/boundaries and existing public regional tables. Distinguish province, district, NUTS-1/2/3 and changing boundary vintages. Record source/license/redistribution terms, code crosswalks, coordinate reference system and indicator geography availability. Check at least population, housing and one annual labour indicator; mark unavailable levels and years explicitly. Define a bounded pilot and fallback to table comparisons.",
+    "acceptance": [
+      "ADR contains dated endpoint/fixture evidence, access status and terms/source attribution for any retained boundaries.",
+      "Code-level joins are validated against official labels for a complete chosen geography level; ambiguous or unmatched codes are reported.",
+      "Period and level coverage is documented for each pilot indicator, including unavailable monthly/provincial combinations.",
+      "Boundary year, geometry validity, simplification and permissible payload size have a defined contract.",
+      "Define go/no-go for @maps and whether data/boundaries can be served without another credential or hosting dependency."
+    ],
+    "sources": "[Official CIP](https://cip.tuik.gov.tr/); official portal regional tables and classifications.",
+    "deps": [],
+    "related": [
+      "semantics"
+    ],
+    "kind": "research",
+    "area": "area: ingestion",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "maps",
+    "title": "feat: add a validated regional comparison and choropleth pilot",
+    "phase": "4 — visual expansion",
+    "priority": "medium",
+    "goal": "Provide an interpretable regional view with traceable values and explicit missing coverage.",
+    "context": "This issue implements only the geography/indicator combinations approved by the geography ADR. Generic labels or unverified shape files are insufficient.",
+    "proposal": "Add a bounded regional comparison and static choropleth output backed by ChartSpec and artifact manifests. Join by validated official codes and boundary vintage. Use explicit color bins, legend, units, observation period, missing-value class and source attribution. Provide exact-value table and alt summary alongside the map. Optional MCP App support can reuse this output later.",
+    "acceptance": [
+      "Chosen geography-level joins are complete or visibly report unmatched areas; national totals never appear as extra provinces.",
+      "Missing/suppressed values use a separate legend class rather than zero; absolute counts and per-capita/rates are labeled distinctly.",
+      "Only source-published or validated derived regional values are mapped; no interpolation to unavailable geography.",
+      "PNG/SVG output is visually inspected for readable Turkish labels, legend, bin boundaries, accessible palette and source note.",
+      "Underlying table, official code crosswalk, boundary version and bundle are retrievable.",
+      "Geometry/input/output budgets and unsupported indicators/levels produce clear errors."
+    ],
+    "sources": "Boundaries and eligible public indicators approved in @geo_design.",
+    "deps": [
+      "geo_design",
+      "charts"
+    ],
+    "related": [],
+    "kind": "enhancement",
+    "area": "area: mcp-tools",
+    "effort": "L",
+    "gate": "Proceed only if @geo_design establishes permitted boundary reuse, correct code mappings and adequate indicator coverage."
+  },
+  {
+    "key": "office",
+    "title": "research: validate Google Workspace and Microsoft 365 handoffs with one connector pilot",
+    "phase": "4 — institutional integrations",
+    "priority": "medium",
+    "goal": "Choose an integration that measurably reduces the last mile from a validated artifact to daily office work.",
+    "context": "Writing a local PPTX is not the same as editing a native Google Slides presentation or live Microsoft 365 file. Native APIs, upload/import, permissions and editability vary. Do not assume Microsoft Graph exposes a general PowerPoint authoring API.",
+    "proposal": "Compare three paths: portable files, host-composed use of existing Office/Drive connectors, and a dedicated optional adapter. Test PPTX/XLSX handoff into Google Drive/Slides/Sheets and OneDrive/Excel with synthetic or public evidence only; inspect chart/text/citation fidelity after import. Verify provider-specific supported APIs and least-privilege delegated scopes. Select one demand-backed pilot; defer the second provider if it adds little measured value.",
+    "acceptance": [
+      "Publish a capability/permission/round-trip matrix and source links to current provider APIs, including unsupported operations.",
+      "One selected provider has a reproducible create/import → read-back → update-existing-owned-artifact prototype, or a documented no-go with evidence.",
+      "Citations, numbers, Turkish text, chart editability and artifact/remote IDs survive the tested path; conversion losses are explicit.",
+      "Idempotent updates target the created file by ID and preserve user edits outside managed sections; failures do not duplicate files.",
+      "Credentials remain outside tool arguments/logs, target ownership is checked and writes/sharing are explicit operations; no auto-email/public sharing.",
+      "Decide whether host composition is sufficient before adding a second credentials/connector stack to the core server."
+    ],
+    "sources": "[Google Slides API](https://developers.google.com/workspace/slides/api/guides/overview), [Drive uploads](https://developers.google.com/workspace/drive/api/guides/manage-uploads), [Microsoft Graph](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).",
+    "deps": [
+      "pptx",
+      "xlsx"
+    ],
+    "related": [
+      "http_design"
+    ],
+    "kind": "research",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  },
+  {
+    "key": "multisource",
+    "title": "research: prototype a provenance-preserving TÜİK and official EVDS reporting workflow",
+    "phase": "4 — institutional integrations",
+    "priority": "low",
+    "goal": "Test cross-source value without turning the project into an unbounded replacement for every public-data MCP.",
+    "context": "TCMB launched official EVDS-MCP on 26 October 2026. Other projects already aggregate TÜİK, TCMB, BDDK and HMB. The useful distinction is a correct combined business output, not duplicating provider access indiscriminately.",
+    "proposal": "Prototype host-level composition or an explicit typed import boundary that combines one verified TÜİK series with one legitimate official EVDS series. Keep original provider IDs, retrieval times and licenses/attribution. Use matched periods and compatible concepts; validate external values and bound payloads. Choose one finance/industry task and compare utility/setup cost with the TÜİK-only report. Neither arbitrary network URLs nor third-party tool instructions become trusted data.",
+    "acceptance": [
+      "An ADR compares host composition, optional adapter and no integration, with a demand/maintenance decision.",
+      "A reproducible public/synthetic fixture demonstration traces every value to its provider; any authenticated live step is separately labeled and uses a legitimately configured credential.",
+      "Frequency, currency, index-base and seasonal-adjustment mismatches are refused or require an explicit recorded transformation.",
+      "No source priority is silently overwritten; conflicting values and different vintages remain inspectable.",
+      "Exported evidence identifies each original publisher and any redistributor; supported reuse/attribution is checked before publication.",
+      "Only create further provider implementation issues if this pilot demonstrates a concrete user benefit."
+    ],
+    "sources": "[TCMB official launch announcement](https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB%2BTR/Main%2BMenu/Duyurular/Basin/2026/DUY2026-46), official EVDS/TÜİK documentation and source terms.",
+    "deps": [
+      "semantics"
+    ],
+    "related": [
+      "office",
+      "analytics",
+      "reportspec"
+    ],
+    "kind": "research",
+    "area": "area: mcp-tools",
+    "effort": "M",
+    "gate": null
+  }
+]
