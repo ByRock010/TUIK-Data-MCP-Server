@@ -16,6 +16,7 @@ from tuik_mcp.services.catalog import CatalogService
 FIXTURES = Path(__file__).parent / "fixtures"
 MODE = sys.argv[1]
 STAMP = "2026-11-02T09:00:00.000Z"
+SERIES = "series:press:57987"
 
 
 def upstream(request):
@@ -61,14 +62,45 @@ def mock_cluster(request):
             "kind": "bulletin",
             "title": "İşgücü İstatistikleri",
             "source_url": "https://veriportali.tuik.gov.tr/tr/press/57987",
+            "series_id": SERIES,
+            "publication_date": "2026-10-15T10:00:00+03:00",
         },
         {
             "id": "press:57987:metadata",
             "kind": "metadata",
             "title": "İşgücü Metaveri",
             "source_url": "https://veriportali.tuik.gov.tr/tr/press/57987",
+            "series_id": SERIES,
         },
     ]
+    if "ids" in json.dumps(query["query"]):
+        # Follow-up of a grouped/hybrid search: highlights and series details (#78).
+        response = {
+            "hits": {
+                "hits": [
+                    {"_id": doc_id, "highlight": {"title": ["<em>İşgücü</em>"]}}
+                    for doc_id in query["query"]["bool"]["filter"][0]["ids"]["values"]
+                ]
+            }
+        }
+        if "aggs" in query:
+            latest = {k: sources[1][k] for k in ("id", "title", "publication_date", "source_url")}
+            response["aggregations"] = {
+                "series": {
+                    "releases": {
+                        "by_series": {
+                            "buckets": [
+                                {
+                                    "key": SERIES,
+                                    "doc_count": 1,
+                                    "latest": {"hits": {"hits": [{"_source": latest}]}},
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        return httpx.Response(200, json=response)
     return httpx.Response(
         200,
         json={

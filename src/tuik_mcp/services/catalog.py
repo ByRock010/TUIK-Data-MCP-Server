@@ -94,14 +94,19 @@ class CatalogService:
             return result
 
     async def search_index(
-        self, query: str, filters: SearchFilters, limit: int = 10, offset: int = 0
+        self,
+        query: str,
+        filters: SearchFilters,
+        limit: int = 10,
+        offset: int = 0,
+        group: bool = False,
     ) -> SearchHits:
         """Indexed search, else literal dataflows (datasets only) or the live portal."""
         if self.index is None:
             reason = "Indexed search is not configured (TUIK_OPENSEARCH_URL)"
         else:
             try:
-                return await self.index.search(query, filters, limit, offset)
+                return await self.index.search(query, filters, limit, offset, group)
             except BackendUnavailable as exc:
                 reason = f"Indexed search is unavailable ({exc})"
         if filters.kinds == ["dataset"]:
@@ -186,6 +191,8 @@ class CatalogService:
         published_before: str | None = None,
         downloadable_only: bool = False,
         live: bool = False,
+        group_series: bool = True,
+        series: str | None = None,
     ) -> IndexedSearchResponse:
         args = IndexedSearchInput(
             query=query,
@@ -196,10 +203,13 @@ class CatalogService:
             published_before=published_before,
             downloadable_only=downloadable_only,
             live=live,
+            group_series=group_series,
+            series=series,
         )
         filters = SearchFilters(
             kinds=[args.kind] if args.kind else [],
             themes=[args.theme] if args.theme else None,
+            series_ids=[args.series] if args.series else None,
             published_after=args.published_after,
             published_before=args.published_before,
             downloadable=True if args.downloadable_only else None,
@@ -207,7 +217,7 @@ class CatalogService:
         hits = (
             await self.portal_search.search(args.query, filters, args.limit)
             if args.live
-            else await self.search_index(args.query, filters, args.limit)
+            else await self.search_index(args.query, filters, args.limit, group=args.group_series)
         )
         warnings = list(hits.warnings)
         if args.theme and hits.backend == "opensearch" and hits.total == 0:
@@ -249,6 +259,8 @@ class CatalogService:
                     formats=hit.formats,
                     page=hit.page,
                     sheet=hit.sheet,
+                    series_id=hit.series_id,
+                    series=hit.series,
                 )
                 for hit in hits.hits
             ],

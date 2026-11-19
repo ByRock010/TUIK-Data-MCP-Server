@@ -43,8 +43,11 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
             "published_before",
             "downloadable_only",
             "live",
+            "group_series",
+            "series",
         } == set(properties)
         assert properties["live"]["default"] is False
+        assert properties["group_series"]["default"] is True
         for arguments in [
             {"kind": "publication"},
             {"limit": 51},
@@ -56,18 +59,35 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
             {"query": " "},
             {"published_after": "2026-02-30"},
             {"published_after": "2026-11-02", "published_before": "2025-01-01"},
+            {"series": "press:57987"},
         ]:
             invalid = await client.call_tool("search_tuik", {"query": "işsizlik", **arguments})
             assert invalid.structuredContent["code"] == "invalid_input"
         found = await client.call_tool("search_tuik", {"query": "issizlik", "limit": 3})
         data = found.structuredContent
         assert not found.isError and data["source"] == "index" and data["backend"] == "opensearch"
-        assert data["total"] == 3 and data["truncated"] is False
+        # Totals and facets count documents; the bulletin's metadata folds into it (#78).
+        assert data["total"] == 3 and data["truncated"] is True
         assert data["facets"]["kind"]["counts"] == {"dataset": 1, "bulletin": 1, "metadata": 1}
         assert data["indexed_at"]
+        assert [hit["id"] for hit in data["results"]] == [
+            "flow:DF_ALTINSIZ_DTH+V1.0",
+            "press:57987",
+        ]
+        dataset, bulletin = data["results"]
+        assert dataset["series_id"] is None and dataset["series"] is None
+        assert bulletin["series_id"] == "series:press:57987"
+        assert bulletin["series"]["collapsed"] == 1 and bulletin["series"]["releases"] == 1
+        assert bulletin["series"]["latest"]["id"] == "press:57987"
         for hit in data["results"]:
             assert hit["score"] == 2.5 and hit["highlights"]["title"]
             assert hit["source_url"] and hit["retrieved_at"] and hit["indexed_at"]
+        separate = await client.call_tool(
+            "search_tuik", {"query": "issizlik", "limit": 3, "group_series": False}
+        )
+        data = separate.structuredContent
+        assert len(data["results"]) == 3 and data["truncated"] is False
+        assert all(hit["series"] is None for hit in data["results"])
         ids = [hit["id"] for hit in data["results"]]
     # No search/cache in this server session: each ID must resolve from upstream fixtures.
     async with session("no-index") as fresh:
@@ -85,7 +105,8 @@ async def test_abbreviation_stdio_reports_lexical_ranking_without_loading_the_mo
         assert not result.isError
         assert data["backend"] == "opensearch" and data["source"] == "index"
         assert data["ranking"] == "lexical" and data["total"] == 3
-        assert len(data["results"]) == 3 and data["facets"]["kind"]["counts"]
+        assert len(data["results"]) == 2 and data["facets"]["kind"]["counts"]
+        assert data["results"][1]["series"]["collapsed"] == 1
         assert data["indexed_at"] and data["results"][0]["source_url"]
         assert len(data["warnings"]) == 1 and "abbreviation" in data["warnings"][0]
 
