@@ -42,6 +42,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Dataset-filtered searches (`search_tuik(kind="dataset")`, `search_tuik_datasets`)
+  use hybrid ranking when the index has vectors (#80, ADR 0005 decision 10). On a
+  pre-registered, source-reviewed evaluation (1,887 pairs, one index build) the
+  served equal-weight hybrid with abbreviation routing raised dataset nDCG@10 from
+  0.655 to 0.690 and MRR@10 from 0.788 to 0.872; synonym, ASCII and typo queries
+  regress slightly. `evaluate_search.py collect-datasets` reproduces the rankings.
+
 - Retain existing PR review approvals after new commits on `develop` and `master`.
   The required approval count, CI checks and conversation-resolution requirement
   remain unchanged; the checked-in ruleset payloads match this policy.

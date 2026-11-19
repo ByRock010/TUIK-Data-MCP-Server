@@ -49,15 +49,14 @@ evaluation set.
    - semantic search is enabled (`TUIK_SEMANTIC_SEARCH`, default true);
    - the extra and the model files are present;
    - the served index's model equals the server's;
-   - no `dataset`, `table` or `document_chunk` kind is requested;
+   - no `table` or `document_chunk` kind is requested (dataset filters are hybrid
+     since decision 10);
    - the entire query is not a curated bare statistical abbreviation (decision 9);
    - `offset + limit ≤ 50`.
 
    Otherwise the request is lexical, exactly as before. A warning is added when
    vectors exist but cannot be used, or when a hybrid request fails.
-   `search_tuik_datasets` stays lexical: dataset-filtered retrieval was not measured,
-   and datasets ranked lower in hybrid top tens. Responses report
-   `ranking: "lexical" | "hybrid"`.
+   Responses report `ranking: "lexical" | "hybrid"`.
 8. **Lexical evidence required (amendment, 2026-11-06):** k-NN always returns its
    50 nearest neighbours, so a gibberish query (`xqzvkj`) used to return 50
    unrelated import-index datasets. A similarity floor cannot fix this: on the frozen
@@ -88,6 +87,19 @@ evaluation set.
    No new retrieval, embeddings, judgments or live source review are claimed.
    NACE and spelling variants have routing tests but are outside the six-query
    abbreviation relevance measurement. The historical pool is not held out.
+
+10. **Dataset-filtered searches are hybrid (amendment, 2026-11-19, #80):**
+    `search_tuik(kind="dataset")` and `search_tuik_datasets` were lexical because
+    only mixed-kind search had been measured. A
+    [pre-registered evaluation](../verification/issue-80-dataset-hybrid-plan-2026-11-19.md)
+    ranked the frozen corpus with the dataset filter inside every query, all systems
+    from one index build. On 1,887 reviewed pairs, dataset-filtered nDCG@10 was
+    0.6549 lexical, 0.6854 equal RRF, 0.7138 lexical-weighted 0.7/0.3 and **0.6898**
+    for the served combination (equal RRF with decision 9's abbreviation routing);
+    MRR@10 rose from 0.7880 to 0.8715. The fixed rule adopts the served combination,
+    so `dataset` left `LEXICAL_ONLY_KINDS`. The 0.7/0.3 weighting scored higher but
+    cannot be adopted for datasets alone. Synonym, ASCII and typo queries regress
+    slightly; see the [report](../verification/issue-80-dataset-hybrid-2026-11-19.md).
 
 ## Consequences
 

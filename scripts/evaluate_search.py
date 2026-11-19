@@ -1023,7 +1023,8 @@ async def collect_datasets(suite, documents, output, url, *, embedder, store=Non
 
     One disposable index with the configured model's vectors serves every system, so
     hybrid rankings are not confounded by index-build differences. The lexical
-    system is the served OpenSearchBackend.search; hybrid systems use the production
+    system is OpenSearchBackend.search without an embedder (the pre-#80 served
+    dataset path); hybrid systems use the production
     request and execution (lexical-evidence guard, highlights) with the filter in
     both subqueries. The routed system is what production would serve if datasets
     left LEXICAL_ONLY_KINDS: bare abbreviations lexical, everything else equal RRF.
@@ -1107,6 +1108,8 @@ async def collect_datasets(suite, documents, output, url, *, embedder, store=Non
         if await store.count(name) != len(payloads):
             raise IndexerError("Evaluation index count does not match the frozen corpus")
         backend = OpenSearchBackend(store, name, embedder)
+        # The served lexical planner (abbreviation ordering included), without vectors.
+        lexical = OpenSearchBackend(store, name)
         systems = report["systems"]
         for system_name in (*DATASET_SYSTEMS, "dataset_hybrid_routed"):
             systems[system_name] = {
@@ -1123,7 +1126,7 @@ async def collect_datasets(suite, documents, output, url, *, embedder, store=Non
             vector = await asyncio.to_thread(embedder.query, text)
             for system_name, weights in DATASET_SYSTEMS.items():
                 if weights is None:
-                    hits = await backend.search(text, filters, 10, 0)
+                    hits = await lexical.search(text, filters, 10, 0)
                 else:
                     body = build_hybrid_query(text, filters, 10, 0, vector, weights=weights)
                     hits = await backend.execute(text, body, 10, 0, "hybrid", [])
