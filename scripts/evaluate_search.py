@@ -31,7 +31,7 @@ from tuik_mcp.search.backend import (
 )
 from tuik_mcp.search.crawl import atomic_write
 from tuik_mcp.search.documents import IndexDocument
-from tuik_mcp.search.embeddings import DOCUMENT_CHARS, Embedder, document_text, embeddable
+from tuik_mcp.search.embeddings import DOCUMENT_CHARS, MODEL, Embedder, document_text, embeddable
 from tuik_mcp.search.indexer import IndexerError, OpenSearchStore, prepare
 from tuik_mcp.search.schema import index_definition
 from tuik_mcp.services.catalog import CatalogService
@@ -768,6 +768,104 @@ def vector_digest(vectors):
     return hashlib.sha256(json.dumps(vectors, separators=(",", ":")).encode()).hexdigest()
 
 
+async def route_abbreviations(suite, lexical_run, hybrid_run):
+    """Replay production routing over frozen rankings, without retrieval or new grades.
+
+    A placeholder vector exercises the planner only; it is never sent to a cluster.
+    Ranking-defining requests, analysis and corpus identity must match the archives.
+    """
+    validate_suite(suite)
+    for run in (lexical_run, hybrid_run):
+        validate_run(run, suite)
+    fingerprint = lexical_run.get("corpus_sha256")
+    if not fingerprint or fingerprint != hybrid_run.get("corpus_sha256"):
+        raise ValueError("Routing replay requires matching corpus fingerprints")
+    if not lexical_run.get("engine") or lexical_run["engine"] != hybrid_run.get("engine"):
+        raise ValueError("Routing replay requires the same recorded search engine")
+    names = ("multi_field_synonyms", "hybrid_rrf_equal")
+    sources = {
+        name: run["systems"][name]
+        for name, run in zip(names, (lexical_run, hybrid_run), strict=True)
+    }
+    lexical, hybrid = (sources[name] for name in names)
+    corpus_ids = lexical.get("corpus_ids")
+    if not corpus_ids or corpus_ids != hybrid.get("corpus_ids"):
+        raise ValueError("Routing replay requires identical nonempty corpus IDs")
+    if not lexical.get("corpus") or lexical["corpus"] != hybrid.get("corpus"):
+        raise ValueError("Routing replay requires the same declared corpus")
+    current = index_definition(MODEL)
+
+    def rank_fields(body):
+        return {
+            key: body[key]
+            for key in ("query", "sort", "from", "size", "search_pipeline")
+            if key in body
+        }
+
+    for name, system in sources.items():
+        definition = system["definition"]
+        if definition["settings"]["analysis"] != current["settings"]["analysis"]:
+            raise ValueError("Archived analysis differs from production")
+        for field in ("title", "description", "body", "kind", "theme", "id", "publication_date"):
+            if (
+                definition["mappings"]["properties"][field]
+                != current["mappings"]["properties"][field]
+            ):
+                raise ValueError(f"Archived ranking mapping differs for {field}")
+        template = variant_query(name, "__QUERY__", ["__QUERY_VECTOR__"])
+        if rank_fields(system["query_template"]) != rank_fields(template):
+            raise ValueError("Archived ranking request differs from production")
+    if hybrid["definition"]["mappings"]["_meta"].get("embedding_model") != MODEL:
+        raise ValueError("Archived embedding model differs from production")
+
+    class ReplayEmbedder:
+        model = MODEL
+
+        def query(self, text):
+            return [0.0]  # Placeholder for request comparison, never a retrieval vector.
+
+    class ReplayStore:
+        async def meta(self, alias):
+            return {alias: {"embedding_model": MODEL}}
+
+    planner = OpenSearchBackend(ReplayStore(), "archived-routing-only", ReplayEmbedder())
+    routed = {
+        "corpus": lexical["corpus"],
+        "corpus_ids": corpus_ids,
+        "results": {},
+        "scores": {},
+        "routing": {},
+    }
+    for query in suite["queries"]:
+        qid, text = query["id"], query["text"]
+        body, warnings = await planner.plan(text, SearchFilters(), 10, 0)
+        name = "hybrid_rrf_equal" if "hybrid" in body["query"] else "multi_field_synonyms"
+        if rank_fields(body) != rank_fields(variant_query(name, text, [0.0])):
+            raise ValueError(f"Production routing changed the archived ranking request for {qid}")
+        if name == "hybrid_rrf_equal" and not lexical["results"][qid]:
+            raise ValueError(f"Cannot replay the lexical-evidence guard for {qid}")
+        source = sources[name]
+        routed["results"][qid] = deepcopy(source["results"][qid])
+        routed["scores"][qid] = deepcopy(source["scores"][qid])
+        routed["routing"][qid] = {"source_system": name, "warnings": warnings}
+    report = {
+        "version": 1,
+        "status": "ok",
+        "method": "archived_routing_replay",
+        "replayed_at": datetime.now(UTC).isoformat(),
+        "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "corpus_sha256": fingerprint,
+        "engine": lexical_run["engine"],
+        "queries": lexical_run["queries"],
+        "systems": {"hybrid_abbreviation_lexical": routed},
+        "limitations": "Reuses historical rankings and reviewed grades; no fresh retrieval, "
+        "embeddings, source review or independent human validation.",
+    }
+    validate_run(report, suite)
+    return report
+
+
 async def collect_index(
     suite, documents, output, url, *, store=None, variants=INDEX_VARIANTS, embedder=None
 ):
@@ -914,7 +1012,16 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "command",
-        choices=("collect", "collect-index", "pool", "judge", "merge", "score", "score-ai"),
+        choices=(
+            "collect",
+            "collect-index",
+            "route-abbreviations",
+            "pool",
+            "judge",
+            "merge",
+            "score",
+            "score-ai",
+        ),
     )
     parser.add_argument("--suite", type=Path, default=Path("tests/fixtures/search_eval.json"))
     parser.add_argument("--runs", type=Path, nargs="*", default=[])
@@ -974,6 +1081,16 @@ def main(argv=None):
     if args.output.resolve() in {path.resolve() for path in inputs if path is not None}:
         parser.error("Output must not overwrite input evidence or judgment files")
     suite = validate_suite(read_json(args.suite))
+    if args.command == "route-abbreviations":
+        if len(args.runs) != 2 or args.resume:
+            parser.error("route-abbreviations requires lexical and hybrid --runs, without --resume")
+        report = asyncio.run(route_abbreviations(suite, *(read_json(path) for path in args.runs)))
+        report["inputs"] = [
+            {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+            for path in (args.suite, *args.runs)
+        ]
+        write_json(args.output, report)
+        return 0
     if args.command == "collect-index":
         if not args.documents or not args.url:
             parser.error("collect-index requires --documents and --url")

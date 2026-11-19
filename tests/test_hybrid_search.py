@@ -12,7 +12,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from tuik_mcp.search import embeddings
+from tuik_mcp.search import analysis_settings, embeddings
 from tuik_mcp.search.backend import (
     HYBRID_DEPTH,
     HYBRID_WEIGHTS,
@@ -23,6 +23,7 @@ from tuik_mcp.search.backend import (
     build_highlight_query,
     build_hybrid_query,
     build_query,
+    is_statistical_abbreviation,
 )
 from tuik_mcp.search.documents import IndexDocument
 from tuik_mcp.search.embeddings import (
@@ -90,7 +91,10 @@ def metadata_documents():
             id="press:57987",
             kind="bulletin",
             title="İşgücü İstatistikleri, Ağustos 2026",
-            body="Mevsim etkisinden arındırılmış işsizlik oranı %8,5 oldu.",
+            body=(
+                "Hanehalkı İşgücü Araştırması. "
+                "Mevsim etkisinden arındırılmış işsizlik oranı %8,5 oldu."
+            ),
             source_url="https://veriportali.tuik.gov.tr/tr/press/57987",
         ),
         IndexDocument(
@@ -312,6 +316,110 @@ async def test_failed_highlight_request_keeps_the_ranked_hits_with_a_warning():
     assert hits.hits[0].highlights == {} and hits.total == 1
     (warning,) = hits.warnings
     assert warning.startswith("Highlights are unavailable")
+
+
+@pytest.mark.parametrize(
+    "query",
+    [
+        "TÜFE",
+        "tufe",
+        "U\u0308FE",
+        "UFE",
+        "Yİ-ÜFE",
+        "yi-ufe",
+        "YI UFE",
+        "  Yİ  ÜFE\t",
+        "GSYH",
+        "HİA",
+        "HIA",
+        "hia",
+        "ADNKS",
+        "adnks",
+        "NACE",
+    ],
+)
+async def test_known_abbreviations_skip_model_access_and_keep_lexical_results(query):
+    store, requests = cluster()
+    embedder = FakeEmbedder(fail=True)
+
+    async def unexpected_meta(name):
+        pytest.fail("An abbreviation must not require vector-model discovery")
+
+    store.meta = unexpected_meta
+    filters = SearchFilters(
+        kinds=["bulletin"],
+        themes=["İstihdam"],
+        downloadable=True,
+        published_after="2026-01-01",
+        published_before="2026-11-19",
+    )
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", embedder).search(
+            query, filters, 5, 10
+        )
+    finally:
+        await store.close()
+    expected = build_query(query, filters, 5, 10)
+    expected["sort"] = [{"_score": "desc"}, {"id": "asc"}]
+    assert requests == [expected]
+    assert hits.ranking == "lexical" and hits.total == 1 and hits.facets is not None
+    assert hits.hits[0].id == "press:57987" and hits.hits[0].source_url
+    assert hits.limit == 5 and hits.offset == 10 and embedder.queries == []
+    assert len(hits.warnings) == 1 and "abbreviation" in hits.warnings[0]
+
+
+@pytest.mark.parametrize(
+    "query",
+    [
+        "HİA işsizlik",
+        "TÜFE 2026",
+        "hanehalkı işgücü araştırması",
+        "TÜİK",
+        "ENERJİ",
+        "hia猫",
+        "XHİA",
+        "Y İ ÜFE",
+        "tüfe/üfe",
+    ],
+)
+async def test_other_queries_keep_hybrid_ranking_and_the_original_embedding(query):
+    store, requests = cluster()
+    embedder = FakeEmbedder()
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", embedder).search(
+            query, SearchFilters(), 10
+        )
+    finally:
+        await store.close()
+    assert hits.ranking == "hybrid" and hits.warnings == []
+    assert embedder.queries == [query]
+    assert [request_kind(body) for body in requests] == ["hybrid", "highlight"]
+
+
+def test_abbreviation_routes_match_curated_equivalence_rules_only():
+    rules = analysis_settings()["analysis"]["filter"]["tuik_tr_synonyms"]["synonyms"]
+    for rule in rules:
+        if "=>" in rule:
+            assert not is_statistical_abbreviation(rule.split("=>")[0].strip())
+            continue
+        alias, expansion = map(str.strip, rule.split(","))
+        assert is_statistical_abbreviation(alias)
+        assert not is_statistical_abbreviation(expansion)
+
+
+@pytest.mark.parametrize("embedder", [None, FakeEmbedder(fail=True)])
+@pytest.mark.parametrize("filters", [SearchFilters(), SearchFilters(kinds=["dataset"])])
+async def test_abbreviation_order_is_stable_without_semantic_dependencies(embedder, filters):
+    store, requests = cluster(model=None)
+    try:
+        hits = await OpenSearchBackend(store, "tuik-resources", embedder).search(
+            "ADNKS", filters, 10, 50
+        )
+    finally:
+        await store.close()
+    assert hits.ranking == "lexical" and hits.hits and requests[0]["from"] == 50
+    assert requests[0]["sort"] == [{"_score": "desc"}, {"id": "asc"}]
+    assert bool(hits.warnings) == (embedder is not None and not filters.kinds)
 
 
 async def test_hybrid_without_lexical_matches_returns_no_semantic_neighbours():
@@ -604,6 +712,10 @@ async def test_real_cluster_hybrid_query_with_inline_rrf_pipeline():
         content = await backend.search("tablo", SearchFilters(kinds=["document_chunk"]), 10)
         assert content.ranking == "lexical"
         assert [hit.parent_id for hit in content.hits] == ["press:57987:file:isgucu~0123456789"]
+        abbreviation = await backend.search("HİA", SearchFilters(), 10)
+        assert abbreviation.ranking == "lexical" and abbreviation.total > 0
+        assert any(hit.id == "press:57987" for hit in abbreviation.hits)
+        assert any("abbreviation" in warning for warning in abbreviation.warnings)
     finally:
         try:
             for name in await store.versions(alias):
