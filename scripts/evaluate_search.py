@@ -31,6 +31,7 @@ from tuik_mcp.search.backend import (
     SearchFilters,
     build_hybrid_query,
     build_query,
+    is_statistical_abbreviation,
 )
 from tuik_mcp.search.crawl import atomic_write
 from tuik_mcp.search.documents import IndexDocument
@@ -420,6 +421,9 @@ def system_metrics(pooled, runs, grades, series=None):
     systems = {}
     documents = pooled["documents"]
     for run in runs:
+        # A run collected under a kind filter cannot return other kinds, so its
+        # ideal (overall and per category) uses only those kinds' grades (#80).
+        allowed = ((run.get("settings") or {}).get("filters") or {}).get("kinds")
         for name, system in run["systems"].items():
             if name in systems:
                 raise ValueError(f"Duplicate system name: {name}; use distinct names for variants")
@@ -430,7 +434,8 @@ def system_metrics(pooled, runs, grades, series=None):
                 judgments = {
                     key: value
                     for key, value in grades[qid].items()
-                    if eligible is None or key in eligible
+                    if (eligible is None or key in eligible)
+                    and (not allowed or documents[key]["resource_type"] in allowed)
                 }
                 hits = system["results"][qid][:10]
                 row = graded_metrics(hits, judgments)
@@ -1216,6 +1221,173 @@ async def collect_production(suite, documents, output, url, *, embedder, store=N
     return 0 if report["status"] == "ok" else 1
 
 
+# Dataset-filtered systems (#80): name -> hybrid weights, or None for the served
+# lexical search. "dataset_hybrid_routed" combines lexical and equal per query.
+DATASET_SYSTEMS = {
+    "dataset_lexical": None,
+    "dataset_hybrid_rrf_lexical_weighted": (0.7, 0.3),
+    "dataset_hybrid_rrf_equal": (0.5, 0.5),
+}
+
+
+async def collect_datasets(suite, documents, output, url, *, embedder, store=None):
+    """Rank the frozen corpus with the dataset filter inside every query (#80).
+
+    One disposable index with the configured model's vectors serves every system, so
+    hybrid rankings are not confounded by index-build differences. The lexical
+    system is OpenSearchBackend.search without an embedder (the pre-#80 served
+    dataset path); hybrid systems use the production
+    request and execution (lexical-evidence guard, highlights) with the filter in
+    both subqueries. The routed system is what production would serve if datasets
+    left LEXICAL_ONLY_KINDS: bare abbreviations lexical, everything else equal RRF.
+    """
+    validate_suite(suite)
+    filters = SearchFilters(kinds=["dataset"])
+    stamp = datetime.now(UTC)
+    documents = list(documents)
+    payloads, kinds = prepare(documents, stamp)
+    originals = {document.id: document.model_dump(mode="json") for document in documents}
+    # Every system is filtered to datasets, so only datasets are eligible: the
+    # overall and per-category ideals then use dataset grades alone (#80 review).
+    corpus_ids = sorted(document["id"] for document in payloads if document["kind"] == "dataset")
+    name = "tuik-evaluation-" + uuid4().hex
+    definition = index_definition(embedder.model)
+    report = {
+        "version": 1,
+        "status": "running",
+        "method": "dataset_filtered_production_requests",
+        "collected_at": stamp.isoformat(),
+        "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "corpus_sha256": corpus_fingerprint(documents),
+        "counts": dict(kinds),
+        "queries": {q["id"]: q["text"] for q in suite["queries"]},
+        "settings": {
+            "filters": filters.model_dump(mode="json"),
+            "limit": 10,
+            "offset": 0,
+            "hybrid_depth": HYBRID_DEPTH,
+            "rank_constant": HYBRID_RANK_CONSTANT,
+            "weights": {k: v for k, v in DATASET_SYSTEMS.items() if v},
+        },
+        "systems": {},
+        "cleanup": {},
+        "errors": {},
+    }
+    own_store = store is None
+    store = store or OpenSearchStore(url)
+    created = False
+
+    def record(hits):
+        return [
+            {
+                "id": stable_id(hit.id),
+                "title": hit.title,
+                "resource_type": hit.kind,
+                "source_url": hit.source_url,
+                "description": originals[hit.id].get("description"),
+                "theme": hit.theme,
+                "publication_date": hit.publication_date,
+            }
+            for hit in hits.hits
+        ]
+
+    try:
+        report["engine"] = (await store._request("GET", "")).json()["version"]
+        started = datetime.now(UTC)
+        targets = [payload for payload in payloads if embeddable(payload)]
+        vectors = await asyncio.to_thread(
+            embedder.documents, [document_text(payload) for payload in targets]
+        )
+        vectors = dict(zip((payload["id"] for payload in targets), vectors, strict=True))
+        report["embeddings"] = {
+            "model": embedder.model,
+            "dimension": embedder.dimension,
+            "document_chars": DOCUMENT_CHARS,
+            "documents": len(vectors),
+            "documents_sha256": vector_digest([vectors[key] for key in sorted(vectors)]),
+            "seconds": round((datetime.now(UTC) - started).total_seconds(), 3),
+        }
+        loaded = [
+            {**payload, "embedding": vectors[payload["id"]]}
+            if payload["id"] in vectors
+            else payload
+            for payload in payloads
+        ]
+        await store._request("PUT", name, json=definition)
+        created = True
+        if failures := await store.bulk(name, loaded):
+            raise IndexerError("Evaluation documents were rejected", failures)
+        await store.refresh(name)
+        if await store.count(name) != len(payloads):
+            raise IndexerError("Evaluation index count does not match the frozen corpus")
+        backend = OpenSearchBackend(store, name, embedder)
+        # The served lexical planner (abbreviation ordering included), without vectors.
+        lexical = OpenSearchBackend(store, name)
+        systems = report["systems"]
+        for system_name in (*DATASET_SYSTEMS, "dataset_hybrid_routed"):
+            systems[system_name] = {
+                "corpus": "frozen_metadata_snapshot",
+                "corpus_ids": corpus_ids,
+                "index": name,
+                "definition": definition,
+                "results": {},
+                "scores": {},
+                "routing": {},
+            }
+        for query in suite["queries"]:
+            qid, text = query["id"], query["text"]
+            vector = await asyncio.to_thread(embedder.query, text)
+            for system_name, weights in DATASET_SYSTEMS.items():
+                if weights is None:
+                    hits = await lexical.search(text, filters, 10, 0)
+                else:
+                    body = build_hybrid_query(text, filters, 10, 0, vector, weights=weights)
+                    hits = await backend.execute(text, body, (10, 0, False), "hybrid", [])
+                if hits.backend != "opensearch" or hits.total is None:
+                    raise IndexerError(f"Unexpected search response for {qid}")
+                system = systems[system_name]
+                system["results"][qid] = record(hits)
+                system["scores"][qid] = [hit.score for hit in hits.hits]
+                system["routing"][qid] = {"ranking": hits.ranking, "warnings": hits.warnings}
+            source = (
+                "dataset_lexical"
+                if is_statistical_abbreviation(text)
+                else "dataset_hybrid_rrf_equal"
+            )
+            routed = systems["dataset_hybrid_routed"]
+            routed["results"][qid] = deepcopy(systems[source]["results"][qid])
+            routed["scores"][qid] = deepcopy(systems[source]["scores"][qid])
+            routed["routing"][qid] = {"source_system": source}
+            write_json(output, report)
+        report["status"] = "ok"
+        validate_run(report, suite)
+    except Exception as exc:
+        report["status"] = "error"
+        report["errors"]["collection"] = {"type": type(exc).__name__, "message": str(exc)}
+    finally:
+        report["finished_at"] = datetime.now(UTC).isoformat()
+        try:
+            if created:
+                try:
+                    await store.delete(name)
+                    report["cleanup"][name] = "deleted"
+                except Exception as exc:
+                    # Keep the rankings for diagnosis, but a run that leaves its
+                    # disposable index on the cluster is not a successful collection.
+                    report["cleanup"][name] = str(exc)
+                    report["status"] = "error"
+                    report["errors"]["cleanup"] = {
+                        "type": type(exc).__name__,
+                        "message": f"Disposable index {name} was not deleted: {exc}",
+                    }
+            if own_store:
+                await store.close()
+        finally:
+            write_json(output, report)
+    return 0 if report["status"] == "ok" else 1
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -1224,6 +1396,7 @@ def main(argv=None):
             "collect",
             "collect-index",
             "collect-production",
+            "collect-datasets",
             "route-abbreviations",
             "pool",
             "judge",
@@ -1325,6 +1498,18 @@ def main(argv=None):
             parser.error("collect-production requires --documents and --url, without --resume")
         return asyncio.run(
             collect_production(
+                suite,
+                load_documents(args.documents),
+                args.output,
+                args.url,
+                embedder=Embedder(cache_dir=Settings.from_env().embedding_cache_dir),
+            )
+        )
+    if args.command == "collect-datasets":
+        if not args.documents or not args.url or args.resume:
+            parser.error("collect-datasets requires --documents and --url, without --resume")
+        return asyncio.run(
+            collect_datasets(
                 suite,
                 load_documents(args.documents),
                 args.output,

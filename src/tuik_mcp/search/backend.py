@@ -55,9 +55,10 @@ NO_LEXICAL_MATCH = (
     "No indexed document contains the query's words or a close spelling; semantic "
     "neighbours alone are not returned. Try other Turkish terms or live=true."
 )
-# Kinds whose filtered searches were neither measured nor vector-indexed stay lexical:
-# datasets ranked lower in hybrid top tens, and file content has no vectors.
-LEXICAL_ONLY_KINDS = frozenset(("dataset", *CONTENT_KINDS))
+# File content has no vectors, so content searches stay lexical. Dataset-filtered
+# searches are hybrid since #80: on the reviewed dataset-filtered pool, routed hybrid
+# nDCG@10 was 0.6898 against 0.6549 lexical (MRR@10 0.8715 vs 0.7880).
+LEXICAL_ONLY_KINDS = frozenset(CONTENT_KINDS)
 # Bare curated acronyms have lexical synonyms but unreliable E5 neighbours (#79).
 # These are the equivalence-rule aliases in synonyms.txt, with Turkish/ASCII forms.
 LEXICAL_ABBREVIATIONS = frozenset(
@@ -348,7 +349,7 @@ def build_hybrid_query(
 
 
 def semantic_scope(filters: SearchFilters) -> bool:
-    """Unfiltered metadata searches (the evaluated setting) and bulletin/metadata kinds."""
+    """Metadata searches, unfiltered or by kind (#21, #80); file content stays lexical."""
     return not set(filters.kinds) & LEXICAL_ONLY_KINDS
 
 

@@ -194,8 +194,10 @@ async def search_tuik_datasets(
     include datasets without exports. Optional theme matches the full major theme name
     (case-insensitive), not a theme ID. backend reports the matcher: "opensearch" ranks
     the metadata index with Turkish stemming, ASCII folding and abbreviations such as
-    TÜFE; "literal" requires every query word in the title, description or theme and
-    ranks exact titles first. warnings explain any fallback to literal matching.
+    TÜFE (ranking="hybrid" when the index has vectors: meaning also ranks, but a query
+    sharing no word with any dataset returns none); "literal" requires every query
+    word in the title, description or theme and ranks exact titles first. warnings
+    explain any fallback to literal matching.
     """
     return reply(
         await respond(service(ctx).search_datasets(query, limit, downloadable_only, theme))

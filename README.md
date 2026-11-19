@@ -195,7 +195,8 @@ matching, without stemming or semantic search. Optional `theme` must match the f
 major theme name, case-insensitively; use `list_tuik_themes` to discover names.
 When an OpenSearch index is configured (see below), the same tool ranks the index
 instead (`backend: "opensearch"`) with Turkish stemming, ASCII folding and
-abbreviation synonyms; results still resolve through the live catalog, and any
+abbreviation synonyms, plus semantic ranking when the index has vectors
+(`ranking: "hybrid"`, #80); results still resolve through the live catalog, and any
 fallback to literal matching is reported in `warnings`.
 
 By default only datasets advertising public exports are included. Set
@@ -708,8 +709,7 @@ these settings:
 - the index has no vectors;
 - the extra or model is missing (with a warning);
 - `TUIK_SEMANTIC_SEARCH=false`;
-- the request filters to `dataset`, `table` or `document_chunk`;
-- `search_tuik_datasets`;
+- the request filters to `table` or `document_chunk` (file content has no vectors);
 - a bare curated abbreviation: TÜFE, ÜFE, Yİ-ÜFE, GSYH, HİA, ADNKS or NACE
   (including case-insensitive ASCII spellings and `Yİ ÜFE`);
 - results beyond the first 50.

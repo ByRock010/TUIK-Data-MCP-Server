@@ -271,7 +271,9 @@ def cluster(model=MODEL, fail_hybrid=False, models=None, lexical_matches=1, fail
         ("other/model", SearchFilters(), 0, False, "lexical", "holds other/model vectors"),
         (MODEL, SearchFilters(), 45, False, "lexical", "first 50 results"),
         (MODEL, SearchFilters(), 0, True, "lexical", "Semantic ranking is unavailable"),
-        (MODEL, SearchFilters(kinds=["dataset"]), 0, False, "lexical", None),
+        # Dataset-filtered searches are hybrid since #80.
+        (MODEL, SearchFilters(kinds=["dataset"]), 0, False, "hybrid", None),
+        (MODEL, SearchFilters(kinds=["dataset", "bulletin"]), 0, False, "hybrid", None),
         (MODEL, SearchFilters(kinds=["table"]), 0, False, "lexical", None),
     ],
 )
@@ -419,7 +421,7 @@ async def test_abbreviation_order_is_stable_without_semantic_dependencies(embedd
         await store.close()
     assert hits.ranking == "lexical" and hits.hits and requests[0]["from"] == 50
     assert requests[0]["sort"] == [{"_score": "desc"}, {"id": "asc"}]
-    assert bool(hits.warnings) == (embedder is not None and not filters.kinds)
+    assert bool(hits.warnings) == (embedder is not None)
 
 
 async def test_hybrid_without_lexical_matches_returns_no_semantic_neighbours():
