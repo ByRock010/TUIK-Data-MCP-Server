@@ -20,7 +20,7 @@ verification and pending reviewed promotion/publication.
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
-| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra) |
+| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -394,6 +394,15 @@ title, unit, retrieval date and the resource's page. Download URLs change within
 hours, so the summary's `source_url` names the downloaded file instead. `chart="bar"` is meant for a few points
 (a warning appears above 60). Bulletins with related datasets return
 `related_datasets`, and PDFs return `download_available`; neither includes an image.
+
+With `save: true` the chart is also stored as an immutable report artifact for the user to
+download. It holds `chart.png`, `chart-data.csv` (the plotted values), `README.txt` (the
+citation and warnings) and the unchanged source file. `manifest.json` pins the source's
+SHA-256, retrieval time and the exact selection. The result lists each file as an MCP
+resource link (`tuik-artifact://<id>/<name>`, read with `resources/read`). On the computer
+running the server, `tuik-mcp-artifacts export <id> --to <directory>` copies a bundle.
+Bundles expire after a day by default and are never refreshed in place. See
+[report artifacts](docs/ARTIFACTS.md) for storage, budgets and safety rules.
 
 ## Read PDF documents
 

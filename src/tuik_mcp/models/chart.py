@@ -4,6 +4,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from tuik_mcp.artifacts import ArtifactSummary
+
 from .common import Provenance
 from .dataset import DownloadLink, RelatedDataset
 
@@ -46,5 +48,7 @@ class ChartResponse(Provenance):
     width_px: int | None = None
     height_px: int | None = None
     warnings: list[str] = Field(default_factory=list)
+    # With save=true: the immutable bundle holding this chart, its data and source (#88).
+    artifact: ArtifactSummary | None = None
     download_links: list[DownloadLink] = Field(default_factory=list)
     related_datasets: list[RelatedDataset] = Field(default_factory=list)
