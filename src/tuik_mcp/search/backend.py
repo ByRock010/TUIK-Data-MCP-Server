@@ -52,6 +52,15 @@ NO_LEXICAL_MATCH = (
 # Kinds whose filtered searches were neither measured nor vector-indexed stay lexical:
 # datasets ranked lower in hybrid top tens, and file content has no vectors.
 LEXICAL_ONLY_KINDS = frozenset(("dataset", *CONTENT_KINDS))
+# Bare curated acronyms have lexical synonyms but unreliable E5 neighbours (#79).
+# These are the equivalence-rule aliases in synonyms.txt, with Turkish/ASCII forms.
+LEXICAL_ABBREVIATIONS = frozenset(
+    ("tufe", "ufe", "yi-ufe", "yi ufe", "gsyh", "hia", "adnks", "nace")
+)
+ABBREVIATION_RANKING = (
+    "Known statistical abbreviation: results use synonym-aware lexical ranking "
+    "because semantic neighbours can be unrelated."
+)
 # How long a served index's vector model is trusted before the alias is rechecked.
 META_TTL_SECONDS = 60
 
@@ -259,6 +268,12 @@ def semantic_scope(filters: SearchFilters) -> bool:
     return not set(filters.kinds) & LEXICAL_ONLY_KINDS
 
 
+def is_statistical_abbreviation(query: str) -> bool:
+    """Recognize whole curated aliases, keeping contextual queries on the hybrid path."""
+    folded = turkish_casefold(query).translate(str.maketrans("çğıöşü", "cgiosu"))
+    return " ".join(folded.split()) in LEXICAL_ABBREVIATIONS
+
+
 class OpenSearchBackend:
     def __init__(self, store: OpenSearchStore, alias: str, embedder: Embedder | None = None):
         self.store, self.alias, self.embedder = store, alias, embedder
@@ -279,6 +294,15 @@ class OpenSearchBackend:
     ) -> tuple[dict, list[str]]:
         """The request body and any reason hybrid ranking was not used."""
         lexical = build_query(query, filters, limit, offset)
+        if is_statistical_abbreviation(query):
+            # Match the frozen lexical evaluation, including tied scores and later pages.
+            lexical["sort"] = [{"_score": "desc"}, {"id": "asc"}]
+            warnings = (
+                [ABBREVIATION_RANKING]
+                if self.embedder is not None and semantic_scope(filters)
+                else []
+            )
+            return lexical, warnings
         if self.embedder is None or not semantic_scope(filters):
             return lexical, []
         model = await self.vector_model()

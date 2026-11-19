@@ -9,6 +9,7 @@ import httpx
 from tuik_mcp import server
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.search.backend import OpenSearchBackend
+from tuik_mcp.search.embeddings import MODEL
 from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.catalog import CatalogService
 
@@ -101,10 +102,18 @@ def mock_cluster(request):
 
 def fixture_service(http):
     service = CatalogService(http)
-    if MODE == "mock-index":
+    if MODE in {"mock-index", "mock-abbreviation"}:
+
+        class UnavailableEmbedder:
+            model = MODEL
+
+            def query(self, text):
+                raise AssertionError("An abbreviation must not load the model")
+
         service.index = OpenSearchBackend(
             OpenSearchStore("http://cluster", transport=httpx.MockTransport(mock_cluster)),
             "fixture",
+            embedder=UnavailableEmbedder() if MODE == "mock-abbreviation" else None,
         )
     elif MODE == "missing-index":
         service.index = OpenSearchBackend(

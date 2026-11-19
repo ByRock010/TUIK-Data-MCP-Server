@@ -50,6 +50,7 @@ evaluation set.
    - the extra and the model files are present;
    - the served index's model equals the server's;
    - no `dataset`, `table` or `document_chunk` kind is requested;
+   - the entire query is not a curated bare statistical abbreviation (decision 9);
    - `offset + limit ≤ 50`.
 
    Otherwise the request is lexical, exactly as before. A warning is added when
@@ -67,6 +68,26 @@ evaluation set.
    empty facets and a warning. None of the 48 evaluation queries is affected, so the
    measured metrics stand. A response that lacks the count falls back to lexical
    search rather than skipping the check.
+9. **Bare abbreviations stay lexical (amendment, 2026-11-19, #79):** match TÜFE,
+   ÜFE, Yİ-ÜFE (also `Yİ ÜFE`), GSYH, HİA, ADNKS and NACE as whole queries,
+   case-insensitively with Turkish/ASCII spelling and normalized whitespace.
+   These are the curated synonym equivalences, not an uppercase-word heuristic.
+   Route them to the unchanged synonym-aware lexical query before vector-model
+   discovery or embedding, ordered by score descending and ID ascending to match
+   the frozen lexical evaluation. Filters, facets and offsets still apply.
+   Report `ranking: "lexical"` and explain the choice when semantic search is
+   enabled and the kind permits it. Full expansions and contextual queries such as
+   `TÜFE 2026` retain the existing hybrid behavior.
+
+   The [fixed plan](../verification/issue-79-abbreviation-plan-2026-11-19.md)
+   selected this rule before scoring. An
+   [archived-routing replay](../verification/issue-79-abbreviation-routing-2026-11-19.md)
+   of the same 48 queries / 1,689 reviewed pairs gives abbreviation nDCG@10
+   **0.9110** (previously 0.8331) and overall **0.8613** (previously 0.8516).
+   HİA and ADNKS recover; TÜFE drops from 0.8533 to 0.6873. No other query changes.
+   No new retrieval, embeddings, judgments or live source review are claimed.
+   NACE and spelling variants have routing tests but are outside the six-query
+   abbreviation relevance measurement. The historical pool is not held out.
 
 ## Consequences
 
@@ -91,10 +112,11 @@ evaluation set.
 - OpenSearch rejects a `_score` tie-breaker sort on hybrid queries. Ties keep the
   engine's internal order, which is deterministic for a freshly loaded
   single-shard index but not across arbitrary rebuilds.
-- The measured gain mostly replaces irrelevant lexical hits with further releases
+- The original #21 gain mostly replaces irrelevant lexical hits with further releases
   of already relevant series. Series-collapsed nDCG@10 is unchanged (0.4526 vs
   0.4575), and abbreviation queries regress (0.833 vs 0.911). The PR records both.
-  Collapsing repeated series in results is a follow-up, not part of this decision.
+  Decision 9 recovers the aggregate abbreviation regression; collapsing repeated
+  series remains a follow-up (#78).
 - The new grades come from a second AI model (Claude) under ADR 0004's single-
   assessor-plus-source-review protocol. The 1,390 inherited Codex labels are
   unchanged. Independent human validation has not occurred.
