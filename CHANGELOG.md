@@ -48,6 +48,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Bare curated abbreviations (TÜFE, ÜFE, Yİ-ÜFE, GSYH, HİA, ADNKS, NACE) use
+  synonym-aware lexical ranking, with stable score/ID ordering and an explicit
+  reason, without loading the embedding model (#79). Replaying the unchanged
+  #21 pool restores abbreviation nDCG@10 from 0.8331 to 0.9110 and raises overall
+  nDCG@10 from 0.8516 to 0.8613; TÜFE individually regresses. The other 42 queries
+  retain their hybrid rankings. Existing AI grades are reused, with no new live
+  retrieval or independent human validation.
 - A bulletin number that does not exist returns `not_found` instead of
   `malformed_response`.
 - A `search_tuik` theme filter that matches nothing adds a warning that themes match
