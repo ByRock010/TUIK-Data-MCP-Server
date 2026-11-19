@@ -71,8 +71,22 @@ class Settings(BaseModel):
     query_max_output_bytes: int = Field(default=64 * 1024, ge=1024, le=1024 * 1024)
     query_cache_bytes: int = Field(default=16 * 1024 * 1024, ge=1024, le=128 * 1024 * 1024)
     query_cursor_ttl_seconds: int = Field(default=900, ge=1, le=3600)
+    # Report artifacts (#88): server-owned, immutable bundles, separate from the caches.
+    # Unset keeps them in ~/.cache/tuik-mcp/artifacts.
+    artifact_dir: str | None = None
+    artifact_ttl_seconds: int = Field(default=24 * 3600, ge=60, le=30 * 24 * 3600)
+    artifact_max_total_bytes: int = Field(
+        default=256 * 1024 * 1024, ge=1024 * 1024, le=8 * 1024 * 1024 * 1024
+    )
+    artifact_max_file_bytes: int = Field(
+        default=16 * 1024 * 1024, ge=64 * 1024, le=256 * 1024 * 1024
+    )
+    artifact_max_files: int = Field(default=16, ge=2, le=256)
+    artifact_max_jobs: int = Field(default=2, ge=1, le=16)
+    # Keep the exact source file in each bundle so every figure can be re-checked.
+    artifact_retain_sources: bool = True
 
-    @field_validator("opensearch_url", "embedding_cache_dir", mode="before")
+    @field_validator("opensearch_url", "embedding_cache_dir", "artifact_dir", mode="before")
     @classmethod
     def blank_search_url_is_unset(cls, value):
         return None if isinstance(value, str) and not value.strip() else value
