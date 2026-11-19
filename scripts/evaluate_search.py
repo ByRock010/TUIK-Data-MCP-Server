@@ -1201,7 +1201,14 @@ async def collect_production(suite, documents, output, url, *, embedder, store=N
                     await store.delete(name)
                     report["cleanup"][name] = "deleted"
                 except Exception as exc:
+                    # Keep the rankings for diagnosis, but a run that leaves its
+                    # disposable index on the cluster is not a successful collection.
                     report["cleanup"][name] = str(exc)
+                    report["status"] = "error"
+                    report["errors"]["cleanup"] = {
+                        "type": type(exc).__name__,
+                        "message": f"Disposable index {name} was not deleted: {exc}",
+                    }
             if own_store:
                 await store.close()
         finally:

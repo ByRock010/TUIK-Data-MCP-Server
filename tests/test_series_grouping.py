@@ -28,7 +28,7 @@ from tuik_mcp.search.backend import (
 )
 from tuik_mcp.search.documents import IndexDocument
 from tuik_mcp.search.embeddings import DIMENSION, MODEL
-from tuik_mcp.search.indexer import OpenSearchStore, prepare, rebuild
+from tuik_mcp.search.indexer import IndexerError, OpenSearchStore, prepare, rebuild
 
 STAMP = datetime(2026, 11, 19, 9, tzinfo=UTC)
 LABOUR, YOUTH = "series:press:100", "series:press:200"
@@ -509,3 +509,45 @@ async def test_production_collector_records_grouped_and_plain_served_rankings(tm
         assert len(plain["results"][qid]) > len(grouped["results"][qid])
     labour = next(s for s in grouped["series"]["q1"] if s["series_id"] == LABOUR)
     assert labour["collapsed"] == 3 and labour["latest"]["id"] == "press:103"
+
+
+class FailingDeleteStore(OpenSearchStore):
+    """A real store whose disposable-index DELETE fails once, as on a timeout."""
+
+    def __init__(self, url):
+        super().__init__(url)
+        self.left = []
+
+    async def delete(self, name):
+        self.left.append(name)
+        raise IndexerError("Injected DELETE failure: index remains on cluster")
+
+
+@pytest.mark.opensearch
+@pytest.mark.skipif(not OPENSEARCH, reason="Set TUIK_OPENSEARCH_URL")
+async def test_production_collector_fails_when_the_disposable_index_is_not_deleted(tmp_path):
+    suite = {
+        "version": 1,
+        "queries": [{"id": "q1", "text": "işgücü istatistikleri", "category": "exact"}],
+        "judgments": {},
+    }
+    output = tmp_path / "production.json"
+    store = FailingDeleteStore(OPENSEARCH)
+    try:
+        code = await evaluation.collect_production(
+            suite, documents(), output, OPENSEARCH, embedder=VectorEmbedder(), store=store
+        )
+        report = evaluation.read_json(output)
+        (index,) = store.left
+        assert await store.exists(index)
+    finally:
+        for name in store.left:
+            await OpenSearchStore.delete(store, name)
+        await store.close()
+    assert code == 1 and report["status"] == "error"
+    assert "Injected DELETE failure" in report["cleanup"][index]
+    assert index in report["errors"]["cleanup"]["message"]
+    # Rankings stay for diagnosis, but the report cannot be scored as a complete run.
+    assert report["systems"]["production_grouped"]["results"]["q1"]
+    with pytest.raises(ValueError, match="Incomplete run"):
+        evaluation.validate_run(report, suite)
