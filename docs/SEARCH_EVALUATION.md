@@ -73,8 +73,8 @@ Scores use dataset grades only (`by_resource_type.dataset`).
 | Hybrid equal + abbreviation routing (served) | **0.6898** | **0.8715** | **0.7334** |
 
 The served combination passes the fixed rule (higher nDCG@10, MRR@10 not lower by
-more than 0.05), so dataset-filtered searches are now hybrid. Synonym (0.307 → 0.301),
-ASCII (0.484 → 0.411) and typo (0.410 → 0.374) categories regress; exact,
+more than 0.05), so dataset-filtered searches are now hybrid. Synonym (0.746 → 0.735),
+ASCII (0.564 → 0.503) and typo (0.586 → 0.558) categories regress; exact,
 multi-concept and regional queries gain most.
 
 ## Full-metadata comparison (#20)

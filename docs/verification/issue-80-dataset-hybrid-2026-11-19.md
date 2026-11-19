@@ -19,10 +19,18 @@ The served combination has higher nDCG@10 and higher MRR@10 than lexical, so the
 `dataset` left `LEXICAL_ONLY_KINDS` (ADR 0005 decision 10). The 0.7/0.3 weighting scored higher but
 production uses one weighting, as the plan stated.
 
-By category (nDCG@10, lexical → served): exact 0.482 → 0.556, abbreviation 0.457 → 0.457,
-synonym 0.307 → 0.301, inflection 0.567 → 0.586, ASCII 0.484 → 0.411, typo 0.410 → 0.374,
-multi-concept 0.290 → 0.401, regional 0.544 → 0.594. ASCII and typo queries regress.
+By category (dataset nDCG@10, lexical → served; six queries each, so the category means equal the
+overall figures): exact 0.740 → 0.847, abbreviation 0.719 → 0.719, synonym 0.746 → 0.735,
+inflection 0.740 → 0.758, ASCII 0.564 → 0.503, typo 0.586 → 0.558, multi-concept 0.516 → 0.721,
+regional 0.629 → 0.678. Synonym, ASCII and typo queries regress.
 `enflsyon` returns no dataset in any system (no dataset shares a word with it).
+
+Correction (review of PR #116): the first version of this report listed category values whose ideal
+also counted bulletin and metadata grades, although every system is dataset-filtered. Scoring now
+applies a run's recorded kind filter (`settings.filters.kinds`) to the ideal, so the overall and
+per-category figures use dataset grades alone, and `collect-datasets` declares only dataset IDs as
+`corpus_ids`. The archived rankings (SHA-256 bound by both assessments), all grades and the dataset
+table above are unchanged; only the reviewed scores file was regenerated.
 
 ## Grading and evidence
 
@@ -37,4 +45,4 @@ Files: `search-dataset-hybrid-2026-11-19.json.gz` (rankings), `search-dataset-hy
 
 After adoption, the collector's lexical system uses `OpenSearchBackend.search` without an embedder; its
 request body is identical to the pre-#80 served dataset request, so the archived lexical ranking stands.
-856 offline and real-OpenSearch tests pass (`-m "not live"`).
+872 offline and real-OpenSearch tests pass (`-m "not live"`).

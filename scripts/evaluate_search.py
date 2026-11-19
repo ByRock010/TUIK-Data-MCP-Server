@@ -375,6 +375,9 @@ def system_metrics(pooled, runs, grades):
     systems = {}
     documents = pooled["documents"]
     for run in runs:
+        # A run collected under a kind filter cannot return other kinds, so its
+        # ideal (overall and per category) uses only those kinds' grades (#80).
+        allowed = ((run.get("settings") or {}).get("filters") or {}).get("kinds")
         for name, system in run["systems"].items():
             if name in systems:
                 raise ValueError(f"Duplicate system name: {name}; use distinct names for variants")
@@ -385,7 +388,8 @@ def system_metrics(pooled, runs, grades):
                 judgments = {
                     key: value
                     for key, value in grades[qid].items()
-                    if eligible is None or key in eligible
+                    if (eligible is None or key in eligible)
+                    and (not allowed or documents[key]["resource_type"] in allowed)
                 }
                 hits = system["results"][qid][:10]
                 row = graded_metrics(hits, judgments)
@@ -1035,7 +1039,9 @@ async def collect_datasets(suite, documents, output, url, *, embedder, store=Non
     documents = list(documents)
     payloads, kinds = prepare(documents, stamp)
     originals = {document.id: document.model_dump(mode="json") for document in documents}
-    corpus_ids = sorted(document["id"] for document in payloads)
+    # Every system is filtered to datasets, so only datasets are eligible: the
+    # overall and per-category ideals then use dataset grades alone (#80 review).
+    corpus_ids = sorted(document["id"] for document in payloads if document["kind"] == "dataset")
     name = "tuik-evaluation-" + uuid4().hex
     definition = index_definition(embedder.model)
     report = {

@@ -3,6 +3,7 @@
 import importlib.util
 import os
 from pathlib import Path
+from statistics import fmean
 
 import pytest
 
@@ -101,6 +102,8 @@ async def test_dataset_collector_filters_every_system_in_one_index(tmp_path):
     assert routed["q1"]["source_system"] == "dataset_hybrid_rrf_equal"
     assert routed["q2"]["source_system"] == "dataset_lexical"
     assert report["settings"]["filters"]["kinds"] == ["dataset"]
+    datasets = sorted(d.id for d in documents() if d.kind == "dataset")
+    assert all(system["corpus_ids"] == datasets for system in systems.values())
 
 
 class FailingDeleteStore(OpenSearchStore):
@@ -143,3 +146,65 @@ async def test_dataset_collector_fails_when_the_disposable_index_is_not_deleted(
     assert report["systems"]["dataset_lexical"]["results"]["q1"]
     with pytest.raises(ValueError, match="Incomplete run"):
         evaluation.validate_run(report, suite)
+
+
+def filtered_case(settings):
+    """One dataset-filtered system; the pool also holds a highly graded bulletin."""
+    pooled = {
+        "queries": [{"id": "q1", "text": "işsizlik", "category": "exact"}],
+        "documents": {
+            "flow:DF_A+V1.0": {"resource_type": "dataset"},
+            "flow:DF_B+V1.0": {"resource_type": "dataset"},
+            "press:1": {"resource_type": "bulletin"},
+        },
+    }
+    grades = {"q1": {"flow:DF_A+V1.0": 1, "flow:DF_B+V1.0": 2, "press:1": 2}}
+    hits = [{"id": "flow:DF_B+V1.0", "resource_type": "dataset"}]
+    system = {
+        "corpus": "frozen",
+        "corpus_ids": sorted(pooled["documents"]),
+        "results": {"q1": hits},
+    }
+    run = {"systems": {"datasets": system}, **settings}
+    return evaluation.system_metrics(pooled, [run], grades)["datasets"]
+
+
+def test_kind_filtered_run_scores_against_an_ideal_of_that_kind_only():
+    filtered = filtered_case({"settings": {"filters": {"kinds": ["dataset"]}}})
+    assert filtered["overall"] == filtered["by_resource_type"]["dataset"]
+    assert filtered["by_category"]["exact"] == filtered["overall"]
+    assert filtered["overall"]["recall_at_10"] == 0.5  # Not 1/3: the bulletin is ineligible.
+    unfiltered = filtered_case({})
+    assert unfiltered["overall"]["ndcg_at_10"] < filtered["overall"]["ndcg_at_10"]
+
+
+def test_archived_dataset_categories_use_the_dataset_only_ideal():
+    """The #80 report's category figures must average to its dataset overall."""
+    root = Path(__file__).parents[1]
+    base = root / "docs/verification"
+    assessment = evaluation.read_json(base / "search-dataset-hybrid-ai-assessment-2026-11-19.json")
+    review = evaluation.read_json(
+        base / "search-dataset-hybrid-ai-reviewed-assessment-2026-11-19.json"
+    )
+    evidence = evaluation.read_json(
+        base / "search-dataset-hybrid-ai-live-evidence-2026-11-19.json.gz"
+    )
+    runs = [evaluation.read_json(root / source["path"]) for source in assessment["runs"]]
+    suite = evaluation.read_json(base / "search-hybrid-pool-2026-11-05.json.gz")
+    report = evaluation.score_ai(suite, runs, assessment, review, evidence)
+    assert report == evaluation.read_json(
+        base / "search-dataset-hybrid-ai-reviewed-scores-2026-11-19.json"
+    )
+    dataset_systems = set(runs[-1]["systems"])
+    assert dataset_systems == {*evaluation.DATASET_SYSTEMS, "dataset_hybrid_routed"}
+    for name in dataset_systems:
+        system = report["systems"][name]
+        overall = system["overall"]
+        assert overall == system["by_resource_type"]["dataset"]
+        categories = system["by_category"].values()
+        assert {category["queries"] for category in categories} == {6}
+        assert fmean(c["ndcg_at_10"] for c in categories) == pytest.approx(overall["ndcg_at_10"])
+    lexical, served = (report["systems"][n] for n in ("dataset_lexical", "dataset_hybrid_routed"))
+    assert lexical["by_category"]["exact"]["ndcg_at_10"] == pytest.approx(0.739937, abs=1e-6)
+    assert served["by_category"]["exact"]["ndcg_at_10"] == pytest.approx(0.846676, abs=1e-6)
+    assert served["overall"]["ndcg_at_10"] == pytest.approx(0.689815, abs=1e-6)
