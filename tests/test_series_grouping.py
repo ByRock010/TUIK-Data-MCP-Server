@@ -1,9 +1,12 @@
 """Bulletin-series grouping in indexed search (#78)."""
 
+import importlib.util
 import json
+import math
 import os
 import uuid
 from datetime import UTC, datetime
+from pathlib import Path
 
 import httpx
 import pytest
@@ -418,3 +421,91 @@ async def test_real_cluster_groups_series_and_reports_the_newest_release():
                 await store.delete(name)
         finally:
             await store.close()
+
+
+spec = importlib.util.spec_from_file_location(
+    "evaluate_search", Path(__file__).parents[1] / "scripts" / "evaluate_search.py"
+)
+evaluation = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(evaluation)
+
+
+def test_series_collapsed_metric_scores_each_series_once():
+    series = {"press:1": LABOUR, "press:1:metadata": LABOUR, "press:2": LABOUR}
+    grades = {"press:1": 2, "press:1:metadata": 2, "press:2": 2, "flow:X": 1, "press:9": 0}
+    repeated = [{"id": "press:1"}, {"id": "press:1:metadata"}, {"id": "press:2"}]
+    row = evaluation.series_collapsed_metrics(repeated, grades, series)
+    # Ideal: one labour series (2) then the dataset (1); the repeats score nothing.
+    ideal = 3 + 1 / math.log2(3)
+    assert row["repeated_series_slots"] == 2
+    assert row["series_collapsed_ndcg_at_10"] == pytest.approx(3 / ideal)
+    diverse = [{"id": "press:2"}, {"id": "flow:X"}, {"id": "press:9"}]
+    row = evaluation.series_collapsed_metrics(diverse, grades, series)
+    assert row == {"series_collapsed_ndcg_at_10": pytest.approx(1.0), "repeated_series_slots": 0}
+    corpus = documents()
+    assert evaluation.series_map(corpus) == {
+        "press:101": LABOUR,
+        "press:102": LABOUR,
+        "press:103": LABOUR,
+        "press:103:metadata": LABOUR,
+        "press:201": YOUTH,
+    }
+
+
+class VectorEmbedder:
+    """Deterministic vectors for a real-cluster run without the ONNX runtime."""
+
+    model = MODEL
+    dimension = DIMENSION
+
+    @staticmethod
+    def vector(text):
+        seed = sum(map(ord, text)) % 97 + 1
+        return [((seed * (i + 1)) % 13) / 13 + 0.01 for i in range(DIMENSION)]
+
+    def documents(self, texts):
+        return [self.vector(text) for text in texts]
+
+    def query(self, text):
+        return self.vector(text)
+
+
+@pytest.mark.opensearch
+@pytest.mark.skipif(not OPENSEARCH, reason="Set TUIK_OPENSEARCH_URL")
+async def test_production_collector_records_grouped_and_plain_served_rankings(tmp_path):
+    suite = {
+        "version": 1,
+        "queries": [
+            {"id": "q1", "text": "işgücü istatistikleri", "category": "exact"},
+            {"id": "q2", "text": "TÜFE", "category": "abbreviation"},
+        ],
+        "judgments": {},
+    }
+    output = tmp_path / "production.json"
+    store = OpenSearchStore(OPENSEARCH)
+    try:
+        code = await evaluation.collect_production(
+            suite, documents(), output, OPENSEARCH, embedder=VectorEmbedder(), store=store
+        )
+        report = evaluation.read_json(output)
+        assert code == 0, report["errors"]
+        index = report["systems"]["production_grouped"]["index"]
+        assert report["cleanup"] == {index: "deleted"}
+        assert not await store.exists(index)
+    finally:
+        await store.close()
+    assert report["method"] == "production_backend_search"
+    assert report["settings"]["group_window"] == GROUP_WINDOW
+    assert report["embeddings"]["documents"] == 6
+    grouped = report["systems"]["production_grouped"]
+    plain = report["systems"]["production_ungrouped"]
+    assert grouped["group"] is True and plain["group"] is False
+    assert grouped["routing"]["q1"]["ranking"] == "hybrid"
+    assert grouped["routing"]["q2"]["ranking"] == "lexical"
+    series = evaluation.series_map(documents())
+    for qid in ("q1",):
+        keys = [series.get(hit["id"], hit["id"]) for hit in grouped["results"][qid]]
+        assert len(keys) == len(set(keys))
+        assert len(plain["results"][qid]) > len(grouped["results"][qid])
+    labour = next(s for s in grouped["series"]["q1"] if s["series_id"] == LABOUR)
+    assert labour["collapsed"] == 3 and labour["latest"]["id"] == "press:103"

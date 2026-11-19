@@ -12,6 +12,7 @@ import json
 import math
 import re
 import subprocess
+import sys
 from collections import Counter
 from copy import deepcopy
 from datetime import UTC, datetime
@@ -22,8 +23,10 @@ from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
 from tuik_mcp.models.dataset import TuikResource
 from tuik_mcp.search.backend import (
+    GROUP_WINDOW,
     HYBRID_DEPTH,
     HYBRID_RANK_CONSTANT,
+    HYBRID_WEIGHTS,
     OpenSearchBackend,
     SearchFilters,
     build_hybrid_query,
@@ -337,15 +340,58 @@ def graded_metrics(hits, grades):
     }
 
 
+def series_collapsed_metrics(hits, grades, series):
+    """Only a series' first document keeps its gain; the ideal takes each series once (#78).
+
+    `series` maps bulletin/metadata IDs to their series key; other IDs are their own.
+    """
+    best = {}
+    for doc_id, grade in grades.items():
+        if grade is not None:
+            key = series.get(doc_id, doc_id)
+            best[key] = max(best.get(key, 0), grade)
+    ideal = sorted(best.values(), reverse=True)[:10]
+    seen, gains, repeated = set(), [], 0
+    for hit in hits[:10]:
+        key = series.get(hit["id"], hit["id"])
+        if key in seen:
+            gains.append(0)
+            repeated += 1
+        else:
+            seen.add(key)
+            gains.append(grades.get(hit["id"]) or 0)
+
+    def dcg(values):
+        return sum((2**g - 1) / math.log2(i + 2) for i, g in enumerate(values))
+
+    return {
+        "series_collapsed_ndcg_at_10": dcg(gains) / dcg(ideal) if dcg(ideal) else 0.0,
+        "repeated_series_slots": repeated,
+    }
+
+
+def series_map(documents):
+    """Series keys of bulletins and their metadata in a frozen corpus."""
+    return {
+        d.id: d.series_id for d in documents if d.kind in ("bulletin", "metadata") and d.series_id
+    }
+
+
 def aggregate(rows):
     returned = sum(r["returned"] for r in rows)
-    return {
+    report = {
         "queries": len(rows),
         **{k: sum(r[k] for r in rows) / len(rows) for k in ("ndcg_at_10", "mrr", "recall_at_10")},
         "returned": returned,
         "unjudged_share": sum(r["unjudged"] for r in rows) / returned if returned else None,
         "queries_without_judged_relevant": sum(r["no_judged_relevant"] for r in rows),
     }
+    if rows and "series_collapsed_ndcg_at_10" in rows[0]:
+        report["series_collapsed_ndcg_at_10"] = sum(
+            r["series_collapsed_ndcg_at_10"] for r in rows
+        ) / len(rows)
+        report["repeated_series_slots"] = sum(r["repeated_series_slots"] for r in rows)
+    return report
 
 
 def score(suite, runs):
@@ -370,7 +416,7 @@ def score(suite, runs):
     return report
 
 
-def system_metrics(pooled, runs, grades):
+def system_metrics(pooled, runs, grades, series=None):
     systems = {}
     documents = pooled["documents"]
     for run in runs:
@@ -388,6 +434,8 @@ def system_metrics(pooled, runs, grades):
                 }
                 hits = system["results"][qid][:10]
                 row = graded_metrics(hits, judgments)
+                if series is not None:
+                    row |= series_collapsed_metrics(hits, judgments, series)
                 rows.append(row)
                 categories.setdefault(query["category"], []).append(row)
                 # Filter the original top ten; do not backfill ranks from lower results.
@@ -516,8 +564,12 @@ def validate_ai_review(pooled, assessment, review, evidence):
     return dict(counts), len(changed)
 
 
-def score_ai(suite, runs, assessment, review=None, evidence=None):
-    """Score one explicitly identified AI assessor without manufacturing judge pairs."""
+def score_ai(suite, runs, assessment, review=None, evidence=None, series=None):
+    """Score one explicitly identified AI assessor without manufacturing judge pairs.
+
+    With `series` (from a frozen corpus), also report series-collapsed nDCG@10 and
+    repeated-series slots (#78).
+    """
     pooled = pool(suite, runs)
     if assessment.get("assessment_type") != "single_model_ai_preliminary":
         raise ValueError("Expected a single_model_ai_preliminary assessment")
@@ -550,11 +602,18 @@ def score_ai(suite, runs, assessment, review=None, evidence=None):
             "agreement": None,
             "reason": "Single AI assessor; no independent human judge pairs",
         },
-        "systems": system_metrics(pooled, runs, grades),
+        "systems": system_metrics(pooled, runs, grades, series),
     }
+    if series is not None:
+        report["series_metric"] = (
+            "Series-collapsed nDCG@10: within each top ten only the first document of a "
+            "bulletin series (bulletin and metadata share series_id) keeps its gain; the "
+            "ideal takes each series' best grade once. repeated_series_slots counts the "
+            "top-ten slots that repeat an already shown series."
+        )
     if review is not None:
         # Apply the same completeness, scope and grade checks to the second pass.
-        second = score_ai(suite, runs, review)
+        second = score_ai(suite, runs, review, series=series)
         counts, changed = validate_ai_review(pooled, assessment, review, evidence or {})
         report.update(
             status="ai_reviewed",
@@ -1008,6 +1067,148 @@ async def collect_index(
     return 0 if report["status"] == "ok" else 1
 
 
+# Production search paths over one disposable hybrid index (#78): name -> group flag.
+PRODUCTION_SYSTEMS = {"production_grouped": True, "production_ungrouped": False}
+
+
+async def collect_production(suite, documents, output, url, *, embedder, store=None):
+    """Rank the frozen corpus through the served OpenSearchBackend.search code path.
+
+    One disposable index holds the corpus with the configured model's vectors. Every
+    query runs unfiltered, limit 10, offset 0, through the production planner
+    (abbreviation routing, hybrid fusion, grouping), so the evaluated ranking is the
+    served one. Nothing touches a production alias.
+    """
+    validate_suite(suite)
+    stamp = datetime.now(UTC)
+    documents = list(documents)
+    payloads, kinds = prepare(documents, stamp)
+    originals = {document.id: document.model_dump(mode="json") for document in documents}
+    corpus_ids = sorted(document["id"] for document in payloads)
+    name = "tuik-evaluation-" + uuid4().hex
+    definition = index_definition(embedder.model)
+    report = {
+        "version": 1,
+        "status": "running",
+        "method": "production_backend_search",
+        "collected_at": stamp.isoformat(),
+        "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "collector_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "backend_sha256": hashlib.sha256(
+            Path(sys.modules[OpenSearchBackend.__module__].__file__).read_bytes()
+        ).hexdigest(),
+        "corpus_sha256": corpus_fingerprint(documents),
+        "counts": dict(kinds),
+        "queries": {q["id"]: q["text"] for q in suite["queries"]},
+        "settings": {
+            "group_window": GROUP_WINDOW,
+            "hybrid_depth": HYBRID_DEPTH,
+            "rank_constant": HYBRID_RANK_CONSTANT,
+            "weights": list(HYBRID_WEIGHTS),
+            "limit": 10,
+            "offset": 0,
+            "filters": SearchFilters().model_dump(mode="json"),
+        },
+        "systems": {},
+        "cleanup": {},
+        "errors": {},
+    }
+    own_store = store is None
+    store = store or OpenSearchStore(url)
+    created = False
+    try:
+        report["engine"] = (await store._request("GET", "")).json()["version"]
+        started = datetime.now(UTC)
+        targets = [payload for payload in payloads if embeddable(payload)]
+        vectors = await asyncio.to_thread(
+            embedder.documents, [document_text(payload) for payload in targets]
+        )
+        vectors = dict(zip((payload["id"] for payload in targets), vectors, strict=True))
+        report["embeddings"] = {
+            "model": embedder.model,
+            "dimension": embedder.dimension,
+            "document_chars": DOCUMENT_CHARS,
+            "documents": len(vectors),
+            "documents_sha256": vector_digest([vectors[key] for key in sorted(vectors)]),
+            "seconds": round((datetime.now(UTC) - started).total_seconds(), 3),
+        }
+        loaded = [
+            {**payload, "embedding": vectors[payload["id"]]}
+            if payload["id"] in vectors
+            else payload
+            for payload in payloads
+        ]
+        await store._request("PUT", name, json=definition)
+        created = True
+        if failures := await store.bulk(name, loaded):
+            raise IndexerError("Evaluation documents were rejected", failures)
+        await store.refresh(name)
+        if await store.count(name) != len(payloads):
+            raise IndexerError("Evaluation index count does not match the frozen corpus")
+        backend = OpenSearchBackend(store, name, embedder)
+        for system_name, group in PRODUCTION_SYSTEMS.items():
+            system = report["systems"][system_name] = {
+                "corpus": "frozen_metadata_snapshot",
+                "corpus_ids": corpus_ids,
+                "index": name,
+                "definition": definition,
+                "group": group,
+                "results": {},
+                "scores": {},
+                "routing": {},
+                "series": {},
+            }
+            for query in suite["queries"]:
+                hits = await backend.search(query["text"], SearchFilters(), 10, 0, group)
+                if hits.backend != "opensearch" or hits.total is None:
+                    raise IndexerError(f"Unexpected search response for {query['id']}")
+                system["results"][query["id"]] = [
+                    {
+                        "id": stable_id(hit.id),
+                        "title": hit.title,
+                        "resource_type": hit.kind,
+                        "source_url": hit.source_url,
+                        "description": originals[hit.id].get("description"),
+                        "theme": hit.theme,
+                        "publication_date": hit.publication_date,
+                    }
+                    for hit in hits.hits
+                ]
+                system["scores"][query["id"]] = [hit.score for hit in hits.hits]
+                system["routing"][query["id"]] = {
+                    "ranking": hits.ranking,
+                    "warnings": hits.warnings,
+                    "total": hits.total,
+                }
+                system["series"][query["id"]] = [
+                    {
+                        "series_id": hit.series_id,
+                        **(hit.series.model_dump(mode="json") if hit.series else {}),
+                    }
+                    for hit in hits.hits
+                ]
+            write_json(output, report)
+        report["status"] = "ok"
+        validate_run(report, suite)
+    except Exception as exc:
+        report["status"] = "error"
+        report["errors"]["collection"] = {"type": type(exc).__name__, "message": str(exc)}
+    finally:
+        report["finished_at"] = datetime.now(UTC).isoformat()
+        try:
+            if created:
+                try:
+                    await store.delete(name)
+                    report["cleanup"][name] = "deleted"
+                except Exception as exc:
+                    report["cleanup"][name] = str(exc)
+            if own_store:
+                await store.close()
+        finally:
+            write_json(output, report)
+    return 0 if report["status"] == "ok" else 1
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -1015,6 +1216,7 @@ def main(argv=None):
         choices=(
             "collect",
             "collect-index",
+            "collect-production",
             "route-abbreviations",
             "pool",
             "judge",
@@ -1111,6 +1313,18 @@ def main(argv=None):
                 else None,
             )
         )
+    if args.command == "collect-production":
+        if not args.documents or not args.url or args.resume:
+            parser.error("collect-production requires --documents and --url, without --resume")
+        return asyncio.run(
+            collect_production(
+                suite,
+                load_documents(args.documents),
+                args.output,
+                args.url,
+                embedder=Embedder(cache_dir=Settings.from_env().embedding_cache_dir),
+            )
+        )
     if args.command == "collect":
         return asyncio.run(
             collect(
@@ -1158,6 +1372,7 @@ def main(argv=None):
             read_json(args.assessment),
             read_json(args.review) if args.review else None,
             read_json(args.evidence) if args.evidence else None,
+            series_map(load_documents(args.documents)) if args.documents else None,
         )
     else:
         report = pool(suite, runs) if args.command == "pool" else score(suite, runs)
