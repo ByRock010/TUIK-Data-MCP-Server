@@ -32,6 +32,11 @@ instructions.
 
 ## Installation
 
+For installation from a built wheel, Windows instructions, client setup and the
+read-only `tuik-mcp-doctor` command, see [installation and diagnostics](docs/INSTALLATION.md).
+The examples below install from a source checkout; no public package-index
+publication or ownership of the distribution name is implied.
+
 Requires Python 3.12 or newer. From the directory containing `pyproject.toml`:
 
 ```bash

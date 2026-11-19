@@ -1,0 +1,937 @@
+{
+  "research_date": "2026-11-18",
+  "method": "Static README/code/test inspection; no competitor live benchmark executed",
+  "repositories": [
+    {
+      "repository": "BerkantACUN/mcp-turkiye",
+      "commit": "68836ba6b4d2a43270b7ed279c1602ab9b6e03cc",
+      "commit_date": "2026-09-24T16:02:42Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 22510,
+          "sha256": "06c8f23dc95201a655828afaae1bece32d407ed05ff4f04a936c5bb9c0fd306b"
+        },
+        {
+          "retained_file": "package.json",
+          "bytes": 2642,
+          "sha256": "d4dd5a6c50008cd67561c0c3072d0f7a02212e14175db87ea904fd0c40c5a2d2"
+        },
+        {
+          "retained_file": "src__core__cevap.ts",
+          "bytes": 1452,
+          "sha256": "3065362f749a26263355a129730aadd8fbd7e5d9d6871d6599e646beeaa0943e"
+        },
+        {
+          "retained_file": "src__prompts.ts",
+          "bytes": 3642,
+          "sha256": "f8e8858a080241fe8e4ee88f1017895024b286719e88c92a1af520561f64911b"
+        },
+        {
+          "retained_file": "src__server.ts",
+          "bytes": 1172,
+          "sha256": "a346b05cef41ab562b77c06a6eca59879e7df4801495aab621c020e646c0a1d9"
+        },
+        {
+          "retained_file": "src__sources__evds__index.ts",
+          "bytes": 18995,
+          "sha256": "9f404a1043e7fd173afd3e9df619c88d89f690f0e04cc7654625e47cefd7b58b"
+        },
+        {
+          "retained_file": "src__sources__iller__index.ts",
+          "bytes": 7109,
+          "sha256": "ffe52db8764c6a606cfb36909ba010c8cb10abfa1bdf715c599708acdc25b266"
+        },
+        {
+          "retained_file": "src__sources__iller__veri.ts",
+          "bytes": 89614,
+          "sha256": "811eac873cc5eaf042ef8150e6484645833d7a2a060ee0af852f60d672e12404"
+        }
+      ]
+    },
+    {
+      "repository": "ByRock010/TUIK-Data-MCP-Server",
+      "commit": "ea26bb4e8e1fd05eed815e4def469b527da9191a",
+      "commit_date": "2026-11-12T17:01:03Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 41418,
+          "sha256": "a5d44a46029548ac231a8043030c77197d0e15e9f36f823d3640ad3410de48ce"
+        },
+        {
+          "retained_file": "docs__verification__mcp-benchmark-2026-11-08.md",
+          "bytes": 9643,
+          "sha256": "df1d93117d3a874e789b81634432b61bbf28fcd8d7ce01315b7eab09761082d0"
+        },
+        {
+          "retained_file": "pyproject.toml",
+          "bytes": 1281,
+          "sha256": "d29646be94d66cc968757e100d9011b600c4708e0d3b57fb17bc852271a166e7"
+        },
+        {
+          "retained_file": "scripts__mcp_benchmark.py",
+          "bytes": 10065,
+          "sha256": "bd22d4dfb5addc5e4d7dbb9f8254b359708c778ea3782918098e90802defba2f"
+        },
+        {
+          "retained_file": "src__tuik_mcp__charts.py",
+          "bytes": 14988,
+          "sha256": "6424721eb7872084dc7106f7270a9d94d20a41df4dd63bce70b6c3a3380ae718"
+        },
+        {
+          "retained_file": "src__tuik_mcp__server.py",
+          "bytes": 16459,
+          "sha256": "d96a90e54a9b15b1434d1158fca32f3a980e0942dadc7b510266af4e9b3c4efb"
+        }
+      ]
+    },
+    {
+      "repository": "YusufBeratZengin/tuik-data",
+      "commit": "93ea84d0e89d83b04eebf84dd0e0a5ec632d7743",
+      "commit_date": "2026-11-03T00:51:55Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 9458,
+          "sha256": "f77aa671c53569044f0f5dafcd1b9c39a7e693691ecd5427c55f3073458f8d8c"
+        },
+        {
+          "retained_file": "pyproject.toml",
+          "bytes": 2902,
+          "sha256": "41cf8e4f631e8916e43bf88f5fe963a69d08062568e7bf44b4286ec098cb42af"
+        },
+        {
+          "retained_file": "src__tuik_data____init__.py",
+          "bytes": 1918,
+          "sha256": "046b16c174f668abb4172f0e9fd6c4269d7cfa6a856be65b2494ade540cb377e"
+        },
+        {
+          "retained_file": "src__tuik_data___http.py",
+          "bytes": 3910,
+          "sha256": "ed9e67fc420ec732276cc4366a10ac59eaaabc9436b7bb717686b25fd4372503"
+        },
+        {
+          "retained_file": "src__tuik_data__auth.py",
+          "bytes": 5627,
+          "sha256": "1ed9e316eeb7a456c33e6947befeee20c4faddf51fd1769b6b6b3b47744a73af"
+        },
+        {
+          "retained_file": "src__tuik_data__catalogues.py",
+          "bytes": 9107,
+          "sha256": "c3d1b6532edf0a8822e545c3fdf62ef4cb7dd2a3efab10930cd107b40f5b6147"
+        },
+        {
+          "retained_file": "src__tuik_data__cli.py",
+          "bytes": 13026,
+          "sha256": "205af5ac7fb4dafa21c6c16644310adf23a52d8eb7948a3d5d525631061ebae2"
+        },
+        {
+          "retained_file": "src__tuik_data__client.py",
+          "bytes": 20138,
+          "sha256": "ae83aa8fe74c7445d9f7708803aeca4ab5a0eb9ac964fd31883187bd8db3df47"
+        },
+        {
+          "retained_file": "src__tuik_data__errors.py",
+          "bytes": 2151,
+          "sha256": "4a17ffd9852c96dc95fec3e0ac69d18dbfe9b0469156de10b7681b32e0ef6f6b"
+        },
+        {
+          "retained_file": "src__tuik_data__mcp_server.py",
+          "bytes": 10690,
+          "sha256": "b30bdd92044cf95f69de5a44b2d737844c9996a2b9c86acbe5c2d9282e388bcc"
+        },
+        {
+          "retained_file": "src__tuik_data__parser.py",
+          "bytes": 35527,
+          "sha256": "74398a96c7945dd51b3d972d963ff08e9440707662088ee18a1ed86546e9f094"
+        },
+        {
+          "retained_file": "src__tuik_data__storage.py",
+          "bytes": 7937,
+          "sha256": "48da40283ffb70a066fdcc7051ca35d8fe5665640c4d096c0c518c430a78c6ce"
+        },
+        {
+          "retained_file": "tests____init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "retained_file": "tests__conftest.py",
+          "bytes": 3686,
+          "sha256": "0dc1761fc29f94f23abd1d2941ece1e50a11571c4022f51d02c61ab5057c22ec"
+        },
+        {
+          "retained_file": "tests__test_auth.py",
+          "bytes": 6109,
+          "sha256": "be3ca49d79b8ba4597decd9123d4a8c57b218868835204fefff2f23306ba8c41"
+        },
+        {
+          "retained_file": "tests__test_catalogue.py",
+          "bytes": 4295,
+          "sha256": "3cdd9fdd573dcbbf7f6ad5cf56e311d2c49f5c28f1b4cc034decc813a752709d"
+        },
+        {
+          "retained_file": "tests__test_cli.py",
+          "bytes": 10467,
+          "sha256": "83a12af18cad611897e4cb78bc071a31d1e258e68f0a457cdacca4d36803357a"
+        },
+        {
+          "retained_file": "tests__test_client.py",
+          "bytes": 19960,
+          "sha256": "fe04bf2cee3165730f74d0ba0dca56f9ed2b17917891fcd6f96c0807ec9d73b8"
+        },
+        {
+          "retained_file": "tests__test_http.py",
+          "bytes": 5031,
+          "sha256": "ddc09378c5b26bcb56a2470e3da6ac9480fd597b6eba74fcc5b9f018e248372f"
+        },
+        {
+          "retained_file": "tests__test_mcp.py",
+          "bytes": 9001,
+          "sha256": "093ec352263c16d17cfd31be0be0cf601875ca8d82044f2715c0c78095f03086"
+        },
+        {
+          "retained_file": "tests__test_network.py",
+          "bytes": 1997,
+          "sha256": "1905ef6e5486e08bad41376c086ab8ef7f39c48cf3dd3ef621d2aa2dd7a821be"
+        },
+        {
+          "retained_file": "tests__test_parser.py",
+          "bytes": 21613,
+          "sha256": "1ded9cf53897e20bd438a6c2729ff453138a54d9501495196d838daaf50f90b5"
+        },
+        {
+          "retained_file": "tests__test_storage.py",
+          "bytes": 5220,
+          "sha256": "0d0e60c5113761ddfe1e84121abd92175d134a317d56496c98f67414990ee2db"
+        }
+      ]
+    },
+    {
+      "repository": "ahmthamza/turkiye-veri-mcp",
+      "commit": "ebb2fa3b7d1363545c7eca1165eee037121fdb03",
+      "commit_date": "2026-11-11T10:26:18Z",
+      "files_retained": [
+        {
+          "retained_file": "COVERAGE.md",
+          "bytes": 2607,
+          "sha256": "b25664909904a61b45c39ebc129c52526aa7b3301a257fe3ecde1340d6657538"
+        },
+        {
+          "retained_file": "ISTAB_PROBE.md",
+          "bytes": 5755,
+          "sha256": "231363a862bf106beb9f34bd826c05e6692fd8b48b4583d75e39678f1b28289b"
+        },
+        {
+          "retained_file": "README.md",
+          "bytes": 22140,
+          "sha256": "fc0e46f9bc29b386de4237917601096b8e4d4febf28a7217ff8d6a374e8b992f"
+        },
+        {
+          "retained_file": "SURUM_NOTLARI.md",
+          "bytes": 35807,
+          "sha256": "252f80831d094d71abaf1acb3bdf70bd341581be3128249167715e87e709f26f"
+        },
+        {
+          "retained_file": "pyproject.toml",
+          "bytes": 1125,
+          "sha256": "944a59a857777c5a77138c283faee74d318abdeb07aa650db19d14cd73450714"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp____init__.py",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__audit.py",
+          "bytes": 7097,
+          "sha256": "2e1d2b86b0f0f82f02cca2027bcd00b4bbf6853200df6ec4df8b77161f8a9c4c"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__bddk.py",
+          "bytes": 71865,
+          "sha256": "f792d747ea7e7e204e88d6190851810dd387a193dcdf861ff915bc837149f503"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__evds.py",
+          "bytes": 45845,
+          "sha256": "29fd462d4825023d3e826c6eada3c068ee8543a01518d87733b04d2a99d5a864"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__hmb.py",
+          "bytes": 153585,
+          "sha256": "77cb0bfe90259fd26014d103ee2778b264c1ac545575b7134d95148614d3326d"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__portal.py",
+          "bytes": 15990,
+          "sha256": "254fe58d72d616064fce10aa62805fa796912c1f6b60653953e49234b1925249"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__probe.py",
+          "bytes": 16401,
+          "sha256": "9a63773b04f3c6bedc41446f5e00168bfa6d3763cfb9207e68e421986ea6fb91"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__sdmx.py",
+          "bytes": 38812,
+          "sha256": "32d1aa9f8772d75649f22005b3539cf263165c301ff8d479a0aae73e5d7f67ad"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__server.py",
+          "bytes": 60417,
+          "sha256": "c150e8d1ef6f9cfe3c59fce37675d4fa51aa92c3a037d3e3162d3c232c15bbfd"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__tidy.py",
+          "bytes": 108264,
+          "sha256": "8892fa6a236a1f88cb0c26b589548867fe41e1ef276f101e83079cb5bca801a0"
+        },
+        {
+          "retained_file": "src__turkiye_veri_mcp__usage.py",
+          "bytes": 17015,
+          "sha256": "653a03c174c90751807a1af10bc1de4825dd6d72ec3696da02923ca4b5a20642"
+        },
+        {
+          "retained_file": "tests__test_bddk.py",
+          "bytes": 16465,
+          "sha256": "c10f6b17b4b93daf1396e7b6321724ee8b09eb20f5b83baa2eb34acd8d54202e"
+        },
+        {
+          "retained_file": "tests__test_evds.py",
+          "bytes": 14374,
+          "sha256": "909e3d2a6d1b4282049f8f1c0e9f80da1f54b5f43bdd161d3e2190af8e65035c"
+        },
+        {
+          "retained_file": "tests__test_hmb.py",
+          "bytes": 40062,
+          "sha256": "1177b31b2e0bb256cacc9427d0f48fc5de08934f0b24eaffe815471e82bdfd39"
+        },
+        {
+          "retained_file": "tests__test_tuik.py",
+          "bytes": 41203,
+          "sha256": "ffb5593d72bc41e5cf67a89f8df352287bd147b8373c78ae584c753f4992a866"
+        },
+        {
+          "retained_file": "tests__test_usage.py",
+          "bytes": 20500,
+          "sha256": "69a1f3df3ea593bf873a156b4c1eeb3570aa758ae72e3b83e4e6010d7da0f954"
+        }
+      ]
+    },
+    {
+      "repository": "noahsilv/tuikdata",
+      "commit": "90ccd70262ed7839e109032525f84f4ee760a8f5",
+      "commit_date": "2026-07-16T14:15:26Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 15976,
+          "sha256": "fd512f40ed81379b23340b6077a76a24d104aa54bd2729c9e98bb8eebf2163ed"
+        },
+        {
+          "retained_file": "mcp-server__README.md",
+          "bytes": 5804,
+          "sha256": "e9269f923df4ee382ccd3078160776d4839f0516d1df9fdbdd25c1289b6c33ef"
+        },
+        {
+          "retained_file": "mcp-server__pyproject.toml",
+          "bytes": 693,
+          "sha256": "df9a3891340e220daacc8473dd885de2d2d4796403d6dff09868bc367883d37a"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp____init__.py",
+          "bytes": 513,
+          "sha256": "63fd3d01bd6dbd5a284c19559fd20daaa9801f7a8412ebcb7370729718fcedc2"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__auth.py",
+          "bytes": 3556,
+          "sha256": "96dc55b7f346cd8317637c934207d3e7ad79690376b88005d8b7d54b7e0df188"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__geo.py",
+          "bytes": 7793,
+          "sha256": "f8008be7a8c34a3d0320e632a6014c91a3dd440a1169e34a4c270551c964f205"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__http_client.py",
+          "bytes": 3415,
+          "sha256": "5bd728dcc8cd434b5168368b042d888eaacd30286f52e9fabe35ba09976fe0e5"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__portal.py",
+          "bytes": 5696,
+          "sha256": "fcf9cd347ffa93e9cab61137e8059f42c6f2d31351f41dc4892e497159ef81bb"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__sdmx.py",
+          "bytes": 15227,
+          "sha256": "db122fb2e25e1a9ce6b5e57dda07a010ec1196017e96630b11a734f434f40a21"
+        },
+        {
+          "retained_file": "mcp-server__src__tuik_mcp__server.py",
+          "bytes": 12822,
+          "sha256": "f46b4e0b81bf2daab8727b207c118c282c21cf7ffa8acfbff13404d499cba060"
+        },
+        {
+          "retained_file": "mcp-server__tests__conftest.py",
+          "bytes": 1393,
+          "sha256": "6ccac9494a2a19ea2bcc968480a7c6fc6662a2ac54afe1a6fb743c709a9648b3"
+        },
+        {
+          "retained_file": "mcp-server__tests__test_auth.py",
+          "bytes": 3779,
+          "sha256": "f3782472d19fa240115e6dd8b3112ed9bbbe2693578e5565eb70ba9b186ea17e"
+        },
+        {
+          "retained_file": "mcp-server__tests__test_geo.py",
+          "bytes": 2596,
+          "sha256": "aeccf1278cfce4a5e92d6b2b52574138abf64f48db09bf4e46b85fa17758ed20"
+        },
+        {
+          "retained_file": "mcp-server__tests__test_portal.py",
+          "bytes": 1679,
+          "sha256": "b004119920524508bb9c911eb6fcdfdd7da0ba405a7641db81800f010b7c9678"
+        },
+        {
+          "retained_file": "mcp-server__tests__test_sdmx.py",
+          "bytes": 3542,
+          "sha256": "50b3f9933db6c0a5db919ec5ea6bf8229e11e461bafad7f29e6363c586a8eb18"
+        },
+        {
+          "retained_file": "mcp-server__tests__test_server.py",
+          "bytes": 4791,
+          "sha256": "2a9813b77e7b7ee40559e13f0cee22971db9998be89376ef1225903578c81d3e"
+        }
+      ]
+    },
+    {
+      "repository": "orhoncan/tuik-mcp",
+      "commit": "2c682e8ee9d84b47d8e46cc2389a8671cddb2b27",
+      "commit_date": "2026-09-20T09:07:14Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 8840,
+          "sha256": "57913450b36edd5bf58b1d483d6f59cad54a4f674eebaab52692ccec994c62c4"
+        },
+        {
+          "retained_file": "pyproject.toml",
+          "bytes": 624,
+          "sha256": "ca837ea7b5173b209d7995a5d18ee3c2dd45d13fcbd494fa857c62b9a5fe8072"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp____init__.py",
+          "bytes": 47,
+          "sha256": "8a1bb5f8a3aa5ab190f7651876be26e2191f43337aeca065b2943f4fc3b2d3d3"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp___version.py",
+          "bytes": 22,
+          "sha256": "667d4a15b970b851e20d17510224670c14646cfb6d5a1e388ca6b9cc6da8bf41"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp__auth.py",
+          "bytes": 9045,
+          "sha256": "08327a3c0349b002986a804be93b3a85136ff3a9c26674d7aabf85f9095c7214"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp__cli.py",
+          "bytes": 885,
+          "sha256": "66d5803e89e1cc48b7db2f2e29e9e1a1c2655db8d3cdaa0c7c3430fcc5005019"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp__sdmx.py",
+          "bytes": 20816,
+          "sha256": "22b5e0dc45bb095b485c485954addd7bfcd65f47092d58b7e6eda1ef9c906cf7"
+        },
+        {
+          "retained_file": "src__tuik_sdmx_mcp__server.py",
+          "bytes": 18107,
+          "sha256": "3236b991ed9902a4a4ed0c629608c1739c651d67a34b33434c0a6396377eeb99"
+        }
+      ]
+    },
+    {
+      "repository": "turkyilmazomer/tuik-mcp",
+      "commit": "c431b3ecf4eb8dd256b4e8c599e13d2062772d95",
+      "commit_date": "2026-04-24T12:01:02Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 6192,
+          "sha256": "4b7338e9f1cba469c781ae5f99a75ecad0e17b21d63611efae8e93d9bc42720b"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DTOs__EducationDto.cs",
+          "bytes": 423,
+          "sha256": "67d8d0791893a9a4b420cca246682c8351a12dd69f960a54b41863b1e9328f8a"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DTOs__InflationDto.cs",
+          "bytes": 282,
+          "sha256": "ded581998910be9ca9153ea4e3077078c682f656e1e36e19c1f4bcdedb8a06d5"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DTOs__PopulationDto.cs",
+          "bytes": 262,
+          "sha256": "18ae28245f5c5369564c3b9d2baa7f9245b64baea132d79083547222cbbae881"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DTOs__ProvinceUnemploymentDto.cs",
+          "bytes": 362,
+          "sha256": "7b355f65a05c10fa985e464e755d7f69fdc671f13808a4c121c526d98730d8d7"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DTOs__UnemploymentDto.cs",
+          "bytes": 333,
+          "sha256": "9562ff3c3d85f7ed9178f94fa302fc8a0f82b4df087b4a49d7834125a69db027"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__DependencyInjection__ApplicationServiceRegistration.cs",
+          "bytes": 667,
+          "sha256": "e1f161d7e83026348e13019917415c10daa3c46706926104f131acb92a1d6367"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__Services__EducationAppService.cs",
+          "bytes": 2314,
+          "sha256": "60f13915bfdaa5ac47b6930a7e2fa9988e38fada7e43bba1baad6f2322a4aeca"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__Services__InflationAppService.cs",
+          "bytes": 1650,
+          "sha256": "13cdd1eefbc9749617ac1946e045508f9b2dbd5378a3d7774d4ed3770738dba2"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__Services__PopulationAppService.cs",
+          "bytes": 1723,
+          "sha256": "8cd7500b040935d25d922cb6968eaa292ddf49e4d02ba63a82f07d4fc21db1d8"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__Services__ProvinceUnemploymentAppService.cs",
+          "bytes": 2360,
+          "sha256": "14b25f5473c30bece40db059a9f82265a3349502cd9ea84b53bec162d781342b"
+        },
+        {
+          "retained_file": "src__TuikMcp.Application__Services__UnemploymentAppService.cs",
+          "bytes": 1801,
+          "sha256": "0f8ed6b68d38888127a0aa3a0cd8b2a6752fe159636e2a10fd8286a2acc74c2c"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Entities__EducationData.cs",
+          "bytes": 758,
+          "sha256": "d47dbb07462f4dbdd6f2eba335e671e7ada944990559f761f1670ea0d6c3743c"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Entities__InflationData.cs",
+          "bytes": 491,
+          "sha256": "aa1610b1bedd33be75ab839a1f52da93a42aa5aa89e57235a5266523bfed869d"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Entities__PopulationData.cs",
+          "bytes": 401,
+          "sha256": "edd9e09ae513b073e51f14513f3fe9d93752a11334a60b0d360f210bbd44c8d4"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Entities__ProvinceUnemploymentData.cs",
+          "bytes": 603,
+          "sha256": "30d490088a487da39be26c39cf4c2ecf64635bcf6413a178d7564a9cbe7fec8e"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Entities__UnemploymentData.cs",
+          "bytes": 528,
+          "sha256": "ad596219d1a7408e9ef0a8a56150496eef787a1d2825a83dc8299e633273d9c3"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Interfaces__IEducationService.cs",
+          "bytes": 1085,
+          "sha256": "7f22c44f90c766e167c0fa16d230f274216d6419f2d0c95a67d74104a0a9a074"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Interfaces__IInflationService.cs",
+          "bytes": 787,
+          "sha256": "87b9ced57d78e190f23024a5949b0b709078d7c2592ac311bb45152d467fa9dd"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Interfaces__IPopulationService.cs",
+          "bytes": 832,
+          "sha256": "773c90e407f1e744aed7f9f7c845b046d6cf501fd576e68d7fdd9d6fbe09e9d8"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Interfaces__IProvinceUnemploymentService.cs",
+          "bytes": 1167,
+          "sha256": "83760390cbf89a66b69c740a59ebbf1edb36ed2bcd406d784f3c5062a6eefad9"
+        },
+        {
+          "retained_file": "src__TuikMcp.Domain__Interfaces__IUnemploymentService.cs",
+          "bytes": 799,
+          "sha256": "ed065e4e3dc13d0d388ee80d3993a535f5427f6046f3a9cba74e3277c60250cf"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Data__EmbeddedJsonDataProvider.cs",
+          "bytes": 1596,
+          "sha256": "4662ca94af411a5d67754ced4bf9dd23f1c51bf59e284610745a2d2c1275ee18"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__DependencyInjection__InfrastructureServiceRegistration.cs",
+          "bytes": 928,
+          "sha256": "d122c9e3132583d31f6fcf77c9308b02775f6fbc33a4f4894834a63ce5875ef5"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Services__TuikEducationService.cs",
+          "bytes": 2097,
+          "sha256": "3a2ce952140c03c0e4c32ae5ffacc4bf21b41717d97082b0c3f0844c71f9bcb8"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Services__TuikInflationService.cs",
+          "bytes": 1473,
+          "sha256": "c7c7f9edd551d3e8ee348449a74217032dcce5c1cc15ddbfc8d842c384c6b396"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Services__TuikPopulationService.cs",
+          "bytes": 1696,
+          "sha256": "aefcc04c8811655cba118a92d53926ca1e502cb8e9695bce30228b4038d4f700"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Services__TuikProvinceUnemploymentService.cs",
+          "bytes": 2264,
+          "sha256": "b6a6ed3138f54ece432aec9a827304cf058120b95f773623049b7e2422f5d468"
+        },
+        {
+          "retained_file": "src__TuikMcp.Infrastructure__Services__TuikUnemploymentService.cs",
+          "bytes": 1508,
+          "sha256": "b101f9730527302054544d0c90be58720a6cdac83a5ab71fda0600ea1edbe395"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Program.cs",
+          "bytes": 2427,
+          "sha256": "a9b3467f5041e88543ba1afaf4f9a0e6b7d72d4e95bfc9a2c7cfc1d94cd2824b"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Tools__EducationTools.cs",
+          "bytes": 7819,
+          "sha256": "ba53dd009275a0c8edb25a3c5dcbe3ef53a2d17a0237609b1c4fd9e0bbc4cc6c"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Tools__InflationTools.cs",
+          "bytes": 4282,
+          "sha256": "9dc15a4e527f0ab95b94d3b4007bb1561b341e359bfa67ad6075f912eb932dd2"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Tools__PopulationTools.cs",
+          "bytes": 4168,
+          "sha256": "3e56a8eceddef9370100eb080d9c5d8d2f03bdf79a592c93c661161e9ec4cd1a"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Tools__ProvinceUnemploymentTools.cs",
+          "bytes": 8522,
+          "sha256": "dd902193659a569f1baff83df957090b2a13f0965aa7b55d289e39edbc341615"
+        },
+        {
+          "retained_file": "src__TuikMcp.McpServer__Tools__UnemploymentTools.cs",
+          "bytes": 4490,
+          "sha256": "d7bfd23eb1ff8ad3266ef5cd3ae0c1cdbbd24fdfa739a566fd12a13aba51db0a"
+        }
+      ]
+    },
+    {
+      "repository": "ulascan54/VeriTR-MCP",
+      "commit": "2c934a336f11d59ac5d70731b80c32e78fcecf46",
+      "commit_date": "2026-08-22T20:45:09Z",
+      "files_retained": [
+        {
+          "retained_file": "README.md",
+          "bytes": 14908,
+          "sha256": "4b2d6ce173d40b93084bc072082065601fc5cfb19cb359b61e4e1bfc2f3da2c1"
+        },
+        {
+          "retained_file": "pyproject.toml",
+          "bytes": 2720,
+          "sha256": "d877cf082cbb63916824f011b3d82cbbadca40f0a0e8f091ecb177b0e8727a67"
+        },
+        {
+          "retained_file": "src__veritr____init__.py",
+          "bytes": 115,
+          "sha256": "9c45feeff3b68cab6b6dea65a50b47a9b64371a47873998c07830966377f7216"
+        },
+        {
+          "retained_file": "src__veritr____main__.py",
+          "bytes": 1940,
+          "sha256": "d5b7ff75a49f18ea022ea8533d1e92c8a4ba5ee49848534adc840f8683e65af6"
+        },
+        {
+          "retained_file": "src__veritr__analytics____init__.py",
+          "bytes": 303,
+          "sha256": "dc379077499fc1122be0e9aff7027153db6992277c2aea1e2c47087f541d7a4d"
+        },
+        {
+          "retained_file": "src__veritr__analytics__statistics.py",
+          "bytes": 5176,
+          "sha256": "defb89cd1ae96be30bf89abe933d90664c9b33c848ad5310be3aeb77c63f5d06"
+        },
+        {
+          "retained_file": "src__veritr__cache____init__.py",
+          "bytes": 310,
+          "sha256": "e0e1d5d301f02a80f64661c9238abc3f0bfc1561f479b809c3bd498cd9346aad"
+        },
+        {
+          "retained_file": "src__veritr__cache__cache.py",
+          "bytes": 2019,
+          "sha256": "7669a1acf8b9b7abf00e517954787d429decb4852e94599d08b7b1d0f96e151d"
+        },
+        {
+          "retained_file": "src__veritr__config.py",
+          "bytes": 1886,
+          "sha256": "d5d2e457aab629083736030a6b7fe73347d908774a7682eec29f3eb275cde629"
+        },
+        {
+          "retained_file": "src__veritr__errors.py",
+          "bytes": 2020,
+          "sha256": "e35b54ff0f182fb2633a1a7930186538e36e72deffee7eea539fefe0a3b14762"
+        },
+        {
+          "retained_file": "src__veritr__indicators____init__.py",
+          "bytes": 221,
+          "sha256": "60afab11f65c68b2d4959c1c5ebcd3bc9bb8152b324b25b4e6b47affc034471e"
+        },
+        {
+          "retained_file": "src__veritr__indicators__registry.py",
+          "bytes": 5274,
+          "sha256": "a6df9b7fde9c602e9c5d4101e6c4d147e029bb50db948585ea07f3849ecb7dfd"
+        },
+        {
+          "retained_file": "src__veritr__models____init__.py",
+          "bytes": 418,
+          "sha256": "265a10e59c163c74e461abc0514f4cb248e126d0042155cbc8d788264770079b"
+        },
+        {
+          "retained_file": "src__veritr__models__geography.py",
+          "bytes": 736,
+          "sha256": "9a9699d1e06d274590052d83624b9ef8944ba60e48ce88d82ffac8a7e0945286"
+        },
+        {
+          "retained_file": "src__veritr__models__indicator.py",
+          "bytes": 3078,
+          "sha256": "d4c4a3cb199e586bfeeb6c531f2dbe28e9e37ed1f94eb999fd0c7f0ad14d6597"
+        },
+        {
+          "retained_file": "src__veritr__models__observation.py",
+          "bytes": 1731,
+          "sha256": "c40aad234fd73dd438cdf35483c52decf0f4d8b0e4d45f0dd4eef73bd5adf8c5"
+        },
+        {
+          "retained_file": "src__veritr__models__source.py",
+          "bytes": 949,
+          "sha256": "8a8e36a33f59a5d4a5398d8c904135724cc20d148c11c134ddb39cd20cf7bc71"
+        },
+        {
+          "retained_file": "src__veritr__normalization____init__.py",
+          "bytes": 122,
+          "sha256": "707e8e0eda776327ff97551d7cf3c524e3aeee2ef53cd2eb8358fdad5ce13027"
+        },
+        {
+          "retained_file": "src__veritr__normalization___provinces.py",
+          "bytes": 6247,
+          "sha256": "30cf860f572f46cc1beda4cb5feb5f8183127216b47caff4f8e98979e42c14d4"
+        },
+        {
+          "retained_file": "src__veritr__normalization__dates.py",
+          "bytes": 4312,
+          "sha256": "fd21dd363d97d3d885450373f85546de027f86f633e82be796ef72a80e5669df"
+        },
+        {
+          "retained_file": "src__veritr__normalization__frequency.py",
+          "bytes": 2216,
+          "sha256": "50ac947352a8b61d95bbe5e5d38470d1ce3f5622d2f5bf29dbabf306bbd0b390"
+        },
+        {
+          "retained_file": "src__veritr__normalization__geography.py",
+          "bytes": 4596,
+          "sha256": "63da34f6245aa24cfe710eaebd63389f65264f05902b9795e5485d4371bb08bf"
+        },
+        {
+          "retained_file": "src__veritr__normalization__text.py",
+          "bytes": 1495,
+          "sha256": "cc8d62ef2104b147a132dec5d4e3956313b03cfeacc4c00578d62dcd6cba8202"
+        },
+        {
+          "retained_file": "src__veritr__observability.py",
+          "bytes": 2320,
+          "sha256": "998c4c8ebd91da92a4324c0e241614557129bcad28bb530d1396e7c53ed383df"
+        },
+        {
+          "retained_file": "src__veritr__providers____init__.py",
+          "bytes": 294,
+          "sha256": "698f02b915f5e000736838bc3ad9e04b9626c412b527fc7d813873f53fc62ba3"
+        },
+        {
+          "retained_file": "src__veritr__providers__base.py",
+          "bytes": 2309,
+          "sha256": "39c1637755e9cf6838b4d7542b5d49abf96d54fe1626043f15fb5b45c46e0213"
+        },
+        {
+          "retained_file": "src__veritr__providers__http.py",
+          "bytes": 6654,
+          "sha256": "2e65d66a9a0a5eeb473fdb49c60248a47f5a1e34fde1aadf8dcd47e81014ca27"
+        },
+        {
+          "retained_file": "src__veritr__providers__municipal____init__.py",
+          "bytes": 358,
+          "sha256": "23fee4b010ac4c4b6a0e9fde79816c3d226b552f35f570973d78e10f9d654093"
+        },
+        {
+          "retained_file": "src__veritr__providers__municipal__cities.py",
+          "bytes": 2802,
+          "sha256": "70a3429230a36e8c173b72a8bd86ac25e3dec5fc34b80cfafa5a54d467e6a5a5"
+        },
+        {
+          "retained_file": "src__veritr__providers__municipal__client.py",
+          "bytes": 3454,
+          "sha256": "e8a97550de831d25a34752b03cb8088b8a1741b58db331079f8ab5cc4edca615"
+        },
+        {
+          "retained_file": "src__veritr__providers__municipal__provider.py",
+          "bytes": 7977,
+          "sha256": "3c7cbb0841d9bfaa3f6e93f77b00c77a53b055bbcc2e7581fa1e68be0a982767"
+        },
+        {
+          "retained_file": "src__veritr__providers__registry.py",
+          "bytes": 4604,
+          "sha256": "a838c2e8b176f7559b1d5f3a2aa9fcf2334cc2285bc3424a1e9947596c0774ef"
+        },
+        {
+          "retained_file": "src__veritr__providers__tcmb____init__.py",
+          "bytes": 84,
+          "sha256": "d34618417da96845008dbfb4329f88632ebaf57d1e77c0649575802d6f055e20"
+        },
+        {
+          "retained_file": "src__veritr__providers__tcmb__provider.py",
+          "bytes": 7172,
+          "sha256": "0676d647d458a86401ae0c0b4caec96ccc56864535540eb908fd0786309179c7"
+        },
+        {
+          "retained_file": "src__veritr__providers__tuik____init__.py",
+          "bytes": 84,
+          "sha256": "f369c6a182f581a8403105db730a171e5fffeba096a1fbdf8d9416bb922229c9"
+        },
+        {
+          "retained_file": "src__veritr__providers__tuik__catalog.py",
+          "bytes": 3174,
+          "sha256": "12ee34bab0e7bf9e9f27b340082ee8e8e9007433347cac55173e6923301c5711"
+        },
+        {
+          "retained_file": "src__veritr__providers__tuik__client.py",
+          "bytes": 4201,
+          "sha256": "ca5892f36287c45e6077383d571ba53691d9118b96effa76f3e5c0b83ad70d28"
+        },
+        {
+          "retained_file": "src__veritr__providers__tuik__jsonstat.py",
+          "bytes": 5361,
+          "sha256": "55be86916dd42d57b7615f136100d35c3358918d7e55165ddc533e389217182f"
+        },
+        {
+          "retained_file": "src__veritr__providers__tuik__provider.py",
+          "bytes": 15159,
+          "sha256": "624db4b708ab673ec107d294b3315daaf3e9448f809a488b09e8f26b399e171c"
+        },
+        {
+          "retained_file": "src__veritr__ratelimit____init__.py",
+          "bytes": 134,
+          "sha256": "8bcdcca024c7ee0c2e80017df28639cb22deec9cba90d8dcf9f694d62be88065"
+        },
+        {
+          "retained_file": "src__veritr__ratelimit__limiter.py",
+          "bytes": 2296,
+          "sha256": "e6fc172c031be7e9d10524800074dd7a268f6f2604ac21042839c58c28cbf577"
+        },
+        {
+          "retained_file": "src__veritr__server.py",
+          "bytes": 26715,
+          "sha256": "a5a1d9265356c9a0f9740ed88875bdce53d14a7846b1164fbd6f2dd9d8733a44"
+        },
+        {
+          "retained_file": "src__veritr__tools____init__.py",
+          "bytes": 210,
+          "sha256": "9b18510417138aa93e2c77da5534e54100d8ca69516630a661cb24fbb47e97e7"
+        },
+        {
+          "retained_file": "src__veritr__tools__formatting.py",
+          "bytes": 3628,
+          "sha256": "36018bd793565f1bda089d313b74a2053ef07be647ef3634b8c277e9169c7db9"
+        },
+        {
+          "retained_file": "tests__conftest.py",
+          "bytes": 2630,
+          "sha256": "1dd40bd28ec677704f2ff5b9f9e8a2b0b56310ec86c1855025b373608e51e93b"
+        },
+        {
+          "retained_file": "tests__docs__test_markdown.py",
+          "bytes": 4739,
+          "sha256": "5cb6801afccf67fa7b3ff1f591cf0a71f4dde9ff8590637d268a9dfa3c115ee4"
+        },
+        {
+          "retained_file": "tests__integration__test_live_providers.py",
+          "bytes": 26498,
+          "sha256": "fda5d4ed55b546b9ab566270d33f30999e7520464dbdac0407d8425a5070a9c0"
+        },
+        {
+          "retained_file": "tests__integration__test_readme_promises.py",
+          "bytes": 9493,
+          "sha256": "feaa73de101d9fc585d08dfd023ed63c4fd8606870b5a552d1bbeb00282ff286"
+        },
+        {
+          "retained_file": "tests__providers__test_jsonstat.py",
+          "bytes": 3862,
+          "sha256": "5564e18d8fcb8dac5c9706cf02351828bd6b35ab90046c5b86508662b35e2a67"
+        },
+        {
+          "retained_file": "tests__providers__test_municipal.py",
+          "bytes": 9780,
+          "sha256": "1289a0b9643f82e0b5771fb273e89a405d73f69017136bbbb212b2bf0946e83c"
+        },
+        {
+          "retained_file": "tests__providers__test_tcmb.py",
+          "bytes": 4116,
+          "sha256": "8641327457bf028401438bc941764e7fe729e3674ff2f943195d049a248c93eb"
+        },
+        {
+          "retained_file": "tests__providers__test_tuik.py",
+          "bytes": 19160,
+          "sha256": "f725fd8a00be497e65b2a6a7fd2606950213de34dab0eeb22e6048a8bd707b7c"
+        },
+        {
+          "retained_file": "tests__test_analytics.py",
+          "bytes": 4608,
+          "sha256": "9cecccdbe607ce909260ed12c0b662e91fa2bc21805a62dd5eeabe44637fce8e"
+        },
+        {
+          "retained_file": "tests__test_cli.py",
+          "bytes": 3260,
+          "sha256": "1013cd5a9bd4cfac5d77cc1a777051f17263ec248056159638b06414170c76c5"
+        },
+        {
+          "retained_file": "tests__test_indicators.py",
+          "bytes": 13054,
+          "sha256": "6143d2aa07f9ad5da4fd7adb74f0cec89bf069f856a440de902cc7be6f7f9303"
+        },
+        {
+          "retained_file": "tests__test_normalization.py",
+          "bytes": 8049,
+          "sha256": "3fe395c474f588842fcf126e190507506bf1ba529246a66bee77bc03f635fe2a"
+        },
+        {
+          "retained_file": "tests__test_ratelimit.py",
+          "bytes": 1627,
+          "sha256": "aa56bbd5c06609dda9b73c3196f57e204b49412f52c72954cc0415d1bdb52a31"
+        },
+        {
+          "retained_file": "tests__tools__test_server.py",
+          "bytes": 10952,
+          "sha256": "e1343f6584e0e527f2bc761b96c5f43e50afb0f42e1799caab22ce40e888df01"
+        }
+      ]
+    }
+  ]
+}
