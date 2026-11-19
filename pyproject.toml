@@ -32,6 +32,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 tuik-mcp = "tuik_mcp.server:main"
 tuik-mcp-index = "tuik_mcp.search.index_cli:main"
 tuik-mcp-doctor = "tuik_mcp.doctor:main"
+tuik-mcp-artifacts = "tuik_mcp.artifacts:main"
 
 [project.urls]
 Repository = "https://github.com/ByRock010/TUIK-Data-MCP-Server"

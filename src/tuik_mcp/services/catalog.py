@@ -1,8 +1,11 @@
 import asyncio
+import csv
+import io
 from datetime import datetime
 from urllib.parse import urlencode
 
 from tuik_mcp import charts
+from tuik_mcp.artifacts import ArtifactInput, ArtifactStore, PendingFile
 from tuik_mcp.cache import Cache, MemoryTTLCache
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.classification import ClassificationClient
@@ -45,6 +48,39 @@ from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
+SOURCE_TYPES = {
+    "csv": "text/csv",
+    "xls": "application/vnd.ms-excel",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+}
+
+
+def plain_number(value: float | None) -> str:
+    if value is None:
+        return ""
+    return str(int(value)) if value.is_integer() else repr(value)
+
+
+def chart_csv(plot, x: list[str]) -> bytes:
+    """The plotted values exactly as drawn: one row per x label, one column per line."""
+    output = io.StringIO()
+    writer = csv.writer(output, lineterminator="\n")
+    writer.writerow([" | ".join(x), *(line.name for line in plot.lines)])
+    for index, label in enumerate(plot.labels):
+        writer.writerow([label, *(plain_number(line.values[index]) for line in plot.lines)])
+    return output.getvalue().encode()
+
+
+def chart_notes(title: str, unit: str | None, citation: str, warnings: list[str]) -> bytes:
+    lines = [title, f"Birim / unit: {unit}" if unit else None, citation, ""]
+    lines += ["Uyarılar / warnings:", *(f"- {w}" for w in warnings)] if warnings else []
+    lines += [
+        "",
+        "chart-data.csv holds the plotted values; empty cells are gaps in the source.",
+        "manifest.json lists every input, its SHA-256 and the selection used.",
+    ]
+    return ("\n".join(line for line in lines if line is not None) + "\n").encode()
+
 
 class CatalogService:
     def __init__(self, http: HttpClient, cache: Cache | None = None):
@@ -54,6 +90,7 @@ class CatalogService:
         self._dataset_lock = asyncio.Lock()
         self.files = FileStore(self.portal)
         self.queries = QueryService(self.files, http.settings)
+        self.artifacts = ArtifactStore(http.settings)
         settings = http.settings
         self.index = (
             OpenSearchBackend(
@@ -756,9 +793,16 @@ class CatalogService:
         title: str | None = None,
         decimal_separator: str | None = None,
         labels: list[str] | None = None,
+        save: bool = False,
     ) -> tuple[ChartResponse, bytes | None]:
-        """Chart the rows get_tuik_data would read, from the same retained snapshot (#72)."""
+        """Chart the rows get_tuik_data would read, from the same retained snapshot (#72).
+
+        save=True also writes an immutable artifact bundle (#88): the PNG, the plotted
+        values as CSV, notes with the citation and the unchanged source file.
+        """
         validate_id(resource_id)
+        if type(save) is not bool:
+            raise ValueError("save must be a boolean")
         if chart not in {"line", "bar"}:
             raise ValueError("chart must be 'line' or 'bar'")
         for name, names, most in (("x", x, 3), ("y", y, 6)):
@@ -883,7 +927,74 @@ class CatalogService:
             warnings.append(
                 f"{len(plot.labels)} bars are hard to read; consider chart='line' or last."
             )
+        artifact = None
+        if save:
+            selection = dict(
+                x=x,
+                y=y,
+                chart=chart,
+                series=series,
+                sheet=table.sheet,
+                filters=filters,
+                query=query.model_dump(mode="json", exclude_defaults=True),
+                last=last,
+                decimal_separator=decimal_separator,
+                labels=labels,
+            )
+            manifest = await self.artifacts.create(
+                kind="chart",
+                title=heading,
+                citation=footer,
+                inputs=[
+                    ArtifactInput(
+                        resource_id=resource_id,
+                        source_url=resource.source_url,
+                        file_url=verified.source_url,
+                        format=verified.format,
+                        retrieved_at=file.retrieved_at,
+                        publication_date=resource.publication_date,
+                        sha256=file.digest,
+                        size=len(file.body),
+                        selection={k: v for k, v in selection.items() if v not in (None, {}, [])},
+                    )
+                ],
+                files=[
+                    PendingFile(
+                        name="chart.png", role="output", mime_type="image/png", content=image
+                    ),
+                    PendingFile(
+                        name="chart-data.csv",
+                        role="data",
+                        mime_type="text/csv",
+                        content=chart_csv(plot, x),
+                    ),
+                    PendingFile(
+                        name="README.txt",
+                        role="notes",
+                        mime_type="text/plain",
+                        content=chart_notes(heading, table.unit, footer, warnings),
+                    ),
+                ],
+                sources={
+                    0: (
+                        f"source.{verified.format}",
+                        SOURCE_TYPES.get(verified.format, "application/octet-stream"),
+                        file.body,
+                    )
+                },
+                transformations=[
+                    "Rows selected with get_tuik_data semantics (filters, query predicates, sort).",
+                    "Published strings parsed as numbers; empty, placeholder and non-numeric "
+                    "cells are gaps, never zero.",
+                    f"Points ordered {plot.order}"
+                    + (f"; the last {last} kept" if last is not None else "")
+                    + ".",
+                ],
+                warnings=warnings,
+            )
+            artifact = self.artifacts.summary(manifest)
         return ChartResponse(
+            artifact=artifact,
             **base,
             status="ok",
             title=heading,

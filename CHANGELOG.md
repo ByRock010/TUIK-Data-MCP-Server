@@ -17,6 +17,13 @@ All notable changes to this project are documented here. The format follows
   `evaluate_search.py collect-production` ranks a frozen corpus through the served
   backend, and `score-ai --documents` reports series metrics. Hybrid top tens are
   not identical across index builds; the report documents this.
+- Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
+  PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
+  `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
+  each file's MIME type, size and SHA-256. Files are MCP resource links read with
+  `resources/read`, or exported locally with `tuik-mcp-artifacts`. Storage is
+  server-owned and budgeted (total/file bytes, files, lifetime, concurrent jobs),
+  survives restarts and never follows caller paths or symlinks (#88).
 
 - `tuik-mcp-doctor` reports local installation/settings errors, optional extras,
   prospective storage permissions and unverified model-cache state without
