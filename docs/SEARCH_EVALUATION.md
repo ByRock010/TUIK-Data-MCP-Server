@@ -29,9 +29,9 @@ identities, with 9 documented revisions. Results on that pool:
 In that original comparison, abbreviation queries regress (0.911 → 0.833).
 The #79 routing amendment below addresses this regression. Series-collapsed nDCG@10 is
 unchanged (0.4575 vs 0.4526), so the gain is precision within already relevant
-series, not new series. Dataset-filtered search stays lexical because it was not
-measured. The same ADR 0004 limitations apply, plus a second, non-independent AI
-assessor for the new pairs.
+series, not new series. Dataset-filtered search was not measured here; #80 below
+measures it and adopts hybrid ranking. The same ADR 0004 limitations apply, plus a
+second, non-independent AI assessor for the new pairs.
 
 ## Abbreviation routing (#79, 2026-11-19)
 
@@ -55,6 +55,27 @@ This is a deterministic archived-routing replay, not a fresh retrieval or new li
 source review. The inherited, dependent AI grades and known historical pool do
 not establish held-out generalization or independent human validation. NACE and
 spelling variants are covered by routing tests, not this six-query relevance set.
+
+## Dataset-filtered hybrid ranking (#80, 2026-11-19)
+
+The [fixed plan](verification/issue-80-dataset-hybrid-plan-2026-11-19.md) and
+[report](verification/issue-80-dataset-hybrid-2026-11-19.md) rank the frozen corpus with
+the dataset filter inside every query (`collect-datasets`, one index build for all
+systems). The pool grows to **1,887 pairs** (198 new; 34 reuse the same assessor's #78
+source-reviewed grades), source-reviewed against 788 live identities with no revisions.
+Scores use dataset grades only (`by_resource_type.dataset`).
+
+| System | Dataset nDCG@10 | MRR@10 | Pooled Recall@10 |
+| --- | ---: | ---: | ---: |
+| Lexical (previous behaviour) | 0.6549 | 0.7880 | 0.6558 |
+| Hybrid 0.7/0.3 | 0.7138 | 0.8771 | 0.7491 |
+| Hybrid equal | 0.6854 | 0.8715 | 0.7289 |
+| Hybrid equal + abbreviation routing (served) | **0.6898** | **0.8715** | **0.7334** |
+
+The served combination passes the fixed rule (higher nDCG@10, MRR@10 not lower by
+more than 0.05), so dataset-filtered searches are now hybrid. Synonym (0.746 → 0.735),
+ASCII (0.564 → 0.503) and typo (0.586 → 0.558) categories regress; exact,
+multi-concept and regional queries gain most.
 
 ## Full-metadata comparison (#20)
 
