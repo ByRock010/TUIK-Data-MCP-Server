@@ -23,6 +23,7 @@ import re
 import secrets
 import shutil
 import sys
+import threading
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Literal
@@ -30,6 +31,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, ValidationError
 
 from tuik_mcp.config import Settings
+from tuik_mcp.services.files import finish_worker
 
 SCHEMA_VERSION = 1
 SCHEME = "tuik-artifact"
@@ -142,6 +144,10 @@ class ArtifactStore:
         self.max_files = settings.artifact_max_files
         self.retain_sources = settings.artifact_retain_sources
         self.jobs = asyncio.Semaphore(settings.artifact_max_jobs)
+        # Bytes reserved by bundles still being written. The quota decision, the
+        # reservation and its release at publication all happen under this lock.
+        self.space = threading.Condition()
+        self.reserved = 0
 
     # Layout ------------------------------------------------------------------
 
@@ -185,7 +191,8 @@ class ArtifactStore:
     ) -> ArtifactManifest:
         """Write one immutable bundle; `sources` maps input index → (name, mime, bytes)."""
         async with self.jobs:
-            return await asyncio.to_thread(
+            # A cancelled caller cannot stop the thread; keep its slot until it exits.
+            return await finish_worker(
                 self._create,
                 kind,
                 title,
@@ -235,11 +242,7 @@ class ArtifactStore:
                 raise ValueError(
                     f"{item.name} is {len(item.content)} bytes; the limit is {self.max_file}"
                 )
-        size = sum(len(item.content) for item in pending)
-        if size > self.max_total:
-            raise ValueError("The artifact is larger than the whole artifact storage budget")
         base = self.base()
-        self.sweep(base, reserve=size)
         artifact_id = "art_" + secrets.token_hex(16)
         created = datetime.now(UTC)
         times = {item.retrieved_at for item in inputs}
@@ -271,18 +274,53 @@ class ArtifactStore:
                 for item in pending
             ],
         )
+        # The manifest is a stored file too: it counts against both budgets.
+        record = manifest.model_dump_json(indent=2).encode()
+        if len(record) > self.max_file:
+            raise ValueError(
+                f"{MANIFEST} would be {len(record)} bytes; the limit is {self.max_file}. "
+                "Narrow the selection."
+            )
+        size = sum(len(item.content) for item in pending) + len(record)
+        if size > self.max_total:
+            raise ValueError("The artifact is larger than the whole artifact storage budget")
+        self._reserve(base, size)
         # Build in a private temporary directory, then publish it with one rename.
         staging = base / f".staging-{artifact_id}"
-        staging.mkdir(mode=0o700)
+        published = False
         try:
+            staging.mkdir(mode=0o700)
             for item in pending:
                 self._write(staging / item.name, item.content)
-            self._write(staging / MANIFEST, manifest.model_dump_json(indent=2).encode())
-            staging.rename(base / artifact_id)
+            self._write(staging / MANIFEST, record)
+            with self.space:
+                staging.rename(base / artifact_id)
+                published = True
+                self._release(size)
         except BaseException:
             shutil.rmtree(staging, ignore_errors=True)
             raise
+        finally:
+            if not published:
+                with self.space:
+                    self._release(size)
         return manifest
+
+    def _reserve(self, base: Path, size: int) -> None:
+        """Make room for `size` bytes, counting every bundle still being written."""
+        with self.space:
+            while True:
+                stored = self._sweep(base, reserve=self.reserved + size)[1]
+                if stored + self.reserved + size <= self.max_total or not self.reserved:
+                    break
+                # Only bundles in progress fill the budget: wait for them to publish,
+                # after which they can be evicted like any other bundle.
+                self.space.wait()
+            self.reserved += size
+
+    def _release(self, size: int) -> None:
+        self.reserved -= size
+        self.space.notify_all()
 
     @staticmethod
     def _write(path: Path, content: bytes) -> None:
@@ -318,9 +356,14 @@ class ArtifactStore:
             found.append((manifest.created_at, manifest.expires_at, size, path))
         return found
 
-    def sweep(self, base: Path | None = None, *, reserve: int = 0) -> list[str]:
+    def sweep(self, base: Path | None = None) -> list[str]:
         """Drop expired, broken and abandoned bundles, then the oldest ones over budget."""
         base = base or self.base()
+        with self.space:
+            return self._sweep(base, reserve=self.reserved)[0]
+
+    def _sweep(self, base: Path, *, reserve: int) -> tuple[list[str], int]:
+        """Removed bundle IDs and the bytes still stored; the caller holds `space`."""
         now = datetime.now(UTC)
         removed = []
         kept = []
@@ -337,7 +380,7 @@ class ArtifactStore:
             shutil.rmtree(path, ignore_errors=True)
             removed.append(path.name)
             total -= size
-        return removed
+        return removed, total
 
     # Reading -----------------------------------------------------------------
 

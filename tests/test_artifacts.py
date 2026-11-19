@@ -8,6 +8,7 @@ import io
 import json
 import os
 import sys
+import threading
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -239,6 +240,96 @@ async def test_concurrent_jobs_are_bounded_and_staging_is_never_swept(tmp_path, 
     os.utime(staging, (old, old))
     target.sweep()
     assert not staging.exists()
+
+
+def on_disk(target):
+    """Every byte under the root, staging directories included."""
+    return sum(p.stat().st_size for p in target.base().rglob("*") if p.is_file())
+
+
+async def test_concurrent_saves_share_one_quota_including_bundles_in_progress(
+    tmp_path, monkeypatch
+):
+    budget = 1024 * 1024
+    target = store(tmp_path, artifact_max_total_bytes=budget, artifact_max_jobs=2)
+    chunk = PendingFile(name="data.bin", role="data", mime_type="x/y", content=b"1" * 600_000)
+    writing, release = threading.Event(), threading.Event()
+    peak = 0
+    original = target._write
+
+    def write(path, content):
+        nonlocal peak
+        if path.name == "data.bin" and not writing.is_set():
+            writing.set()  # The first save has reserved its bytes and is writing.
+            assert release.wait(10)
+        original(path, content)
+        peak = max(peak, on_disk(target))
+
+    monkeypatch.setattr(target, "_write", write)
+    first = asyncio.create_task(make(target, files=[chunk], sources=False))
+    assert await asyncio.to_thread(writing.wait, 10)
+    second = asyncio.create_task(make(target, files=[chunk], sources=False))
+    await asyncio.sleep(0.2)
+    # Both jobs run, but the second waits for room instead of overshooting the quota.
+    assert not second.done() and 600_000 < target.reserved <= budget
+    release.set()
+    older, newer = await asyncio.gather(first, second)
+    assert peak <= budget and on_disk(target) <= budget and target.reserved == 0
+    # Once published, the first bundle is evicted for the second like any older one.
+    with pytest.raises(ArtifactError) as gone:
+        target.manifest(older.artifact_id)
+    assert gone.value.code == "not_found" and target.manifest(newer.artifact_id)
+
+
+async def test_a_cancelled_save_keeps_its_job_slot_until_its_worker_exits(tmp_path, monkeypatch):
+    target = store(tmp_path, artifact_max_jobs=1)
+    running, peak = 0, 0
+    entered, release = threading.Event(), threading.Event()
+    original = target._create
+
+    def counted(*args):
+        nonlocal running, peak
+        running += 1
+        peak = max(peak, running)
+        try:
+            if not entered.is_set():
+                entered.set()
+                assert release.wait(10)
+            return original(*args)
+        finally:
+            running -= 1
+
+    monkeypatch.setattr(target, "_create", counted)
+    first = asyncio.create_task(make(target))
+    assert await asyncio.to_thread(entered.wait, 10)
+    first.cancel()
+    second = asyncio.create_task(make(target))
+    await asyncio.sleep(0.2)
+    assert not second.done() and peak == 1  # The thread still runs; so does its slot.
+    release.set()
+    with pytest.raises(asyncio.CancelledError):
+        await first
+    assert (await second).artifact_id and peak == 1 and target.reserved == 0
+
+
+async def test_the_manifest_counts_against_the_file_and_total_budgets(tmp_path):
+    budget = 1024 * 1024
+    target = store(tmp_path, artifact_max_total_bytes=budget, artifact_max_file_bytes=2 * budget)
+    exact = PendingFile(name="data.bin", role="data", mime_type="x/y", content=b"1" * budget)
+    with pytest.raises(ValueError, match="whole artifact storage budget"):
+        await make(target, files=[exact], sources=False)
+    assert on_disk(target) == 0
+    fits = exact.model_copy(update={"content": b"1" * (budget - 4096)})
+    manifest = await make(target, files=[fits], sources=False)
+    assert budget - 4096 < on_disk(target) <= budget
+    assert target.manifest(manifest.artifact_id)
+    # A metadata-heavy selection cannot slip a large manifest past the file limit.
+    small = store(tmp_path / "small", artifact_max_file_bytes=64 * 1024)
+    where = [{"column": f"c{i}", "in": ["v" * 200] * 100} for i in range(20)]
+    heavy = pinned().model_copy(update={"selection": {"where": where}})
+    with pytest.raises(ValueError, match="manifest.json would be"):
+        await make(small, inputs=[heavy])
+    assert on_disk(small) == 0 and small.reserved == 0
 
 
 async def test_cli_lists_shows_and_exports_without_overwriting(tmp_path, monkeypatch, capsys):

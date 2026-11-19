@@ -71,6 +71,7 @@ A server-local path is never reported as a download. A future hosted server (#10
 - **No caller-chosen paths.** IDs are `art_` plus 32 random hex digits, and file names come from the server. Both are validated again on every read (letters, digits, `-`, `_`, one extension, no `..`).
 - **No symlinks.** Files are created exclusively without following symlinks, inside a private (`0700`) root that must not itself be a symlink. A symlinked bundle or file, or a path that resolves outside the root, is refused.
 - **Bounded storage.** Expired, unreadable and abandoned staging directories are swept before each write. Staging directories are only swept after an hour, so a concurrent job is never interrupted.
+- **One quota for every writer.** `manifest.json` counts against the file and total limits like any other file; a selection too large for the manifest is refused. Saves running at the same time reserve their bytes under one lock, and a save that would overshoot waits for bundles in progress to publish, so stored and in-progress bytes never exceed the total. A cancelled save keeps its job slot until its worker thread exits.
 - **One writer.** The store expects a single server process per directory. Several processes sharing one directory may evict each other's bundles when the total budget is reached.
 
 ## Limits of this slice
