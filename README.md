@@ -693,7 +693,18 @@ these settings:
 - `TUIK_SEMANTIC_SEARCH=false`;
 - the request filters to `dataset`, `table` or `document_chunk`;
 - `search_tuik_datasets`;
+- a bare curated abbreviation: TÜFE, ÜFE, Yİ-ÜFE, GSYH, HİA, ADNKS or NACE
+  (including case-insensitive ASCII spellings and `Yİ ÜFE`);
 - results beyond the first 50.
+
+Bare abbreviations use the existing synonym-aware lexical query, ordered by score
+then stable ID, without loading the embedding model. `ranking: "lexical"` and a
+warning explain the choice when semantic search is enabled. Queries with added
+context, such as `TÜFE 2026`, keep the usual hybrid scope. On the frozen #21 pool,
+this routing restores abbreviation nDCG@10 to 0.9110 and raises overall nDCG@10
+to 0.8613; TÜFE alone regresses. See the
+[archived-routing evaluation](docs/verification/issue-79-abbreviation-routing-2026-11-19.md)
+for the per-query tradeoffs and inherited AI-review limitations.
 
 Set `TUIK_EMBEDDING_CACHE_DIR` when the indexer and server use different caches.
 Mapping schema 3 adds the vector field, so rebuild older indices once with `--full`.

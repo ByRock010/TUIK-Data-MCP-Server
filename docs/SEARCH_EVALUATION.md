@@ -26,11 +26,35 @@ identities, with 9 documented revisions. Results on that pool:
 | Hybrid 0.7/0.3 | 0.7898 | 0.9578 | 0.3595 |
 | Hybrid equal (new default) | 0.8516 | 0.9896 | 0.3653 |
 
-Abbreviation queries regress (0.911 → 0.833). Series-collapsed nDCG@10 is
+In that original comparison, abbreviation queries regress (0.911 → 0.833).
+The #79 routing amendment below addresses this regression. Series-collapsed nDCG@10 is
 unchanged (0.4575 vs 0.4526), so the gain is precision within already relevant
 series, not new series. Dataset-filtered search stays lexical because it was not
 measured. The same ADR 0004 limitations apply, plus a second, non-independent AI
 assessor for the new pairs.
+
+## Abbreviation routing (#79, 2026-11-19)
+
+The [fixed candidate plan](verification/issue-79-abbreviation-plan-2026-11-19.md)
+routes whole curated abbreviations to synonym-aware lexical ranking before loading
+the embedding model. Contextual queries remain hybrid. The
+[report](verification/issue-79-abbreviation-routing-2026-11-19.md) replays the
+production planner against the archived #21 rankings, verifying matching corpora,
+analysis, mappings and ranking requests. It reuses all 1,689 reviewed pairs and
+passes `score-ai --require-reviewed` without adding or changing a grade.
+
+| System | Overall nDCG@10 | Abbreviation nDCG@10 | MRR@10 | Pooled Recall@10 |
+| --- | ---: | ---: | ---: | ---: |
+| Original equal-weight hybrid | 0.8516 | 0.8331 | 0.9896 | 0.3653 |
+| Hybrid with bare-abbreviation lexical routing | **0.8613** | **0.9110** | **1.0000** | **0.3704** |
+
+Both #79 thresholds pass (abbreviation ≥0.911, overall ≥0.8516), with zero
+unjudged returned slots. HİA improves from 0.3564 to 0.7789 and ADNKS from 0.7889
+to 1.0000; TÜFE drops from 0.8533 to 0.6873. The other 42 rankings are unchanged.
+This is a deterministic archived-routing replay, not a fresh retrieval or new live
+source review. The inherited, dependent AI grades and known historical pool do
+not establish held-out generalization or independent human validation. NACE and
+spelling variants are covered by routing tests, not this six-query relevance set.
 
 ## Full-metadata comparison (#20)
 

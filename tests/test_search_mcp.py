@@ -78,6 +78,18 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
             assert resource.structuredContent["source_url"]
 
 
+async def test_abbreviation_stdio_reports_lexical_ranking_without_loading_the_model():
+    async with session("mock-abbreviation") as client:
+        result = await client.call_tool("search_tuik", {"query": "HİA", "limit": 3})
+        data = result.structuredContent
+        assert not result.isError
+        assert data["backend"] == "opensearch" and data["source"] == "index"
+        assert data["ranking"] == "lexical" and data["total"] == 3
+        assert len(data["results"]) == 3 and data["facets"]["kind"]["counts"]
+        assert data["indexed_at"] and data["results"][0]["source_url"]
+        assert len(data["warnings"]) == 1 and "abbreviation" in data["warnings"][0]
+
+
 @pytest.mark.parametrize("mode", ["no-index", "missing-index"])
 async def test_stdio_both_fallbacks_and_explicit_portal(mode):
     async with session(mode) as client:
