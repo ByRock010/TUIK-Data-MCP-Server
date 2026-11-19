@@ -96,7 +96,7 @@ class IndexedSearchInput(SearchInput):
     published_before: date | None = None
     downloadable_only: bool = Field(default=False, strict=True)
     live: bool = Field(default=False, strict=True)
-    group_series: bool = Field(default=True, strict=True)
+    group_series: bool = Field(default=False, strict=True)
     series: str | None = Field(default=None, max_length=40)
 
     @field_validator("series")

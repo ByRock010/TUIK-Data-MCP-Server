@@ -8,6 +8,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `search_tuik(group_series=true)` folds the releases of a bulletin series (and
+  their metadata) into the best-matching release, reporting `series.collapsed`,
+  `series.releases` and `series.latest`; indexed bulletin/metadata results carry
+  `series_id`, and `series=<id>` lists one series (#78). On 1,913 reviewed pairs,
+  grouping raised series-collapsed nDCG@10 from 0.425 to 0.741 but lowered plain
+  nDCG@10 from 0.856 to 0.553, so it is opt-in under the pre-registered plan.
+  `evaluate_search.py collect-production` ranks a frozen corpus through the served
+  backend, and `score-ai --documents` reports series metrics. Hybrid top tens are
+  not identical across index builds; the report documents this.
+
 - `tuik-mcp-doctor` reports local installation/settings errors, optional extras,
   prospective storage permissions and unverified model-cache state without
   changing configuration or provisioning a model. Network reachability probes

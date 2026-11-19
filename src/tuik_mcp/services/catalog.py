@@ -191,7 +191,7 @@ class CatalogService:
         published_before: str | None = None,
         downloadable_only: bool = False,
         live: bool = False,
-        group_series: bool = True,
+        group_series: bool = False,
         series: str | None = None,
     ) -> IndexedSearchResponse:
         args = IndexedSearchInput(

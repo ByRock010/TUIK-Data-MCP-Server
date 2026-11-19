@@ -87,7 +87,7 @@ async def search_tuik(
     published_before: str | None = None,
     downloadable_only: bool = False,
     live: bool = False,
-    group_series: bool = True,
+    group_series: bool = False,
     series: Annotated[str | None, Field(max_length=40)] = None,
 ) -> CallToolResult:
     """Search TÜİK resources using the Turkish metadata index when configured.
@@ -102,11 +102,11 @@ async def search_tuik(
     "lexical". Meaning only reranks: a query sharing no word or close spelling with the
     index returns no results (query in Turkish).
 
-    Indexed results group each bulletin series by default: one result per series, its
-    best-matching release, with series.collapsed (other matching releases/metadata
-    folded in), series.releases and series.latest (the newest indexed release). Use
-    series=<series_id> to list one series' releases, or group_series=false to list
-    every release separately. Without the index, dataset-only searches use
+    Set group_series=true for one result per bulletin series: its best-matching
+    release, with series.collapsed (other matching releases/metadata folded in),
+    series.releases and series.latest (the newest indexed release). Indexed bulletin
+    and metadata results carry series_id; series=<series_id> lists that series'
+    releases. Without the index, dataset-only searches use
     literal catalog matching; general/bulletin searches use the live portal with warnings
     for unsupported filters. Missing facets and unknown totals/truncated are null.
 

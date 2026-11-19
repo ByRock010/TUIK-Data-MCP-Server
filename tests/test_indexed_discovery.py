@@ -94,9 +94,12 @@ async def test_discovery_filters_and_full_match_facets_preserve_provenance(catal
         assert result.facets.theme.counts == {"İstihdam": 6}
         assert result.facets.theme.truncated and result.facets.theme.count_error_upper_bound == 2
         assert not calls  # No live lookup of every hit, and no eager catalog dependency.
-        # Grouped by default (#78): a document window, then highlights for the page.
-        assert requests[0]["size"] == 200 and "highlight" not in requests[0]
-        assert requests[1]["query"]["bool"]["filter"] == [{"ids": {"values": ["press:57987"]}}]
+        assert len(requests) == 1 and requests[0]["size"] == 1  # Grouping is opt-in (#78).
+        grouped = await service.discover("işsizliğin", limit=1, group_series=True)
+        assert grouped.results[0].id == "press:57987"
+        # Grouped: a document window, then highlights for the page.
+        assert requests[1]["size"] == 200 and "highlight" not in requests[1]
+        assert requests[2]["query"]["bool"]["filter"] == [{"ids": {"values": ["press:57987"]}}]
         assert requests[0]["query"]["bool"]["filter"] == [
             {"terms": {"kind": ["bulletin"]}},
             {"terms": {"theme": ["İstihdam"]}},

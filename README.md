@@ -15,7 +15,7 @@ verification and pending reviewed promotion/publication.
 
 | Tool | Purpose |
 | --- | --- |
-| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False)` | Turkish indexed discovery with filters, highlights and facets; table/PDF-page content search; optional live portal search |
+| `search_tuik(query, limit=10, kind=None, theme=None, published_after=None, published_before=None, downloadable_only=False, live=False, group_series=False, series=None)` | Turkish indexed discovery with filters, highlights and facets; table/PDF-page content search; optional live portal search |
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
@@ -129,6 +129,23 @@ never returned. See [file content index](docs/CONTENT_INDEX.md).
 ```json
 {"query": "CATI telefonla görüşme", "kind": "document_chunk", "limit": 3}
 ```
+
+Monthly bulletins can fill a page with releases of one series. Set
+`group_series: true` for one result per bulletin series (#78): its best-matching
+release, with `series.collapsed` (other matching releases or metadata folded in),
+`series.releases` and `series.latest` (the newest indexed release). Indexed
+bulletin and metadata results always carry `series_id`; pass it as `series` to
+list that series' releases. `total` and facets still count documents.
+
+```json
+{"query": "Sanayi Üretim Endeksi", "group_series": true, "limit": 10}
+{"query": "Sanayi Üretim Endeksi", "series": "series:press:45729", "limit": 20}
+```
+
+Grouping is off by default. On the reviewed 48-query pool it raised
+series-collapsed nDCG@10 from 0.425 to 0.741 but lowered plain nDCG@10 from 0.856
+to 0.553, because the rubric counts every historical release as relevant; see the
+[evaluation](docs/verification/issue-78-series-grouping-2026-11-19.md).
 
 `theme` is an exact full stored
 name (case-sensitive for this tool; use `list_tuik_themes`). Publication bounds are

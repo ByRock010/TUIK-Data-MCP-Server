@@ -47,7 +47,7 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
             "series",
         } == set(properties)
         assert properties["live"]["default"] is False
-        assert properties["group_series"]["default"] is True
+        assert properties["group_series"]["default"] is False
         for arguments in [
             {"kind": "publication"},
             {"limit": 51},
@@ -63,7 +63,9 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
         ]:
             invalid = await client.call_tool("search_tuik", {"query": "işsizlik", **arguments})
             assert invalid.structuredContent["code"] == "invalid_input"
-        found = await client.call_tool("search_tuik", {"query": "issizlik", "limit": 3})
+        found = await client.call_tool(
+            "search_tuik", {"query": "issizlik", "limit": 3, "group_series": True}
+        )
         data = found.structuredContent
         assert not found.isError and data["source"] == "index" and data["backend"] == "opensearch"
         # Totals and facets count documents; the bulletin's metadata folds into it (#78).
@@ -82,12 +84,11 @@ async def test_indexed_search_stdio_schema_results_and_fresh_session_ids():
         for hit in data["results"]:
             assert hit["score"] == 2.5 and hit["highlights"]["title"]
             assert hit["source_url"] and hit["retrieved_at"] and hit["indexed_at"]
-        separate = await client.call_tool(
-            "search_tuik", {"query": "issizlik", "limit": 3, "group_series": False}
-        )
+        separate = await client.call_tool("search_tuik", {"query": "issizlik", "limit": 3})
         data = separate.structuredContent
         assert len(data["results"]) == 3 and data["truncated"] is False
         assert all(hit["series"] is None for hit in data["results"])
+        assert [hit["series_id"] for hit in data["results"]][1:] == ["series:press:57987"] * 2
         ids = [hit["id"] for hit in data["results"]]
     # No search/cache in this server session: each ID must resolve from upstream fixtures.
     async with session("no-index") as fresh:
@@ -105,8 +106,7 @@ async def test_abbreviation_stdio_reports_lexical_ranking_without_loading_the_mo
         assert not result.isError
         assert data["backend"] == "opensearch" and data["source"] == "index"
         assert data["ranking"] == "lexical" and data["total"] == 3
-        assert len(data["results"]) == 2 and data["facets"]["kind"]["counts"]
-        assert data["results"][1]["series"]["collapsed"] == 1
+        assert len(data["results"]) == 3 and data["facets"]["kind"]["counts"]
         assert data["indexed_at"] and data["results"][0]["source_url"]
         assert len(data["warnings"]) == 1 and "abbreviation" in data["warnings"][0]
 

@@ -110,13 +110,18 @@ evaluation set.
   nothing lexically and now return no results, with a warning to retry in Turkish.
   Before the rule they returned relevant labour bulletins through k-NN alone.
 - OpenSearch rejects a `_score` tie-breaker sort on hybrid queries. Ties keep the
-  engine's internal order, which is deterministic for a freshly loaded
-  single-shard index but not across arbitrary rebuilds.
+  engine's internal order. Beyond ties, hybrid top tens differ between index builds
+  of the same corpus and vectors: in #78 a fresh build matched the archived #79
+  top ten for 9 of 48 queries, and two further builds matched each other for 8–9.
+  Approximate HNSW k-NN is the likely cause. Reviewed nDCG@10 moved only slightly
+  (0.8560 vs 0.8576), but comparisons must use rankings from one build.
 - The original #21 gain mostly replaces irrelevant lexical hits with further releases
   of already relevant series. Series-collapsed nDCG@10 is unchanged (0.4526 vs
   0.4575), and abbreviation queries regress (0.833 vs 0.911). The PR records both.
-  Decision 9 recovers the aggregate abbreviation regression; collapsing repeated
-  series remains a follow-up (#78).
+  Decision 9 recovers the aggregate abbreviation regression. Series grouping
+  (#78) is available as `group_series=true`: it raises series-collapsed nDCG@10 to
+  0.7407 but lowers plain nDCG@10 to 0.5529, below the v0.3.0 default, so it is
+  not the default ([report](../verification/issue-78-series-grouping-2026-11-19.md)).
 - The new grades come from a second AI model (Claude) under ADR 0004's single-
   assessor-plus-source-review protocol. The 1,390 inherited Codex labels are
   unchanged. Independent human validation has not occurred.
