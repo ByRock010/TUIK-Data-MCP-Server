@@ -1,0 +1,513 @@
+{
+  "schema": 1,
+  "source_cutoff": "2026-11-23",
+  "tasks": [
+    {
+      "id": "F01",
+      "persona": "finance_research",
+      "split": "development",
+      "text": "23 Kasım 2026 itibarıyla son TÜFE bültenini bul. Genel endeksin yıllık ve aylık değişimini, dönemini ve baz yılını yaz.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Ekim 2026 yıllık %29,77, aylık %2,58. Baz 2025=100.",
+        "period": "2026-10",
+        "unit": "percent; index base 2025=100",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58291"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "ground_truth_archive": "P04"
+    },
+    {
+      "id": "F02",
+      "persona": "finance_research",
+      "split": "development",
+      "text": "Eylül ve Ekim 2026 yıllık TÜFE oranları arasında fark kaç yüzde puan? İki girdiyi ve işlemi yaz.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "29,77 − 29,73 = +0,04 yüzde puan. Aylık TÜFE oranlarını kullanma.",
+        "period": "2026-09 to 2026-10",
+        "unit": "percent inputs; percentage point difference",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58298",
+          "https://veriportali.tuik.gov.tr/tr/press/58291"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "F03",
+      "persona": "finance_research",
+      "split": "development",
+      "text": "31 Ağustos 2026 yıllık GSYH yayımındaki 2023, 2024 ve 2025 reel büyümelerini yaz. Önceki değerlerle farkı açıklarken gözlem ve yayım tarihini ayır.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "2023 %5,0, 2024 %3,5 (revize), 2025 %3,7. 2024 için 28 Şubat 2025 ilk açıklama %3,2. 31 Ağustos 2026 yayım tarihi.",
+        "period": "2023–2025; release 2026-08-31",
+        "unit": "annual real growth percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58198",
+          "https://veriportali.tuik.gov.tr/tr/press/54163/metadata"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource",
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ],
+      "ground_truth_archive": "P10"
+    },
+    {
+      "id": "F04",
+      "persona": "finance_research",
+      "split": "development",
+      "text": "Eylül 2026’da mevsim etkisinden arındırılmış işsizlik oranı neydi? Bir önceki aya farkı yüzde puan olarak ver.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Türkiye, 15+, toplam %8,4 ve +0,5 yüzde puan. İlk yayım tablosunu açıkça belirt.",
+        "period": "2026-09 release; comparison 2026-08",
+        "unit": "percent; percentage points",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/57988"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "ground_truth_archive": "P01"
+    },
+    {
+      "id": "F05",
+      "persona": "finance_research",
+      "split": "development",
+      "text": "2015 Ocak–Mart altın hariç dış ticaret hadlerinde gıda grubunu kaynaklı bir çizgi grafik ve grafik verisi dosyası olarak hazırla.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Ocak 98,4622068329301; Şubat 101,664854746884; Mart 96,4516474099525. Gıda ve canlı hayvanlar, sektör 0; 2015 tabanı. Üç nokta kronolojik.",
+        "period": "2015-01–2015-03",
+        "unit": "ratio series, published scale and base 2015",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_ALTINSIZ_DTH,1.0"
+        ]
+      },
+      "current_tools": [
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data",
+        "chart_tuik_data"
+      ],
+      "artifact": {
+        "format": "PNG + CSV + manifest",
+        "editability": "PNG static; CSV cells can be edited independently. Keep raw inputs and manifest immutable.",
+        "layout": "Readable Turkish title and source, chronological ticks, one line, no clipped labels."
+      }
+    },
+    {
+      "id": "F06",
+      "persona": "finance_research",
+      "split": "held_out",
+      "text": "Ekim 2026 genel TÜFE aylık ve yıllık oranlarını formülleri düzenlenebilir bir Excel çalışma kitabında teslim et.",
+      "expected_support": "unsupported",
+      "rubric": {
+        "expected": "Editable XLSX unsupported. Disclose that the workbook is unavailable; evidence-backed fallback 2,58 and 29,77 percent with distinct horizons.",
+        "period": "2026-10",
+        "unit": "percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58291"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "artifact": {
+        "format": "XLSX",
+        "editability": "Numeric cells and formulas editable.",
+        "layout": "Units and source on visible tabs; no clipped headers."
+      }
+    },
+    {
+      "id": "M01",
+      "persona": "manufacturing_export",
+      "split": "development",
+      "text": "23 Kasım 2026 kesiminde son genel ticaret bülteninden Türkiye ihracat ve ithalat tutarını, birimini ve dönemini bul.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Eylül 2026 ihracat 25,967 milyar USD, ithalat 31,130 milyar USD; geçici genel ticaret sistemi.",
+        "period": "2026-09",
+        "unit": "billion USD",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58240"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "ground_truth_archive": "P08"
+    },
+    {
+      "id": "M02",
+      "persona": "manufacturing_export",
+      "split": "development",
+      "text": "Eylül 2026 sanayi üretiminde imalatın yıllık değişimini madencilik ve enerjiyle karşılaştır. Endeksin bazını belirt.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "İmalat +%2,6; madencilik +%1,2; elektrik/gaz/buhar/iklimlendirme +%4,0. Baz 2021=100, yıllık karşılaştırma.",
+        "period": "2026-09 vs 2025-09",
+        "unit": "percent; index base 2021=100",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58189"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "M03",
+      "persona": "manufacturing_export",
+      "split": "development",
+      "text": "Eylül 2026 ihracat ve ithalattan dış ticaret açığını milyon dolar ve karşılama oranını bir ondalıkla hesapla.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "31.130 − 25.967 = 5.163 milyon USD açık. 25.967 / 31.130 × 100 = %83,4, yuvarlanmış girdiler.",
+        "period": "2026-09",
+        "unit": "million USD and percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58240"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "ground_truth_archive": "P08"
+    },
+    {
+      "id": "M04",
+      "persona": "manufacturing_export",
+      "split": "development",
+      "text": "\"Ocak 2015 altın hariç dış ticarette 98,46\" ifadesinin neyi ölçtüğünü söyle. Gıda ve canlı hayvanlar için özgün değeri bul.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "98,4622068329301 (kesin kaynak dizesi). 2015 bazlı oran göstergesi; gıda ve canlı hayvanlar, sektör 0. USD, yüzde değişim veya yüzde puan olarak etiketleme.",
+        "period": "2015-01",
+        "unit": "ratio with base 2015",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_ALTINSIZ_DTH,1.0"
+        ]
+      },
+      "current_tools": [
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ]
+    },
+    {
+      "id": "M05",
+      "persona": "manufacturing_export",
+      "split": "development",
+      "text": "Eylül 2026 Hanehalkı İşgücü Araştırması sınıflamasında kullanılan NACE sürümünü resmî sınıflama kaydından doğrula.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "NACE Rev. 2.1. Sürüm 2.1 bir sınıflama kimliği; ölçüm veya oran değil. Bülten metaverisi 3.2 ve sınıflama kaydı.",
+        "period": "2026-09 methodology",
+        "unit": "classification version",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/57988/metadata",
+          "https://siniflama.tuik.gov.tr/Classifications/ClassificationsTurDetay?tur=0&searchname=NACE"
+        ]
+      },
+      "current_tools": [
+        "get_tuik_resource",
+        "search_tuik_classifications"
+      ],
+      "ground_truth_archive": "P07"
+    },
+    {
+      "id": "M06",
+      "persona": "manufacturing_export",
+      "split": "held_out",
+      "text": "Eylül 2026 ihracat ve ithalatını düzenlenebilir grafik ve metin içeren PowerPoint sunumu olarak teslim et.",
+      "expected_support": "unsupported",
+      "rubric": {
+        "expected": "Editable PPTX unsupported. Disclose that no deck is available; fallback 25,967 and 31,130 billion USD with citation.",
+        "period": "2026-09",
+        "unit": "billion USD",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58240"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "artifact": {
+        "format": "PPTX",
+        "editability": "Title, labels and chart data are native and editable.",
+        "layout": "Readable units; source on slide; no text overflow."
+      }
+    },
+    {
+      "id": "L01",
+      "persona": "local_government",
+      "split": "development",
+      "text": "23 Kasım 2026 itibarıyla son yıllık ADNKS bültenindeki Türkiye nüfusunu ve sayım referans tarihini bul.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "86.092.168 kişi, 31 Aralık 2025. Yayım 9 Şubat 2026; dönem ile yayım tarihini ayır.",
+        "period": "2025-12-31",
+        "unit": "persons",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/53899"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "L02",
+      "persona": "local_government",
+      "split": "development",
+      "text": "2025 ADNKS sonuçlarına göre İstanbul ve Ankara il nüfuslarını ve aralarındaki kişi farkını ver.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "İstanbul 15.754.053 kişi, Ankara 5.910.320 kişi; fark 9.843.733 kişi. Yıl sonu il toplamları.",
+        "period": "2025-12-31",
+        "unit": "persons",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/53899"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ]
+    },
+    {
+      "id": "L03",
+      "persona": "local_government",
+      "split": "development",
+      "text": "2025 yıllık il işsizlik oranlarında en yüksek ve en düşük ili, değerleri ve il düzeyini yaz.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Hakkari %13,8; Ardahan %4,0. İBBS Düzey 3 yıllık il tahminleri. Aylık oran veya ilçe değeri çıkarma.",
+        "period": "2025",
+        "unit": "percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/57996"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "L04",
+      "persona": "local_government",
+      "split": "development",
+      "text": "Türkiye’de Ekim 2026 konut satışları ile önceki yılın aynı ayı arasındaki adet ve yüzde değişimini bildir. İş yeri satışlarını karıştırma.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "131.072 konut, Ekim 2025 170.955 konut, −39.883 adet; yıllık −%23,3. Aynı bültenin karşılaştırma serisi.",
+        "period": "2026-10 vs 2025-10",
+        "unit": "sales counts; annual percent change",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58348"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "L05",
+      "persona": "local_government",
+      "split": "development",
+      "text": "İstanbul ilinin Eylül 2026 aylık işsizlik oranını yüzde olarak ver.",
+      "expected_support": "unsupported",
+      "rubric": {
+        "expected": "Unsupported monthly province estimate. Give no İstanbul monthly number. Point to the annual province release (2025) or the national monthly series, explicitly labelled.",
+        "period": "2026-09 requested; 2025 annual alternative",
+        "unit": "percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/57988/metadata",
+          "https://veriportali.tuik.gov.tr/tr/press/57996"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ]
+    },
+    {
+      "id": "L06",
+      "persona": "local_government",
+      "split": "held_out",
+      "text": "2025 Türkiye konut satışları için 1.688.910 ile 1.760.292 değerlerinin neden farklı olduğunu belgeye bağla.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Revizyon raporu Tablo 2: önce 1.688.910, sonra 1.760.292 konut. Aynı referans yılı, Şubat 2026 revizyonu; konut ve iş yeri toplamı olarak yorumlama.",
+        "period": "2025; revision released 2026-02",
+        "unit": "residential sales counts",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58340"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource",
+        "read_tuik_document"
+      ]
+    },
+    {
+      "id": "A01",
+      "persona": "academic_journalism",
+      "split": "development",
+      "text": "Eylül 2026 işgücü araştırmasının yöntem belgesinden görüşme yöntemlerini ve yaklaşık çeyreklik/yıllık örnek hacmini sayfa numarasıyla belirt.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "CAPI ve CATI; çeyrekte yaklaşık 60 bin, yılda yaklaşık 235 bin hanehalkı. Metodolojik açıklama dokümanı s. 4–5 / metaveri 18.3.",
+        "period": "2026-09 methodology",
+        "unit": "households, approximate",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/57988/metadata"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource",
+        "read_tuik_document"
+      ],
+      "ground_truth_archive": "P05"
+    },
+    {
+      "id": "A02",
+      "persona": "academic_journalism",
+      "split": "development",
+      "text": "2025 boşanmaları için çift sayısını, bir önceki yılın revize sayısını ve kaba boşanma hızını kısa bir haber cümlesiyle ver.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "2025 193.793 çift; 2024 revize 188.963 çift; 2025 kaba hız binde 2,26. Sayı ile hız ayrımı.",
+        "period": "2024 and 2025",
+        "unit": "couples and per mille",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58165"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "ground_truth_archive": "P09"
+    },
+    {
+      "id": "A03",
+      "persona": "academic_journalism",
+      "split": "development",
+      "text": "Ekim 2026 TÜFE tablosunda yıllık artışı en yüksek ana harcama grubunu bul. Konutla karşılaştır.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "Eğitim hizmetleri %48,86; konut %40,24. Yıllık değişim, ana gruplar; aylık oran veya alt gruplarla karıştırma.",
+        "period": "2026-10 vs 2025-10",
+        "unit": "percent year over year",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58291",
+          "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_TUFE_SDMX_TT01,1.0"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource",
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ],
+      "ground_truth_archive": "P04"
+    },
+    {
+      "id": "A04",
+      "persona": "academic_journalism",
+      "split": "development",
+      "text": "8 Kasım 2026’da erişilen revize seride Ekim 2025–Eylül 2026 toplam genç işsizlik oranının tepe, dip ve basit ortalamasını hesapla.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "15–24 yaş, mevsim etkisinden arındırılmış toplam: Kasım 2025 %15,9, Haziran 2026 %12,9, 12 aylık ortalama %14,525 (bir ondalık %14,5). Kaynak seçimi ve basit ortalama belirtilir.",
+        "period": "2025-10–2026-09; snapshot 2026-11-08",
+        "unit": "percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C,1.0"
+        ]
+      },
+      "current_tools": [
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ],
+      "ground_truth_archive": "P02"
+    },
+    {
+      "id": "A05",
+      "persona": "academic_journalism",
+      "split": "development",
+      "text": "8 Kasım 2026’da erişilen Ocak 2005–Eylül 2026 revize toplam aylık işsizlik serisinde en düşük ve en yüksek değerleri, eşit aylar dahil, bildir.",
+      "expected_support": "supported",
+      "rubric": {
+        "expected": "261 ay; maksimum %14,1 (Ağustos ve Eylül 2019, Temmuz 2020), minimum %7,7 (Haziran 2026). Türkiye, 15+, mevsim etkisinden arındırılmış.",
+        "period": "2005-01–2026-09; snapshot 2026-11-08",
+        "unit": "percent",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C,1.0"
+        ]
+      },
+      "current_tools": [
+        "search_tuik_datasets",
+        "inspect_tuik_data",
+        "get_tuik_data"
+      ],
+      "ground_truth_archive": "P03"
+    },
+    {
+      "id": "A06",
+      "persona": "academic_journalism",
+      "split": "held_out",
+      "text": "2025 boşanma sayı ve hızını, kaynak dipnotu olan düzenlenebilir bir Word dosyasında teslim et.",
+      "expected_support": "unsupported",
+      "rubric": {
+        "expected": "Editable DOCX unsupported. Disclose the missing file. Fallback 193.793 couples and 2,26 per mille with original citation.",
+        "period": "2025",
+        "unit": "couples and per mille",
+        "official_sources": [
+          "https://veriportali.tuik.gov.tr/tr/press/58165"
+        ]
+      },
+      "current_tools": [
+        "search_tuik",
+        "get_tuik_resource"
+      ],
+      "artifact": {
+        "format": "DOCX",
+        "editability": "Paragraph, table and source note editable.",
+        "layout": "Keep number and unit together; legible Turkish text; source beside table."
+      }
+    }
+  ]
+}
