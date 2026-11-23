@@ -1,0 +1,42 @@
+{
+  "per_domain": 10,
+  "held_out_positions": [3, 6, 9, 10],
+  "domains": {
+    "prices": {
+      "csv_target": 8,
+      "flow_prefixes": ["DF_TUFE_SDMX_TT01+", "DF_TUFE_SDMX_TT05+", "DF_TUFE_SDMX_TT06+", "DF_TUFE_SDMX_TT08+", "DF_TUFE_SDMX_TT09+", "DF_TUFE_SDMX_TT10+", "DF_TUFE_SDMX_TT02+", "DF_TUFE_SDMX_TT03+", "DF_TUFE_SDMX_TT07+", "DF_TUFE_SDMX_2003+"],
+      "releases": [58291, 58298],
+      "preferred_titles": ["mal ve hizmet sepeti", "Ana harcama gruplarına göre ağırlıklar", "COICOP 2018", "ilgili sayısal bilgiler"]
+    },
+    "labour": {
+      "csv_target": 7,
+      "flow_prefixes": ["DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+", "DF_ISGUCU_AYLIK_FIIL_CALISMA_SURE_C+", "DF_ISGUCU_AYLIK_TAMAMLAYICI_GOSTERGE_C+", "DF_ISGUCU_CEYREK_TEMEL_ISGUCU_C+", "DF_ISGUCU_CEYREK_SGK_KAYIT_C+", "DF_ISGUCU_CEYREK_EGITIM_DURUM_C+", "DF_ISGUCU_CEYREK_NEET_YAS_GRUP_C+", "DF_ISGUCU_CEYREK_SEKTOR_ISTIHDAM_C+"],
+      "releases": [57996, 57988],
+      "preferred_titles": ["İl düzeyinde işsizlik", "İl düzeyinde istihdam", "Mevsim etkisinden arındırılmış temel işgücü", "İl düzeyinde işgücüne katılma"]
+    },
+    "population": {
+      "csv_target": 8,
+      "flow_prefixes": ["DF_ADNKS_T30+", "DF_ADNKS_T20+", "DF_ADNKS_T23+", "DF_ADNKS_T24+", "DF_ADNKS_T25+", "DF_ADNKS_T29+", "DF_ADNKS_T31+", "DF_ADNKS_T35+", "DF_ADNKS_T18+"],
+      "releases": [53899],
+      "preferred_titles": ["İllere ve cinsiyete göre yabancı nüfus", "il/ilçe merkezi, belde/köy nüfusu ve nüfus yoğunluğu", "Kent-kır sınıflaması"]
+    },
+    "trade": {
+      "csv_target": 8,
+      "flow_prefixes": ["DF_ALTINSIZ_DTH+", "DF_ALTINSIZ_IHRACAT_BDE+", "DF_ALTINSIZ_IME+", "DF_ALTINSIZ_ITHALAT_BDE+", "DF_ALTINSIZ_ITHALAT_ME+", "DF_ALTINSIZ_ENERJISIZ_DTH+", "DF_ALTINSIZ_ENERJISIZ_IHRACAT_BDE+", "DF_ALTINSIZ_ENERJISIZ_IME+", "DF_ALTINSIZ_ITHALAT_ENERJISIZ_ME+", "DF_ALTINSIZ_ENERJISIZ_ITHALAT_BDE+"],
+      "releases": [58240, 58239],
+      "preferred_titles": ["Genel ticaret sistemine göre yıllara ve aylara göre dış ticaret", "Özel ticaret sistemine göre yıllara ve aylara göre dış ticaret"]
+    },
+    "housing": {
+      "csv_target": 4,
+      "flow_prefixes": ["DF_SATIS_SEKLI_SATIS_DURUMU_V3+", "DF_YABANCILARA_SATIS_V3+", "DF_UYRUKLARA_GORE_SATISLAR_V3+", "DF_CINSIYETE_GORE_SATISLAR_V3+"],
+      "releases": [54149, 54148],
+      "preferred_titles": ["İlçelere Göre Konut Satış", "İllere Göre Cinsiyet", "Satış Şekline ve Satış Durumuna Göre", "İllere Göre Konut Satış", "Ülke Uyruklarına Göre Yabancılara", "İllere Göre Yabancılara"]
+    },
+    "industry": {
+      "csv_target": 6,
+      "flow_prefixes": ["DF_SANAYI_URETIM_ENDEKS_ANA_C+", "DF_SANAYI_URETIM_ENDEKS_ETKI_C+", "DF_SANAYI_URETIM_ENDEKS_ETKI_O+", "DF_SANAYI_ENERJI_YILLIK_NIHAI_TUKETIM_ORJ_V1+", "DF_SANAYI_ENERJI_YILLIK_NIHAI_TUKETIM_TJ+", "DF_SANAYI_URETIM_ENDEKS_ANA_O+", "DF_SANAYI_URETIM_ENDEKS_ALT_C+", "DF_SANAYI_URETIM_ENDEKS_GRUP_O+"],
+      "releases": [58189, 58196, 58188, 58186],
+      "preferred_titles": ["Bölümlerin Üst Grup", "Sanayi Üretim Endeksi", "Revizyon"]
+    }
+  }
+}
