@@ -56,6 +56,9 @@ All notable changes to this project are documented here. The format follows
   latency, response size and upstream requests per call. The
   [2026-11-10 report](docs/verification/usage-performance-2026-11-10.md) has the
   before and after numbers for the changes below.
+- [Dimensional data access audit](docs/adr/0008-dimensional-data-access.md) verifies
+  six bounded DataBrowser selections, compares exact export values and records
+  the key-free pilot decision (#104).
 
 ### Changed
 
