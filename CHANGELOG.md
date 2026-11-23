@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- [Regional coverage audit](docs/adr/0007-regional-data-and-boundaries.md) verifies
+  the 81-province TÜİK crosswalk, audited annual indicators and boundary eligibility
+  for a future choropleth (#106).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry
