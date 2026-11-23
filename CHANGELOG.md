@@ -8,9 +8,6 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- [Regional coverage audit](docs/adr/0007-regional-data-and-boundaries.md) verifies
-  the 81-province TÜİK crosswalk, audited annual indicators and boundary eligibility
-  for a future choropleth (#106).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry
@@ -41,6 +38,9 @@ All notable changes to this project are documented here. The format follows
   roadmap (#84), with retained issue plans and GitHub dependency verification.
   Downloaded third-party source snapshots and temporary render/build files remain
   local working artifacts.
+- [Regional coverage audit](docs/adr/0007-regional-data-and-boundaries.md) verifies
+  the 81-province TÜİK crosswalk, audited annual indicators and boundary eligibility
+  for a future choropleth (#106).
 - Optional hybrid lexical + semantic search (#21, ADR 0005).
   `tuik-mcp-index --embeddings` stores multilingual-e5-small vectors (`semantic`
   extra, ONNX). `search_tuik` fuses the lexical query with filtered k-NN by
