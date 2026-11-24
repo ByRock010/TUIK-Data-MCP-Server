@@ -1,0 +1,819 @@
+{
+  "adnks_workbook_join": {
+    "missing": [],
+    "unmatched": [
+      ""
+    ]
+  },
+  "classification_level_counts": {
+    "1": 1,
+    "2": 12,
+    "3": 26,
+    "4": 81
+  },
+  "coverage": {
+    "housing.json": {
+      "periods": [
+        "2025",
+        "2024",
+        "2023",
+        "2022",
+        "2021"
+      ],
+      "regions": 81
+    },
+    "population-l2.json": {
+      "periods": [
+        "2025",
+        "2024",
+        "2023",
+        "2022",
+        "2021"
+      ],
+      "regions": 26
+    },
+    "population.json": {
+      "periods": [
+        "2025",
+        "2024",
+        "2023",
+        "2022",
+        "2021"
+      ],
+      "regions": 81
+    },
+    "unemployment-l2.json": {
+      "periods": [
+        "2025",
+        "2024",
+        "2023",
+        "2022",
+        "2021"
+      ],
+      "regions": 26
+    },
+    "unemployment-l3.json": {
+      "periods": [
+        "2025",
+        "2024",
+        "2023",
+        "2022"
+      ],
+      "regions": 81
+    }
+  },
+  "crosswalk": [
+    {
+      "cip_label": "İSTANBUL",
+      "cip_province": "34",
+      "ibbs2": "TR10",
+      "ibbs3": "TR100",
+      "labour_label": "İstanbul",
+      "official_label": "İSTANBUL"
+    },
+    {
+      "cip_label": "TEKİRDAĞ",
+      "cip_province": "59",
+      "ibbs2": "TR21",
+      "ibbs3": "TR211",
+      "labour_label": "Tekirdağ",
+      "official_label": "TEKİRDAĞ"
+    },
+    {
+      "cip_label": "EDİRNE",
+      "cip_province": "22",
+      "ibbs2": "TR21",
+      "ibbs3": "TR212",
+      "labour_label": "Edirne",
+      "official_label": "EDİRNE"
+    },
+    {
+      "cip_label": "KIRKLARELİ",
+      "cip_province": "39",
+      "ibbs2": "TR21",
+      "ibbs3": "TR213",
+      "labour_label": "Kırklareli",
+      "official_label": "KIRKLARELİ"
+    },
+    {
+      "cip_label": "BALIKESİR",
+      "cip_province": "10",
+      "ibbs2": "TR22",
+      "ibbs3": "TR221",
+      "labour_label": "Balıkesir",
+      "official_label": "BALIKESİR"
+    },
+    {
+      "cip_label": "ÇANAKKALE",
+      "cip_province": "17",
+      "ibbs2": "TR22",
+      "ibbs3": "TR222",
+      "labour_label": "Çanakkale",
+      "official_label": "ÇANAKKALE"
+    },
+    {
+      "cip_label": "İZMİR",
+      "cip_province": "35",
+      "ibbs2": "TR31",
+      "ibbs3": "TR310",
+      "labour_label": "İzmir",
+      "official_label": "İZMİR"
+    },
+    {
+      "cip_label": "AYDIN",
+      "cip_province": "9",
+      "ibbs2": "TR32",
+      "ibbs3": "TR321",
+      "labour_label": "Aydın",
+      "official_label": "AYDIN"
+    },
+    {
+      "cip_label": "DENİZLİ",
+      "cip_province": "20",
+      "ibbs2": "TR32",
+      "ibbs3": "TR322",
+      "labour_label": "Denizli",
+      "official_label": "DENİZLİ"
+    },
+    {
+      "cip_label": "MUĞLA",
+      "cip_province": "48",
+      "ibbs2": "TR32",
+      "ibbs3": "TR323",
+      "labour_label": "Muğla",
+      "official_label": "MUĞLA"
+    },
+    {
+      "cip_label": "MANİSA",
+      "cip_province": "45",
+      "ibbs2": "TR33",
+      "ibbs3": "TR331",
+      "labour_label": "Manisa",
+      "official_label": "MANİSA"
+    },
+    {
+      "cip_label": "AFYONKARAHİSAR",
+      "cip_province": "3",
+      "ibbs2": "TR33",
+      "ibbs3": "TR332",
+      "labour_label": "Afyonkarahisar",
+      "official_label": "AFYONKARAHİSAR"
+    },
+    {
+      "cip_label": "KÜTAHYA",
+      "cip_province": "43",
+      "ibbs2": "TR33",
+      "ibbs3": "TR333",
+      "labour_label": "Kütahya",
+      "official_label": "KÜTAHYA"
+    },
+    {
+      "cip_label": "UŞAK",
+      "cip_province": "64",
+      "ibbs2": "TR33",
+      "ibbs3": "TR334",
+      "labour_label": "Uşak",
+      "official_label": "UŞAK"
+    },
+    {
+      "cip_label": "BURSA",
+      "cip_province": "16",
+      "ibbs2": "TR41",
+      "ibbs3": "TR411",
+      "labour_label": "Bursa",
+      "official_label": "BURSA"
+    },
+    {
+      "cip_label": "ESKİŞEHİR",
+      "cip_province": "26",
+      "ibbs2": "TR41",
+      "ibbs3": "TR412",
+      "labour_label": "Eskişehir",
+      "official_label": "ESKİŞEHİR"
+    },
+    {
+      "cip_label": "BİLECİK",
+      "cip_province": "11",
+      "ibbs2": "TR41",
+      "ibbs3": "TR413",
+      "labour_label": "Bilecik",
+      "official_label": "BİLECİK"
+    },
+    {
+      "cip_label": "KOCAELİ",
+      "cip_province": "41",
+      "ibbs2": "TR42",
+      "ibbs3": "TR421",
+      "labour_label": "Kocaeli",
+      "official_label": "KOCAELİ"
+    },
+    {
+      "cip_label": "SAKARYA",
+      "cip_province": "54",
+      "ibbs2": "TR42",
+      "ibbs3": "TR422",
+      "labour_label": "Sakarya",
+      "official_label": "SAKARYA"
+    },
+    {
+      "cip_label": "DÜZCE",
+      "cip_province": "81",
+      "ibbs2": "TR42",
+      "ibbs3": "TR423",
+      "labour_label": "Düzce",
+      "official_label": "DÜZCE"
+    },
+    {
+      "cip_label": "BOLU",
+      "cip_province": "14",
+      "ibbs2": "TR42",
+      "ibbs3": "TR424",
+      "labour_label": "Bolu",
+      "official_label": "BOLU"
+    },
+    {
+      "cip_label": "YALOVA",
+      "cip_province": "77",
+      "ibbs2": "TR42",
+      "ibbs3": "TR425",
+      "labour_label": "Yalova",
+      "official_label": "YALOVA"
+    },
+    {
+      "cip_label": "ANKARA",
+      "cip_province": "6",
+      "ibbs2": "TR51",
+      "ibbs3": "TR510",
+      "labour_label": "Ankara",
+      "official_label": "ANKARA"
+    },
+    {
+      "cip_label": "KONYA",
+      "cip_province": "42",
+      "ibbs2": "TR52",
+      "ibbs3": "TR521",
+      "labour_label": "Konya",
+      "official_label": "KONYA"
+    },
+    {
+      "cip_label": "KARAMAN",
+      "cip_province": "70",
+      "ibbs2": "TR52",
+      "ibbs3": "TR522",
+      "labour_label": "Karaman",
+      "official_label": "KARAMAN"
+    },
+    {
+      "cip_label": "ANTALYA",
+      "cip_province": "7",
+      "ibbs2": "TR61",
+      "ibbs3": "TR611",
+      "labour_label": "Antalya",
+      "official_label": "ANTALYA"
+    },
+    {
+      "cip_label": "ISPARTA",
+      "cip_province": "32",
+      "ibbs2": "TR61",
+      "ibbs3": "TR612",
+      "labour_label": "Isparta",
+      "official_label": "ISPARTA"
+    },
+    {
+      "cip_label": "BURDUR",
+      "cip_province": "15",
+      "ibbs2": "TR61",
+      "ibbs3": "TR613",
+      "labour_label": "Burdur",
+      "official_label": "BURDUR"
+    },
+    {
+      "cip_label": "ADANA",
+      "cip_province": "1",
+      "ibbs2": "TR62",
+      "ibbs3": "TR621",
+      "labour_label": "Adana",
+      "official_label": "ADANA"
+    },
+    {
+      "cip_label": "MERSİN",
+      "cip_province": "33",
+      "ibbs2": "TR62",
+      "ibbs3": "TR622",
+      "labour_label": "Mersin",
+      "official_label": "MERSİN"
+    },
+    {
+      "cip_label": "HATAY",
+      "cip_province": "31",
+      "ibbs2": "TR63",
+      "ibbs3": "TR631",
+      "labour_label": "Hatay",
+      "official_label": "HATAY"
+    },
+    {
+      "cip_label": "KAHRAMANMARAŞ",
+      "cip_province": "46",
+      "ibbs2": "TR63",
+      "ibbs3": "TR632",
+      "labour_label": "Kahramanmaraş",
+      "official_label": "KAHRAMANMARAŞ"
+    },
+    {
+      "cip_label": "OSMANİYE",
+      "cip_province": "80",
+      "ibbs2": "TR63",
+      "ibbs3": "TR633",
+      "labour_label": "Osmaniye",
+      "official_label": "OSMANİYE"
+    },
+    {
+      "cip_label": "KIRIKKALE",
+      "cip_province": "71",
+      "ibbs2": "TR71",
+      "ibbs3": "TR711",
+      "labour_label": "Kırıkkale",
+      "official_label": "KIRIKKALE"
+    },
+    {
+      "cip_label": "AKSARAY",
+      "cip_province": "68",
+      "ibbs2": "TR71",
+      "ibbs3": "TR712",
+      "labour_label": "Aksaray",
+      "official_label": "AKSARAY"
+    },
+    {
+      "cip_label": "NİĞDE",
+      "cip_province": "51",
+      "ibbs2": "TR71",
+      "ibbs3": "TR713",
+      "labour_label": "Niğde",
+      "official_label": "NİĞDE"
+    },
+    {
+      "cip_label": "NEVSEHİR",
+      "cip_province": "50",
+      "ibbs2": "TR71",
+      "ibbs3": "TR714",
+      "labour_label": "Nevşehir",
+      "official_label": "NEVŞEHİR"
+    },
+    {
+      "cip_label": "KIRŞEHİR",
+      "cip_province": "40",
+      "ibbs2": "TR71",
+      "ibbs3": "TR715",
+      "labour_label": "Kırşehir",
+      "official_label": "KIRŞEHİR"
+    },
+    {
+      "cip_label": "KAYSERI",
+      "cip_province": "38",
+      "ibbs2": "TR72",
+      "ibbs3": "TR721",
+      "labour_label": "Kayseri",
+      "official_label": "KAYSERİ"
+    },
+    {
+      "cip_label": "SİVAS",
+      "cip_province": "58",
+      "ibbs2": "TR72",
+      "ibbs3": "TR722",
+      "labour_label": "Sivas",
+      "official_label": "SİVAS"
+    },
+    {
+      "cip_label": "YOZGAT",
+      "cip_province": "66",
+      "ibbs2": "TR72",
+      "ibbs3": "TR723",
+      "labour_label": "Yozgat",
+      "official_label": "YOZGAT"
+    },
+    {
+      "cip_label": "ZONGULDAK",
+      "cip_province": "67",
+      "ibbs2": "TR81",
+      "ibbs3": "TR811",
+      "labour_label": "Zonguldak",
+      "official_label": "ZONGULDAK"
+    },
+    {
+      "cip_label": "KARABÜK",
+      "cip_province": "78",
+      "ibbs2": "TR81",
+      "ibbs3": "TR812",
+      "labour_label": "Karabük",
+      "official_label": "KARABÜK"
+    },
+    {
+      "cip_label": "BARTIN",
+      "cip_province": "74",
+      "ibbs2": "TR81",
+      "ibbs3": "TR813",
+      "labour_label": "Bartın",
+      "official_label": "BARTIN"
+    },
+    {
+      "cip_label": "KASTAMONU",
+      "cip_province": "37",
+      "ibbs2": "TR82",
+      "ibbs3": "TR821",
+      "labour_label": "Kastamonu",
+      "official_label": "KASTAMONU"
+    },
+    {
+      "cip_label": "ÇANKIRI",
+      "cip_province": "18",
+      "ibbs2": "TR82",
+      "ibbs3": "TR822",
+      "labour_label": "Çankırı",
+      "official_label": "ÇANKIRI"
+    },
+    {
+      "cip_label": "SİNOP",
+      "cip_province": "57",
+      "ibbs2": "TR82",
+      "ibbs3": "TR823",
+      "labour_label": "Sinop",
+      "official_label": "SİNOP"
+    },
+    {
+      "cip_label": "SAMSUN",
+      "cip_province": "55",
+      "ibbs2": "TR83",
+      "ibbs3": "TR831",
+      "labour_label": "Samsun",
+      "official_label": "SAMSUN"
+    },
+    {
+      "cip_label": "TOKAT",
+      "cip_province": "60",
+      "ibbs2": "TR83",
+      "ibbs3": "TR832",
+      "labour_label": "Tokat",
+      "official_label": "TOKAT"
+    },
+    {
+      "cip_label": "ÇORUM",
+      "cip_province": "19",
+      "ibbs2": "TR83",
+      "ibbs3": "TR833",
+      "labour_label": "Çorum",
+      "official_label": "ÇORUM"
+    },
+    {
+      "cip_label": "AMASYA",
+      "cip_province": "5",
+      "ibbs2": "TR83",
+      "ibbs3": "TR834",
+      "labour_label": "Amasya",
+      "official_label": "AMASYA"
+    },
+    {
+      "cip_label": "TRABZON",
+      "cip_province": "61",
+      "ibbs2": "TR90",
+      "ibbs3": "TR901",
+      "labour_label": "Trabzon",
+      "official_label": "TRABZON"
+    },
+    {
+      "cip_label": "ORDU",
+      "cip_province": "52",
+      "ibbs2": "TR90",
+      "ibbs3": "TR902",
+      "labour_label": "Ordu",
+      "official_label": "ORDU"
+    },
+    {
+      "cip_label": "GİRESUN",
+      "cip_province": "28",
+      "ibbs2": "TR90",
+      "ibbs3": "TR903",
+      "labour_label": "Giresun",
+      "official_label": "GİRESUN"
+    },
+    {
+      "cip_label": "RİZE",
+      "cip_province": "53",
+      "ibbs2": "TR90",
+      "ibbs3": "TR904",
+      "labour_label": "Rize",
+      "official_label": "RİZE"
+    },
+    {
+      "cip_label": "ARTVİN",
+      "cip_province": "8",
+      "ibbs2": "TR90",
+      "ibbs3": "TR905",
+      "labour_label": "Artvin",
+      "official_label": "ARTVİN"
+    },
+    {
+      "cip_label": "GÜMÜŞHANE",
+      "cip_province": "29",
+      "ibbs2": "TR90",
+      "ibbs3": "TR906",
+      "labour_label": "Gümüşhane",
+      "official_label": "GÜMÜŞHANE"
+    },
+    {
+      "cip_label": "ERZURUM",
+      "cip_province": "25",
+      "ibbs2": "TRA1",
+      "ibbs3": "TRA11",
+      "labour_label": "Erzurum",
+      "official_label": "ERZURUM"
+    },
+    {
+      "cip_label": "ERZİNCAN",
+      "cip_province": "24",
+      "ibbs2": "TRA1",
+      "ibbs3": "TRA12",
+      "labour_label": "Erzincan",
+      "official_label": "ERZİNCAN"
+    },
+    {
+      "cip_label": "BAYBURT",
+      "cip_province": "69",
+      "ibbs2": "TRA1",
+      "ibbs3": "TRA13",
+      "labour_label": "Bayburt",
+      "official_label": "BAYBURT"
+    },
+    {
+      "cip_label": "AĞRI",
+      "cip_province": "4",
+      "ibbs2": "TRA2",
+      "ibbs3": "TRA21",
+      "labour_label": "Ağrı",
+      "official_label": "AĞRI"
+    },
+    {
+      "cip_label": "KARS",
+      "cip_province": "36",
+      "ibbs2": "TRA2",
+      "ibbs3": "TRA22",
+      "labour_label": "Kars",
+      "official_label": "KARS"
+    },
+    {
+      "cip_label": "IĞDIR",
+      "cip_province": "76",
+      "ibbs2": "TRA2",
+      "ibbs3": "TRA23",
+      "labour_label": "Iğdır",
+      "official_label": "IĞDIR"
+    },
+    {
+      "cip_label": "ARDAHAN",
+      "cip_province": "75",
+      "ibbs2": "TRA2",
+      "ibbs3": "TRA24",
+      "labour_label": "Ardahan",
+      "official_label": "ARDAHAN"
+    },
+    {
+      "cip_label": "MALATYA",
+      "cip_province": "44",
+      "ibbs2": "TRB1",
+      "ibbs3": "TRB11",
+      "labour_label": "Malatya",
+      "official_label": "MALATYA"
+    },
+    {
+      "cip_label": "ELAZIĞ",
+      "cip_province": "23",
+      "ibbs2": "TRB1",
+      "ibbs3": "TRB12",
+      "labour_label": "Elazığ",
+      "official_label": "ELAZIĞ"
+    },
+    {
+      "cip_label": "BİNGÖL",
+      "cip_province": "12",
+      "ibbs2": "TRB1",
+      "ibbs3": "TRB13",
+      "labour_label": "Bingöl",
+      "official_label": "BİNGÖL"
+    },
+    {
+      "cip_label": "TUNCELİ",
+      "cip_province": "62",
+      "ibbs2": "TRB1",
+      "ibbs3": "TRB14",
+      "labour_label": "Tunceli",
+      "official_label": "TUNCELİ"
+    },
+    {
+      "cip_label": "VAN",
+      "cip_province": "65",
+      "ibbs2": "TRB2",
+      "ibbs3": "TRB21",
+      "labour_label": "Van",
+      "official_label": "VAN"
+    },
+    {
+      "cip_label": "MUŞ",
+      "cip_province": "49",
+      "ibbs2": "TRB2",
+      "ibbs3": "TRB22",
+      "labour_label": "Muş",
+      "official_label": "MUŞ"
+    },
+    {
+      "cip_label": "BİTLİS",
+      "cip_province": "13",
+      "ibbs2": "TRB2",
+      "ibbs3": "TRB23",
+      "labour_label": "Bitlis",
+      "official_label": "BİTLİS"
+    },
+    {
+      "cip_label": "HAKKARİ",
+      "cip_province": "30",
+      "ibbs2": "TRB2",
+      "ibbs3": "TRB24",
+      "labour_label": "Hakkari",
+      "official_label": "HAKKARİ"
+    },
+    {
+      "cip_label": "GAZİANTEP",
+      "cip_province": "27",
+      "ibbs2": "TRC1",
+      "ibbs3": "TRC11",
+      "labour_label": "Gaziantep",
+      "official_label": "GAZİANTEP"
+    },
+    {
+      "cip_label": "ADIYAMAN",
+      "cip_province": "2",
+      "ibbs2": "TRC1",
+      "ibbs3": "TRC12",
+      "labour_label": "Adıyaman",
+      "official_label": "ADIYAMAN"
+    },
+    {
+      "cip_label": "KİLİS",
+      "cip_province": "79",
+      "ibbs2": "TRC1",
+      "ibbs3": "TRC13",
+      "labour_label": "Kilis",
+      "official_label": "KİLİS"
+    },
+    {
+      "cip_label": "ŞANLIURFA",
+      "cip_province": "63",
+      "ibbs2": "TRC2",
+      "ibbs3": "TRC21",
+      "labour_label": "Şanlıurfa",
+      "official_label": "ŞANLIURFA"
+    },
+    {
+      "cip_label": "DİYARBAKIR",
+      "cip_province": "21",
+      "ibbs2": "TRC2",
+      "ibbs3": "TRC22",
+      "labour_label": "Diyarbakır",
+      "official_label": "DİYARBAKIR"
+    },
+    {
+      "cip_label": "MARDİN",
+      "cip_province": "47",
+      "ibbs2": "TRC3",
+      "ibbs3": "TRC31",
+      "labour_label": "Mardin",
+      "official_label": "MARDİN"
+    },
+    {
+      "cip_label": "BATMAN",
+      "cip_province": "72",
+      "ibbs2": "TRC3",
+      "ibbs3": "TRC32",
+      "labour_label": "Batman",
+      "official_label": "BATMAN"
+    },
+    {
+      "cip_label": "ŞIRNAK",
+      "cip_province": "73",
+      "ibbs2": "TRC3",
+      "ibbs3": "TRC33",
+      "labour_label": "Şırnak",
+      "official_label": "ŞIRNAK"
+    },
+    {
+      "cip_label": "SİİRT",
+      "cip_province": "56",
+      "ibbs2": "TRC3",
+      "ibbs3": "TRC34",
+      "labour_label": "Siirt",
+      "official_label": "SİİRT"
+    }
+  ],
+  "geometry": {
+    "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+    "geos": "3.14.1",
+    "invalid": {
+      "TR100": "Ring Self-intersection",
+      "TR310": "Ring Self-intersection",
+      "TR323": "Ring Self-intersection",
+      "TR823": "Ring Self-intersection"
+    },
+    "positions": 10157
+  },
+  "ibbs2_geometry_join": {
+    "missing": [],
+    "unmatched": []
+  },
+  "ibbs3_geometry_join": {
+    "missing": [],
+    "unmatched": []
+  },
+  "inputs": {
+    "housing.json": {
+      "bytes": 5669,
+      "sha256": "33f583fe30bfe5c94bca077bc7276b94e1aadada827a0a457ace1e3c6f782b77"
+    },
+    "ibbs.json": {
+      "bytes": 43606,
+      "sha256": "f6565ce43a24840bb135fb5b951aacdc9934e919c3abdbe6d8d43a389b6d4d71"
+    },
+    "labour.xls": {
+      "bytes": 71168,
+      "sha256": "654ab07ca668805cdea7f59e74e2b41fc4d6a985fabf37bbc4454ea4e4ed1255"
+    },
+    "nuts2.json": {
+      "bytes": 86117,
+      "sha256": "f9a5b59ef56c27382313ebc33aef3b62f8f5082844ca17414a14c45fecae6454"
+    },
+    "nuts3.json": {
+      "bytes": 233221,
+      "sha256": "6b4a652d805ba5c554bb86ab7709cba33006d2a8e689b38797f11dd42bde272c"
+    },
+    "population-l2.json": {
+      "bytes": 2458,
+      "sha256": "47d6f9f487c41c712dd0006223dfaf9bd812737e0fc141eff3e008c153629488"
+    },
+    "population.json": {
+      "bytes": 6392,
+      "sha256": "f57a5b5c1b16fbb09aeccea315714327800703aedf14def301fff035e93f85b8"
+    },
+    "population.xls": {
+      "bytes": 53760,
+      "sha256": "6a3380dd0694909afd4f2b6a0a51fac1303f07d499e378881a107c467d114b3d"
+    },
+    "sideMenu.json": {
+      "bytes": 30113,
+      "sha256": "865719b22a4aa5872abe738056643d6ad5e27d4984bb46942a0ce45f1661cb5e"
+    },
+    "unemployment-l2.json": {
+      "bytes": 1907,
+      "sha256": "f2682bfc4d2ea69d3e6e8265798d6852eb3a095813bcabff5da38e6cdef9cf09"
+    },
+    "unemployment-l3.json": {
+      "bytes": 4547,
+      "sha256": "79cb58185d9475f9135972a718b70897c993032e109d1eeb9beed0b9b670f967"
+    }
+  },
+  "label_exceptions": {
+    "cip": [
+      "TR714",
+      "TR721"
+    ],
+    "labour": []
+  },
+  "labour_caution_counts": {
+    "2022": 10,
+    "2023": 6,
+    "2024": 7,
+    "2025": 9
+  },
+  "labour_workbook_join": {
+    "missing": [],
+    "unmatched": []
+  },
+  "totals": {
+    "housing": {
+      "2021": 1609561,
+      "2022": 1625774,
+      "2023": 1330135,
+      "2024": 1549760,
+      "2025": 1760292
+    },
+    "population": {
+      "2021": 84680273,
+      "2022": 85279553,
+      "2023": 85372377,
+      "2024": 85664944,
+      "2025": 86092168
+    }
+  },
+  "value_differences": {
+    "housing_totals": [],
+    "population": [],
+    "population_regional_totals": [],
+    "unemployment_rounded": []
+  }
+}
