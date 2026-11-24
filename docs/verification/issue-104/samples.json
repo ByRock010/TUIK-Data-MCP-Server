@@ -1,0 +1,72 @@
+{
+  "prices": {
+    "id": "DF_TUFE_SDMX_TT05+V1.0",
+    "period": "2026-10",
+    "from": "2026-10-01",
+    "to": "2026-10-31",
+    "codes": {
+      "OZEL_KAPSAM_TUFE": [
+        "GT_1"
+      ]
+    }
+  },
+  "labour": {
+    "id": "DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+    "period": "2026-09",
+    "from": "2026-09-01",
+    "to": "2026-09-30",
+    "codes": {
+      "SEX": [
+        "_T"
+      ]
+    }
+  },
+  "population": {
+    "id": "DF_ADNKS_T30+V1.1",
+    "period": "2025",
+    "from": "2025-01-01",
+    "to": "2025-12-31",
+    "codes": {
+      "IKAMET_YERI": [
+        "TR100"
+      ]
+    },
+    "value_header": "Gözlem"
+  },
+  "trade": {
+    "id": "DF_ALTINSIZ_DTH+V1.0",
+    "period": "2026-09",
+    "from": "2026-09-01",
+    "to": "2026-09-30",
+    "codes": {
+      "DTE_SEKTOR_KODLARI": [
+        "0"
+      ]
+    }
+  },
+  "housing": {
+    "id": "DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+    "period": "2026-10",
+    "from": "2026-10-01",
+    "to": "2026-10-31",
+    "codes": {
+      "SATIS_TURU": [
+        "_T"
+      ]
+    }
+  },
+  "industry": {
+    "id": "DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0",
+    "period": "2026-09",
+    "from": "2026-09-01",
+    "to": "2026-09-30",
+    "codes": {
+      "SEASONAL_ADJUST": [
+        "Y"
+      ],
+      "DEGISIM_TUR": [
+        "1"
+      ]
+    }
+  }
+}

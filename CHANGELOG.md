@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
+  authenticated transport decision, isolation and operating budgets, and a
+  deterministic HTTP prototype using recorded TÜİK data (#102).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry
@@ -17,6 +20,11 @@ All notable changes to this project are documented here. The format follows
   `evaluate_search.py collect-production` ranks a frozen corpus through the served
   backend, and `score-ai --documents` reports series metrics. Hybrid top tens are
   not identical across index builds; the report documents this.
+- [Source-table audit](docs/verification/issue-86/README.md) of 60 public TÜİK
+  files (#86). The default path traced 290 of 300 sampled observations.
+  The ten remaining observations traced offline in two CSVs above the default
+  download cap. The audit pins the sample and records workbook header, period
+  and unit gaps for normalized reporting.
 - Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
   PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
   `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
@@ -38,6 +46,9 @@ All notable changes to this project are documented here. The format follows
   roadmap (#84), with retained issue plans and GitHub dependency verification.
   Downloaded third-party source snapshots and temporary render/build files remain
   local working artifacts.
+- [Regional coverage audit](docs/adr/0007-regional-data-and-boundaries.md) verifies
+  the 81-province TÜİK crosswalk, audited annual indicators and boundary eligibility
+  for a future choropleth (#106).
 - Optional hybrid lexical + semantic search (#21, ADR 0005).
   `tuik-mcp-index --embeddings` stores multilingual-e5-small vectors (`semantic`
   extra, ONNX). `search_tuik` fuses the lexical query with filtered k-NN by
@@ -59,6 +70,9 @@ All notable changes to this project are documented here. The format follows
   latency, response size and upstream requests per call. The
   [2026-11-10 report](docs/verification/usage-performance-2026-11-10.md) has the
   before and after numbers for the changes below.
+- [Dimensional data access audit](docs/adr/0008-dimensional-data-access.md) verifies
+  six bounded DataBrowser selections, compares exact export values and records
+  the key-free pilot decision (#104).
 
 ### Changed
 

@@ -1,0 +1,3844 @@
+{
+  "anonymous_sdmx": {
+    "message": "Unauthorized",
+    "status": 401
+  },
+  "catalog": {
+    "advertised_downloadable": 341,
+    "bytes": 310376,
+    "rows": 523,
+    "sha256": "5c72c116368d14208235aff5027bef27628e5be0fa5662dbea2089efaac089e7"
+  },
+  "domains": {
+    "housing": {
+      "attribute_headers": {
+        "CONF_STATUS": "Gizlilik Durumu",
+        "DECIMALS": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 28,
+      "catalog_period": "Ekim 2026",
+      "catalog_updated_at": "2026-11-17T10:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_KONUT_ISYERI_SATIS(1.6)",
+      "dsd_order": [
+        "FREQ",
+        "SATIS_TURU",
+        "REF_AREA",
+        "ENDEKS_DEGISIM",
+        "KONUT_ISYERI_SAHP",
+        "KONUT_ISYERI_GSTERGE",
+        "ULKE",
+        "OLCU_BIRIMI",
+        "SATIS_ADET_PAY",
+        "INDICATOR",
+        "DUZELTME",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 138,
+          "sha256": "cef68724c890a1e9d4f981a1f3ee43c4f5469d758b9bddf1d4ca6658c42743be"
+        },
+        "count.json": {
+          "bytes": 137,
+          "sha256": "c44b2442b0a91d0930603e092790b8af728a08b324b2cf62027d31163fa6d37b"
+        },
+        "dsd.json": {
+          "bytes": 940398,
+          "sha256": "884a06ad2b8330be93b9e4aed29169aa6405ae54fb85230bc61b4b1d8db96b01"
+        },
+        "portal.csv": {
+          "bytes": 674235,
+          "sha256": "b6a36cadacaecb66313801740a509731d6d36b3ae6933343f368c32be43717c2"
+        },
+        "selected.csv": {
+          "bytes": 598,
+          "sha256": "e31c22e47ac317a2d081986982ed52e3c22a9533ba1ae8ffd67772c64c2d7df4"
+        },
+        "view.json": {
+          "bytes": 7166,
+          "sha256": "d24bd7072755362956139b004580d32c38a0ce7df218cf21113a4318f05cb44a"
+        }
+      },
+      "mapped_headers": {
+        "FREQ": "Gözlem Sıklığı",
+        "INDICATOR": "İstatistiksel Gösterge",
+        "KONUT_ISYERI_GSTERGE": "Konut ve iş yeri Gösterge",
+        "REF_AREA": "Coğrafi Kapsam",
+        "SATIS_ADET_PAY": "Adet Pay Oranı",
+        "SATIS_TURU": "Satış Türü",
+        "TIME_PERIOD": "Zaman"
+      },
+      "matched_rows": [
+        {
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "MII_ISS",
+          "KONUT_ISYERI_GSTERGE": "2",
+          "KONUT_ISYERI_SAHP": "_Z",
+          "OLCU_BIRIMI": "_Z",
+          "REF_AREA": "TR",
+          "SATIS_ADET_PAY": "_T",
+          "SATIS_TURU": "_T",
+          "TIME_PERIOD": "2026-10",
+          "ULKE": "_Z",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "16489",
+          "equal_decimal": true,
+          "portal_value": "16489"
+        },
+        {
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "MII_KSS",
+          "KONUT_ISYERI_GSTERGE": "2",
+          "KONUT_ISYERI_SAHP": "_Z",
+          "OLCU_BIRIMI": "_Z",
+          "REF_AREA": "TR",
+          "SATIS_ADET_PAY": "_T",
+          "SATIS_TURU": "_T",
+          "TIME_PERIOD": "2026-10",
+          "ULKE": "_Z",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "131072",
+          "equal_decimal": true,
+          "portal_value": "131072"
+        },
+        {
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "MII_ISS",
+          "KONUT_ISYERI_GSTERGE": "3",
+          "KONUT_ISYERI_SAHP": "_Z",
+          "OLCU_BIRIMI": "_Z",
+          "REF_AREA": "TR",
+          "SATIS_ADET_PAY": "_T",
+          "SATIS_TURU": "_T",
+          "TIME_PERIOD": "2026-10",
+          "ULKE": "_Z",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "16489",
+          "equal_decimal": true,
+          "portal_value": "16489"
+        },
+        {
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "MII_KSS",
+          "KONUT_ISYERI_GSTERGE": "3",
+          "KONUT_ISYERI_SAHP": "_Z",
+          "OLCU_BIRIMI": "_Z",
+          "REF_AREA": "TR",
+          "SATIS_ADET_PAY": "_T",
+          "SATIS_TURU": "_T",
+          "TIME_PERIOD": "2026-10",
+          "ULKE": "_Z",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "131072",
+          "equal_decimal": true,
+          "portal_value": "131072"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "CONF_STATUS": {
+          "codelist": "TR:CL_GIZLILIK(1.1)",
+          "labels": {}
+        },
+        "DECIMALS": {
+          "codelist": "TR:CL_ONDALIK(1.2)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.1)",
+          "labels": {}
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "TR:CL_BIRIM_CARPANI(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "DUZELTME": {
+          "codelist": "TR:CL_DUZELTME(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "ENDEKS_DEGISIM": {
+          "codelist": "TR:CL_DEGISIM(3.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.1)",
+          "labels": {
+            "M": {
+              "en": "Monthly",
+              "tr": "Aylık"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(9.2)",
+          "labels": {
+            "MII_ISS": {
+              "en": "Number of Commercial Property Sales",
+              "tr": "İş Yeri Satış Sayıları"
+            },
+            "MII_KSS": {
+              "en": "Number of House Sales",
+              "tr": "Konut Satış Sayıları"
+            }
+          }
+        },
+        "KONUT_ISYERI_GSTERGE": {
+          "codelist": "TR:CL_KONUT_ISYERI_GOSTERGE(1.2)",
+          "labels": {
+            "2": {
+              "en": "Sales by Type",
+              "tr": "Satış Şekline Göre"
+            },
+            "3": {
+              "en": "Sales by State",
+              "tr": "Satış Durumuna Göre"
+            }
+          }
+        },
+        "KONUT_ISYERI_SAHP": {
+          "codelist": "TR:CL_KONUT_ISYERI_SAHIP(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir Değil"
+            }
+          }
+        },
+        "OLCU_BIRIMI": {
+          "codelist": "TR:CL_OLCU_BIRIMI(2.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SATIS_ADET_PAY": {
+          "codelist": "TR:CL_SATIS_ADET_PAY(1.0)",
+          "labels": {
+            "_T": {
+              "en": "Total",
+              "tr": "Toplam"
+            }
+          }
+        },
+        "SATIS_TURU": {
+          "codelist": "TR:CL_SATIS(1.1)",
+          "labels": {
+            "_T": {
+              "en": "Total",
+              "tr": "Toplam"
+            }
+          }
+        },
+        "ULKE": {
+          "codelist": "TR:CL_ULKE_N_1094(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        }
+      },
+      "portal_rows": 5012,
+      "portal_selection_rows": 4,
+      "selection_count": 4
+    },
+    "industry": {
+      "attribute_headers": {
+        "CONF_STATUS": "Gizlilik Durumu",
+        "DECIMALS": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "TRANSFORMATION": null,
+        "UNIT_MEASURE": "Ölçü Birimi",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 210,
+      "catalog_period": "Eylül 2026",
+      "catalog_updated_at": "2026-11-10T10:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_SANAYI_URETIM_ENDEKSI(1.7)",
+      "dsd_order": [
+        "REF_AREA",
+        "FREQ",
+        "ACTIVITY_ISIC_REV3",
+        "ACTIVITY_EFFECT_NACE_REV2",
+        "ACTIVITY_NACE_REV2",
+        "INDICATOR",
+        "SEASONAL_ADJUST",
+        "BASE_PER",
+        "SECTOR",
+        "DEGISIM_TUR",
+        "FAAL_GRUP",
+        "YAYIM_DONEMI",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 139,
+          "sha256": "5378a541bf8422a58f65632b20bc0698ba400cd2ff6ed9c40cce230b903cdc68"
+        },
+        "count.json": {
+          "bytes": 138,
+          "sha256": "338223cfa0b66a20eb4123a39cfcc27a69c788ac28c4c0d6d304cc21097450cf"
+        },
+        "dsd.json": {
+          "bytes": 2376354,
+          "sha256": "55540f94d45cdddec3aba0e61922daa51f450f443c47a2fb8bb4e150eac2f800"
+        },
+        "portal.csv": {
+          "bytes": 14364209,
+          "sha256": "25f69576bfd8626655e31ef1f8e7bb7ce09455e4b2494b7aa6dac11e62241a97"
+        },
+        "selected.csv": {
+          "bytes": 5122,
+          "sha256": "da328858c97f6e3282b99b0edee69197efda15e87f6f6cf231c0ff809646a20e"
+        },
+        "view.json": {
+          "bytes": 15333,
+          "sha256": "fd29d59e0223572797dab86231354b78d898ee8a603cad1e7b7e7059b42f5bb6"
+        }
+      },
+      "mapped_headers": {
+        "ACTIVITY_NACE_REV2": "İktisadi Faaliyet (Nace Rev2) (B-C-D)",
+        "BASE_PER": "Temel Dönem/Yıl (2021)",
+        "DEGISIM_TUR": "Endeks-Değişim (1)",
+        "FAAL_GRUP": "Faaliyet Grubu (1)",
+        "FREQ": "Gözlem Sıklığı (M)",
+        "INDICATOR": "İstatistiksel Gösterge (II_SUE)",
+        "REF_AREA": "Coğrafi Kapsam",
+        "SEASONAL_ADJUST": "Mevsimsel Düzeltme (N)",
+        "TIME_PERIOD": "Zaman (2026-09)"
+      },
+      "matched_rows": [
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "4",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "99.9212945276",
+          "equal_decimal": true,
+          "portal_value": "99,9212945276"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B05",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "90.4754019664",
+          "equal_decimal": true,
+          "portal_value": "90,4754019664"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B06",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "242.3973631046",
+          "equal_decimal": true,
+          "portal_value": "242,3973631046"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B07",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "77.0155464999",
+          "equal_decimal": true,
+          "portal_value": "77,0155464999"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B08",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "94.9112337592",
+          "equal_decimal": true,
+          "portal_value": "94,9112337592"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "B-C-D",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "1",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "110.781099661",
+          "equal_decimal": true,
+          "portal_value": "110,781099661"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "4",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "111.344572232",
+          "equal_decimal": true,
+          "portal_value": "111,344572232"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C_HTC",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "3",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "211.9096304471",
+          "equal_decimal": true,
+          "portal_value": "211,9096304471"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C_HTC_M",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "3",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "123.4818671977",
+          "equal_decimal": true,
+          "portal_value": "123,4818671977"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C_LTC",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "3",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "97.4905595778",
+          "equal_decimal": true,
+          "portal_value": "97,4905595778"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C_LTC_M",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "3",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "107.5588652604",
+          "equal_decimal": true,
+          "portal_value": "107,5588652604"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C10",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "110.9901080987",
+          "equal_decimal": true,
+          "portal_value": "110,9901080987"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C11",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "103.1513027003",
+          "equal_decimal": true,
+          "portal_value": "103,1513027003"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C12",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "132.8970807451",
+          "equal_decimal": true,
+          "portal_value": "132,8970807451"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C13",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "76.9050065368",
+          "equal_decimal": true,
+          "portal_value": "76,9050065368"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C14",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "84.2485607517",
+          "equal_decimal": true,
+          "portal_value": "84,2485607517"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C15",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "117.8731973804",
+          "equal_decimal": true,
+          "portal_value": "117,8731973804"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C16",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "103.6986205802",
+          "equal_decimal": true,
+          "portal_value": "103,6986205802"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C17",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "103.7483518996",
+          "equal_decimal": true,
+          "portal_value": "103,7483518996"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C18",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "89.2669118362",
+          "equal_decimal": true,
+          "portal_value": "89,2669118362"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C19",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "105.6379600207",
+          "equal_decimal": true,
+          "portal_value": "105,6379600207"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C20",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "102.3163797825",
+          "equal_decimal": true,
+          "portal_value": "102,3163797825"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C21",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "117.6553405324",
+          "equal_decimal": true,
+          "portal_value": "117,6553405324"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C22",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "101.5094429829",
+          "equal_decimal": true,
+          "portal_value": "101,5094429829"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C23",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "106.2850970529",
+          "equal_decimal": true,
+          "portal_value": "106,2850970529"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C24",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "98.0157330417",
+          "equal_decimal": true,
+          "portal_value": "98,0157330417"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C25",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "118.0239496665",
+          "equal_decimal": true,
+          "portal_value": "118,0239496665"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C26",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "234.6501645111",
+          "equal_decimal": true,
+          "portal_value": "234,6501645111"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C27",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "120.8067884798",
+          "equal_decimal": true,
+          "portal_value": "120,8067884798"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C28",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "97.5035385715",
+          "equal_decimal": true,
+          "portal_value": "97,5035385715"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C29",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "136.3934885281",
+          "equal_decimal": true,
+          "portal_value": "136,3934885281"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C30",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "253.0152848509",
+          "equal_decimal": true,
+          "portal_value": "253,0152848509"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C31",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "110.5799925447",
+          "equal_decimal": true,
+          "portal_value": "110,5799925447"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C32",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "116.1186632744",
+          "equal_decimal": true,
+          "portal_value": "116,1186632744"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "C33",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "152.8748730161",
+          "equal_decimal": true,
+          "portal_value": "152,8748730161"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "D",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "4",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "111.9366116507",
+          "equal_decimal": true,
+          "portal_value": "111,9366116507"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "D35",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "5",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "111.9366116507",
+          "equal_decimal": true,
+          "portal_value": "111,9366116507"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "MIG_CAG",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "2",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "149.6994882029",
+          "equal_decimal": true,
+          "portal_value": "149,6994882029"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "MIG_DCOG",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "2",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "101.9910292856",
+          "equal_decimal": true,
+          "portal_value": "101,9910292856"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "MIG_ING",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "2",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "101.6083854232",
+          "equal_decimal": true,
+          "portal_value": "101,6083854232"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "MIG_NDCOG",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "2",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "101.2390216204",
+          "equal_decimal": true,
+          "portal_value": "101,2390216204"
+        },
+        {
+          "ACTIVITY_EFFECT_NACE_REV2": "_Z",
+          "ACTIVITY_ISIC_REV3": "_Z",
+          "ACTIVITY_NACE_REV2": "MIG_NRG_X_E",
+          "BASE_PER": "2021",
+          "DEGISIM_TUR": "1",
+          "FAAL_GRUP": "2",
+          "FREQ": "M",
+          "INDICATOR": "II_SUE",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "Y",
+          "SECTOR": "_Z",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "F",
+            "DECIMALS": "",
+            "OBS_STATUS": "A",
+            "TIME_FORMAT": "",
+            "TRANSFORMATION": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "114.1089699357",
+          "equal_decimal": true,
+          "portal_value": "114,1089699357"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "CONF_STATUS": {
+          "codelist": "TR:CL_GIZLILIK(1.1)",
+          "labels": {
+            "F": {
+              "en": "Free (free for publication)",
+              "tr": "Yayıma serbest"
+            }
+          }
+        },
+        "DECIMALS": {
+          "codelist": "TR:CL_ONDALIK(1.0)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.0)",
+          "labels": {
+            "A": {
+              "en": "Normal value",
+              "tr": "Normal değer"
+            }
+          }
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "TRANSFORMATION": {
+          "codelist": "TR:CL_DONUSUM(1.1)",
+          "labels": {}
+        },
+        "UNIT_MEASURE": {
+          "codelist": "TR:CL_OLCU_BIRIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "TR:CL_BIRIM_CARPANI(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "ACTIVITY_EFFECT_NACE_REV2": {
+          "codelist": "TR:CL_NACE_REV2_364_HIYERARSIK(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "ACTIVITY_ISIC_REV3": {
+          "codelist": "TR:CL_ISIC_REV3_128_HIYERARSIK(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "ACTIVITY_NACE_REV2": {
+          "codelist": "TR:CL_NACE_REV2_364_HIYERARSIK(1.1)",
+          "labels": {
+            "B": {
+              "en": "Mining and quarrying",
+              "tr": "Madencilik ve taş ocakçılığı"
+            },
+            "B-C-D": {
+              "en": "Total Industry",
+              "tr": "Toplam Sanayi"
+            },
+            "B05": {
+              "en": "Mining of coal and lignite",
+              "tr": "Kömür ve linyit çıkartılması"
+            },
+            "B06": {
+              "en": "Extraction of crude petroleum and natural gas",
+              "tr": "Ham petrol ve doğal gaz çıkarımı"
+            },
+            "B07": {
+              "en": "Mining of metal ores",
+              "tr": "Metal cevherleri madenciliği"
+            },
+            "B08": {
+              "en": "Other mining and quarrying",
+              "tr": "Diğer madencilik ve taş ocakçılığı"
+            },
+            "C": {
+              "en": "Manufacturing",
+              "tr": "İmalat"
+            },
+            "C10": {
+              "en": "Manufacture of food products",
+              "tr": "Gıda ürünlerinin imalatı"
+            },
+            "C11": {
+              "en": "Manufacture of beverages",
+              "tr": "İçeceklerin imalatı"
+            },
+            "C12": {
+              "en": "Manufacture of tobacco products",
+              "tr": "Tütün ürünleri imalatı"
+            },
+            "C13": {
+              "en": "Manufacture of textiles",
+              "tr": "Tekstil ürünlerinin imalatı"
+            },
+            "C14": {
+              "en": "Manufacture of wearing apparel",
+              "tr": "Giyim eşyalarının imalatı"
+            },
+            "C15": {
+              "en": "Manufacture of leather and related products",
+              "tr": "Deri ve ilgili ürünlerin imalatı"
+            },
+            "C16": {
+              "en": "Manufacture of wood and of products of wood and cork, except furniture; manufacture of articles of straw and plaiting materials",
+              "tr": "Ağaç, ağaç ürünleri ve mantar ürünleri imalatı (mobilya hariç); saz, saman ve benzeri malzemelerden örülerek yapılan eşyaların imalatı"
+            },
+            "C17": {
+              "en": "Manufacture of paper and paper products",
+              "tr": "Kağıt ve kağıt ürünlerinin imalatı"
+            },
+            "C18": {
+              "en": "Printing and reproduction of recorded media",
+              "tr": "Kayıtlı medyanın basılması ve çoğaltılması"
+            },
+            "C19": {
+              "en": "Manufacture of coke and refined petroleum products",
+              "tr": "Kok kömürü ve rafine edilmiş petrol ürünleri imalatı"
+            },
+            "C20": {
+              "en": "Manufacture of chemicals and chemical products",
+              "tr": "Kimyasalların ve kimyasal ürünlerin imalatı"
+            },
+            "C21": {
+              "en": "Manufacture of basic pharmaceutical products and pharmaceutical preparations",
+              "tr": "Temel eczacılık ürünlerinin ve eczacılığa ilişkin malzemelerin imalatı"
+            },
+            "C22": {
+              "en": "Manufacture of rubber and plastic products",
+              "tr": "Kauçuk ve plastik ürünlerin imalatı"
+            },
+            "C23": {
+              "en": "Manufacture of other non-metallic mineral products",
+              "tr": "Diğer metalik olmayan mineral ürünlerin imalatı"
+            },
+            "C24": {
+              "en": "Manufacture of basic metals",
+              "tr": "Ana metal sanayii"
+            },
+            "C25": {
+              "en": "Manufacture of fabricated metal products, except machinery and equipment",
+              "tr": "Fabrikasyon metal ürünleri imalatı (makine ve teçhizat hariç)"
+            },
+            "C26": {
+              "en": "Manufacture of computer, electronic and optical products",
+              "tr": "Bilgisayarların, elektronik ve optik ürünlerin imalatı"
+            },
+            "C27": {
+              "en": "Manufacture of electrical equipment",
+              "tr": "Elektrikli teçhizat imalatı"
+            },
+            "C28": {
+              "en": "Manufacture of machinery and equipment n.e.c.",
+              "tr": "Başka yerde sınıflandırılmamış makine ve ekipman imalatı"
+            },
+            "C29": {
+              "en": "Manufacture of motor vehicles, trailers and semi-trailers",
+              "tr": "Motorlu kara taşıtı, treyler (römork) ve yarı treyler (yarı römork) imalatı"
+            },
+            "C30": {
+              "en": "Manufacture of other transport equipment",
+              "tr": "Diğer ulaşım araçlarının imalatı"
+            },
+            "C31": {
+              "en": "Manufacture of furniture",
+              "tr": "Mobilya imalatı"
+            },
+            "C32": {
+              "en": "Other manufacturing",
+              "tr": "Diğer imalatlar"
+            },
+            "C33": {
+              "en": "Repair and installation of machinery and equipment",
+              "tr": "Makine ve ekipmanların kurulumu ve onarımı"
+            },
+            "C_HTC": {
+              "en": "High-technology manufacturing",
+              "tr": "Yüksek teknoloji ürün imalatı"
+            },
+            "C_HTC_M": {
+              "en": "Medium high-technology manufacturing",
+              "tr": "Orta ileri teknoloji ürün imalatı"
+            },
+            "C_LTC": {
+              "en": "Low-technology manufacturing",
+              "tr": "Düşük teknoloji ürün imalatı"
+            },
+            "C_LTC_M": {
+              "en": "Medium low-technology manufacturing",
+              "tr": "Orta düşük teknoloji ürün imalatı"
+            },
+            "D": {
+              "en": "Electricity, gas, steam and air conditioning supply",
+              "tr": "Elektrik, gaz, buhar ve iklimlendirme üretimi ve dağıtımı"
+            },
+            "D35": {
+              "en": "Electricity, gas, steam and air conditioning supply",
+              "tr": "Elektrik, gaz, buhar ve havalandırma sistemi üretim ve dağıtımı"
+            },
+            "MIG_CAG": {
+              "en": "MIG - capital goods",
+              "tr": "MIG - sermaye malı"
+            },
+            "MIG_DCOG": {
+              "en": "MIG - durable consumer goods",
+              "tr": "MIG - dayanıklı tüketim malı"
+            },
+            "MIG_ING": {
+              "en": "MIG - intermediate goods",
+              "tr": "MIG - ara malı"
+            },
+            "MIG_NDCOG": {
+              "en": "MIG - non-durable consumer goods",
+              "tr": "MIG - dayanıksız tüketim malı"
+            },
+            "MIG_NRG_X_E": {
+              "en": "MIG - energy (except Section E)",
+              "tr": "MIG - enerji ( kısım e hariç)"
+            }
+          }
+        },
+        "BASE_PER": {
+          "codelist": "TR:CL_BAZ_YIL(1.0)",
+          "labels": {
+            "2021": {
+              "en": "2021",
+              "tr": "2021"
+            }
+          }
+        },
+        "DEGISIM_TUR": {
+          "codelist": "TR:CL_DEGISIM(2.1)",
+          "labels": {
+            "1": {
+              "en": "Index",
+              "tr": "Endeks"
+            }
+          }
+        },
+        "FAAL_GRUP": {
+          "codelist": "TR:CL_FAAL_GRUP(1.0)",
+          "labels": {
+            "1": {
+              "en": "Total",
+              "tr": "Toplam"
+            },
+            "2": {
+              "en": "MIGs",
+              "tr": "MIGs"
+            },
+            "3": {
+              "en": "Tech",
+              "tr": "Tech"
+            },
+            "4": {
+              "en": "Section",
+              "tr": "Bölüm (harf)"
+            },
+            "5": {
+              "en": "Division",
+              "tr": "Kısım (ikili)"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.0)",
+          "labels": {
+            "M": {
+              "en": "Monthly",
+              "tr": "Aylık"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(6.2)",
+          "labels": {
+            "II_SUE": {
+              "en": "Industrial Production Index",
+              "tr": "Sanayi Üretim Endeksi"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SEASONAL_ADJUST": {
+          "codelist": "TR:CL_MEVSIMSEL_DUZELTME(1.0)",
+          "labels": {
+            "Y": {
+              "en": "Calendar and seasonally adjusted data",
+              "tr": "Mevsim ve takvim etkilerinden arındırılmış"
+            }
+          }
+        },
+        "SECTOR": {
+          "codelist": "TR:CL_SEKTOR(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "YAYIM_DONEMI": {
+          "codelist": "TR:CL_YAYIM_DONEMI(1.0)",
+          "labels": {
+            "2026_01": {
+              "en": "January 2026",
+              "tr": "Ocak 2026"
+            }
+          }
+        }
+      },
+      "portal_rows": 57624,
+      "portal_selection_rows": 42,
+      "selection_count": 42
+    },
+    "labour": {
+      "attribute_headers": {
+        "CONF_STATUS": "Gizlilik Durumu",
+        "DECIMAL": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "UNIT_MEASURE": "Ölçü Birimi",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 96,
+      "catalog_period": "Eylül 2026",
+      "catalog_updated_at": "2026-10-27T10:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_ISGUCU_ISTATISTIKLERI(1.3)",
+      "dsd_order": [
+        "REF_AREA",
+        "FREQ",
+        "INDICATOR",
+        "ISGUCU_GOSTERGE",
+        "TEMEL_YAS",
+        "SEASONAL_ADJUST",
+        "SEX",
+        "FIIL_CALISMA_SURE",
+        "YAYIM_DONEMI",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 138,
+          "sha256": "a6f66187c8e3808c14192b3aa631c742a2a3c3cee2a206d620013759682e7494"
+        },
+        "count.json": {
+          "bytes": 138,
+          "sha256": "0dff2371f4b18e4f27b16ccd7ff76fd6d019e3586c15f32219fe76a9e98b36c8"
+        },
+        "dsd.json": {
+          "bytes": 1463900,
+          "sha256": "690c24deeaea73b81bdaa97699c3fd32b90c16094cdbde9d4cc602c4d717251d"
+        },
+        "portal.csv": {
+          "bytes": 3553859,
+          "sha256": "a03a26b5baa6a8ab69ea6570cea3844ad8dc7cf556884c1628ef2b9a1708b6d5"
+        },
+        "selected.csv": {
+          "bytes": 3380,
+          "sha256": "3d8d57ae8646cf1b9dc29d3bfff1872f11bc45dc32ed2840de8e0e253787b9da"
+        },
+        "view.json": {
+          "bytes": 9565,
+          "sha256": "217d203c9688dd286b4680b780eaa610e96fef0456a59087694391638a8c521c"
+        }
+      },
+      "mapped_headers": {
+        "FREQ": "Gözlem Sıklığı",
+        "INDICATOR": "İstatistiksel Gösterge",
+        "ISGUCU_GOSTERGE": "İşgücü Göstergeleri",
+        "REF_AREA": "Coğrafi Kapsam",
+        "SEASONAL_ADJUST": "Mevsimsel Düzeltme",
+        "SEX": "Cinsiyet",
+        "TEMEL_YAS": "Temel Yaş",
+        "TIME_PERIOD": "Zaman"
+      },
+      "matched_rows": [
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "1",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "67168",
+          "equal_decimal": true,
+          "portal_value": "67168"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "1",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "67168",
+          "equal_decimal": true,
+          "portal_value": "67168"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "1",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "11387",
+          "equal_decimal": true,
+          "portal_value": "11387"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "1",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "11387",
+          "equal_decimal": true,
+          "portal_value": "11387"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "2",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "35729",
+          "equal_decimal": true,
+          "portal_value": "35729"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "2",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "35412",
+          "equal_decimal": true,
+          "portal_value": "35412"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "2",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "5444",
+          "equal_decimal": true,
+          "portal_value": "5444"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "2",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "5293",
+          "equal_decimal": true,
+          "portal_value": "5293"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "3",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "32681",
+          "equal_decimal": true,
+          "portal_value": "32681"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "3",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "32445",
+          "equal_decimal": true,
+          "portal_value": "32445"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "3",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "4603",
+          "equal_decimal": true,
+          "portal_value": "4603"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "3",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "4510",
+          "equal_decimal": true,
+          "portal_value": "4510"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "4",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "3049",
+          "equal_decimal": true,
+          "portal_value": "3049"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "4",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "2967",
+          "equal_decimal": true,
+          "portal_value": "2967"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "4",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "841",
+          "equal_decimal": true,
+          "portal_value": "841"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "4",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "783",
+          "equal_decimal": true,
+          "portal_value": "783"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "5",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "31439",
+          "equal_decimal": true,
+          "portal_value": "31439"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "5",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "31756",
+          "equal_decimal": true,
+          "portal_value": "31756"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "5",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "5943",
+          "equal_decimal": true,
+          "portal_value": "5943"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "5",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "6094",
+          "equal_decimal": true,
+          "portal_value": "6094"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "6",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "53.2",
+          "equal_decimal": true,
+          "portal_value": "53,2"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "6",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "52.7",
+          "equal_decimal": true,
+          "portal_value": "52,7"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "6",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "47.79999999999999",
+          "equal_decimal": true,
+          "portal_value": "47,79999999999999"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "6",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "46.5",
+          "equal_decimal": true,
+          "portal_value": "46,5"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "7",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "48.7",
+          "equal_decimal": true,
+          "portal_value": "48,7"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "7",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "48.29999999999999",
+          "equal_decimal": true,
+          "portal_value": "48,29999999999999"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "7",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "40.39999999999999",
+          "equal_decimal": true,
+          "portal_value": "40,39999999999999"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "7",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "39.6",
+          "equal_decimal": true,
+          "portal_value": "39,6"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "8",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "8.5",
+          "equal_decimal": true,
+          "portal_value": "8,5"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "8",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y_GE15",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "8.4",
+          "equal_decimal": true,
+          "portal_value": "8,4"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "8",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "N",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "15.4",
+          "equal_decimal": true,
+          "portal_value": "15,4"
+        },
+        {
+          "FIIL_CALISMA_SURE": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "ISGI_TIG",
+          "ISGUCU_GOSTERGE": "8",
+          "REF_AREA": "TR",
+          "SEASONAL_ADJUST": "S",
+          "SEX": "_T",
+          "TEMEL_YAS": "Y15T24",
+          "TIME_PERIOD": "2026-09",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "14.8",
+          "equal_decimal": true,
+          "portal_value": "14,8"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "CONF_STATUS": {
+          "codelist": "TR:CL_GIZLILIK(1.1)",
+          "labels": {}
+        },
+        "DECIMAL": {
+          "codelist": "TR:CL_ONDALIK(1.0)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.0)",
+          "labels": {}
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MEASURE": {
+          "codelist": "TR:CL_OLCU_BIRIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "SDMX:CL_UNIT_MULT(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "FIIL_CALISMA_SURE": {
+          "codelist": "TR:CL_FIIL_CALISMA_SURE(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Unknown",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.0)",
+          "labels": {
+            "M": {
+              "en": "Monthly",
+              "tr": "Aylık"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(2.9)",
+          "labels": {
+            "ISGI_TIG": {
+              "en": "Main Labour Force Indicators",
+              "tr": "Temel İşgücü Göstergeleri"
+            }
+          }
+        },
+        "ISGUCU_GOSTERGE": {
+          "codelist": "TR:CL_ISGUCU_GOSTERGE(2.0)",
+          "labels": {
+            "1": {
+              "en": "Population (Thousand Person)",
+              "tr": "Nüfus (Bin Kişi)"
+            },
+            "2": {
+              "en": "Labour Force (Thousand Person)",
+              "tr": "İşgücü (Bin Kişi)"
+            },
+            "3": {
+              "en": "Employment (Thousand Person)",
+              "tr": "İstihdam (Bin Kişi)"
+            },
+            "4": {
+              "en": "Unemployment (Thousand Person)",
+              "tr": "İşsiz (Bin Kişi)"
+            },
+            "5": {
+              "en": "Not in Labour Force (Thousand Person)",
+              "tr": "İşgücüne Dahil Olmayanlar (Bin Kişi)"
+            },
+            "6": {
+              "en": "Labour Force Participation Rate (%)",
+              "tr": "İşgücüne Katılma Oranı (%)"
+            },
+            "7": {
+              "en": "Employment Rate (%)",
+              "tr": "İstihdam Oranı (%)"
+            },
+            "8": {
+              "en": "Unemployment Rate (%)",
+              "tr": "İşsizlik Oranı (%)"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.1)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SEASONAL_ADJUST": {
+          "codelist": "TR:CL_MEVSIMSEL_DUZELTME(1.0)",
+          "labels": {
+            "N": {
+              "en": "Neither seasonally adjusted nor calendar adjusted data",
+              "tr": "Arındırılmamış"
+            },
+            "S": {
+              "en": "Seasonally adjusted data, not calendar adjusted",
+              "tr": "Mevsim etkilerinden arındırılmış"
+            }
+          }
+        },
+        "SEX": {
+          "codelist": "TR:CL_CINSIYET(1.1)",
+          "labels": {
+            "_T": {
+              "en": "Total",
+              "tr": "Toplam"
+            }
+          }
+        },
+        "TEMEL_YAS": {
+          "codelist": "TR:CL_YAS(1.0)",
+          "labels": {
+            "Y15T24": {
+              "en": "15-24",
+              "tr": "15-24"
+            },
+            "Y_GE15": {
+              "en": "15+",
+              "tr": "15+"
+            }
+          }
+        },
+        "YAYIM_DONEMI": {
+          "codelist": "TR:CL_YAYIM_DONEMI(1.0)",
+          "labels": {
+            "2026_01": {
+              "en": "January 2026",
+              "tr": "Ocak 2026"
+            }
+          }
+        }
+      },
+      "portal_rows": 21600,
+      "portal_selection_rows": 32,
+      "selection_count": 32
+    },
+    "population": {
+      "attribute_headers": {
+        "DECIMAL": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "UNIT_MEASURE": "Ölçü Birimi",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 83,
+      "catalog_period": "2026-Q1",
+      "catalog_updated_at": "2026-06-01T16:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_ADNKS(1.7)",
+      "dsd_order": [
+        "REF_AREA",
+        "FREQ",
+        "INDICATOR",
+        "NUFUS_KAYIT_IL",
+        "YERLESIM_YERI_TUR",
+        "VATANDASLIK_ULKESI",
+        "DOGUM_YERI_IL",
+        "IKAMET_YERI",
+        "DOGUM_YERI_DURUM",
+        "DOGUM_YERI_ULKE",
+        "YAS",
+        "DOGUM_YIL",
+        "HANEHALKI_TIPI",
+        "HANEHALKI_BUYUKLUGU",
+        "SEX",
+        "YAS_GRUBU",
+        "ERKEK_ISIM",
+        "KADIN_ISIM",
+        "CIVIL_STATUS",
+        "ADNKS_GOSTERGE",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_ADNKS_T30+V1.1",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 140,
+          "sha256": "bbb6259169be2667c2e64a1115ebc007da057d7abdf55413940785c17a6caf50"
+        },
+        "count.json": {
+          "bytes": 139,
+          "sha256": "b78c9c956dece9da3768148aff2bc2ac7bf117f422b0a42c37c13023f93ac775"
+        },
+        "dsd.json": {
+          "bytes": 1426408,
+          "sha256": "4ec9d8367c5761b4013abcbe3b52e2143fbb1574605ac0844f6c748d8873341f"
+        },
+        "portal.csv": {
+          "bytes": 244402,
+          "sha256": "702a94c2e37a08c495cc3919deffac7b57b46e15b62f75be78a557fefa6136ca"
+        },
+        "selected.csv": {
+          "bytes": 446,
+          "sha256": "4fb8665059660ac8346017bbe694bf34f489d1554c854bed7a34c6c020e9f3a6"
+        },
+        "view.json": {
+          "bytes": 4617,
+          "sha256": "f0e45a93b152bd96276bcf3fe52277190b363c11d7b9618226a0ffab6a5ca00c"
+        }
+      },
+      "mapped_headers": {
+        "ADNKS_GOSTERGE": "ADNKS Gösterge",
+        "FREQ": "Gözlem Sıklığı",
+        "IKAMET_YERI": "İkamet edilen yer",
+        "INDICATOR": "İstatistiksel Gösterge",
+        "REF_AREA": "Coğrafi Kapsam",
+        "TIME_PERIOD": "Zaman"
+      },
+      "matched_rows": [
+        {
+          "ADNKS_GOSTERGE": "NUFUS",
+          "CIVIL_STATUS": "_Z",
+          "DOGUM_YERI_DURUM": "_Z",
+          "DOGUM_YERI_IL": "_Z",
+          "DOGUM_YERI_ULKE": "_Z",
+          "DOGUM_YIL": "_Z",
+          "ERKEK_ISIM": "_Z",
+          "FREQ": "A",
+          "HANEHALKI_BUYUKLUGU": "_Z",
+          "HANEHALKI_TIPI": "_Z",
+          "IKAMET_YERI": "TR100",
+          "INDICATOR": "NG_ADNKS",
+          "KADIN_ISIM": "_Z",
+          "NUFUS_KAYIT_IL": "_Z",
+          "REF_AREA": "TR",
+          "SEX": "_Z",
+          "TIME_PERIOD": "2025",
+          "VATANDASLIK_ULKESI": "_Z",
+          "YAS": "_Z",
+          "YAS_GRUBU": "_Z",
+          "YERLESIM_YERI_TUR": "_Z",
+          "attributes": {
+            "DECIMAL": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "15754053",
+          "equal_decimal": true,
+          "portal_value": "15754053"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "DECIMAL": {
+          "codelist": "TR:CL_ONDALIK(1.0)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.0)",
+          "labels": {}
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MEASURE": {
+          "codelist": "TR:CL_OLCU_BIRIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "TR:CL_BIRIM_CARPANI(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "ADNKS_GOSTERGE": {
+          "codelist": "TR:CL_ADNKS_GOSTERGE(1.1)",
+          "labels": {
+            "NUFUS": {
+              "en": "Population",
+              "tr": "Nüfus"
+            }
+          }
+        },
+        "CIVIL_STATUS": {
+          "codelist": "TR:CL_MEDENI_DURUM(1.2)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "DOGUM_YERI_DURUM": {
+          "codelist": "TR:CL_DOGUM_YER_DURUM(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "DOGUM_YERI_IL": {
+          "codelist": "TR:CL_IL(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir Değil"
+            }
+          }
+        },
+        "DOGUM_YERI_ULKE": {
+          "codelist": "TR:CL_ULKE_ADNKS(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "DOGUM_YIL": {
+          "codelist": "TR:CL_YIL(2.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir Değil"
+            }
+          }
+        },
+        "ERKEK_ISIM": {
+          "codelist": "TR:CL_ERKEK_ISIM(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.0)",
+          "labels": {
+            "A": {
+              "en": "Annual",
+              "tr": "Yıllık"
+            }
+          }
+        },
+        "HANEHALKI_BUYUKLUGU": {
+          "codelist": "TR:CL_SAYI_ARALIK(1.4)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "HANEHALKI_TIPI": {
+          "codelist": "TR:CL_HANEHALKI_TIPI(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir Değil"
+            }
+          }
+        },
+        "IKAMET_YERI": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR100": {
+              "en": "İstanbul",
+              "tr": "İstanbul"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(2.9)",
+          "labels": {
+            "NG_ADNKS": {
+              "en": "Address Based Population Registration System",
+              "tr": "Adrese Dayalı Nüfus Kayıt Sistemi"
+            }
+          }
+        },
+        "KADIN_ISIM": {
+          "codelist": "TR:CL_KADIN_ISIM(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "NUFUS_KAYIT_IL": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir Değil"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SEX": {
+          "codelist": "TR:CL_CINSIYET(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "VATANDASLIK_ULKESI": {
+          "codelist": "TR:CL_ULKE_ADNKS(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "YAS": {
+          "codelist": "TR:CL_YAS(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "YAS_GRUBU": {
+          "codelist": "TR:CL_YAS(1.1)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "YERLESIM_YERI_TUR": {
+          "codelist": "TR:CL_YERLESIM_YERI_TUR(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        }
+      },
+      "portal_rows": 2132,
+      "portal_selection_rows": 1,
+      "selection_count": 1
+    },
+    "prices": {
+      "attribute_headers": {
+        "CONF_STATUS": "Gizlilik Durumu",
+        "DECIMALS": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "UNIT_MEASURE": "Ölçü Birimi",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 50,
+      "catalog_period": "2026-10",
+      "catalog_updated_at": "2026-11-04T16:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_TUFE(1.12)",
+      "dsd_order": [
+        "REF_AREA",
+        "FREQ",
+        "SINIFLAMA_DUZEYI",
+        "DEGISIM",
+        "OZEL_KAPSAM_TUFE",
+        "BASE_PER",
+        "YAYIM_DONEMI",
+        "COICOP_1999",
+        "COICOP_2018",
+        "INDICATOR",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_TUFE_SDMX_TT05+V1.0",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 138,
+          "sha256": "6ee0483daf18f1a2e2ec8fb63bfa1c7e190830cea522aa76565ece8fe9baeff3"
+        },
+        "count.json": {
+          "bytes": 137,
+          "sha256": "a0f3b762a533e1806be713322268b44cd7d49c064c2fe54a5af8a3ebd552b5fa"
+        },
+        "dsd.json": {
+          "bytes": 1583522,
+          "sha256": "e0651993103b20fdc5d6ec480c9c3a4e8c0f437c1a9eea3009d8156e20c699a9"
+        },
+        "portal.csv": {
+          "bytes": 124340,
+          "sha256": "5c8f3f7e7b9a6677da207d0d7ccf3a8ae99ca36623e46ba940398da71c1ee10c"
+        },
+        "selected.csv": {
+          "bytes": 405,
+          "sha256": "bf9ff26bcce7ecea49e073ba473d9535f43b0b1be5c62ac65086562d180a6bab"
+        },
+        "view.json": {
+          "bytes": 3575,
+          "sha256": "5432784959cef7ca99eee957d8a13cd01784f94d10af08c2425750ececb4675f"
+        }
+      },
+      "mapped_headers": {
+        "BASE_PER": "Temel Dönem/Yıl (2025)",
+        "DEGISIM": "Endeks-Değişim (1)",
+        "FREQ": "Gözlem Sıklığı (M)",
+        "INDICATOR": "İstatistiksel Gösterge (F_MEATG)",
+        "OZEL_KAPSAM_TUFE": "Özel Kapsamlı TÜFE Göstergeleri (GT_1)",
+        "REF_AREA": "Coğrafi Kapsam (TR)",
+        "TIME_PERIOD": "Zaman (2025-10)"
+      },
+      "matched_rows": [
+        {
+          "BASE_PER": "2025",
+          "COICOP_1999": "_Z",
+          "COICOP_2018": "_Z",
+          "DEGISIM": "1",
+          "FREQ": "M",
+          "INDICATOR": "F_MEATG",
+          "OZEL_KAPSAM_TUFE": "GT_1",
+          "REF_AREA": "TR",
+          "SINIFLAMA_DUZEYI": "_Z",
+          "TIME_PERIOD": "2026-10",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "140.0811924821",
+          "equal_decimal": true,
+          "portal_value": "140,0811924821"
+        },
+        {
+          "BASE_PER": "2025",
+          "COICOP_1999": "_Z",
+          "COICOP_2018": "_Z",
+          "DEGISIM": "2",
+          "FREQ": "M",
+          "INDICATOR": "F_MEATG",
+          "OZEL_KAPSAM_TUFE": "GT_1",
+          "REF_AREA": "TR",
+          "SINIFLAMA_DUZEYI": "_Z",
+          "TIME_PERIOD": "2026-10",
+          "YAYIM_DONEMI": "2026_01",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MEASURE": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "2.1394487381",
+          "equal_decimal": true,
+          "portal_value": "2,1394487381"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "CONF_STATUS": {
+          "codelist": "TR:CL_GIZLILIK(1.0)",
+          "labels": {}
+        },
+        "DECIMALS": {
+          "codelist": "TR:CL_ONDALIK(1.1)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.1)",
+          "labels": {}
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MEASURE": {
+          "codelist": "TR:CL_OLCU_BIRIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "SDMX:CL_UNIT_MULT(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "BASE_PER": {
+          "codelist": "TR:CL_YIL(2.0)",
+          "labels": {
+            "2025": {
+              "en": "2025",
+              "tr": "2025"
+            }
+          }
+        },
+        "COICOP_1999": {
+          "codelist": "TR:CL_COICOP1999(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "COICOP_2018": {
+          "codelist": "TR:CL_COICOP2018(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "DEGISIM": {
+          "codelist": "TR:CL_DEGISIM(3.4)",
+          "labels": {
+            "1": {
+              "en": "Index",
+              "tr": "Endeks"
+            },
+            "2": {
+              "en": "Monthly rate of change (%)",
+              "tr": "Bir önceki aya göre değişim oranı (%)"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.0)",
+          "labels": {
+            "M": {
+              "en": "Monthly",
+              "tr": "Aylık"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(9.9)",
+          "labels": {
+            "F_MEATG": {
+              "en": "Seasonal Adjusted CPI Indicators",
+              "tr": "Mevsim Etkisinden Arındırılmış TÜFE Göstergeleri"
+            }
+          }
+        },
+        "OZEL_KAPSAM_TUFE": {
+          "codelist": "TR:CL_OZEL_KAPSAMLI_TUFE_GOSTERGELERI(3.0)",
+          "labels": {
+            "GT_1": {
+              "en": "CPI",
+              "tr": "Genel TÜFE"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SINIFLAMA_DUZEYI": {
+          "codelist": "TR:CL_COICOP_HARCAMA_GRUP_DUZEY(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "YAYIM_DONEMI": {
+          "codelist": "TR:CL_YAYIM_DONEMI(1.0)",
+          "labels": {
+            "2026_01": {
+              "en": "January 2026",
+              "tr": "Ocak 2026"
+            }
+          }
+        }
+      },
+      "portal_rows": 674,
+      "portal_selection_rows": 2,
+      "selection_count": 2
+    },
+    "trade": {
+      "attribute_headers": {
+        "CONF_STATUS": "Gizlilik Durumu",
+        "DECIMALS": "Ondalık Basamak Sayısı",
+        "OBS_STATUS": "Gözlem Durumu",
+        "TIME_FORMAT": "Zaman Formatı",
+        "UNIT_MULT": "Birim Çarpanı"
+      },
+      "broad_period_count": 59,
+      "catalog_period": "2026-09",
+      "catalog_updated_at": "2026-11-12T10:00:00",
+      "discrepancies": [],
+      "dsd_id": "TR:DSD_DIS_TCARET_ENDEKS(1.5)",
+      "dsd_order": [
+        "FREQ",
+        "OLCU_BIRIMI",
+        "DISTIC_END_ALTGOSTERGE",
+        "DISTICARET_TUR",
+        "INDICATOR",
+        "ENDEKS_DEGISIM",
+        "SITC_REV4_205",
+        "DTE_SEKTOR_KODLARI",
+        "BASE_PER",
+        "REF_AREA",
+        "DUZELTME",
+        "TIME_PERIOD"
+      ],
+      "id": "flow:DF_ALTINSIZ_DTH+V1.0",
+      "inputs": {
+        "broad-count.json": {
+          "bytes": 138,
+          "sha256": "f7a2877530141370842d66c018ad222c013151e408e9e3b8b4c106dcb17a99c7"
+        },
+        "count.json": {
+          "bytes": 137,
+          "sha256": "7220036d680778ed86335691df6b7d316e6dbd32852749bb2e7f335b3d99454e"
+        },
+        "dsd.json": {
+          "bytes": 2523341,
+          "sha256": "3dbc4e868877865152bef4fc900ee08e7a67fcfa94c328b33801bda9090ac7b6"
+        },
+        "portal.csv": {
+          "bytes": 2954517,
+          "sha256": "0e9751aeacd0c11db4f7ed537faa9ce3cdf119bbee386042800cb0a96b572d80"
+        },
+        "selected.csv": {
+          "bytes": 1042,
+          "sha256": "8aedddefc3be4e2550005c9789a931d5cbd4074a76fc3956219d285986c848b0"
+        },
+        "view.json": {
+          "bytes": 8417,
+          "sha256": "2bd465acaa966178cd82cca7f163674cc522199c7d295730c51c96d08d7577e6"
+        }
+      },
+      "mapped_headers": {
+        "BASE_PER": "Temel Dönem/Yıl",
+        "DISTICARET_TUR": "Dış Ticaret Türü",
+        "DISTIC_END_ALTGOSTERGE": "Dış Ticaret Göstergeleri",
+        "DTE_SEKTOR_KODLARI": "Dış Ticaret Endeks Sektör Kodları",
+        "FREQ": "Gözlem Sıklığı",
+        "INDICATOR": "İstatistiksel Gösterge",
+        "OLCU_BIRIMI": "Ölçü Birimi",
+        "REF_AREA": "Coğrafi Kapsam",
+        "SITC_REV4_205": "İktisadi Faaliyet",
+        "TIME_PERIOD": "Zaman"
+      },
+      "matched_rows": [
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "0",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "89.44215343296369",
+          "equal_decimal": true,
+          "portal_value": "89,44215343296369"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "02",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "86.6165071767222",
+          "equal_decimal": true,
+          "portal_value": "86,6165071767222"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "04",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "92.74167011516906",
+          "equal_decimal": true,
+          "portal_value": "92,74167011516906"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "05",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "95.21504593697658",
+          "equal_decimal": true,
+          "portal_value": "95,21504593697658"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "06",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "109.01223463238094",
+          "equal_decimal": true,
+          "portal_value": "109,01223463238094"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "07",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "92.40947644414393",
+          "equal_decimal": true,
+          "portal_value": "92,40947644414393"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "08",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "91.33254960195126",
+          "equal_decimal": true,
+          "portal_value": "91,33254960195126"
+        },
+        {
+          "BASE_PER": "2015",
+          "DISTICARET_TUR": "_O",
+          "DISTIC_END_ALTGOSTERGE": "18",
+          "DTE_SEKTOR_KODLARI": "0",
+          "DUZELTME": "_Z",
+          "ENDEKS_DEGISIM": "_Z",
+          "FREQ": "M",
+          "INDICATOR": "UTOD_DISTIC_END",
+          "OLCU_BIRIMI": "RO",
+          "REF_AREA": "TR",
+          "SITC_REV4_205": "09",
+          "TIME_PERIOD": "2026-09",
+          "attributes": {
+            "CONF_STATUS": "",
+            "DECIMALS": "",
+            "OBS_STATUS": "",
+            "TIME_FORMAT": "",
+            "UNIT_MULT": ""
+          },
+          "dataflow_value": "108.27675193635673",
+          "equal_decimal": true,
+          "portal_value": "108,27675193635673"
+        }
+      ],
+      "missing_inputs": [],
+      "observed_attribute_codes": {
+        "CONF_STATUS": {
+          "codelist": "TR:CL_GIZLILIK(1.1)",
+          "labels": {}
+        },
+        "DECIMALS": {
+          "codelist": "TR:CL_ONDALIK(1.2)",
+          "labels": {}
+        },
+        "OBS_STATUS": {
+          "codelist": "TR:CL_GOZLEM_DURUMU(1.1)",
+          "labels": {}
+        },
+        "TIME_FORMAT": {
+          "codelist": "TR:CL_ZAMAN_BICIMI(1.0)",
+          "labels": {}
+        },
+        "UNIT_MULT": {
+          "codelist": "TR:CL_BIRIM_CARPANI(1.0)",
+          "labels": {}
+        }
+      },
+      "observed_codes": {
+        "BASE_PER": {
+          "codelist": "TR:CL_BAZ_YIL(1.3)",
+          "labels": {
+            "2015": {
+              "en": "2015",
+              "tr": "2015"
+            }
+          }
+        },
+        "DISTICARET_TUR": {
+          "codelist": "TR:CL_DIS_TCARET_TURU(1.1)",
+          "labels": {
+            "_O": {
+              "en": "Other",
+              "tr": "Diğer"
+            }
+          }
+        },
+        "DISTIC_END_ALTGOSTERGE": {
+          "codelist": "TR:CL_DISTIC_END_ALTGOSTERGE(1.2)",
+          "labels": {
+            "18": {
+              "en": "Terms of Trade Excluding Gold",
+              "tr": "Altın Hariç Dış Ticaret Hadleri"
+            }
+          }
+        },
+        "DTE_SEKTOR_KODLARI": {
+          "codelist": "TR:CL_DTE_SEKTOR_KODLARI_SDMX(1.1)",
+          "labels": {
+            "0": {
+              "en": "Food and live animals",
+              "tr": "0 Canlı hayvanlar ve gıda maddeleri"
+            }
+          }
+        },
+        "DUZELTME": {
+          "codelist": "TR:CL_DUZELTME(1.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "ENDEKS_DEGISIM": {
+          "codelist": "TR:CL_DEGISIM(3.0)",
+          "labels": {
+            "_Z": {
+              "en": "Not Applicable",
+              "tr": "Uygulanabilir değil"
+            }
+          }
+        },
+        "FREQ": {
+          "codelist": "TR:CL_SIKLIK(1.0)",
+          "labels": {
+            "M": {
+              "en": "Monthly",
+              "tr": "Aylık"
+            }
+          }
+        },
+        "INDICATOR": {
+          "codelist": "TR:CL_GOSTERGE(7.2)",
+          "labels": {
+            "UTOD_DISTIC_END": {
+              "en": "Foreign Trade Index",
+              "tr": "Dış Ticaret Endeksleri"
+            }
+          }
+        },
+        "OLCU_BIRIMI": {
+          "codelist": "TR:CL_OLCU_BIRIMI(1.8)",
+          "labels": {
+            "RO": {
+              "en": "Ratio",
+              "tr": "Oran"
+            }
+          }
+        },
+        "REF_AREA": {
+          "codelist": "TR:CL_IBBS(1.2)",
+          "labels": {
+            "TR": {
+              "en": "Türkiye",
+              "tr": "Türkiye"
+            }
+          }
+        },
+        "SITC_REV4_205": {
+          "codelist": "TR:CL_SITC_REV_4_205(1.0)",
+          "labels": {
+            "0": {
+              "en": "Food and live animals",
+              "tr": "Gıda ve canlı hayvanlar"
+            },
+            "02": {
+              "en": "Dairy products and birds’ eggs",
+              "tr": "Süt ürünleri ve kuş yumurtaları"
+            },
+            "04": {
+              "en": "Cereals and cereal preparations",
+              "tr": "Tahıl ve tahıl müstahzarları"
+            },
+            "05": {
+              "en": "Vegetables and fruit",
+              "tr": "Sebze ve meyveler"
+            },
+            "06": {
+              "en": "Sugars, sugar preparations and honey",
+              "tr": "Şeker, şeker müstahzarları ve bal"
+            },
+            "07": {
+              "en": "Coffee, tea, cocoa, spices, and manufactures thereof",
+              "tr": "Kahve, çay, kakao, baharat ve bunlardan yapılan mamuller"
+            },
+            "08": {
+              "en": "Feeding stuff for animals (not including unmilled cereals)",
+              "tr": "Hayvan yemi (öğütülmemiş tahıllar hariç)"
+            },
+            "09": {
+              "en": "Miscellaneous edible products and preparations",
+              "tr": "Çeşitli yenilebilir ürünler ve müstahzarlar"
+            }
+          }
+        }
+      },
+      "portal_rows": 11623,
+      "portal_selection_rows": 8,
+      "selection_count": 8
+    }
+  },
+  "prices_empty_geography_probe": {
+    "body": {
+      "criteria": []
+    },
+    "bytes": 15,
+    "sha256": "bf9807cc9a583dfe45d17a28a2e6e567d511fd880cc6b6e64734e1ae8e57f2fa"
+  },
+  "prices_historic_probe": {
+    "browser_count": 2,
+    "browser_csv_bytes": 404,
+    "browser_csv_sha256": "8a382f1ae7681bdefb2926513bfcdd51ef198f783796600e5600a53554e5e878",
+    "browser_rows": [
+      {
+        "BASE_PER": "2025",
+        "COICOP_1999": "_Z",
+        "COICOP_2018": "_Z",
+        "CONF_STATUS": "",
+        "DATAFLOW": "TR:DF_TUFE_SDMX_TT05(1.0)",
+        "DECIMALS": "",
+        "DEGISIM": "1",
+        "FREQ": "M",
+        "INDICATOR": "F_MEATG",
+        "OBS_STATUS": "",
+        "OBS_VALUE": "62.1433694517",
+        "OZEL_KAPSAM_TUFE": "GT_1",
+        "REF_AREA": "TR",
+        "SINIFLAMA_DUZEYI": "_Z",
+        "TIME_FORMAT": "",
+        "TIME_PERIOD": "2024-01",
+        "UNIT_MEASURE": "",
+        "UNIT_MULT": "",
+        "YAYIM_DONEMI": "2026_01"
+      },
+      {
+        "BASE_PER": "2025",
+        "COICOP_1999": "_Z",
+        "COICOP_2018": "_Z",
+        "CONF_STATUS": "",
+        "DATAFLOW": "TR:DF_TUFE_SDMX_TT05(1.0)",
+        "DECIMALS": "",
+        "DEGISIM": "2",
+        "FREQ": "M",
+        "INDICATOR": "F_MEATG",
+        "OBS_STATUS": "",
+        "OBS_VALUE": "4.9283494224",
+        "OZEL_KAPSAM_TUFE": "GT_1",
+        "REF_AREA": "TR",
+        "SINIFLAMA_DUZEYI": "_Z",
+        "TIME_FORMAT": "",
+        "TIME_PERIOD": "2024-01",
+        "UNIT_MEASURE": "",
+        "UNIT_MULT": "",
+        "YAYIM_DONEMI": "2026_01"
+      }
+    ],
+    "period": "2024-01",
+    "portal_periods": [
+      "2025-10",
+      "2025-11",
+      "2025-12",
+      "2026-01",
+      "2026-02",
+      "2026-03",
+      "2026-04",
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08",
+      "2026-09",
+      "2026-10"
+    ]
+  }
+}

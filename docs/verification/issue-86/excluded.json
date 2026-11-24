@@ -1,0 +1,37 @@
+[
+  {
+    "domain": "prices",
+    "id": "DF_TUFE_SDMX_TT02+V1.0",
+    "title": "COICOP 2018 alt sınıflarına göre TÜFE aylık ve yıllık değişim oranları",
+    "source_page": "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_TUFE_SDMX_TT02,1.0",
+    "reason": "Content-Length 21700193 exceeds 16777216"
+  },
+  {
+    "domain": "industry",
+    "id": "DF_SANAYI_URETIM_ENDEKS_ANA_O+V1.0",
+    "title": "Sanayi Üretim Endeksi [2021=100]-Revizyon Geçmişi (Ana Endeksler)",
+    "source_page": "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_SANAYI_URETIM_ENDEKS_ANA_O,1.0",
+    "reason": "Content-Length 37103191 exceeds 16777216"
+  },
+  {
+    "domain": "industry",
+    "id": "DF_SANAYI_URETIM_ENDEKS_ALT_C+V1.0",
+    "title": "Sanayi Üretim Endeksi [2021=100] (Alt Endeksler)",
+    "source_page": "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_SANAYI_URETIM_ENDEKS_ALT_C,1.0",
+    "reason": "Content-Length 91189151 exceeds 16777216"
+  },
+  {
+    "domain": "industry",
+    "id": "DF_SANAYI_URETIM_ENDEKS_GRUP_O+V1.0",
+    "title": "Sanayi Üretim Endeksi [2021=100] Revizyon Geçmişi (Grup - Üçlü Endeksleri)",
+    "source_page": "https://veriportali.tuik.gov.tr/tr/databrowser/tuik/TR,DF_SANAYI_URETIM_ENDEKS_GRUP_O,1.0",
+    "reason": "Content-Length 89715928 exceeds 16777216"
+  },
+  {
+    "domain": "industry",
+    "id": "press:58196",
+    "title": "Bölümlerin Üst Grup Endeks Değişimine Etkisi (2021=100)",
+    "source_page": "https://veriportali.tuik.gov.tr/tr/press/58196",
+    "reason": "identical to an earlier sample or repository fixture"
+  }
+]
