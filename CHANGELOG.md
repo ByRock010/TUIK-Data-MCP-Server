@@ -20,6 +20,11 @@ All notable changes to this project are documented here. The format follows
   `evaluate_search.py collect-production` ranks a frozen corpus through the served
   backend, and `score-ai --documents` reports series metrics. Hybrid top tens are
   not identical across index builds; the report documents this.
+- [Source-table audit](docs/verification/issue-86/README.md) of 60 public TÜİK
+  files (#86). The default path traced 290 of 300 sampled observations.
+  The ten remaining observations traced offline in two CSVs above the default
+  download cap. The audit pins the sample and records workbook header, period
+  and unit gaps for normalized reporting.
 - Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
   PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
   `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
