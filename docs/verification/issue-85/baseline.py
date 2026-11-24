@@ -127,7 +127,7 @@ async def run(entries, output_png):
         "search_index": None,
         "server_state": "fresh; F05 chart after source inspection",
         "permissions": "local fixture stdio; no model tools, no live TÜİK calls",
-        "outcomes": {task["id"]: task["expected_support"] for task in entries},
+        "expected_support": {task["id"]: task["expected_support"] for task in entries},
         "chart_probe": chart,
     }
 

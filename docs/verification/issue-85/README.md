@@ -19,10 +19,10 @@ The [baseline output](baseline.json) records nine discovered MCP tools on
 develop `b7bdb25`. All 24 tasks have their stated source or fallback path
 mapped to discovered tools. The capability audit uses the November 8 run,
 frozen official releases, repository tests for CSV/XLS/PDF and cursor paths,
-and a fresh stdio artifact run. Supported here means there is a path using the
-current tools, plus client-side arithmetic when the rubric calls for it.
-These counts come from a designed task set. They are not observed model
-success or an estimate of project-wide coverage.
+and a fresh stdio artifact run. The output's `expected_support` field copies
+the frozen task classifications. A supported task has a path using the current
+tools, plus client-side arithmetic when the rubric calls for it. The measured
+checks cover tool discovery, route availability and the F05 artifact probe.
 
 F05 exercised the actual MCP tool on a recorded official series. The PNG,
 three plotted CSV values, original source bytes and manifest were fetched via

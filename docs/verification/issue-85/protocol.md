@@ -19,10 +19,13 @@ errors. Treat missing details, timeouts and unavailable files on supported
 tasks as failures. For unsupported tasks, score explicit restraint and a
 correctly labelled alternative separately.
 
-Freeze four held-out prompts (F06, M06, L06, A06), one per persona. Use only the
-other 20 for tuning and keep the held-out pass separate from development results.
-The IDs and answers are public here for reproducibility. They are a fixed
-no-tuning holdout, with no claim of secrecy or independence after publication.
+The four frozen held-out prompts include one supported workflow (L06) and
+three unsupported requests (F06, M06 and A06) that test refusal and fallback
+behavior. Use only the 20 development tasks for tuning. Report held-out results
+separately and interpret them primarily as a check of how the model handles
+unsupported requests. The IDs and answers are public for reproducibility. This
+is a fixed no-tuning holdout, with no claim of secrecy or independence after
+publication.
 
 For a candidate model run, use one fresh session per assigned task and condition,
 one in-flight MCP session, 120 seconds and USD 0.75 per run. Each task gets one
@@ -34,10 +37,14 @@ unrun. A separately reviewed rerun uses a new run ID and reports both attempts.
 
 Pre-registered gates are zero critical numeric or source errors, at least
 90% success among the 20 supported tasks (at least 18/20), and all four
-unsupported requests disclosed (4/4). An incomplete run cannot pass. The
-denominator stays fixed even if runs time out. Report success counts and
-two-sided 95% Wilson intervals per supported/unsupported scope, condition and
-split. Treat the intervals as descriptive because several tasks share sources.
+unsupported requests disclosed (4/4). For each condition, show the supported
+success count overall (out of 20), in development (out of 19) and in the
+holdout (out of 1). Apply the 18/20 gate to the combined supported count.
+Report unsupported disclosures separately (out of 1 in development and out of
+3 in the holdout). An incomplete run cannot pass. The denominators stay fixed
+even if runs time out. Report two-sided 95% Wilson intervals per
+supported/unsupported scope, condition and split. Treat the intervals as
+descriptive because several tasks share sources.
 Keep source correctness, model behavior, client setup time and artifact
 usability as separate observations.
 
@@ -45,9 +52,9 @@ For the reproducible capability baseline, discover the installed server's
 nine tools with a cold stdio session and run its existing scenario/verifier
 checks. Match each matrix route to actual tools and known source snapshots.
 Check PNG/CSV artifact storage, numeric values and resource delivery with the
-existing #88 test cases. Record supported and unsupported outcomes separately.
-This exercise measures available paths. Model task success, setup time and
-visual usability require their own run.
+existing #88 test cases. Record each task's expected support from the frozen
+matrix alongside the discovered tools and F05 probe result. Model task success,
+setup time and visual usability require their own run.
 
 ## Runner and review
 
