@@ -45,6 +45,17 @@ same flow can publish `Zaman (2015-01)` on one day and `Zaman` on another.
   and `TUIK_QUERY_MAX_CELLS` budgets. A budget overrun, malformed record or blank
   record is an error, never a partial series. `complete` is true on every `ok`
   response, and `counts` cover the whole selection, not just the page.
+  `complete` is about reading the source. Whether a period range is covered
+  is reported separately in `coverage`.
+- **Requested ranges report their coverage.** With `period_from` or `period_to`,
+  `coverage` enumerates every period of the range for each selected series.
+  Counting the rows that exist cannot see a month the source never published.
+  `coverage.gaps` lists each series' `absent` periods and its periods
+  `without_value` (missing, confidential, duplicate, invalid or unmapped).
+  `coverage.complete` is true only when every series has one valid value in
+  every period. Otherwise `issues` says how many are short. An open bound runs
+  to the selection's first or last period (`bounds`). A reversed range, or one
+  longer than 2,400 periods, is `invalid_input`.
 - **Changed sources are refused.** A recipe lists every column concept it
   expects. An extra, missing or doubled concept returns `schema_changed` with the
   exact `issues` and no observations.
@@ -54,7 +65,10 @@ same flow can publish `Zaman (2015-01)` on one day and `Zaman` on another.
   `value`. A non-empty SDMX attribute the recipe expects empty, such as
   `Birim Çarpanı`, is also `unmapped`, because it would change the meaning.
 - **Duplicates are not chosen.** Records with the same period and dimensions are
-  all `duplicate`, with the record numbers.
+  all `duplicate`, with the record numbers. This also applies when one of the
+  records fails on its own: a valid `8,4` beside an `invalid` or `unmapped` twin is
+  `duplicate` with no value, and the failing twin keeps its own reason plus the
+  collision.
 - **Periods match frequencies.** `2026` under `Aylık` or `2026-03` under `Yıllık`
   is `invalid`. A period range needs one frequency in the selection.
 - **Distinct units stay distinct.** Percent and percentage points, persons and
@@ -108,18 +122,20 @@ Read one series, then the next page from the same snapshot:
 ```
 
 ```json
-{
-  "resource_id": "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0",
-  "filters": {"İşgücü Göstergeleri": "İşsizlik Oranı (%)", "Cinsiyet": "Toplam"},
-  "offset": 50,
-  "snapshot_id": "sha256:..."
-}
+{"cursor": "obs1.eyJvIjo1MCwi...", "limit": 50}
 ```
 
+`next_cursor` carries the resource, the snapshot hash and the whole selection
+(filters and period bounds) along with the position. Pass it alone, optionally
+with `limit`. A cursor sent with other filters, a period bound, another resource
+or another `snapshot_id` returns `invalid_cursor`, as does an edited cursor. If
+the file has changed since the first page, the response is `snapshot_changed`;
+restart without the cursor. `snapshot_id` on a new query pins it to a file you
+have already read.
+
 A filter on an unknown concept or an unpublished value returns `invalid_input`
-with the available concepts or values. A different `snapshot_id` returns
-`snapshot_changed`. Pages shrink to the 64 KB output budget. Follow
-`next_offset` rather than counting rows.
+with the available concepts or values. Pages shrink to the 64 KB output budget.
+Follow `next_cursor` rather than counting rows.
 
 ## Not covered yet
 

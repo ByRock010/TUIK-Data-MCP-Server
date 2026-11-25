@@ -134,6 +134,40 @@ class ObservationCounts(BaseModel):
     unmapped: int = Field(ge=0)
 
 
+class SeriesGap(BaseModel):
+    """One selected series that lacks a valid value for some periods of the range."""
+
+    # Varying dimensions that identify the series, by concept name.
+    dimensions: dict[str, str]
+    # Periods in the range with no source record for this series (first ones only).
+    absent: list[str]
+    absent_count: int = Field(ge=0)
+    # Periods with a record but no value: missing, confidential, duplicate, invalid
+    # or unmapped (first ones only).
+    without_value: list[str]
+    without_value_count: int = Field(ge=0)
+
+
+class RangeCoverage(BaseModel):
+    """Requested period coverage, separate from source-scan completeness."""
+
+    frequency: Frequency
+    # Inclusive range checked. An open bound uses the selection's own first or
+    # last period; `bounds` says which side the caller requested.
+    period_from: str
+    period_to: str
+    bounds: Literal["requested", "from_requested", "to_requested"]
+    periods: int = Field(ge=0)
+    series: int = Field(ge=0)
+    # series × periods: one valid value expected for each.
+    expected: int = Field(ge=0)
+    valid: int = Field(ge=0)
+    # True only when every selected series has a valid value for every period.
+    complete: bool
+    gaps: list[SeriesGap] = Field(default_factory=list)
+    gaps_truncated: bool = False
+
+
 class RecipeSummary(BaseModel):
     id: str
     version: int
@@ -159,10 +193,13 @@ class ObservationResponse(Provenance):
     message: str
     recipe: RecipeRef | None = None
     snapshot_id: str | None = None
-    # True only when every source record was read and classified.
+    # True only when every source record was read and classified. It says nothing
+    # about whether a requested period range is covered; see `coverage`.
     complete: bool = False
     counts: ObservationCounts | None = None
     selection: dict[str, str] = Field(default_factory=dict)
+    # Set when a period range was requested.
+    coverage: RangeCoverage | None = None
     # Values shared by every record, by concept name; metadata, not a dimension.
     constant_dimensions: dict[str, str] = Field(default_factory=dict)
     # Varying dimension concepts and their values, in source order of first appearance.
@@ -172,7 +209,8 @@ class ObservationResponse(Provenance):
     issues: list[str] = Field(default_factory=list)
     observations: list[Observation] = Field(default_factory=list)
     offset: int = Field(default=0, ge=0)
-    next_offset: int | None = None
     has_more: bool = False
+    # Opaque continuation bound to this snapshot, resource and selection.
+    next_cursor: str | None = None
     recipes: list[RecipeSummary] = Field(default_factory=list)
     unavailable: list[UnavailableFamily] = Field(default_factory=list)

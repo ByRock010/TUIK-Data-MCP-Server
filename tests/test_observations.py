@@ -18,6 +18,7 @@ from tuik_mcp.observations.recipes import MeasureRule
 from tuik_mcp.parsers.errors import ParseError, ParseLimitError
 from tuik_mcp.server import respond
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.services.observations import encode_cursor
 
 FIXTURES = Path(__file__).parent / "fixtures"
 FLOW = "flow:DF_ALTINSIZ_DTH+V1.0"
@@ -312,6 +313,20 @@ def test_duplicate_periods_are_refused_not_chosen():
     assert [o.status for o in ratios.observations] == ["duplicate", "duplicate", "valid"]
 
 
+def test_a_failing_twin_still_makes_its_valid_record_a_duplicate():
+    rate = {"İşgücü Göstergeleri": "İşsizlik Oranı (%)"}
+    for twin in (
+        {"Gözlem Değeri": "not-numeric"},
+        {"Gözlem Durumu": "Revize", "Gözlem Değeri": "8,5"},
+    ):
+        table = run(LABOUR, labour({**rate, "Gözlem Değeri": "8,4"}, {**rate, **twin}))
+        first, second = table.observations
+        assert (first.status, first.value) == ("duplicate", None)
+        assert first.reason == "same period and dimensions in records 2, 3"
+        assert second.status in {"invalid", "unmapped"} and second.value is None
+        assert second.reason.endswith("; same period and dimensions in records 2, 3")
+
+
 def test_cpi_change_rates_carry_their_basis_and_index_its_base():
     header = [
         "Coğrafi Kapsam (TR)",
@@ -461,14 +476,17 @@ async def test_service_reads_the_complete_snapshot_with_lineage_and_paging():
         assert observation.unit.base_period == "2015"
         assert observation.period.value == "2015-01" and observation.period.source == "source"
         assert first.constant_dimensions["Ölçü Birimi"] == "Oran"
-        assert first.has_more and first.next_offset == 2
-        second = await catalog.observations(FLOW, offset=2, limit=2, snapshot_id=first.snapshot_id)
+        assert first.has_more and first.next_cursor and first.coverage is None
+        second = await catalog.observations(cursor=first.next_cursor, limit=2)
         assert [o.locator.record for o in second.observations] == [4]
-        assert not second.has_more and second.next_offset is None
+        assert second.offset == 2 and second.snapshot_id == first.snapshot_id
+        assert not second.has_more and second.next_cursor is None
         ranged = await catalog.observations(FLOW, period_from="2015-02", period_to="2015-03")
         assert [o.period.value for o in ranged.observations] == ["2015-02", "2015-03"]
         assert ranged.selection == {"period_from": "2015-02", "period_to": "2015-03"}
         assert ranged.counts.selected == 2 and ranged.counts.source_records == 3
+        assert ranged.coverage.complete and ranged.coverage.expected == ranged.coverage.valid == 2
+        assert ranged.issues == []
         changed = await respond(catalog.observations(FLOW, snapshot_id="sha256:" + "0" * 64))
         assert changed["code"] == "snapshot_changed"
         unknown = await respond(catalog.observations(FLOW, filters={"Zaman": "2015-01"}))
@@ -479,6 +497,108 @@ async def test_service_reads_the_complete_snapshot_with_lineage_and_paging():
         assert mixed["code"] == "invalid_input"
         wrong = await respond(catalog.observations(FLOW, period_from="2015"))
         assert wrong["code"] == "invalid_input" and "['month']" in wrong["message"]
+        backwards = await respond(
+            catalog.observations(FLOW, period_from="2015-03", period_to="2015-01")
+        )
+        assert backwards["code"] == "invalid_input" and "after" in backwards["message"]
+    finally:
+        await http.close()
+
+
+async def test_a_cursor_is_bound_to_its_snapshot_resource_and_selection():
+    http, catalog, _ = http_catalog((FIXTURES / "data.csv").read_bytes())
+    try:
+        first = await catalog.observations(FLOW, period_from="2015-02", limit=1)
+        assert [o.period.value for o in first.observations] == ["2015-02"]
+        # Page two keeps the period filter even though the caller does not repeat it.
+        second = await catalog.observations(cursor=first.next_cursor)
+        assert [o.period.value for o in second.observations] == ["2015-03"]
+        assert second.selection == {"period_from": "2015-02"}
+        # A cursor cannot be combined with a different selection, resource or snapshot.
+        for extra in (
+            {"period_from": "2015-01"},
+            {"filters": {"Gözlem Sıklığı": "Aylık"}},
+            {"resource_id": "flow:DF_ADNKS_T24+V1.1"},
+            {"snapshot_id": "sha256:" + "0" * 64},
+        ):
+            mixed = await respond(catalog.observations(cursor=first.next_cursor, **extra))
+            assert mixed["code"] == "invalid_cursor", extra
+        tampered = first.next_cursor[:-1] + ("0" if first.next_cursor[-1] != "0" else "1")
+        for bad in (tampered, "abc.def", "obs1.%%%.0"):
+            result = await respond(catalog.observations(cursor=bad))
+            assert result["code"] == "invalid_cursor"
+        # Bytes that changed since the first page are refused, never resumed.
+        stale = encode_cursor(FLOW, "0" * 64, {"period_from": "2015-02"}, 1)
+        changed = await respond(catalog.observations(cursor=stale))
+        assert changed["code"] == "snapshot_changed"
+        beyond = encode_cursor(FLOW, first.snapshot_id[7:], {}, 9)
+        assert (await respond(catalog.observations(cursor=beyond)))["code"] == "invalid_cursor"
+    finally:
+        await http.close()
+
+
+def labour_catalog(data: bytes, **settings):
+    http, catalog, calls = http_catalog(data, **settings)
+    # The fixture catalog lists only the trade flow; serve its record for labour.
+    original = catalog.resource
+
+    async def resource(resource_id):
+        return (await original(FLOW)).model_copy(update={"id": resource_id})
+
+    catalog.resource = resource
+    return http, catalog
+
+
+async def test_a_period_range_reports_coverage_of_every_selected_series():
+    rate = {"İşgücü Göstergeleri": "İşsizlik Oranı (%)"}
+    rows = [
+        {**rate, "Cinsiyet": "Kadın", "Zaman": "2026-01", "Gözlem Değeri": "8,4"},
+        {**rate, "Cinsiyet": "Kadın", "Zaman": "2026-03", "Gözlem Değeri": "8,6"},
+        {**rate, "Cinsiyet": "Erkek", "Zaman": "2026-01", "Gözlem Değeri": "7,1"},
+        {**rate, "Cinsiyet": "Erkek", "Zaman": "2026-02", "Gözlem Değeri": "-"},
+        {**rate, "Cinsiyet": "Erkek", "Zaman": "2026-03", "Gözlem Değeri": "7,3"},
+        {**rate, "Cinsiyet": "Toplam", "Zaman": "2025-12", "Gözlem Değeri": "8,0"},
+    ]
+    http, catalog = labour_catalog(labour(*rows))
+    resource = LABOUR.resource_ids[0]
+    try:
+        women = await catalog.observations(
+            resource, filters={"Cinsiyet": "Kadın"}, period_from="2026-01", period_to="2026-03"
+        )
+        # Every existing row is valid, yet February was never published.
+        assert women.complete and women.counts.selected == women.counts.valid == 2
+        coverage = women.coverage
+        assert (coverage.periods, coverage.series, coverage.expected, coverage.valid) == (
+            3,
+            1,
+            3,
+            2,
+        )
+        assert not coverage.complete and coverage.bounds == "requested"
+        assert coverage.gaps[0].absent == ["2026-02"] and coverage.gaps[0].dimensions == {}
+        assert any("1 of 3 series periods" in issue for issue in women.issues)
+
+        every = await catalog.observations(resource, period_from="2026-01", period_to="2026-03")
+        coverage = every.coverage
+        assert (coverage.series, coverage.expected, coverage.valid) == (3, 9, 4)
+        gaps = {gap.dimensions["Cinsiyet"]: gap for gap in coverage.gaps}
+        assert gaps["Erkek"].absent == [] and gaps["Erkek"].without_value == ["2026-02"]
+        # A series with no record inside the range is reported, not dropped.
+        assert gaps["Toplam"].absent == ["2026-01", "2026-02", "2026-03"]
+
+        # An open bound checks up to the selection's own last period.
+        open_ended = await catalog.observations(
+            resource, filters={"Cinsiyet": "Erkek"}, period_from="2026-01"
+        )
+        assert open_ended.coverage.bounds == "from_requested"
+        assert open_ended.coverage.period_to == "2026-03" and not open_ended.coverage.complete
+
+        full = await catalog.observations(
+            resource, filters={"Cinsiyet": "Kadın"}, period_from="2026-03", period_to="2026-03"
+        )
+        assert full.coverage.complete and full.issues == []
+        huge = await respond(catalog.observations(resource, period_from="1000-01"))
+        assert huge["code"] == "invalid_input" and "2400 periods" in huge["message"]
     finally:
         await http.close()
 
@@ -488,14 +608,7 @@ async def test_output_budget_shortens_pages_and_keeps_exact_counts():
         {"İşgücü Göstergeleri": "İşsizlik Oranı (%)", "Zaman": f"20{y:02}-01", "Gözlem Değeri": "1"}
         for y in range(10, 40)
     ]
-    http, catalog, _ = http_catalog(labour(*rows), query_max_output_bytes=8 * 1024)
-    # The fixture catalog lists only the trade flow; serve its record for labour.
-    original = catalog.resource
-
-    async def resource(resource_id):
-        return (await original(FLOW)).model_copy(update={"id": resource_id})
-
-    catalog.resource = resource
+    http, catalog = labour_catalog(labour(*rows), query_max_output_bytes=8 * 1024)
     try:
         result = await catalog.observations(LABOUR.resource_ids[0], limit=200)
         assert 0 < len(result.observations) < 30 and result.has_more
@@ -522,7 +635,7 @@ async def test_schema_changes_unsupported_and_held_resources_return_no_values():
         listing = await respond(catalog.observations())
         assert listing["status"] == "catalog" and len(listing["recipes"]) == len(RECIPES)
         assert listing["unavailable"][0]["domain"] == "housing_sales"
-        orphan = await respond(catalog.observations(None, offset=3))
+        orphan = await respond(catalog.observations(None, period_from="2026"))
         assert orphan["code"] == "invalid_input"
     finally:
         await http.close()

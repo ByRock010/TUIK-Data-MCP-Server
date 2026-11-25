@@ -21,7 +21,7 @@ verification and pending reviewed promotion/publication.
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
-| `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, offset=0, limit=50, snapshot_id=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
+| `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -428,7 +428,9 @@ Bundles expire after a day by default and are never refreshed in place. See
 calculations and reports. Each value keeps its published text, its CSV record
 number and whether each field was published or comes from the reviewed recipe.
 Unknown labels, markers, confidential cells and duplicate periods never become
-numbers, and a changed column set returns `schema_changed`. Six families in the
+numbers, and a changed column set returns `schema_changed`. A period range reports,
+per series, the periods without a valid value, and pages continue with a cursor
+bound to the snapshot and selection. Six families in the
 prices, labour, population, foreign trade and industry domains are reviewed.
 Housing sales stay unavailable. Other resources keep the raw table tools. See
 [normalized observations](docs/OBSERVATIONS.md).

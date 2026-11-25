@@ -15,8 +15,10 @@ All notable changes to this project are documented here. The format follows
   text, an exact decimal, its CSV record, period and frequency, geography code
   and level, unit, measure, adjustment and whether each field is published or
   recipe-defined. Unknown labels, markers, confidential cells and duplicate
-  periods get no value. A changed column set is refused, and housing sales stay
-  unavailable. Without `resource_id` the tool lists the recipes. Workbook
+  periods get no value, even when only one twin fails. A period range reports,
+  for each series, the periods with no valid value. Pages continue with a cursor
+  bound to the snapshot and selection. A changed column set is refused, and
+  housing sales stay unavailable. Without `resource_id` the tool lists the recipes. Workbook
   lineage is not covered yet (#87).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a

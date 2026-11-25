@@ -261,19 +261,22 @@ def normalize(
             )
         )
         facets.append(facet)
-        if status in {"valid", "missing", "confidential"}:
-            key = tuple(facet[c] for c in descriptive if c not in recipe.identity_exclude)
-            identities[(*key, period_text)].append(index)
+        # Every record joins its identity group, whatever its own status: a failing
+        # twin still makes the group ambiguous.
+        key = tuple(facet[c] for c in descriptive if c not in recipe.identity_exclude)
+        identities[(*key, period_text)].append(index)
 
     for indexes in identities.values():
         if len(indexes) > 1:
-            records_text = ", ".join(str(i + 2) for i in indexes[:5])
+            shared = "same period and dimensions in records " + ", ".join(
+                str(i + 2) for i in indexes[:5]
+            )
             for index in indexes:
-                observations[index] = observations[index].model_copy(
-                    update={
-                        "status": "duplicate",
-                        "value": None,
-                        "reason": f"same period and dimensions in records {records_text}",
-                    }
-                )
+                observation = observations[index]
+                if observation.status in {"invalid", "unmapped"}:
+                    # Keep the record's own failure and name the collision too.
+                    update = {"reason": f"{observation.reason}; {shared}"}
+                else:
+                    update = {"status": "duplicate", "value": None, "reason": shared}
+                observations[index] = observation.model_copy(update=update)
     return Normalized(columns, observations, facets, constant, varying)
