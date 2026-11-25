@@ -102,6 +102,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Weekly live contracts accept bulletin dataflow links without the optional
+  databrowser `categories/` path, which TÜİK stopped sending in November 2026.
+  They check classification through the export catalog instead. The live MCP
+  workflow also expects `chart_tuik_data` in the tool list (#37).
 - Bare curated abbreviations (TÜFE, ÜFE, Yİ-ÜFE, GSYH, HİA, ADNKS, NACE) use
   synonym-aware lexical ranking, with stable score/ID ordering and an explicit
   reason, without loading the embedding model (#79). Replaying the unchanged

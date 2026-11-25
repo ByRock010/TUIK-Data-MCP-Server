@@ -114,7 +114,9 @@ such as “Haber Bültenleri” are excluded. Multiple assignments remain arrays
 
 The tree and databrowser use different ID systems: `category_path` namespaces
 them as `theme-tree:8.55` versus `dataflow:8_1_4`. It does not invent equivalence.
-Unknown categories stay empty. A theme-tree outage is explicit in the report and
+Unknown categories stay empty. Current bulletin links omit the databrowser path
+(#37), so new crawls normally have no `dataflow:` entries. Themes still come from
+the linked flows' catalog categories. A theme-tree outage is explicit in the report and
 uses only confirmed linked-flow categories. Each subsequent run retries taxonomy
 and reclassifies reused details; an outage cannot cache an unconfirmed assignment
 permanently. The report includes coverage numerator/denominator.
