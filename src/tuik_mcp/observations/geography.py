@@ -6,6 +6,8 @@ code only through an exact entry here; a column name never makes a series provin
 
 from types import MappingProxyType
 
+from tuik_mcp.models.observation import Geography, GeographyLevel
+
 PROVINCES = {
     "Adana": "01",
     "Adıyaman": "02",
@@ -94,3 +96,13 @@ NATIONAL = MappingProxyType({"Türkiye": ("TR", "national")})
 PROVINCIAL = MappingProxyType(
     {"Toplam": ("TR", "national")} | {name: (code, "province") for name, code in PROVINCES.items()}
 )
+
+
+def geography(label: str, code: str, level: GeographyLevel) -> Geography:
+    return Geography(
+        label=label,
+        code=code,
+        level=level,
+        code_system="ISO 3166-1" if level == "national" else "TR province code",
+        source="recipe",
+    )

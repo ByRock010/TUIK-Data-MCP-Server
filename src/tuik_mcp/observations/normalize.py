@@ -15,7 +15,6 @@ from decimal import Decimal
 from tuik_mcp.models.observation import (
     Adjustments,
     CsvLocator,
-    Geography,
     Measure,
     Observation,
     Period,
@@ -24,7 +23,7 @@ from tuik_mcp.models.observation import (
 from tuik_mcp.parsers.errors import ParseError, ParseLimitError
 from tuik_mcp.parsers.profile import PLACEHOLDERS
 
-from .geography import NATIONAL
+from .geography import NATIONAL, geography
 from .recipes import (
     CONFIDENTIAL,
     EMPTY_ATTRIBUTES,
@@ -62,6 +61,7 @@ class Normalized:
     facets: list[dict[str, str]]
     constant: dict[str, str]
     varying: dict[str, list[str]]
+    series_exclude: tuple[str, ...] = ()
 
     @property
     def source_records(self) -> int:
@@ -166,11 +166,11 @@ def normalize(
                 source="source",
             )
 
-        geography = None
+        location = None
         place = get(recipe.geography)
         if place in recipe.geographies:
             code, level = recipe.geographies[place]
-            geography = Geography(label=place, code=code, level=level, source="recipe")
+            location = geography(place, code, level)
         else:
             problems.append(("unmapped", f"geography {place!r} has no reviewed mapping"))
         if recipe.coverage is not None and get(recipe.coverage) not in NATIONAL:
@@ -252,7 +252,7 @@ def normalize(
                 value=value,
                 locator=CsvLocator(record=number_of_record, column=columns[recipe.value]),
                 period=period,
-                geography=geography,
+                geography=location,
                 unit=unit,
                 measure=measure,
                 adjustment=adjustment,
@@ -279,4 +279,11 @@ def normalize(
                 else:
                     update = {"status": "duplicate", "value": None, "reason": shared}
                 observations[index] = observation.model_copy(update=update)
-    return Normalized(columns, observations, facets, constant, varying)
+    return Normalized(
+        columns,
+        observations,
+        facets,
+        constant,
+        varying,
+        (*recipe.identity_exclude, recipe.frequency),
+    )

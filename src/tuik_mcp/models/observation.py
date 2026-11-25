@@ -9,7 +9,7 @@ derived value, so a caller can always check the published text.
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from .common import Provenance
 
@@ -36,6 +36,7 @@ ChangeBasis = Literal[
 ]
 Adjustment = Literal["adjusted", "not_adjusted", "not_applicable", "unknown"]
 ObservationStatus = Literal["valid", "missing", "confidential", "invalid", "duplicate", "unmapped"]
+SourceFormat = Literal["csv", "xls", "xlsx"]
 
 
 class CsvLocator(BaseModel):
@@ -45,14 +46,17 @@ class CsvLocator(BaseModel):
     column: str
 
 
-class SpreadsheetLocator(BaseModel):
-    """Reserved for workbook lineage; no workbook recipe is verified yet (#86 follow-up 1)."""
+class SpreadsheetHeader(BaseModel):
+    cell: str
+    text: str
+    merged_from: str | None = None
 
+
+class SpreadsheetLocator(BaseModel):
     format: Literal["xls", "xlsx"]
     sheet: str
     cell: str
-    header_path: list[str] = Field(default_factory=list)
-    merged_from: list[str] = Field(default_factory=list)
+    headers: list[SpreadsheetHeader]
 
 
 class Period(BaseModel):
@@ -66,6 +70,7 @@ class Geography(BaseModel):
     label: str
     code: str | None = None
     level: GeographyLevel
+    code_system: Literal["ISO 3166-1", "TR province code"]
     # The label is published; the code and level come from `source`.
     source: FieldSource
 
@@ -99,10 +104,10 @@ class Observation(BaseModel):
     id: str
     status: ObservationStatus
     reason: str | None = None
-    # The published text, unchanged.
+    # Published CSV text or the text representation of a stored workbook cell.
     value_text: str
     # Exact decimal of a valid observation, otherwise null. Serialized as a string.
-    value: Decimal | None = None
+    value: Decimal | None = Field(default=None, allow_inf_nan=False)
     locator: CsvLocator | SpreadsheetLocator
     period: Period | None = None
     geography: Geography | None = None
@@ -113,6 +118,13 @@ class Observation(BaseModel):
     dimensions: dict[str, str] = Field(default_factory=dict)
     # Published observation and confidentiality status text.
     source_status: dict[str, str] = Field(default_factory=dict)
+    notes: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_numeric_status(self):
+        if (self.status == "valid") != (self.value is not None):
+            raise ValueError("A numeric value is required exactly for valid observations")
+        return self
 
 
 class RecipeRef(BaseModel):
@@ -124,6 +136,7 @@ class RecipeRef(BaseModel):
 
 
 class ObservationCounts(BaseModel):
+    # Entire CSV export or the set of reviewed workbook cells.
     source_records: int = Field(ge=0)
     selected: int = Field(ge=0)
     valid: int = Field(ge=0)
@@ -174,6 +187,9 @@ class RecipeSummary(BaseModel):
     domain: str
     title: str
     resource_ids: list[str]
+    format: SourceFormat = "csv"
+    snapshot_id: str | None = None
+    example_period: str | None = None
     evidence: str
     measures: list[str]
     example: dict[str, str]
@@ -193,8 +209,11 @@ class ObservationResponse(Provenance):
     message: str
     recipe: RecipeRef | None = None
     snapshot_id: str | None = None
-    # True only when every source record was read and classified. It says nothing
-    # about whether a requested period range is covered; see `coverage`.
+    publication_date: str | None = None
+    source_updated_at: str | None = None
+    source_scope: Literal["whole_export", "reviewed_cells"] | None = None
+    # True once every record in source_scope was read and classified.
+    # Use coverage for the completeness of a requested period range.
     complete: bool = False
     counts: ObservationCounts | None = None
     selection: dict[str, str] = Field(default_factory=dict)
@@ -210,7 +229,7 @@ class ObservationResponse(Provenance):
     observations: list[Observation] = Field(default_factory=list)
     offset: int = Field(default=0, ge=0)
     has_more: bool = False
-    # Opaque continuation bound to this snapshot, resource and selection.
+    # Opaque continuation bound to this snapshot, resource, recipe and selection.
     next_cursor: str | None = None
     recipes: list[RecipeSummary] = Field(default_factory=list)
     unavailable: list[UnavailableFamily] = Field(default_factory=list)

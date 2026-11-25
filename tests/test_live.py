@@ -1,4 +1,5 @@
 import importlib.util
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -6,6 +7,7 @@ import pytest
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
 from tuik_mcp.observations import RECIPES
+from tuik_mcp.observations.workbooks import WORKBOOK_RECIPES
 from tuik_mcp.services.catalog import CatalogService
 
 
@@ -53,16 +55,16 @@ async def test_live_mcp_workflow():
     spec.loader.exec_module(module)
     report = await module.run()
     assert set(report["tools"]) == {
+        "chart_tuik_data",
         "search_tuik",
         "search_tuik_datasets",
         "get_tuik_resource",
         "get_tuik_data",
         "inspect_tuik_data",
-        "chart_tuik_data",
-        "get_tuik_observations",
         "list_tuik_themes",
         "read_tuik_document",
         "search_tuik_classifications",
+        "get_tuik_observations",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
@@ -146,5 +148,36 @@ async def test_live_observation_recipes_still_match_their_sources():
             counts = whole.counts
             assert counts.unmapped == counts.invalid == counts.duplicate == 0, (resource_id, counts)
             assert counts.valid + counts.missing + counts.confidential == counts.source_records
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_reviewed_workbook_observation_cells():
+    expected = {
+        "cpi-basket-2026": {"D5": (Decimal("24.4444"), "percent")},
+        "population-2025": {"C11": (Decimal("2911853"), "persons")},
+        "industrial-change-2026-09": {
+            "C8": (Decimal("2.58966869988598"), "percent"),
+            "D8": (Decimal("2.28287426407597"), "percentage_points"),
+        },
+    }
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        for recipe in WORKBOOK_RECIPES:
+            (resource_id,) = recipe.resource_ids
+            result = await service.observations(
+                resource_id, period_from=recipe.period, period_to=recipe.period
+            )
+            assert result.status == "ok", (resource_id, result.issues)
+            assert result.source_scope == "reviewed_cells" and result.coverage.complete
+            assert result.publication_date and result.snapshot_id == "sha256:" + recipe.sha256
+            assert {
+                row.locator.cell: (row.value, row.unit.kind) for row in result.observations
+            } == expected[recipe.id]
+            if recipe.id == "population-2025":
+                (row,) = result.observations
+                assert row.locator.headers[1].merged_from == "B3"
     finally:
         await http.close()

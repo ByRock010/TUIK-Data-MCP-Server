@@ -2,19 +2,23 @@
 
 import csv
 import dataclasses
+import hashlib
 import io
 from decimal import Decimal
 from pathlib import Path
 
 import httpx
 import pytest
+from openpyxl import Workbook
 
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
+from tuik_mcp.models.dataset import DownloadLink, TuikResource
 from tuik_mcp.models.observation import SCHEMA_VERSION, ObservationResponse
 from tuik_mcp.observations import BY_RESOURCE, RECIPES, SchemaChanged, normalize
 from tuik_mcp.observations.geography import PROVINCES
 from tuik_mcp.observations.recipes import MeasureRule
+from tuik_mcp.observations.workbooks import BY_WORKBOOK, WORKBOOK_RECIPES
 from tuik_mcp.parsers.errors import ParseError, ParseLimitError
 from tuik_mcp.server import respond
 from tuik_mcp.services.catalog import CatalogService
@@ -528,10 +532,10 @@ async def test_a_cursor_is_bound_to_its_snapshot_resource_and_selection():
             result = await respond(catalog.observations(cursor=bad))
             assert result["code"] == "invalid_cursor"
         # Bytes that changed since the first page are refused, never resumed.
-        stale = encode_cursor(FLOW, "0" * 64, {"period_from": "2015-02"}, 1)
+        stale = encode_cursor(FLOW, "0" * 64, {"period_from": "2015-02"}, 1, TRADE)
         changed = await respond(catalog.observations(cursor=stale))
         assert changed["code"] == "snapshot_changed"
-        beyond = encode_cursor(FLOW, first.snapshot_id[7:], {}, 9)
+        beyond = encode_cursor(FLOW, first.snapshot_id[7:], {}, 9, TRADE)
         assert (await respond(catalog.observations(cursor=beyond)))["code"] == "invalid_cursor"
     finally:
         await http.close()
@@ -633,7 +637,9 @@ async def test_schema_changes_unsupported_and_held_resources_return_no_values():
         assert held["status"] == "unavailable" and "housing_sales" in held["message"]
         assert calls == []  # Unreviewed families are refused before any download.
         listing = await respond(catalog.observations())
-        assert listing["status"] == "catalog" and len(listing["recipes"]) == len(RECIPES)
+        assert listing["status"] == "catalog" and len(listing["recipes"]) == len(RECIPES) + len(
+            WORKBOOK_RECIPES
+        )
         assert listing["unavailable"][0]["domain"] == "housing_sales"
         orphan = await respond(catalog.observations(None, period_from="2026"))
         assert orphan["code"] == "invalid_input"
@@ -646,3 +652,84 @@ def test_a_comma_separated_export_fails_the_column_check():
     with pytest.raises(SchemaChanged) as changed:
         run(TRADE, data)
     assert changed.value.issues[0].startswith("unexpected column")
+
+
+async def test_continuation_refuses_new_recipe_even_with_identical_source_bytes(monkeypatch):
+    data = (FIXTURES / "data.csv").read_bytes()
+    http, catalog, calls = http_catalog(data)
+    try:
+        first = await catalog.observations(FLOW, limit=1)
+        revised = dataclasses.replace(TRADE, version=TRADE.version + 1)
+        monkeypatch.setitem(BY_RESOURCE, FLOW, revised)
+        calls.clear()
+        resumed = await respond(catalog.observations(cursor=first.next_cursor))
+        assert resumed["code"] == "recipe_changed"
+        assert calls == []
+        fresh = await catalog.observations(FLOW, limit=1, snapshot_id=first.snapshot_id)
+        assert fresh.recipe.version == revised.version and fresh.snapshot_id == first.snapshot_id
+    finally:
+        await http.close()
+
+
+async def test_workbook_scope_lineage_and_pinned_snapshot(monkeypatch):
+    original = next(recipe for recipe in WORKBOOK_RECIPES if recipe.id == "population-2025")
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = original.sheet
+    sheet["A1"] = "Population by province and sex, 2025"
+    sheet.merge_cells("B3:D3")
+    sheet["B3"] = "Toplam\nTotal"
+    sheet["C4"] = "Erkek\nMale"
+    sheet["C11"] = 2_918_853
+    stream = io.BytesIO()
+    workbook.save(stream)
+    data = stream.getvalue()
+    digest = hashlib.sha256(data).hexdigest()
+    mapped = dataclasses.replace(original, format="xlsx", sha256=digest)
+    (resource_id,) = mapped.resource_ids
+    monkeypatch.setitem(BY_WORKBOOK, resource_id, mapped)
+    http, catalog, _ = http_catalog(data)
+    source_url = f"https://veriportali.tuik.gov.tr/tr/press/{mapped.press}"
+
+    async def resource(requested):
+        assert requested == resource_id
+        return TuikResource(
+            id=requested,
+            title=mapped.title,
+            resource_type="table",
+            publication_date="2026-02-09T10:00:00",
+            source_url=source_url,
+            download_links=[
+                DownloadLink(
+                    title=mapped.title,
+                    format="xls",
+                    resource_id=requested,
+                    source_url="https://veriportali.tuik.gov.tr/api/tr/data/downloads?t=t",
+                )
+            ],
+        )
+
+    monkeypatch.setattr(catalog, "resource", resource)
+    try:
+        result = await catalog.observations(
+            resource_id, filters={"Cinsiyet": "Erkek"}, period_from="2024", period_to="2025"
+        )
+        assert result.complete and result.source_scope == "reviewed_cells"
+        assert result.publication_date == "2026-02-09T10:00:00"
+        assert result.source_url == source_url and result.snapshot_id == "sha256:" + digest
+        assert result.counts.source_records == result.counts.valid == 1
+        assert result.coverage.gaps[0].absent == ["2024"]
+        (row,) = result.observations
+        assert row.value == Decimal(2_918_853) and row.unit.multiplier == 0
+        assert row.geography.code == "06" and row.geography.code_system == "TR province code"
+        assert row.locator.sheet == mapped.sheet and row.locator.cell == "C11"
+        assert row.locator.headers[1].model_dump() == {
+            "cell": "C3",
+            "text": "Toplam Total",
+            "merged_from": "B3",
+        }
+        monkeypatch.setitem(BY_WORKBOOK, resource_id, dataclasses.replace(mapped, sha256="0" * 64))
+        changed = await respond(catalog.observations(resource_id))
+        assert changed["code"] == "snapshot_changed"
+    finally:
+        await http.close()

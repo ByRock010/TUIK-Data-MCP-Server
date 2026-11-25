@@ -4,6 +4,7 @@ import base64
 import binascii
 import hashlib
 import json
+from itertools import islice
 
 from tuik_mcp.clients.base import SourceError
 from tuik_mcp.config import PORTAL
@@ -26,6 +27,12 @@ from tuik_mcp.observations import (
 )
 from tuik_mcp.observations.normalize import PERIODS
 from tuik_mcp.observations.recipes import EVIDENCE
+from tuik_mcp.observations.workbooks import (
+    BY_WORKBOOK,
+    WORKBOOK_RECIPES,
+    WorkbookRecipe,
+    normalize_workbook,
+)
 from tuik_mcp.parsers.errors import ParseError, ParseLimitError
 from tuik_mcp.utils.normalization import validate_id
 from tuik_mcp.utils.rendering import rendered
@@ -65,9 +72,21 @@ def period_label(number: int, frequency: str) -> str:
     return f"{year:04}-{'H' if frequency == 'half' else 'Q'}{part + 1}"
 
 
-def encode_cursor(resource_id: str, digest: str, selection: dict, offset: int) -> str:
+def encode_cursor(
+    resource_id: str,
+    digest: str,
+    selection: dict,
+    offset: int,
+    recipe: Recipe | WorkbookRecipe,
+) -> str:
     payload = json.dumps(
-        {"r": resource_id, "s": digest, "q": selection, "o": offset},
+        {
+            "r": resource_id,
+            "s": digest,
+            "q": selection,
+            "o": offset,
+            "m": [recipe.id, recipe.version],
+        },
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -86,20 +105,28 @@ def decode_cursor(cursor: str) -> dict:
         raise malformed
     data, check = cursor[len(CURSOR_PREFIX) :].split(".")
     try:
-        payload = base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))
+        payload = base64.b64decode(data + "=" * (-len(data) % 4), altchars=b"-_", validate=True)
+        if hashlib.sha256(payload).hexdigest()[:16] != check:
+            raise malformed
         state = json.loads(payload)
-    except (binascii.Error, ValueError) as exc:
+    except (binascii.Error, ValueError, RecursionError) as exc:
         raise malformed from exc
-    if hashlib.sha256(payload).hexdigest()[:16] != check or not isinstance(state, dict):
+    if not isinstance(state, dict):
         raise malformed
     query = state.get("q")
+    mapping = state.get("m")
     if not (
         isinstance(state.get("r"), str)
         and isinstance(state.get("s"), str)
         and isinstance(query, dict)
         and set(query) <= {"filters", "period_from", "period_to"}
-        and isinstance(state.get("o"), int)
-        and not isinstance(state.get("o"), bool)
+        and type(state.get("o")) is int
+        and state["o"] > 0
+        and isinstance(mapping, list)
+        and len(mapping) == 2
+        and isinstance(mapping[0], str)
+        and type(mapping[1]) is int
+        and mapping[1] >= 1
     ):
         raise malformed
     return state
@@ -133,7 +160,7 @@ def catalog() -> ObservationResponse:
             "resource_ids; use example as filters. Other resources keep the raw "
             "get_tuik_data path."
         ),
-        recipes=[recipe.summary() for recipe in RECIPES],
+        recipes=[recipe.summary() for recipe in (*RECIPES, *WORKBOOK_RECIPES)],
         unavailable=list(UNAVAILABLE),
     )
 
@@ -147,35 +174,53 @@ class ObservationService:
 
         Raises SchemaChanged when the published columns no longer match the recipe.
         """
-        recipe = BY_RESOURCE[resource_id]
+        recipe = BY_RESOURCE.get(resource_id) or BY_WORKBOOK[resource_id]
         resource = await self.catalog.resource(resource_id)
-        link = next((item for item in resource.download_links if item.format == "csv"), None)
+        workbook = isinstance(recipe, WorkbookRecipe)
+        formats = {"xls", "xlsx"} if workbook else {"csv"}
+        expected_format = recipe.format if workbook else "csv"
+        link = next((item for item in resource.download_links if item.format in formats), None)
         if link is None:
             raise SourceError(
-                "not_structured", "This resource advertises no CSV export.", resource.source_url
+                "not_structured", "The reviewed source file is unavailable.", resource.source_url
             )
         files = self.catalog.files
         file = await files.download(link.resource_id or resource_id, link)
-        if snapshot_id is not None and snapshot_id != "sha256:" + file.digest:
+        actual_id = "sha256:" + file.digest
+        if snapshot_id is not None and snapshot_id != actual_id:
             raise SourceError(
                 "snapshot_changed",
-                "The retained file differs from snapshot_id; restart from offset 0.",
-                file.link.source_url,
+                "The retained file differs from snapshot_id; restart without the cursor.",
+                resource.source_url,
             )
-        limits = self.catalog.queries.limits
+        if workbook and recipe.sha256 != file.digest:
+            raise SourceError(
+                "snapshot_changed",
+                "The workbook differs from the audited snapshot. Use raw inspection or "
+                "review the workbook before updating the recipe.",
+                resource.source_url,
+            )
+        if file.link.format != expected_format:
+            raise SchemaChanged([f"expected {expected_format}, received {file.link.format}"])
         try:
-            normalized = await files.work(
-                normalize,
-                recipe,
-                file.body,
-                file.digest,
-                max_rows=limits.max_rows,
-                max_cells=limits.max_cells,
-            )
+            if workbook:
+                normalized = await files.work(
+                    normalize_workbook, recipe, file.body, file.digest, files.limits
+                )
+            else:
+                limits = self.catalog.queries.limits
+                normalized = await files.work(
+                    normalize,
+                    recipe,
+                    file.body,
+                    file.digest,
+                    max_rows=limits.max_rows,
+                    max_cells=limits.max_cells,
+                )
         except ParseLimitError as exc:
-            raise SourceError("parse_limit_exceeded", str(exc), file.link.source_url) from exc
+            raise SourceError("parse_limit_exceeded", str(exc), resource.source_url) from exc
         except ParseError as exc:
-            raise SourceError("parse_failed", str(exc), file.link.source_url) from exc
+            raise SourceError("parse_failed", str(exc), resource.source_url) from exc
         return recipe, resource, file, normalized
 
     async def observations(
@@ -189,6 +234,7 @@ class ObservationService:
         cursor: str | None = None,
     ) -> ObservationResponse:
         offset = 0
+        cursor_recipe = None
         if cursor is not None:
             state = decode_cursor(cursor)
             if filters is not None or period_from is not None or period_to is not None:
@@ -208,6 +254,7 @@ class ObservationService:
                     PORTAL,
                 )
             resource_id, snapshot_id, offset = state["r"], "sha256:" + state["s"], state["o"]
+            cursor_recipe = state["m"]
             filters = state["q"].get("filters")
             period_from = state["q"].get("period_from")
             period_to = state["q"].get("period_to")
@@ -226,7 +273,16 @@ class ObservationService:
                 message=f"No normalized observations for {held.domain}: {held.reason}",
                 unavailable=[held],
             )
-        if resource_id not in BY_RESOURCE:
+        recipe = BY_RESOURCE.get(resource_id) or BY_WORKBOOK.get(resource_id)
+        if cursor_recipe is not None and (
+            recipe is None or cursor_recipe != [recipe.id, recipe.version]
+        ):
+            raise SourceError(
+                "recipe_changed",
+                "The observation recipe differs from the cursor; restart without it.",
+                PORTAL,
+            )
+        if recipe is None:
             flow = resource_id.split("+", 1)[0] + "+"
             reviewed = [r for r in BY_RESOURCE if r.startswith(flow)]
             hint = f" Reviewed version: {reviewed[0]}." if reviewed else ""
@@ -246,7 +302,6 @@ class ObservationService:
                 raise ValueError("period_from and period_to must have the same frequency")
             if ordinal(period_from, frequency) > ordinal(period_to, frequency):
                 raise ValueError("period_from is after period_to")
-        recipe = BY_RESOURCE[resource_id]
         try:
             recipe, resource, file, table = await self.table(resource_id, snapshot_id)
         except SchemaChanged as exc:
@@ -256,13 +311,13 @@ class ObservationService:
                 status="schema_changed",
                 recipe=self.reference(recipe),
                 message=(
-                    "The published columns no longer match the reviewed recipe, so no "
-                    "observations are returned. Read raw rows with get_tuik_data."
+                    "The published file no longer matches the reviewed recipe. "
+                    "Read raw rows with get_tuik_data."
                 ),
                 issues=exc.issues,
             )
-        selected, selection, issues, coverage = self.select(
-            recipe, table, filters or {}, period_from, period_to
+        selected, selection, issues, coverage = await self.catalog.files.work(
+            self.select, table, filters or {}, period_from, period_to
         )
         counts = ObservationCounts(
             source_records=table.source_records,
@@ -298,18 +353,23 @@ class ObservationService:
         notes = list(recipe.notes)
         if resource.notes:
             notes.append(resource.notes)
+        workbook = isinstance(recipe, WorkbookRecipe)
         response = ObservationResponse(
-            source_url=file.link.source_url,
+            source_url=resource.source_url if workbook else file.link.source_url,
             retrieved_at=file.retrieved_at,
             resource_id=resource_id,
             status="ok",
             message=(
-                "Normalized from the complete snapshot. value_text is the published text; "
-                "value is set only for valid observations. Fields marked source were "
-                "published; recipe fields come from the reviewed mapping."
+                "Normalized the reviewed cells in the exact workbook snapshot."
+                if workbook
+                else "Normalized from the complete CSV export. value_text is the published text; "
+                "value is set only for valid observations."
             ),
             recipe=self.reference(recipe),
             snapshot_id="sha256:" + file.digest,
+            publication_date=resource.publication_date,
+            source_updated_at=resource.updated_at,
+            source_scope="reviewed_cells" if workbook else "whole_export",
             complete=True,
             counts=counts,
             selection=selection,
@@ -334,7 +394,7 @@ class ObservationService:
         }
 
         def continuation(next_offset: int) -> str:
-            return encode_cursor(resource_id, file.digest, query, next_offset)
+            return encode_cursor(resource_id, file.digest, query, next_offset, recipe)
 
         return await self.catalog.files.work(
             self.page,
@@ -346,7 +406,7 @@ class ObservationService:
         )
 
     @staticmethod
-    def reference(recipe: Recipe) -> RecipeRef:
+    def reference(recipe: Recipe | WorkbookRecipe) -> RecipeRef:
         return RecipeRef(
             id=recipe.id,
             version=recipe.version,
@@ -356,7 +416,7 @@ class ObservationService:
         )
 
     @staticmethod
-    def select(recipe: Recipe, table: Normalized, filters: dict[str, str], period_from, period_to):
+    def select(table: Normalized, filters: dict[str, str], period_from, period_to):
         concepts = list(table.facets[0]) if table.facets else []
         for concept, value in filters.items():
             if concept not in concepts:
@@ -393,9 +453,7 @@ class ObservationService:
                 f"{len(undated)} selected records have no valid period and are outside "
                 "the period range."
             )
-        coverage = ObservationService.coverage(
-            recipe, table, selected, frequency, period_from, period_to
-        )
+        coverage = ObservationService.coverage(table, selected, frequency, period_from, period_to)
         selected = [
             i
             for i in selected
@@ -411,7 +469,7 @@ class ObservationService:
 
     @staticmethod
     def coverage(
-        recipe: Recipe, table: Normalized, candidates: list[int], frequency, period_from, period_to
+        table: Normalized, candidates: list[int], frequency, period_from, period_to
     ) -> RangeCoverage:
         """Check every selected series for one valid value in each period of the range.
 
@@ -433,11 +491,10 @@ class ObservationService:
             raise ValueError(
                 f"The period range spans more than {MAX_RANGE_PERIODS} periods; narrow it"
             )
-        exclude = {*recipe.identity_exclude, recipe.frequency}
         identifying = [
             c
             for c in table.varying
-            if c not in exclude and len({table.facets[i][c] for i in candidates}) > 1
+            if c not in table.series_exclude and len({table.facets[i][c] for i in candidates}) > 1
         ]
         series: dict[tuple[str, ...], dict[int, bool]] = {}
         for i in candidates:
@@ -451,20 +508,24 @@ class ObservationService:
         width = end - start + 1
         valid = 0
         gaps = []
+        incomplete = 0
         for key, periods in series.items():
             present = sum(periods.values())
             valid += present
             if present == width:
                 continue
-            absent = [n for n in range(start, end + 1) if n not in periods]
-            unusable = [n for n, ok in sorted(periods.items()) if not ok]
+            incomplete += 1
+            if len(gaps) >= MAX_GAPS:
+                continue
+            absent = islice((n for n in range(start, end + 1) if n not in periods), MAX_GAP_PERIODS)
+            unusable = islice((n for n, ok in sorted(periods.items()) if not ok), MAX_GAP_PERIODS)
             gaps.append(
                 SeriesGap(
                     dimensions=dict(zip(identifying, key, strict=True)),
-                    absent=[period_label(n, frequency) for n in absent[:MAX_GAP_PERIODS]],
-                    absent_count=len(absent),
-                    without_value=[period_label(n, frequency) for n in unusable[:MAX_GAP_PERIODS]],
-                    without_value_count=len(unusable),
+                    absent=[period_label(n, frequency) for n in absent],
+                    absent_count=width - len(periods),
+                    without_value=[period_label(n, frequency) for n in unusable],
+                    without_value_count=len(periods) - present,
                 )
             )
         expected = len(series) * width
@@ -484,8 +545,8 @@ class ObservationService:
             expected=expected,
             valid=valid,
             complete=bool(series) and valid == expected,
-            gaps=gaps[:MAX_GAPS],
-            gaps_truncated=len(gaps) > MAX_GAPS,
+            gaps=gaps,
+            gaps_truncated=incomplete > len(gaps),
         )
 
     def page(self, response: ObservationResponse, rows, offset: int, limit: int, continuation):

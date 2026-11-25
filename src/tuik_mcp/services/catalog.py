@@ -92,7 +92,6 @@ class CatalogService:
         self.files = FileStore(self.portal)
         self.queries = QueryService(self.files, http.settings)
         self.artifacts = ArtifactStore(http.settings)
-        self.normalized = ObservationService(self)
         settings = http.settings
         self.index = (
             OpenSearchBackend(
@@ -109,6 +108,7 @@ class CatalogService:
         )
         self.literal = LiteralBackend(self._datasets)
         self.portal_search = PortalBackend(self.search)
+        self.normalized = ObservationService(self)
 
     async def close(self) -> None:
         if self.index is not None:

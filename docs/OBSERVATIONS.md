@@ -14,18 +14,18 @@ in [`observations/recipes.py`](../src/tuik_mcp/observations/recipes.py).
 
 | Field | Meaning |
 | --- | --- |
-| `id` | `obs:<first 16 hex of the file SHA-256>:<record>`; stable for one snapshot. |
-| `value_text` | The published text, unchanged (`8,4`). |
+| `id` | A stable observation ID for the snapshot and source location. |
+| `value_text` | The published CSV field (`8,4`) or a text representation of the workbook cell's stored value. |
 | `value` | Exact decimal as a string (`"8.4"`), only when `status` is `valid`. |
 | `status`, `reason` | `valid`, `missing`, `confidential`, `invalid`, `duplicate` or `unmapped`, with the cause. |
-| `locator` | `csv`, one-based `record` counting the header as record 1, and the value column's header. |
+| `locator` | Format and source coordinates. CSV gives a one-based record counting the header as record 1 and the value column's name. Excel gives sheet, A1 cell and header cells with any merge anchor. |
 | `period` | `value`, `frequency` (`month`, `quarter`, `half`, `year`) and the published frequency label. |
-| `geography` | Published `label`, plus `code` and `level` (`national`, `province`, ...). |
+| `geography` | Published label, level, code and its system. National measures use ISO 3166-1. Provinces use the two-digit Turkish province code. |
 | `unit` | `kind`, published `label`, `multiplier` as a power of ten, `currency` and an index's `base_period`. |
 | `measure` | `type` (`level`, `index`, `rate`, `ratio`, `change`, `share`) and a change's `basis`. |
 | `adjustment` | `seasonal` and `calendar`: `adjusted`, `not_adjusted`, `not_applicable` or `unknown`. |
 | `dimensions` | Other dimensions that vary within the file, by concept name. |
-| `source_status` | Published observation and confidentiality status text. |
+| `source_status`, `notes` | Published observation and confidentiality status text and any reviewed source notes. |
 
 Every structured field has a `source`:
 
@@ -41,24 +41,14 @@ same flow can publish `Zaman (2015-01)` on one day and `Zaman` on another.
 
 ## Guarantees
 
-- **Complete or nothing.** The whole CSV is read within the `TUIK_QUERY_MAX_ROWS`
-  and `TUIK_QUERY_MAX_CELLS` budgets. A budget overrun, malformed record or blank
-  record is an error, never a partial series. `complete` is true on every `ok`
-  response, and `counts` cover the whole selection, not just the page.
-  `complete` is about reading the source. Whether a period range is covered
-  is reported separately in `coverage`.
-- **Requested ranges report their coverage.** With `period_from` or `period_to`,
-  `coverage` enumerates every period of the range for each selected series.
-  Counting the rows that exist cannot see a month the source never published.
-  `coverage.gaps` lists each series' `absent` periods and its periods
-  `without_value` (missing, confidential, duplicate, invalid or unmapped).
-  `coverage.complete` is true only when every series has one valid value in
-  every period. Otherwise `issues` says how many are short. An open bound runs
-  to the selection's first or last period (`bounds`). A reversed range, or one
-  longer than 2,400 periods, is `invalid_input`.
-- **Changed sources are refused.** A recipe lists every column concept it
-  expects. An extra, missing or doubled concept returns `schema_changed` with the
-  exact `issues` and no observations.
+- **Scoped completeness.** The whole CSV is read within the row and cell
+  budgets. A budget overrun or malformed record returns an error. For a workbook,
+  `source_scope=reviewed_cells` covers the explicitly mapped cells in the pinned
+  snapshot. `complete` describes reading that scope. `counts` cover the entire
+  selection within the scope, including records on later pages.
+- **Changed sources are refused.** A recipe lists the CSV columns it expects.
+  An extra, missing or doubled concept returns `schema_changed`. A workbook's
+  bytes must match the audited hash and changed bytes return `snapshot_changed`.
 - **No silent values.** A measure, unit, geography, frequency or status label
   without a reviewed entry is `unmapped`. An empty cell, a marker such as `-`, a
   confidential cell or a number in another notation (`1.234,5`) never gets a
@@ -94,9 +84,22 @@ until it is reviewed.
 | Industry | `industry-final-energy-tj` | `flow:DF_SANAYI_ENERJI_YILLIK_NIHAI_TUKETIM_TJ+V1.0` | Terajoules; 343 confidential cells stay empty. |
 | Housing sales | none | `DF_SATIS_SEKLI_SATIS_DURUMU_V3` and related flows | `unavailable`: classification, count versus share, geography and vintage are not verified. |
 
-On 2026-11-25 every recipe mapped its whole current export: 57,208 records,
-with no `unmapped`, `invalid` or `duplicate` records. The weekly live contract
-(`test_live_observation_recipes_still_match_their_sources`) repeats this check.
+The six CSV recipes were checked against 57,208 records in the public
+exports on 25 November 2026. The live recipe test repeats this contract check.
+
+### Audited workbook cells
+
+| Recipe | Bulletin | Reviewed cells |
+| --- | --- | --- |
+| `cpi-basket-2026` | [October CPI](https://veriportali.tuik.gov.tr/tr/press/58291) | `Tablo 4!D5`, food weight of 24.4444%. |
+| `population-2025` | [2025 ADNKS](https://veriportali.tuik.gov.tr/tr/press/53899) | `t3!C11`, 2,911,853 male residents in Ankara. The total settlement header for `C3` comes from merge anchor `B3`. |
+| `industrial-change-2026-09` | [September industrial production](https://veriportali.tuik.gov.tr/tr/press/58189) | `s2!C8` and `s2!D8`, the manufacturing change in percent and its contribution in percentage points. `A52` supplies the calendar-adjustment note. |
+
+Each discovery item gives the reusable file ID, workbook format, exact snapshot
+hash and an example period and filter. The contract exposes `publication_date`
+when available, separately from `source_updated_at`, retrieval time and the
+observation period. A new hash is a distinct source vintage. A workbook recipe
+must be reviewed again before it accepts revised bytes.
 
 ## Calls
 
@@ -125,26 +128,23 @@ Read one series, then the next page from the same snapshot:
 {"cursor": "obs1.eyJvIjo1MCwi...", "limit": 50}
 ```
 
-`next_cursor` carries the resource, the snapshot hash and the whole selection
-(filters and period bounds) along with the position. Pass it alone, optionally
+`next_cursor` binds the resource, snapshot hash, recipe ID and version, full
+selection and position. Pass it alone, optionally
 with `limit`. A cursor sent with other filters, a period bound, another resource
-or another `snapshot_id` returns `invalid_cursor`, as does an edited cursor. If
+or another `snapshot_id` returns `invalid_cursor`. The cursor checksum detects
+accidental changes to the token. If
 the file has changed since the first page, the response is `snapshot_changed`;
-restart without the cursor. `snapshot_id` on a new query pins it to a file you
-have already read.
+restart without the cursor. A recipe revision returns `recipe_changed` even if
+the downloaded bytes are unchanged. `snapshot_id` on a new query pins it to a
+file you have already read.
 
 A filter on an unknown concept or an unpublished value returns `invalid_input`
 with the available concepts or values. Pages shrink to the 64 KB output budget.
 Follow `next_cursor` rather than counting rows.
 
-## Not covered yet
+## Further scope
 
-- **Workbooks.** XLS/XLSX observations need sheet, cell and merged-header lineage
-  in the spreadsheet parser (#86 follow-up 1). The schema reserves
-  `SpreadsheetLocator`, but no workbook recipe is verified, so this acceptance
-  item of #87 stays open.
-- **Release vintage.** The snapshot hash and retrieval time identify the file.
-  Reference period and revision vintage are not separate fields yet (#86
-  follow-up 3).
-- **More families.** Production indices and other #86 `exact` CSV families need
-  their own reviewed recipe. Oversized exports wait for bounded retrieval (#105).
+The workbook recipes cover the specific coordinates in the table above.
+Inspect other workbook cells through the raw table tools. Production indices
+and other audited CSV families need separate observation recipes. Oversized
+exports depend on bounded retrieval in #105.

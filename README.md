@@ -424,16 +424,14 @@ Bundles expire after a day by default and are never refreshed in place. See
 
 ## Typed observations
 
-`get_tuik_observations` turns a reviewed CSV family into typed observations for
-calculations and reports. Each value keeps its published text, its CSV record
-number and whether each field was published or comes from the reviewed recipe.
-Unknown labels, markers, confidential cells and duplicate periods never become
-numbers, and a changed column set returns `schema_changed`. A period range reports,
-per series, the periods without a valid value, and pages continue with a cursor
-bound to the snapshot and selection. Six families in the
-prices, labour, population, foreign trade and industry domains are reviewed.
-Housing sales stay unavailable. Other resources keep the raw table tools. See
-[normalized observations](docs/OBSERVATIONS.md).
+Call `get_tuik_observations` without arguments to list reviewed CSV and Excel
+recipes. With a recipe's `resource_id`, it returns exact decimal values with
+source text, period, geography, unit and adjustment. CSV observations cite the
+source record. Workbook observations cite the worksheet, cell and header anchors
+within the pinned snapshot. A period range reports gaps for each series and
+`next_cursor` pins the snapshot, recipe version and selection. Housing sales
+remain unavailable pending source validation. See [normalized observations](
+docs/OBSERVATIONS.md).
 
 ## Read PDF documents
 
