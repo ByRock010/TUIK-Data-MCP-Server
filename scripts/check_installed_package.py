@@ -20,6 +20,7 @@ TOOLS = {
     "search_tuik_datasets",
     "get_tuik_resource",
     "get_tuik_data",
+    "get_tuik_observations",
     "inspect_tuik_data",
     "chart_tuik_data",
     "list_tuik_themes",

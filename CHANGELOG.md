@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `get_tuik_observations` discovers audited mappings and reads one bounded,
+  typed series with exact snapshot and row/cell provenance. It distinguishes
+  units, geography and adjustment and reports incomplete selections (#87).
+
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).

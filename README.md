@@ -5,7 +5,7 @@ Kurumu (TÜİK) statistical resources. It searches the current data portal, retr
 bulletin and dataset metadata, returns bounded rows from public CSV and Excel exports, and
 verifies official table downloads. Runtime results always come from TÜİK.
 
-Version 0.3.0 prepares nine tools with optional Turkish OpenSearch discovery,
+Version 0.3.0 provides nine tools with optional Turkish OpenSearch discovery,
 filters, highlights and facets, alongside Excel/PDF reading, bounded table queries
 and optional PNG charts. See the [release notes](docs/releases/v0.3.0.md) for scope
 and upgrade details, and the [release checklist](docs/RELEASE_0.3.0.md) for candidate
@@ -19,16 +19,16 @@ verification and pending reviewed promotion/publication.
 | `search_tuik_datasets(query, limit=10, downloadable_only=True, theme=None)` | Search the export catalog for datasets with reusable IDs and public export formats |
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
+| `get_tuik_observations(mapping_id=None, selection=None)` | Reviewed statistical series with explicit units, geography, periods and source records or cells |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
 
-Every response includes `source_url`, `retrieved_at` (UTC) and `publisher`.
-Collections also include provenance for individual records. Missing fields are
-null or empty arrays. Source text is untrusted content, never executable code or
-instructions.
+Source results include `source_url`, `retrieved_at` (UTC) and `publisher`. The
+observations tool puts those fields in `snapshot` when it loads data. Mapping
+discovery is available offline. Source text is untrusted data.
 
 ## Installation
 
@@ -367,6 +367,28 @@ or expiry. Restart without a cursor after `invalid_cursor`, `cursor_expired` or
 
 The [query contract](docs/TABLE_QUERIES.md) describes operators, type formats,
 missing ordering, errors, session scope and configurable `TUIK_QUERY_*` budgets.
+
+## Read normalized observations
+
+Call `get_tuik_observations` with no arguments to discover reviewed mappings.
+Pass only `mapping_id` to see exact series selectors and an example period.
+Then request an inclusive range in the series' frequency.
+
+```json
+{
+  "mapping_id": "labour",
+  "selection": {
+    "series": "unemployment-rate-adjusted",
+    "start": "2026-08",
+    "end": "2026-09"
+  }
+}
+```
+
+The result pins the source bytes and gives each observation a source CSV record
+or Excel cell. Use complete selections for analysis and check any required
+adjustment or base-year metadata. The [observation contract](docs/OBSERVATIONS.md)
+lists sources, supported examples and coverage limits.
 
 ## Chart a table
 

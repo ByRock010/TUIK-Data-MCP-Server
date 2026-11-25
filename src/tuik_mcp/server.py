@@ -15,6 +15,7 @@ from tuik_mcp import artifacts
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.config import CLASSIFICATION, PORTAL, Settings
 from tuik_mcp.models.common import ErrorResponse
+from tuik_mcp.models.observation import ObservationSelection
 from tuik_mcp.models.query import TableQuery
 from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.services.catalog import CatalogService
@@ -210,6 +211,26 @@ async def get_tuik_resource(
 ) -> CallToolResult:
     """Inspect metadata, downloads and a bulletin's related datasets with reusable flow: IDs."""
     return reply(await respond(service(ctx).resource(resource_id)))
+
+
+@mcp.tool(structured_output=False)
+async def get_tuik_observations(
+    ctx: Context,
+    mapping_id: Annotated[str | None, Field(min_length=1, max_length=60)] = None,
+    selection: ObservationSelection | None = None,
+) -> CallToolResult:
+    """Discover or select a reviewed, provenance-preserving statistical series.
+
+    Omit arguments to list mappings and unavailable domains. Pass mapping_id alone to see
+    exact series IDs, source selectors and example periods. Read one series with
+    selection={series, start, end}; bounds are inclusive and must match the reported
+    frequency (YYYY-MM, YYYY-Qn or YYYY). An optional snapshot_sha256 requires the
+    current file to match those exact bytes. Results identify the source snapshot
+    and original CSV record or workbook cell and include units, geography and
+    adjustment when known. Use only complete selections for analysis. For general
+    tables and unsupported combinations, use inspect_tuik_data and get_tuik_data.
+    """
+    return reply(await respond(service(ctx).observations(mapping_id, selection)))
 
 
 @mcp.tool(structured_output=False)

@@ -16,6 +16,7 @@ async def test_stdio_discovery_and_input_validation():
                 "search_tuik_datasets",
                 "get_tuik_resource",
                 "get_tuik_data",
+                "get_tuik_observations",
                 "inspect_tuik_data",
                 "chart_tuik_data",
                 "list_tuik_themes",
@@ -29,6 +30,18 @@ async def test_stdio_discovery_and_input_validation():
             assert all("ctx" not in t.inputSchema["properties"] for t in tools.tools)
             dataset_tool = next(t for t in tools.tools if t.name == "search_tuik_datasets")
             assert dataset_tool.inputSchema["properties"]["downloadable_only"]["default"] is True
+            discovery = await session.call_tool("get_tuik_observations", {})
+            registry = discovery.structuredContent
+            assert registry["schema_version"] == 1
+            assert "housing" in registry["unavailable_domains"]
+            inspection = await session.call_tool("get_tuik_observations", {"mapping_id": "cpi"})
+            (mapping,) = inspection.structuredContent["mappings"]
+            assert mapping["id"] == "cpi"
+            assert mapping["series"][0]["example_period"] == "2026-10"
+            unavailable = await session.call_tool(
+                "get_tuik_observations", {"mapping_id": "housing"}
+            )
+            assert unavailable.structuredContent["code"] == "unsupported_observation_mapping"
             result = await session.call_tool("get_tuik_resource", {"resource_id": "invalid"})
             assert result.structuredContent["code"] == "invalid_input"
             assert result.structuredContent["source_url"]

@@ -23,6 +23,12 @@ from tuik_mcp.models.dataset import (
     InspectResponse,
     TuikResource,
 )
+from tuik_mcp.models.observation import (
+    MappingDiscovery,
+    ObservationResult,
+    ObservationSelection,
+    Snapshot,
+)
 from tuik_mcp.models.query import TableQuery
 from tuik_mcp.models.search import (
     IndexedSearchInput,
@@ -31,6 +37,7 @@ from tuik_mcp.models.search import (
     ThemesResponse,
     TuikSearchResult,
 )
+from tuik_mcp.observation_mappings import MAPPINGS, describe
 from tuik_mcp.parsers.profile import UnknownColumnsError
 from tuik_mcp.parsers.query import QueryError, evaluate
 from tuik_mcp.search.backend import (
@@ -44,9 +51,16 @@ from tuik_mcp.search.backend import (
 from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
+from tuik_mcp.services.observations import (
+    normalize_csv,
+    normalize_workbook,
+    observation_result,
+    selected_periods,
+)
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
+from tuik_mcp.utils.rendering import rendered
 
 SOURCE_TYPES = {
     "csv": "text/csv",
@@ -484,6 +498,79 @@ class CatalogService:
         record = matches[ordinal - 1].model_copy(update={"id": resource_id})
         self.remember(record)
         return record
+
+    async def observations(
+        self, mapping_id: str | None, selection: ObservationSelection | None
+    ) -> MappingDiscovery | ObservationResult:
+        if mapping_id is None:
+            if selection is not None:
+                raise ValueError("Select a mapping_id first")
+            return describe()
+        mapping = MAPPINGS.get(mapping_id)
+        if mapping is None:
+            raise SourceError(
+                "unsupported_observation_mapping",
+                "Call get_tuik_observations without arguments to discover supported mappings.",
+                PORTAL,
+            )
+        if selection is None:
+            return describe(mapping)
+        series = mapping.series.get(selection.series)
+        if series is None:
+            raise ValueError("Use one of the series IDs returned by mapping inspection")
+        periods = selected_periods(selection, series.frequency)
+        resource = await self.resource(mapping.resource_id)
+        allowed_formats = {"csv"} if mapping.format == "csv" else {"xls", "xlsx", None}
+        link = next(
+            (link for link in resource.download_links if link.format in allowed_formats), None
+        )
+        if link is None:
+            raise SourceError(
+                "unsupported_observation_source",
+                "The reviewed source file is no longer advertised",
+                resource.source_url,
+            )
+        file = await self.files.download(mapping.resource_id, link)
+        if file.link.format != mapping.format:
+            raise SourceError(
+                "unsupported_observation_schema",
+                "The source format differs from the reviewed mapping",
+                resource.source_url,
+            )
+        pins = (selection.snapshot_sha256, mapping.snapshot_sha256)
+        if any(pin is not None and pin != file.digest for pin in pins):
+            raise SourceError(
+                "observation_snapshot_mismatch",
+                "The active source bytes do not match the requested or reviewed snapshot",
+                resource.source_url,
+            )
+        snapshot = Snapshot(
+            resource_id=mapping.resource_id,
+            source_url=resource.source_url,
+            sha256=file.digest,
+            retrieved_at=file.retrieved_at,
+            publication_date=resource.publication_date,
+        )
+        if mapping.format == "csv":
+            (table,) = await self.files.tables(
+                mapping.resource_id,
+                file,
+                scan_max_rows=self.files.scan.max_rows,
+                scan_max_cells=self.files.scan.max_cells,
+            )
+            values = await self.files.work(normalize_csv, table, mapping, series, periods, snapshot)
+        else:
+            values = await self.files.work(
+                normalize_workbook, file.body, mapping, series, periods, snapshot, self.files.limits
+            )
+        result = observation_result(mapping, series, selection, periods, snapshot, values)
+        if len(rendered(result.model_dump(mode="json"))) > self.files.scan.max_output_bytes:
+            raise SourceError(
+                "observation_output_limit",
+                "The selected range exceeds the response budget. Request a shorter explicit range.",
+                resource.source_url,
+            )
+        return result
 
     async def data(
         self,
