@@ -22,6 +22,7 @@ TOOLS = {
     "get_tuik_data",
     "inspect_tuik_data",
     "chart_tuik_data",
+    "get_tuik_observations",
     "list_tuik_themes",
     "read_tuik_document",
     "search_tuik_classifications",
