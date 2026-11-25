@@ -1,4 +1,3 @@
-import asyncio
 import base64
 from collections.abc import AsyncIterator, Awaitable
 from contextlib import asynccontextmanager
@@ -18,12 +17,14 @@ from tuik_mcp.models.common import ErrorResponse
 from tuik_mcp.models.query import TableQuery
 from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.services.files import finish_worker
 from tuik_mcp.utils.rendering import rendered
 
 
 @dataclass
 class App:
     service: CatalogService
+    inline_saved_images: bool = True
 
 
 @asynccontextmanager
@@ -45,7 +46,7 @@ class TuikMCP(FastMCP):
         store = self.get_context().request_context.lifespan_context.service.artifacts
         try:
             artifact_id, name = artifacts.parse_uri(str(uri))
-            content, mime_type = await asyncio.to_thread(store.read, artifact_id, name)
+            content, mime_type = await finish_worker(store.read, artifact_id, name)
         except artifacts.ArtifactError as exc:
             raise ResourceError(f"{exc.code}: {exc}") from exc
         if mime_type.startswith("text/") or mime_type == "application/json":
@@ -348,6 +349,11 @@ async def chart_tuik_data(
             save=save,
         )
         summary = result.model_dump(mode="json")
+        if (
+            result.artifact is not None
+            and not ctx.request_context.lifespan_context.inline_saved_images
+        ):
+            image = None
     except Exception as exc:  # Same error shapes as respond(), without the image.
         summary = await respond(_raise(exc))
         image = None

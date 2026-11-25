@@ -50,8 +50,9 @@ class DownloadedFile:
 
 
 class FileStore:
-    def __init__(self, portal: TuikPortal):
+    def __init__(self, portal: TuikPortal, *, cache_profiles: bool = True):
         self.portal = portal
+        self.cache_profiles = cache_profiles
         self.limits = ParseLimits.from_settings(portal.http.settings)
         self.inspect = InspectLimits.from_settings(portal.http.settings)
         self.scan = QueryLimits.from_settings(portal.http.settings)
@@ -165,7 +166,7 @@ class FileStore:
             [resource_id, file.digest, file.link.format, sheet, columns, max_values],
             ensure_ascii=False,
         )
-        cached = self.cache.get(key)
+        cached = self.cache.get(key) if self.cache_profiles else None
         if cached is not None:
             return PROFILE.validate_json(cached)
         csv = file.link.format == "csv"
@@ -185,5 +186,6 @@ class FileStore:
                 profile_table, table, max_values=max_values, limits=self.inspect, columns=columns
             )
         result = (sheets, profile)
-        self.cache.set(key, PROFILE.dump_json(result))
+        if self.cache_profiles:
+            self.cache.set(key, PROFILE.dump_json(result))
         return result
