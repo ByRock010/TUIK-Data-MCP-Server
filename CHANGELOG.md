@@ -8,6 +8,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `get_tuik_observations` returns versioned, typed observations
+  (`tuik.observation/1`) for six source families reviewed in the #86 audit:
+  CPI main groups, monthly labour, provincial age dependency, two gold-excluded
+  trade indices and industrial energy use. Each observation keeps the published
+  text, an exact decimal, its CSV record, period and frequency, geography code
+  and level, unit, measure, adjustment and whether each field is published or
+  recipe-defined. Unknown labels, markers, confidential cells and duplicate
+  periods get no value. A changed column set is refused, and housing sales stay
+  unavailable. Without `resource_id` the tool lists the recipes. Workbook
+  lineage is not covered yet (#87).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
