@@ -43,6 +43,7 @@ MAX_REQUEST = 64 * 1024
 MAX_RESPONSE = 128 * 1024
 MAX_RESOURCE_RESPONSE = 12 * MIB
 MAX_CONNECTIONS = 16
+MAX_INTROSPECTIONS = 4
 WORKSPACE_ID = re.compile(r"[a-f0-9]{64}")
 PARSE_TOOLS = {"get_tuik_data", "inspect_tuik_data", "chart_tuik_data"}
 DEADLINE = 30
@@ -147,6 +148,12 @@ class HostedBoundary:
     def quota(self):
         return self.answer(429, "request_limit", {"Retry-After": "60"})
 
+    def reject_credentials(self, request: Request):
+        peer = request.client.host if request.client else "unknown"
+        if not self.admission.failed_auth(peer):
+            return self.quota()
+        return self.challenge(401)
+
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
             await self.app(scope, receive, send)
@@ -211,17 +218,21 @@ class HostedBoundary:
             return JSONResponse({"status": "ok"})
         if request.url.path != "/mcp":
             return self.answer(404, "not_found")
-        if not self.admission.pre_auth(request.client.host if request.client else "unknown"):
-            return self.quota()
         supplied = request.headers.getlist("authorization")
         if len(supplied) != 1 or (token := BEARER.fullmatch(supplied[0])) is None:
-            return self.challenge(401)
+            return self.reject_credentials(request)
+        # An exhausted failure bucket cannot establish whether this bearer is valid.
+        if self.admission.introspections >= MAX_INTROSPECTIONS:
+            return self.answer(503, "pilot_busy")
+        self.admission.introspections += 1
         try:
             identity = await self.verifier.verify(token[1])
         except IssuerUnavailable:
             return self.answer(503, "authorization_unavailable")
+        finally:
+            self.admission.introspections -= 1
         if identity is None:
-            return self.challenge(401)
+            return self.reject_credentials(request)
         if not self.admission.request(identity.subject):
             return self.quota()
         if READ not in identity.scopes:

@@ -1,8 +1,8 @@
 """Single-worker hosted admission counters with bounded memory."""
 
-import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from time import monotonic
 
 
 @dataclass
@@ -27,6 +27,7 @@ class RequestBudget:
 class Admission:
     def __init__(self):
         self.connections = 0
+        self.introspections = 0
         self.in_flight: set[str] = set()
         self.global_budget = RequestBudget()
         self.callers: dict[str, RequestBudget] = {}
@@ -35,8 +36,8 @@ class Admission:
         self.ips: dict[str, int] = {}
         self.ip_minute = None
 
-    def pre_auth(self, ip: str) -> bool:
-        minute = int(time.monotonic()) // 60
+    def failed_auth(self, ip: str) -> bool:
+        minute = int(monotonic()) // 60
         if minute != self.ip_minute:
             self.ips.clear()
             self.ip_minute = minute

@@ -5,6 +5,7 @@ import base64
 import json
 import time
 from contextlib import AsyncExitStack, asynccontextmanager
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import parse_qs
 
@@ -54,11 +55,12 @@ def headers(token):
 
 
 @asynccontextmanager
-async def app_client(tmp_path, *, blocking_upstream=None):
+async def app_client(tmp_path, *, blocking_upstream=None, blocking_issuer=None, **overrides):
     introspections = []
     upstream = []
+    config = configuration(tmp_path, **overrides)
 
-    def issuer(request):
+    async def issuer(request):
         assert request.url == f"{ISSUER}/introspect"
         assert (
             request.headers["authorization"]
@@ -66,6 +68,8 @@ async def app_client(tmp_path, *, blocking_upstream=None):
         )
         token = parse_qs(request.content.decode())["token"][0]
         introspections.append(token)
+        if blocking_issuer:
+            await blocking_issuer()
         if token == "issuer-unavailable":
             return httpx.Response(302, headers={"location": "https://untrusted.example.test"})
         claims = {
@@ -77,9 +81,7 @@ async def app_client(tmp_path, *, blocking_upstream=None):
             "aud": RESOURCE,
             "scope": f"{READ} {REPORTS}",
         }
-        changes = {
-            "alice": {},
-            "bob": {"sub": "bob"},
+        changes = {subject: {"sub": subject} for subject in config.subjects} | {
             "reader": {"sub": "reader", "scope": READ},
             "no-scope": {"scope": "other"},
             "expired": {"exp": 1},
@@ -109,7 +111,7 @@ async def app_client(tmp_path, *, blocking_upstream=None):
         raise AssertionError("Unexpected upstream call")
 
     app = create_hosted_app(
-        configuration(tmp_path),
+        config,
         issuer_transport=httpx.MockTransport(issuer),
         upstream_transport=httpx.MockTransport(source),
     )
@@ -277,6 +279,66 @@ async def test_rate_and_active_call_admission(tmp_path):
             for _ in range(11)
         ]
         assert statuses == [200] * 10 + [429]
+
+
+async def test_failed_credentials_do_not_spend_authenticated_quota(tmp_path, monkeypatch):
+    class FixedDateTime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 11, 26, tzinfo=UTC).astimezone(tz)
+
+    monkeypatch.setattr("tuik_mcp.hosted_limits.datetime", FixedDateTime)
+    monkeypatch.setattr("tuik_mcp.hosted_limits.monotonic", lambda: 120)
+    subjects = {"alice", "bob", "reader", "deniz", "ece", "mert", "zeynep"}
+    async with (
+        app_client(tmp_path, subjects=subjects) as (transport, introspections, _),
+        httpx.AsyncClient(transport=transport, base_url=ORIGIN, headers=ACCEPT) as client,
+    ):
+        for _ in range(29):
+            assert (await client.post("/mcp", json=INIT)).status_code == 401
+        assert introspections == []
+        assert (await client.post("/mcp", json=INIT, headers=headers("unknown"))).status_code == 401
+        assert (await client.post("/mcp", json=INIT)).status_code == 429
+        assert (await client.post("/mcp", json=INIT, headers=headers("expired"))).status_code == 429
+
+        for subject in sorted(subjects - {"zeynep"}):
+            for _ in range(10):
+                response = await client.post("/mcp", json=INIT, headers=headers(subject))
+                assert response.status_code == 200
+        excess = await client.post("/mcp", json=INIT, headers=headers("zeynep"))
+        assert excess.status_code == 429
+        assert excess.headers["retry-after"] == "60"
+
+
+async def test_issuer_admission_releases_slots(tmp_path):
+    started, release = asyncio.Event(), asyncio.Event()
+    count = 0
+
+    async def block_introspection():
+        nonlocal count
+        count += 1
+        if count == 4:
+            started.set()
+        await release.wait()
+
+    async with (
+        app_client(tmp_path, blocking_issuer=block_introspection) as (transport, introspections, _),
+        httpx.AsyncClient(transport=transport, base_url=ORIGIN, headers=ACCEPT) as client,
+    ):
+        async with asyncio.TaskGroup() as group:
+            active = [
+                group.create_task(client.post("/mcp", json=INIT, headers=headers("unknown")))
+                for _ in range(4)
+            ]
+            try:
+                await asyncio.wait_for(started.wait(), timeout=5)
+                excess = await client.post("/mcp", json=INIT, headers=headers("bob"))
+                assert excess.status_code == 503
+                assert introspections == ["unknown"] * 4
+            finally:
+                release.set()
+        assert all(request.result().status_code == 401 for request in active)
+        assert (await client.post("/mcp", json=INIT, headers=headers("bob"))).status_code == 200
 
 
 def test_issuer_introspection_cannot_forward_to_other_origin(tmp_path):

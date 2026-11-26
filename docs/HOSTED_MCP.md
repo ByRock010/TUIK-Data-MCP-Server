@@ -83,11 +83,16 @@ Use the local CA for these isolated requests. [Caddy local TLS](https://caddyser
   jobs at once, with one active call per subject. It charges a conservative
   32 MiB for a new parse-capable request, allowing two per subject and eight
   globally per UTC day. Cursor continuation uses its existing snapshot.
-- Request rate is 10/minute and 60/day per subject, with 60/minute,
-  500/day and 10,000/month globally. The loopback proxy counts as one
-  30/minute pre-auth peer. These counters are process-local. The worker caps
-  request bodies at 64 KiB, regular JSON responses at 128 KiB and resource
-  responses at 12 MiB. Work reaching the HTTP deadline returns 504.
+- Authenticated request rate is 10/minute and 60/day per subject, with 60/minute,
+  500/day and 10,000/month globally. Missing, malformed and rejected credentials
+  share a separate peer budget. The first 30 failures per minute return 401;
+  further failures return 429. The loopback proxy counts as one peer. A
+  well-formed bearer is still introspected on each request, even after the
+  peer exhausts its failure budget. The worker allows four concurrent issuer
+  calls within its 16-connection ceiling. Excess calls receive 503.
+- Counters are process-local. The worker caps request bodies at 64 KiB, regular
+  JSON responses at 128 KiB and resource responses at 12 MiB. Work reaching the
+  HTTP deadline returns 504.
 - The workspace budgets share 512 MiB across active and retained workspace
   directories, with up to 64 MiB per workspace, 8 MiB per artifact file and
   16 MiB per bundle. Expiry is checked on read and swept at startup and hourly.
