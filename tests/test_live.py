@@ -65,6 +65,7 @@ async def test_live_mcp_workflow():
         "read_tuik_document",
         "search_tuik_classifications",
         "get_tuik_observations",
+        "calculate_tuik_series",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
@@ -148,6 +149,39 @@ async def test_live_observation_recipes_still_match_their_sources():
             counts = whole.counts
             assert counts.unmapped == counts.invalid == counts.duplicate == 0, (resource_id, counts)
             assert counts.valid + counts.missing + counts.confidential == counts.source_records
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_cpi_year_ago_change_reproduces_the_published_annual_rate():
+    """The calendar-matched percent change of the index equals TÜİK's own rate (#89)."""
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        resource_id = "flow:DF_TUFE_SDMX_TT01+V1.0"
+        total = {"COICOP 2018 (Amaca Göre Bireysel Tüketim Sınıflaması, 2018)": "TÜFE"}
+        computed = await service.calculate(
+            resource_id,
+            "percent_change",
+            filters={**total, "Endeks-Değişim": "Endeks"},
+            basis="same_period_previous_year",
+            period_from="2025-01",
+        )
+        rate = "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%)"
+        published = await service.observations(
+            resource_id,
+            filters={**total, "Endeks-Değişim": rate},
+            period_from="2025-01",
+            limit=200,
+        )
+        official = {o.period.value: o.value for o in published.observations if o.value}
+        compared = [r for r in computed.series[0].results if r.period in official]
+        assert len(compared) >= 12 and all(r.status == "valid" for r in compared)
+        # TÜİK publishes the rate to two decimals; the derived value rounds to it.
+        assert all(Decimal(r.rounded) == official[r.period] for r in compared), [
+            (r.period, r.rounded, official[r.period]) for r in compared
+        ]
     finally:
         await http.close()
 

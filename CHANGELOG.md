@@ -8,6 +8,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `calculate_tuik_series` computes auditable derived values from reviewed
+  observations (#89): absolute and percentage-point differences, percent
+  change, previous-period and same-period-previous-year matching by calendar
+  position, explicit trailing moving averages, min/max with every tie, and
+  rebasing to a declared common period. Results list their formula, input
+  observation IDs, output unit, half-to-even rounding and missing or undefined
+  reasons. Incompatible units, measures, adjustments, frequencies and index
+  bases are refused, and missing periods are never filled. `save=true` stores
+  `calculation.json`, which `tuik_mcp.calculations.recompute` reproduces, with
+  CSVs of inputs and results and the source file.
 - `get_tuik_observations` returns versioned observations from six reviewed CSV
   families and selected cells in three pinned XLS/XLSX releases. Values include
   CSV records or worksheet addresses with merged-header anchors, periods, units,

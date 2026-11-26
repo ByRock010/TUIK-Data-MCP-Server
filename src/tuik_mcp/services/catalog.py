@@ -43,6 +43,7 @@ from tuik_mcp.search.backend import (
 )
 from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import OpenSearchStore
+from tuik_mcp.services.calculations import CalculationService
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
@@ -109,6 +110,7 @@ class CatalogService:
         self.literal = LiteralBackend(self._datasets)
         self.portal_search = PortalBackend(self.search)
         self.normalized = ObservationService(self)
+        self.calculations = CalculationService(self)
 
     async def close(self) -> None:
         if self.index is not None:
@@ -676,6 +678,10 @@ class CatalogService:
     async def observations(self, resource_id: str | None = None, **selection):
         """Normalized observations of a reviewed source family (#87)."""
         return await self.normalized.observations(resource_id, **selection)
+
+    async def calculate(self, resource_id: str, operation: str, **specification):
+        """Auditable derived values from reviewed observations (#89)."""
+        return await self.calculations.calculate(resource_id, operation, **specification)
 
     async def inspect(
         self,
