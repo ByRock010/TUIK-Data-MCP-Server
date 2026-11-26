@@ -15,7 +15,10 @@ async def test_live_bulletin_related_datasets_to_csv():
         service = CatalogService(http)
         resource = await service.resource("press:58347")
         related = [item for item in resource.related_datasets if item.downloadable]
-        assert related and all(item.category_path for item in related)
+        # Since November 2026 the portal links flows without the optional
+        # categories/ segment. Classification comes from the export catalog.
+        assert related and all(item.category_path in ([], ["9", "9_4"]) for item in related)
+        assert (await service.resource(related[0].id)).theme
         response = await service.data(resource.id)
         assert response.status == "related_datasets"
         data = await service.data(related[0].id, limit=2)
@@ -26,19 +29,21 @@ async def test_live_bulletin_related_datasets_to_csv():
 
 
 @pytest.mark.live
-async def test_live_three_level_bulletin_category_paths():
+async def test_live_three_level_bulletin_related_datasets():
     http = HttpClient(Settings())
     try:
         service = CatalogService(http)
         resource = await service.resource("press:57954")
         related = [item for item in resource.related_datasets if item.downloadable]
         assert len(related) == 2
-        assert all(item.category_path == ["8", "8_1", "8_1_4"] for item in related)
+        # A category path is optional upstream. When present it must be complete.
+        assert all(item.category_path in ([], ["8", "8_1", "8_1_4"]) for item in related)
         assert (await service.data(resource.id)).status == "related_datasets"
         for item in related:
             # These exports can exceed the default 10 MiB response bound.
             # Resolve their catalog metadata; the other live test checks CSV rows.
             flow = await service.resource(item.id)
+            assert flow.theme
             assert any(link.format == "csv" for link in flow.download_links)
     finally:
         await http.close()
@@ -52,6 +57,7 @@ async def test_live_mcp_workflow():
     spec.loader.exec_module(module)
     report = await module.run()
     assert set(report["tools"]) == {
+        "chart_tuik_data",
         "search_tuik",
         "search_tuik_datasets",
         "get_tuik_resource",

@@ -143,7 +143,10 @@ https://databrowser2.tuik.gov.tr/#/tr/tuik/categories/8/8_1/8_1_4/TR,DF_UCRETLI_
 
 The last component maps `TR,<CODE>,<version>` to `flow:<CODE>+V<version>`.
 The optional category path retains every level, including `["8", "8_1", "8_1_4"]`;
-it is not inferred from text. Only HTTPS links on the exact databrowser host with
+it is not inferred from text. On 2026-11-24 the portal no longer included the
+`categories/` segment on press 57954 or 58347, so `category_path` is empty for
+current bulletins (#37). The export catalog's category names still classify these
+flows. A numeric databrowser path is not reconstructed from those names. Only HTTPS links on the exact databrowser host with
 recognized fragment structure are accepted. Duplicate flow IDs across the two
 lists are collapsed, preferring an available category path. Source titles are
 stripped of HTML. Other file downloads are preserved separately.
