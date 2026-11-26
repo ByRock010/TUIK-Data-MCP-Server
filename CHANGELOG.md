@@ -58,6 +58,9 @@ All notable changes to this project are documented here. The format follows
   - Dataset-only, file-content and deep-page searches stay lexical.
   - The new grades come from a second, non-independent AI assessor.
 - `collect-index --variants` collects the hybrid evaluation systems.
+- [Sector benchmark protocol](docs/verification/issue-85/README.md) freezes
+  24 tasks with official rubrics and records the current MCP tool and artifact
+  baseline (#85).
 - `scripts/mcp_benchmark.py` runs the same prompts through Claude Code with the
   TÜİK MCP, with web tools only and with no tools, and summarizes tool calls, costs
   and which answer numbers occur in tool output. The
