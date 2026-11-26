@@ -1,0 +1,252 @@
+{
+  "source": {
+    "url": "https://www.tuik.gov.tr/indir/duyuru/favori_raporlar.xlsx",
+    "format": "xlsx",
+    "size_bytes": 3736479,
+    "sha256": "3901a6d86382c61175b7e9ca06db8a2b1fb16ece662bd0fb5a947f13b503e7b4",
+    "reference_period": "2021-12-31",
+    "retrieved_date": "2026-11-25",
+    "split": "supplemental held-out"
+  },
+  "default": {
+    "classification": "unsupported",
+    "code": "parse_limit_exceeded",
+    "message": "Workbook cells exceeds the configured limit (200000)"
+  },
+  "offline": {
+    "classification": "inferred",
+    "max_workbook_cells": 700000,
+    "samples": [
+      {
+        "sheet": "İL NÜFUSU",
+        "cell": "C49",
+        "header_context": [
+          "TOPLAM",
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "KOCAELİ"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 2033441,
+        "parser_layout": "table",
+        "source_rows": 82,
+        "parser_rows": 82,
+        "parser_row": 42,
+        "parser_column": "TOPLAM / TOPLAM",
+        "parser_value": "2033441",
+        "unique_row_matches": 1,
+        "merged_ranges": 7,
+        "value_matches": true,
+        "source_markers": {
+          "BELDE VE KÖYLER / TOPLAM": "-",
+          "ERKEK [column 10]": "-",
+          "KADIN [column 11]": "-"
+        },
+        "parser_markers": {
+          "BELDE VE KÖYLER / TOPLAM": "-",
+          "ERKEK [column 10]": "-",
+          "KADIN [column 11]": "-"
+        }
+      },
+      {
+        "sheet": "İLÇE NÜFUSU",
+        "cell": "E504",
+        "header_context": [
+          "TOPLAM",
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "KARS",
+          "SARIKAMIŞ"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 39486,
+        "parser_layout": "table",
+        "source_rows": 974,
+        "parser_rows": 974,
+        "parser_row": 497,
+        "parser_column": "TOPLAM / TOPLAM",
+        "parser_value": "39486",
+        "unique_row_matches": 1,
+        "merged_ranges": 9,
+        "value_matches": true,
+        "source_markers": {},
+        "parser_markers": {}
+      },
+      {
+        "sheet": "BÜYÜKŞEHİR B. NÜFUSU",
+        "cell": "C22",
+        "header_context": [
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "KAYSERİ"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 1434357,
+        "parser_layout": "table",
+        "source_rows": 30,
+        "parser_rows": 30,
+        "parser_row": 16,
+        "parser_column": "TOPLAM",
+        "parser_value": "1434357",
+        "unique_row_matches": 1,
+        "merged_ranges": 1,
+        "value_matches": true,
+        "source_markers": {},
+        "parser_markers": {}
+      },
+      {
+        "sheet": "BELEDİYE NÜFUSU",
+        "cell": "J687",
+        "header_context": [
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "KAYSERİ",
+          "ÖZVATAN",
+          "ÖZVATAN"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 3800,
+        "parser_layout": "table",
+        "source_rows": 1360,
+        "parser_rows": 1360,
+        "parser_row": 681,
+        "parser_column": "TOPLAM",
+        "parser_value": "3800",
+        "unique_row_matches": 1,
+        "merged_ranges": 1,
+        "value_matches": true,
+        "source_markers": {},
+        "parser_markers": {}
+      },
+      {
+        "sheet": "MAHALLE NÜFUSU",
+        "cell": "K16069",
+        "header_context": [
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "İZMİR",
+          "URLA",
+          "URLA",
+          "YAĞCILAR"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 554,
+        "parser_layout": "table",
+        "source_rows": 32125,
+        "parser_rows": 32125,
+        "parser_row": 16063,
+        "parser_column": "TOPLAM",
+        "parser_value": "554",
+        "unique_row_matches": 1,
+        "merged_ranges": 1,
+        "value_matches": true,
+        "source_markers": {},
+        "parser_markers": {}
+      },
+      {
+        "sheet": "MAHALLE NÜFUSU",
+        "cell": "K12040",
+        "header_context": [
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "GAZİANTEP",
+          "ŞEHİTKAMİL",
+          "ŞEHİTKAMİL",
+          "BAŞPINAR(ORGANİZE)OSB"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 22,
+        "parser_layout": "table",
+        "source_rows": 32125,
+        "parser_rows": 32125,
+        "parser_row": 12034,
+        "parser_column": "TOPLAM",
+        "parser_value": "22",
+        "unique_row_matches": 1,
+        "merged_ranges": 1,
+        "value_matches": true,
+        "source_markers": {
+          "ERKEK": "C",
+          "KADIN": "C"
+        },
+        "parser_markers": {
+          "ERKEK": "C",
+          "KADIN": "C"
+        }
+      },
+      {
+        "sheet": "KÖY NÜFUSU",
+        "cell": "H9112",
+        "header_context": [
+          "TOPLAM"
+        ],
+        "row_labels": [
+          "KASTAMONU",
+          "TAŞKÖPRÜ",
+          "DERE"
+        ],
+        "reference_period": "2021-12-31",
+        "period_source": {
+          "cell": "A1",
+          "text": "31 ARALIK 2021 TARİHLİ ADRESE DAYALI NÜFUS KAYIT SİSTEMİ (ADNKS) SONUÇLARI"
+        },
+        "unit": "persons",
+        "number_format": "#,##0",
+        "source_value": 139,
+        "parser_layout": "table",
+        "source_rows": 18211,
+        "parser_rows": 18211,
+        "parser_row": 9106,
+        "parser_column": "TOPLAM",
+        "parser_value": "139",
+        "unique_row_matches": 1,
+        "merged_ranges": 1,
+        "value_matches": true,
+        "source_markers": {},
+        "parser_markers": {}
+      }
+    ]
+  }
+}

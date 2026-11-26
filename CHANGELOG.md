@@ -24,7 +24,9 @@ All notable changes to this project are documented here. The format follows
   files (#86). The default path traced 290 of 300 sampled observations.
   The ten remaining observations traced offline in two CSVs above the default
   download cap. The audit pins the sample and records workbook header, period
-  and unit gaps for normalized reporting.
+  and unit gaps for normalized reporting. A supplemental held-out 2021 ADNKS
+  workbook traces seven population counts across six worksheets with an explicit
+  offline cap. The default cell cap still rejects the full workbook.
 - Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
   PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
   `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
@@ -58,6 +60,9 @@ All notable changes to this project are documented here. The format follows
   - Dataset-only, file-content and deep-page searches stay lexical.
   - The new grades come from a second, non-independent AI assessor.
 - `collect-index --variants` collects the hybrid evaluation systems.
+- [Sector benchmark protocol](docs/verification/issue-85/README.md) freezes
+  24 tasks with official rubrics and records the current MCP tool and artifact
+  baseline (#85).
 - `scripts/mcp_benchmark.py` runs the same prompts through Claude Code with the
   TÜİK MCP, with web tools only and with no tools, and summarizes tool calls, costs
   and which answer numbers occur in tool output. The
