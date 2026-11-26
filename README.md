@@ -95,6 +95,31 @@ executable (`Scripts/tuik-mcp.exe` on Windows). Any stdio-compatible MCP
 client can launch the same command; no API key or working-directory setting is
 required. Restart the client after changing its configuration.
 
+## Guided workflows
+
+Clients that expose MCP prompts can list and open these four recipes. In a
+client without a prompt menu, paste the example question and follow the same
+tool sequence. The examples correspond to the
+[frozen benchmark tasks](docs/verification/issue-85/tasks.json).
+
+| MCP prompt | Text-only example and first steps |
+| --- | --- |
+| `latest_indicator_brief` | “Son TÜFE bültenindeki yıllık ve aylık değişimi, dönemi ve baz yılını ver.” Start with live bulletin search, then open the returned ID. |
+| `regional_comparison` | “2025 ADNKS sonuçlarına göre İstanbul ve Ankara il nüfuslarını karşılaştır.” Open the regional release, inspect the table, and select the exact province labels. |
+| `trend_analysis` | “Altın hariç dış ticaret hadlerinde gıda grubunun 2015 Ocak–Mart eğilimini göster.” Discover the dataset, inspect its exact columns or reviewed recipe, and retrieve the full selected range. |
+| `source_methodology_audit` | “Eylül 2026 işgücü araştırmasının görüşme yöntemlerini ve örnek hacmini sayfa numarasıyla doğrula.” Follow the release's methodology link and read the relevant document pages. |
+
+Before asking for a report or artifact, verify the indicator, observation
+period and frequency, geography, unit/base, adjustment, release cutoff and
+output format. An unsupported request such as monthly unemployment for
+İstanbul should identify the missing geography/frequency combination and offer
+annual provincial or monthly national estimates, labelled by scope.
+
+If indexed search is unavailable, use the Turkish literal dataset catalog or
+live portal search. The trend workflow can provide a PNG and its CSV/source
+bundle when the visualization extra and client support are present. A sourced
+text table uses the same selection in a core-only installation or text client.
+
 ## Example questions and calls
 
 ```text
