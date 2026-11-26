@@ -102,7 +102,11 @@ budget is 64 KB by default. A larger calculation fails with
 the complete calculation. The inline response, artifact summary included, stays
 within the budget: it keeps the counts, coverage and extrema values, and lists at
 most 10 tied periods per extremum, with `tie_count` giving the full number
-(`inline_complete: false`).
+(`inline_complete: false`). If even that is too large, the reply falls back to
+the totals, the issues and one resource link to `calculation.json`; series and
+coverage gaps are then read from that file. This compact reply is about 3 KB
+and is returned even under a smaller configured budget, because the artifact
+already exists.
 
 `save=true` stores an artifact with these files:
 

@@ -6,11 +6,12 @@ import json
 from decimal import ROUND_DOWN, localcontext
 
 import pytest
-from test_observations import CPI, LABOUR, body, labour, labour_catalog
+from test_observations import CPI, ENERGY, LABOUR, body, energy, labour, labour_catalog
 
+from tuik_mcp import artifacts
 from tuik_mcp.calculations import recompute
 from tuik_mcp.models.calculation import SCHEMA_VERSION, CalculationResponse
-from tuik_mcp.server import respond
+from tuik_mcp.server import reply, respond
 from tuik_mcp.utils.rendering import rendered
 
 RESOURCE = LABOUR.resource_ids[0]
@@ -529,4 +530,39 @@ async def test_saved_extrema_with_many_ties_fit_the_budget_and_keep_every_tie(tm
         await http.close()
     for extremum in bundle["series"][0]["extrema"]:
         assert len(extremum["periods"]) == len(extremum["inputs"]) == 1104
+    assert recompute(bundle) == bundle["series"]
+
+
+async def test_an_oversized_saved_calculation_still_returns_its_bundle_link(tmp_path):
+    sources = [{"Enerji Kaynak (T)": f"Kaynak {n:02}", "Gözlem Değeri": "88"} for n in range(20)]
+    limit = 8192
+    http, catalog = labour_catalog(
+        energy(*sources), artifact_dir=str(tmp_path), query_max_output_bytes=limit
+    )
+    try:
+        payload = await respond(
+            catalog.calculate(
+                ENERGY.resource_ids[0],
+                "rebase",
+                base_period="2024",
+                period_from="2024",
+                period_to="2050",
+                save=True,
+            )
+        )
+        result = reply(payload)
+        text, *links = result.content
+        assert payload["status"] == "ok" and not payload["inline_complete"]
+        assert len(text.text.encode()) <= limit
+        assert payload["counts"]["series"] == 20 and payload["series"] == []
+        assert not payload["coverage"]["complete"] and payload["coverage"]["gaps_truncated"]
+        (link,) = links
+        assert link.type == "resource_link" and link.name == "calculation.json"
+        content, mime_type = catalog.artifacts.read(*artifacts.parse_uri(str(link.uri)))
+    finally:
+        await http.close()
+    assert mime_type == "application/json"
+    bundle = json.loads(content)
+    assert len(bundle["series"]) == 20 and bundle["coverage"]["gaps"]
+    assert all(len(item["results"]) == 27 for item in bundle["series"])
     assert recompute(bundle) == bundle["series"]

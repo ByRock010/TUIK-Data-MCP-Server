@@ -37,6 +37,7 @@ MAX_SERIES = 20
 MAX_WINDOW = 60
 # Tied periods listed per extremum in the inline view of a saved calculation.
 MAX_INLINE_TIES = 10
+MAX_COMPACT_ISSUES = 3
 LAGGED = {"difference", "percent_change", "pp_difference"}
 # Quantities that add: a difference keeps their unit.
 ADDITIVE = {"persons", "currency", "terajoule"}
@@ -374,6 +375,32 @@ def inline_summary(response: CalculationResponse, ties: int) -> CalculationRespo
     )
 
 
+def compact(response: CalculationResponse) -> CalculationResponse:
+    """The smallest saved-calculation reply: totals plus the calculation.json link.
+
+    Series, coverage gaps and the other files stay in the artifact and its manifest.
+    """
+    artifact = response.artifact
+    bundle = [f for f in artifact.files if f.name == "calculation.json"]
+    return response.model_copy(
+        update={
+            "message": (
+                "Derived values, not published by TÜİK. The calculation is too large to "
+                "show inline: read calculation.json from the artifact for every input, "
+                "result and coverage gap."
+            ),
+            "inline_complete": False,
+            "series": [],
+            "coverage": response.coverage.model_copy(
+                update={"gaps": [], "gaps_truncated": bool(response.coverage.gaps)}
+            ),
+            "notes": [DERIVED],
+            "issues": response.issues[:MAX_COMPACT_ISSUES],
+            "artifact": artifact.model_copy(update={"files": bundle}),
+        }
+    )
+
+
 def csv_bytes(header: list[str], rows: list[list]) -> bytes:
     stream = io.StringIO()
     writer = csv.writer(stream, lineterminator="\n")
@@ -529,14 +556,11 @@ class CalculationService:
             if size(response) <= budget:
                 return response
             response = inline_summary(response, ties)
-        if size(response) > budget:
-            raise SourceError(
-                "query_limit_exceeded",
-                f"Even the summary of the saved calculation exceeds the output budget; read "
-                f"calculation.json from artifact {manifest.artifact_id}.",
-                response.source_url,
-            )
-        return response
+        if size(response) <= budget:
+            return response
+        # The artifact exists: always hand back its calculation.json link rather
+        # than an error that leaves a client to build the resource URI itself.
+        return compact(response)
 
     async def save(self, response: CalculationResponse, recipe, resource, file, table):
         by_id = {o.id: o for o in table.observations}
