@@ -1,0 +1,71 @@
+{
+  "chart_probe": {
+    "artifacts_read": [
+      "chart.png",
+      "chart-data.csv",
+      "source.csv",
+      "manifest.json"
+    ],
+    "id": "F05",
+    "points": [
+      [
+        "2015-01",
+        "98.4622068329301"
+      ],
+      [
+        "2015-02",
+        "101.664854746884"
+      ],
+      [
+        "2015-03",
+        "96.4516474099525"
+      ]
+    ],
+    "sha256_source": "2bef23664b207e2e869f44b1672b599673304b7582081a142bf5e93a228e82bd",
+    "x_order": "chronological"
+  },
+  "expected_support": {
+    "A01": "supported",
+    "A02": "supported",
+    "A03": "supported",
+    "A04": "supported",
+    "A05": "supported",
+    "A06": "unsupported",
+    "F01": "supported",
+    "F02": "supported",
+    "F03": "supported",
+    "F04": "supported",
+    "F05": "supported",
+    "F06": "unsupported",
+    "L01": "supported",
+    "L02": "supported",
+    "L03": "supported",
+    "L04": "supported",
+    "L05": "unsupported",
+    "L06": "supported",
+    "M01": "supported",
+    "M02": "supported",
+    "M03": "supported",
+    "M04": "supported",
+    "M05": "supported",
+    "M06": "unsupported"
+  },
+  "mcp_sdk": "1.30.0",
+  "model": null,
+  "permissions": "local fixture stdio; no model tools, no live TÜİK calls",
+  "provider": null,
+  "python": "3.14.0",
+  "search_index": null,
+  "server_state": "fresh; F05 chart after source inspection",
+  "tools": [
+    "chart_tuik_data",
+    "get_tuik_data",
+    "get_tuik_resource",
+    "inspect_tuik_data",
+    "list_tuik_themes",
+    "read_tuik_document",
+    "search_tuik",
+    "search_tuik_classifications",
+    "search_tuik_datasets"
+  ]
+}
