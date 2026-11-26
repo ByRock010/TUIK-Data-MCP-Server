@@ -21,6 +21,7 @@ verification and pending reviewed promotion/publication.
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
+| `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -420,6 +421,17 @@ resource link (`tuik-artifact://<id>/<name>`, read with `resources/read`). On th
 running the server, `tuik-mcp-artifacts export <id> --to <directory>` copies a bundle.
 Bundles expire after a day by default and are never refreshed in place. See
 [report artifacts](docs/ARTIFACTS.md) for storage, budgets and safety rules.
+
+## Typed observations
+
+Call `get_tuik_observations` without arguments to list reviewed CSV and Excel
+recipes. With a recipe's `resource_id`, it returns exact decimal values with
+source text, period, geography, unit and adjustment. CSV observations cite the
+source record. Workbook observations cite the worksheet, cell and header anchors
+within the pinned snapshot. A period range reports gaps for each series and
+`next_cursor` pins the snapshot, recipe version and selection. Housing sales
+remain unavailable pending source validation. See [normalized observations](
+docs/OBSERVATIONS.md).
 
 ## Read PDF documents
 

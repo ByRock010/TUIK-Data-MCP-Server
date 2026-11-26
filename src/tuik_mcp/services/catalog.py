@@ -44,6 +44,7 @@ from tuik_mcp.search.backend import (
 from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import OpenSearchStore
 from tuik_mcp.services.files import FileStore
+from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
@@ -107,6 +108,7 @@ class CatalogService:
         )
         self.literal = LiteralBackend(self._datasets)
         self.portal_search = PortalBackend(self.search)
+        self.normalized = ObservationService(self)
 
     async def close(self) -> None:
         if self.index is not None:
@@ -670,6 +672,10 @@ class CatalogService:
             ),
         )
         return await self.files.work(self.queries.bounded, response)
+
+    async def observations(self, resource_id: str | None = None, **selection):
+        """Normalized observations of a reviewed source family (#87)."""
+        return await self.normalized.observations(resource_id, **selection)
 
     async def inspect(
         self,

@@ -1,10 +1,13 @@
 import importlib.util
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
 
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
+from tuik_mcp.observations import RECIPES
+from tuik_mcp.observations.workbooks import WORKBOOK_RECIPES
 from tuik_mcp.services.catalog import CatalogService
 
 
@@ -66,6 +69,7 @@ async def test_live_mcp_workflow():
         "list_tuik_themes",
         "read_tuik_document",
         "search_tuik_classifications",
+        "get_tuik_observations",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
@@ -130,5 +134,55 @@ async def test_live_cpi_spreadsheet_and_xls_only_bulletin_rows():
         )
         rows = await service.data(file.resource_id, limit=2)
         assert rows.status == "ok" and rows.rows and rows.unit == "15+ yaş - age"
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_observation_recipes_still_match_their_sources():
+    """Every reviewed recipe maps the whole current export without failures (#87)."""
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        for recipe in RECIPES:
+            (resource_id,) = recipe.resource_ids
+            result = await service.observations(resource_id, filters=dict(recipe.example))
+            assert result.status == "ok", (resource_id, result.issues)
+            assert result.complete and result.counts.selected > 0, resource_id
+            whole = await service.observations(resource_id, limit=1)
+            counts = whole.counts
+            assert counts.unmapped == counts.invalid == counts.duplicate == 0, (resource_id, counts)
+            assert counts.valid + counts.missing + counts.confidential == counts.source_records
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_reviewed_workbook_observation_cells():
+    expected = {
+        "cpi-basket-2026": {"D5": (Decimal("24.4444"), "percent")},
+        "population-2025": {"C11": (Decimal("2911853"), "persons")},
+        "industrial-change-2026-09": {
+            "C8": (Decimal("2.58966869988598"), "percent"),
+            "D8": (Decimal("2.28287426407597"), "percentage_points"),
+        },
+    }
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        for recipe in WORKBOOK_RECIPES:
+            (resource_id,) = recipe.resource_ids
+            result = await service.observations(
+                resource_id, period_from=recipe.period, period_to=recipe.period
+            )
+            assert result.status == "ok", (resource_id, result.issues)
+            assert result.source_scope == "reviewed_cells" and result.coverage.complete
+            assert result.publication_date and result.snapshot_id == "sha256:" + recipe.sha256
+            assert {
+                row.locator.cell: (row.value, row.unit.kind) for row in result.observations
+            } == expected[recipe.id]
+            if recipe.id == "population-2025":
+                (row,) = result.observations
+                assert row.locator.headers[1].merged_from == "B3"
     finally:
         await http.close()

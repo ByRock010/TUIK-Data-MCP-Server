@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `get_tuik_observations` returns versioned observations from six reviewed CSV
+  families and selected cells in three pinned XLS/XLSX releases. Values include
+  CSV records or worksheet addresses with merged-header anchors, periods, units,
+  geography and adjustment. The tool exposes period coverage and publication
+  metadata, holds housing sales for review, and binds continuation to the
+  snapshot, recipe version and selection (#87).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
