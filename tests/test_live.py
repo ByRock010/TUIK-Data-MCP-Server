@@ -1,10 +1,13 @@
 import importlib.util
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
 
 from tuik_mcp.clients.base import HttpClient
 from tuik_mcp.config import Settings
+from tuik_mcp.observations import RECIPES
+from tuik_mcp.observations.workbooks import WORKBOOK_RECIPES
 from tuik_mcp.services.catalog import CatalogService
 
 
@@ -15,7 +18,10 @@ async def test_live_bulletin_related_datasets_to_csv():
         service = CatalogService(http)
         resource = await service.resource("press:58347")
         related = [item for item in resource.related_datasets if item.downloadable]
-        assert related and all(item.category_path for item in related)
+        # Since November 2026 the portal links flows without the optional
+        # categories/ segment. Classification comes from the export catalog.
+        assert related and all(item.category_path in ([], ["9", "9_4"]) for item in related)
+        assert (await service.resource(related[0].id)).theme
         response = await service.data(resource.id)
         assert response.status == "related_datasets"
         data = await service.data(related[0].id, limit=2)
@@ -26,19 +32,21 @@ async def test_live_bulletin_related_datasets_to_csv():
 
 
 @pytest.mark.live
-async def test_live_three_level_bulletin_category_paths():
+async def test_live_three_level_bulletin_related_datasets():
     http = HttpClient(Settings())
     try:
         service = CatalogService(http)
         resource = await service.resource("press:57954")
         related = [item for item in resource.related_datasets if item.downloadable]
         assert len(related) == 2
-        assert all(item.category_path == ["8", "8_1", "8_1_4"] for item in related)
+        # A category path is optional upstream. When present it must be complete.
+        assert all(item.category_path in ([], ["8", "8_1", "8_1_4"]) for item in related)
         assert (await service.data(resource.id)).status == "related_datasets"
         for item in related:
             # These exports can exceed the default 10 MiB response bound.
             # Resolve their catalog metadata; the other live test checks CSV rows.
             flow = await service.resource(item.id)
+            assert flow.theme
             assert any(link.format == "csv" for link in flow.download_links)
     finally:
         await http.close()
@@ -52,6 +60,7 @@ async def test_live_mcp_workflow():
     spec.loader.exec_module(module)
     report = await module.run()
     assert set(report["tools"]) == {
+        "chart_tuik_data",
         "search_tuik",
         "search_tuik_datasets",
         "get_tuik_resource",
@@ -60,6 +69,7 @@ async def test_live_mcp_workflow():
         "list_tuik_themes",
         "read_tuik_document",
         "search_tuik_classifications",
+        "get_tuik_observations",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
@@ -124,5 +134,55 @@ async def test_live_cpi_spreadsheet_and_xls_only_bulletin_rows():
         )
         rows = await service.data(file.resource_id, limit=2)
         assert rows.status == "ok" and rows.rows and rows.unit == "15+ yaş - age"
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_observation_recipes_still_match_their_sources():
+    """Every reviewed recipe maps the whole current export without failures (#87)."""
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        for recipe in RECIPES:
+            (resource_id,) = recipe.resource_ids
+            result = await service.observations(resource_id, filters=dict(recipe.example))
+            assert result.status == "ok", (resource_id, result.issues)
+            assert result.complete and result.counts.selected > 0, resource_id
+            whole = await service.observations(resource_id, limit=1)
+            counts = whole.counts
+            assert counts.unmapped == counts.invalid == counts.duplicate == 0, (resource_id, counts)
+            assert counts.valid + counts.missing + counts.confidential == counts.source_records
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_reviewed_workbook_observation_cells():
+    expected = {
+        "cpi-basket-2026": {"D5": (Decimal("24.4444"), "percent")},
+        "population-2025": {"C11": (Decimal("2911853"), "persons")},
+        "industrial-change-2026-09": {
+            "C8": (Decimal("2.58966869988598"), "percent"),
+            "D8": (Decimal("2.28287426407597"), "percentage_points"),
+        },
+    }
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        for recipe in WORKBOOK_RECIPES:
+            (resource_id,) = recipe.resource_ids
+            result = await service.observations(
+                resource_id, period_from=recipe.period, period_to=recipe.period
+            )
+            assert result.status == "ok", (resource_id, result.issues)
+            assert result.source_scope == "reviewed_cells" and result.coverage.complete
+            assert result.publication_date and result.snapshot_id == "sha256:" + recipe.sha256
+            assert {
+                row.locator.cell: (row.value, row.unit.kind) for row in result.observations
+            } == expected[recipe.id]
+            if recipe.id == "population-2025":
+                (row,) = result.observations
+                assert row.locator.headers[1].merged_from == "B3"
     finally:
         await http.close()

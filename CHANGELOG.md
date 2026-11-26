@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `get_tuik_observations` returns versioned observations from six reviewed CSV
+  families and selected cells in three pinned XLS/XLSX releases. Values include
+  CSV records or worksheet addresses with merged-header anchors, periods, units,
+  geography and adjustment. The tool exposes period coverage and publication
+  metadata, holds housing sales for review, and binds continuation to the
+  snapshot, recipe version and selection (#87).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
@@ -27,7 +33,9 @@ All notable changes to this project are documented here. The format follows
   files (#86). The default path traced 290 of 300 sampled observations.
   The ten remaining observations traced offline in two CSVs above the default
   download cap. The audit pins the sample and records workbook header, period
-  and unit gaps for normalized reporting.
+  and unit gaps for normalized reporting. A supplemental held-out 2021 ADNKS
+  workbook traces seven population counts across six worksheets with an explicit
+  offline cap. The default cell cap still rejects the full workbook.
 - Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
   PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
   `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
@@ -61,6 +69,9 @@ All notable changes to this project are documented here. The format follows
   - Dataset-only, file-content and deep-page searches stay lexical.
   - The new grades come from a second, non-independent AI assessor.
 - `collect-index --variants` collects the hybrid evaluation systems.
+- [Sector benchmark protocol](docs/verification/issue-85/README.md) freezes
+  24 tasks with official rubrics and records the current MCP tool and artifact
+  baseline (#85).
 - `scripts/mcp_benchmark.py` runs the same prompts through Claude Code with the
   TÜİK MCP, with web tools only and with no tools, and summarizes tool calls, costs
   and which answer numbers occur in tool output. The
@@ -105,6 +116,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Weekly live contracts accept bulletin dataflow links without the optional
+  databrowser `categories/` path, which TÜİK stopped sending in November 2026.
+  They check classification through the export catalog instead. The live MCP
+  workflow also expects `chart_tuik_data` in the tool list (#37).
 - Bare curated abbreviations (TÜFE, ÜFE, Yİ-ÜFE, GSYH, HİA, ADNKS, NACE) use
   synonym-aware lexical ranking, with stable score/ID ordering and an explicit
   reason, without loading the embedding model (#79). Replaying the unchanged
