@@ -35,6 +35,8 @@ from tuik_mcp.utils.rendering import rendered
 
 MAX_SERIES = 20
 MAX_WINDOW = 60
+# Tied periods listed per extremum in the inline view of a saved calculation.
+MAX_INLINE_TIES = 10
 LAGGED = {"difference", "percent_change", "pp_difference"}
 # Quantities that add: a difference keeps their unit.
 ADDITIVE = {"persons", "currency", "terajoule"}
@@ -276,8 +278,18 @@ def prepare(spec: CalculationSpec, table) -> Prepared:
     if spec.basis == "periods":
         start = end = ordinal(spec.periods[1], frequency)
     else:
-        start = ordinal(spec.period_from, frequency) if spec.period_from else min(numbers)
-        end = ordinal(spec.period_to, frequency) if spec.period_to else max(numbers)
+        # A requested bound is kept even when the series lies wholly on its other
+        # side: the range then holds that one period, reported as missing, the way
+        # get_tuik_observations reports coverage. It never reverses into an empty
+        # range that would look complete.
+        start = ordinal(spec.period_from, frequency) if spec.period_from else None
+        end = ordinal(spec.period_to, frequency) if spec.period_to else None
+        if start is None and end is None:
+            start, end = min(numbers), max(numbers)
+        elif start is None:
+            start = min((n for n in numbers if n <= end), default=end)
+        elif end is None:
+            end = max((n for n in numbers if n >= start), default=start)
     if end - start + 1 > MAX_RANGE_PERIODS:
         raise ValueError(f"The period range spans more than {MAX_RANGE_PERIODS} periods")
     if spec.basis == "periods":
@@ -328,6 +340,38 @@ def locator_text(observation: Observation) -> str:
     if locator.format == "csv":
         return f"record {locator.record}, column {locator.column}"
     return f"{locator.sheet}!{locator.cell}"
+
+
+def size(response: CalculationResponse) -> int:
+    return len(rendered(response.model_dump(mode="json")))
+
+
+def inline_summary(response: CalculationResponse, ties: int) -> CalculationResponse:
+    """The inline view of a saved calculation: counts, coverage and extrema values.
+
+    Inputs and results stay in the artifact, and so does every tied period:
+    `tie_count` says how many the inline `periods` list cut.
+    """
+    return response.model_copy(
+        update={
+            "inline_complete": False,
+            "series": [
+                item.model_copy(
+                    update={
+                        "inputs": [],
+                        "results": [],
+                        "extrema": [
+                            e.model_copy(
+                                update={"periods": e.periods[:ties], "inputs": e.inputs[:ties]}
+                            )
+                            for e in item.extrema
+                        ],
+                    }
+                )
+                for item in response.series
+            ],
+        }
+    )
 
 
 def csv_bytes(header: list[str], rows: list[list]) -> bytes:
@@ -464,32 +508,34 @@ class CalculationService:
             notes=[DERIVED, *recipe.notes],
             issues=issues,
         )
-        complete = response
         budget = self.catalog.queries.limits.max_output_bytes
-        too_large = len(rendered(response.model_dump(mode="json"))) > budget
-        if too_large and not save:
+        if not save:
+            if size(response) > budget:
+                raise SourceError(
+                    "query_limit_exceeded",
+                    "The calculation with its inputs exceeds the output budget. Narrow "
+                    "period_from/period_to, or pass save=true to keep the whole calculation "
+                    "in an artifact.",
+                    response.source_url,
+                )
+            return response
+        # The artifact keeps the complete calculation; the budget bounds what is
+        # returned inline, artifact summary included.
+        manifest = await self.save(response, recipe, resource, file, table)
+        response = response.model_copy(
+            update={"artifact": self.catalog.artifacts.summary(manifest)}
+        )
+        for ties in (MAX_INLINE_TIES, 0):
+            if size(response) <= budget:
+                return response
+            response = inline_summary(response, ties)
+        if size(response) > budget:
             raise SourceError(
                 "query_limit_exceeded",
-                "The calculation with its inputs exceeds the output budget. Narrow "
-                "period_from/period_to, or pass save=true to keep the whole calculation in "
-                "an artifact.",
+                f"Even the summary of the saved calculation exceeds the output budget; read "
+                f"calculation.json from artifact {manifest.artifact_id}.",
                 response.source_url,
             )
-        if save:
-            manifest = await self.save(complete, recipe, resource, file, table)
-            response = response.model_copy(
-                update={"artifact": self.catalog.artifacts.summary(manifest)}
-            )
-            if too_large:
-                response = response.model_copy(
-                    update={
-                        "inline_complete": False,
-                        "series": [
-                            item.model_copy(update={"inputs": [], "results": []})
-                            for item in response.series
-                        ],
-                    }
-                )
         return response
 
     async def save(self, response: CalculationResponse, recipe, resource, file, table):

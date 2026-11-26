@@ -91,9 +91,11 @@ class Extremum(BaseModel):
     kind: Literal["min", "max"]
     value: str
     rounded: str
-    # Every period that reaches the value: ties are all reported.
+    # Every period that reaches the value: ties are all reported. The inline view of
+    # a saved calculation may list fewer; tie_count is always the full number.
     periods: list[str]
     inputs: list[str]
+    tie_count: int
 
 
 class SeriesResult(BaseModel):

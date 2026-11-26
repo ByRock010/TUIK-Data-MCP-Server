@@ -3,6 +3,7 @@
 import csv
 import io
 import json
+from decimal import ROUND_DOWN, localcontext
 
 import pytest
 from test_observations import CPI, LABOUR, body, labour, labour_catalog
@@ -10,6 +11,7 @@ from test_observations import CPI, LABOUR, body, labour, labour_catalog
 from tuik_mcp.calculations import recompute
 from tuik_mcp.models.calculation import SCHEMA_VERSION, CalculationResponse
 from tuik_mcp.server import respond
+from tuik_mcp.utils.rendering import rendered
 
 RESOURCE = LABOUR.resource_ids[0]
 RATE = "İşsizlik Oranı (%)"
@@ -463,3 +465,68 @@ async def test_index_series_with_different_bases_cannot_share_a_percent_change()
         assert one["input_unit"]["base_period"] == "2025"
     finally:
         await http.close()
+
+
+@pytest.mark.parametrize(
+    ("bound", "period"),
+    [({"period_from": "2026-04"}, "2026-04"), ({"period_to": "2025-12"}, "2025-12")],
+)
+async def test_a_one_sided_bound_beyond_the_series_is_missing_not_complete(bound, period):
+    data = labour(*series(RATE, {"2026-01": "8,4", "2026-03": "8,0"}))
+    extrema = await calculate(data, "extrema", **bound)
+    assert extrema["status"] == "ok"
+    assert (extrema["period_from"], extrema["period_to"]) == (period, period)
+    coverage = extrema["coverage"]
+    assert (coverage["expected"], coverage["valid"], coverage["complete"]) == (1, 0, False)
+    assert coverage["gaps"][0]["absent"] == [period]
+    assert extrema["series"][0]["extrema"] == []
+    assert any("Only 0 of 1 series periods" in issue for issue in extrema["issues"])
+    change = await calculate(data, "pp_difference", basis="previous_period", **bound)
+    assert [(p, s) for p, s, _, _ in results(change)] == [(period, "missing")]
+    assert not change["coverage"]["complete"]
+
+
+async def test_differences_are_exact_whatever_the_callers_decimal_context(tmp_path):
+    tiny = "0," + "0" * 26 + "1"
+    data = labour(
+        *series(UNEMPLOYED, {"2025": "100", "2026": tiny}, **{"Gözlem Sıklığı": "Yıllık"})
+    )
+    response = await calculate(
+        data, "difference", tmp_path, basis="previous_period", period_from="2026", save=True
+    )
+    (row,) = response["series"][0]["results"]
+    assert row["value"] == "-99.999999999999999999999999999"
+    assert row["rounded"] == "-100.00"
+    http, catalog = labour_catalog(b"", artifact_dir=str(tmp_path))
+    try:
+        artifact_id = response["artifact"]["artifact_id"]
+        bundle = json.loads(catalog.artifacts.read(artifact_id, "calculation.json")[0])
+    finally:
+        await http.close()
+    with localcontext() as context:
+        context.prec = 5
+        context.rounding = ROUND_DOWN
+        assert recompute(bundle) == bundle["series"] == response["series"]
+
+
+async def test_saved_extrema_with_many_ties_fit_the_budget_and_keep_every_tie(tmp_path):
+    months = {f"{year}-{month:02}": "8,4" for year in range(1935, 2027) for month in range(1, 13)}
+    assert len(months) == 1104
+    data = labour(*series(RATE, months))
+    refused = await calculate(data, "extrema")
+    assert refused["code"] == "query_limit_exceeded"
+    saved = await calculate(data, "extrema", tmp_path, save=True)
+    assert saved["status"] == "ok" and not saved["inline_complete"]
+    assert len(rendered(saved)) <= 64 * 1024
+    for extremum in saved["series"][0]["extrema"]:
+        assert extremum["tie_count"] == 1104 and len(extremum["periods"]) <= 10
+        assert len(extremum["inputs"]) == len(extremum["periods"])
+    http, catalog = labour_catalog(b"", artifact_dir=str(tmp_path))
+    try:
+        artifact_id = saved["artifact"]["artifact_id"]
+        bundle = json.loads(catalog.artifacts.read(artifact_id, "calculation.json")[0])
+    finally:
+        await http.close()
+    for extremum in bundle["series"][0]["extrema"]:
+        assert len(extremum["periods"]) == len(extremum["inputs"]) == 1104
+    assert recompute(bundle) == bundle["series"]

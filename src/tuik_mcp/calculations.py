@@ -12,7 +12,20 @@ filled, skipped or extrapolated.
 """
 
 from collections import defaultdict
-from decimal import ROUND_HALF_EVEN, Decimal, localcontext
+from decimal import (
+    MAX_EMAX,
+    MAX_PREC,
+    MIN_EMIN,
+    ROUND_HALF_EVEN,
+    Context,
+    Decimal,
+    DivisionByZero,
+    Inexact,
+    InvalidOperation,
+    Overflow,
+    localcontext,
+)
+from fractions import Fraction
 
 from tuik_mcp.models.calculation import (
     VALUE_PLACES,
@@ -39,6 +52,15 @@ FORMULAS = {
     "extrema": "min and max of x[t] over the valid periods in range, with every tied period",
     "rebase": "y[t] = x[t] × 100 ÷ x[b]",
 }
+# Sums, differences and products of the inputs are exact, whatever the caller's
+# decimal context: an inexact result would raise instead of rounding silently.
+EXACT = Context(
+    prec=MAX_PREC,
+    rounding=ROUND_HALF_EVEN,
+    Emax=MAX_EMAX,
+    Emin=MIN_EMIN,
+    traps=[InvalidOperation, DivisionByZero, Overflow, Inexact],
+)
 
 
 def text(value: Decimal) -> str:
@@ -49,17 +71,23 @@ def text(value: Decimal) -> str:
     return "0" if result in ("-0", "") else result
 
 
+def place(value: Fraction, places: int) -> Decimal:
+    """`value` rounded once, half-to-even, to `places` decimals; exact otherwise.
+
+    Integer arithmetic on the exact rational, so the result never depends on a
+    decimal context's precision and is never rounded twice.
+    """
+    scaled = round(value * 10**places)  # round() of a Fraction is half-to-even.
+    return Decimal(f"{scaled}E-{places}")
+
+
 def rounded(value: Decimal, decimals: int) -> str:
-    result = value.quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_HALF_EVEN)
+    result = place(Fraction(value), decimals)
     return format(result.copy_abs() if result == 0 else result, "f")
 
 
 def divided(numerator: Decimal, denominator: Decimal) -> Decimal:
-    with localcontext() as context:
-        context.prec = 60
-        return (numerator / denominator).quantize(
-            Decimal(1).scaleb(-VALUE_PLACES), rounding=ROUND_HALF_EVEN
-        )
+    return place(Fraction(numerator) / Fraction(denominator), VALUE_PLACES)
 
 
 def formula(spec: CalculationSpec, frequency: str) -> str:
@@ -157,6 +185,11 @@ def compute(
     period_to: str,
     series: list[tuple[dict[str, str], list[CalculationInput]]],
 ) -> list[SeriesResult]:
+    with localcontext(EXACT):
+        return series_results(spec, frequency, period_from, period_to, series)
+
+
+def series_results(spec, frequency, period_from, period_to, series) -> list[SeriesResult]:
     start, end = ordinal(period_from, frequency), ordinal(period_to, frequency)
     span = range(start, end + 1)
     output = []
@@ -219,6 +252,7 @@ def compute(
                         rounded=rounded(best, spec.decimals),
                         periods=[label for label, _ in ties],
                         inputs=[i for _, ids in ties for i in ids],
+                        tie_count=len(ties),
                     )
                 )
         used = [item for item in inputs if item.id in lookup.used]

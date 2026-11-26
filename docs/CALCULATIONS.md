@@ -65,7 +65,9 @@ selected series; otherwise the whole call is refused.
 ## Missing, undefined and coverage
 
 Every period from `period_from` to `period_to` gets a result. By default that
-is the series' own first to last period. Lags and windows may read earlier
+is the series' own first to last period. A one-sided bound beyond the series is
+kept: `period_from` after the last period gives a range of that one period,
+reported missing and incomplete, never an empty range that looks complete. Lags and windows may read earlier
 inputs, which are listed too. A result is:
 
 - `valid`, with `value` and `rounded`;
@@ -82,9 +84,11 @@ never enter a formula.
 
 ## Numbers and rounding
 
-Inputs are the exact decimals of valid observations. Differences are exact.
-Divisions use 60 significant digits and are rounded half-to-even to 10 decimal
-places (`rounding.value_places`) before they are reported in `value`.
+Inputs are the exact decimals of valid observations. Sums, differences and
+products are exact at any number of digits; they never take the precision of the
+caller's decimal context, so `recompute` gives the same strings anywhere.
+Divisions are computed on the exact rational and rounded once, half-to-even, to
+10 decimal places (`rounding.value_places`) before they are reported in `value`.
 `rounded` applies `decimals` (default 2) with the same mode, for display only.
 Values are strings in plain notation, so a client never reads them through a
 binary float.
@@ -95,8 +99,10 @@ Each `series[]` entry holds its `inputs` (ID, period, status, exact value) and
 its `results` or `extrema`, each naming the input IDs it read. The output
 budget is 64 KB by default. A larger calculation fails with
 `query_limit_exceeded` unless `save=true`. With `save=true`, the artifact holds
-the complete calculation and the inline response keeps the counts, coverage and
-extrema (`inline_complete: false`).
+the complete calculation. The inline response, artifact summary included, stays
+within the budget: it keeps the counts, coverage and extrema values, and lists at
+most 10 tied periods per extremum, with `tie_count` giving the full number
+(`inline_complete: false`).
 
 `save=true` stores an artifact with these files:
 
