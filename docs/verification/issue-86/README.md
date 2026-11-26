@@ -78,9 +78,47 @@ CSV, wide spreadsheets, merged header hierarchies, bilingual headers and
 multiple vintages, including the dedicated industrial contribution revision
 history. The four exclusions above 16 MiB and the duplicate are separate from
 the retained corpus. The inspected public workbooks each exposed one sheet.
-The existing synthetic two-sheet parser and service tests cover the mechanics
-of sheet selection, and an official multi-sheet export is still needed to
-validate real-world lineage across sheets.
+The official multi-sheet check below adds a separate held-out workbook.
+
+## Supplemental held-out multi-sheet workbook
+
+On 25 November 2026 we retrieved the official [2021 ADNKS workbook](
+https://www.tuik.gov.tr/indir/duyuru/favori_raporlar.xlsx). It contains six
+worksheets for provinces, districts, metropolitan municipalities, municipalities,
+neighborhoods and villages. The 3,736,479-byte file is outside the fixed 60-file
+sample. Its snapshot hash, layout and cell evidence are in
+[multisheet-evidence.json](multisheet-evidence.json).
+
+The default path rejects the workbook at the 200,000-cell safety limit.
+An offline replay with a 700,000-cell cap and all other parser limits unchanged
+produced six tables. Sheet names and order agree with the independent read.
+All six counts chosen near their sheet midpoints and one additional neighborhood
+count traced to a unique parsed row. The additional row has the published total
+but suppresses the male and female counts with `C`. Both `C` cells and three
+provincial `-` markers remained literal. The counts are people as of the
+workbook's title date, 31 December 2021. The title supplies the date and subject
+for the whole sheet and does not establish an observation period column.
+
+| Worksheet | Independently counted source rows | Parsed rows | Sample |
+| --- | ---: | ---: | --- |
+| İL NÜFUSU | 82 | 82 | C49, 2,033,441 |
+| İLÇE NÜFUSU | 974 | 974 | E504, 39,486 |
+| BÜYÜKŞEHİR B. NÜFUSU | 30 | 30 | C22, 1,434,357 |
+| BELEDİYE NÜFUSU | 1,360 | 1,360 | J687, 3,800 |
+| MAHALLE NÜFUSU | 32,125 | 32,125 | K16069, 554 and K12040, 22 |
+| KÖY NÜFUSU | 18,211 | 18,211 | H9112, 139 |
+
+The offline classification is `inferred`. The checker retains the complete
+sampled header path, including the merged ancestors in the province and district
+sheets. Some parser labels expose only the innermost header. The production
+limit remains in force and the offline result does not confer normalized
+eligibility on other years or workbooks.
+
+```sh
+python docs/verification/issue-86/multisheet.py /tmp/favori_raporlar.xlsx \
+  > /tmp/tuik-audit-multisheet.json
+diff -u docs/verification/issue-86/multisheet-evidence.json /tmp/tuik-audit-multisheet.json
+```
 
 ## Outcomes
 
@@ -164,5 +202,5 @@ selected observation. Use a new check when those fields or the source shape chan
    distinction to the requested series in A04 and A05.
 4. **Keep codes and explicit missing markers in workbook output.** Retain
    leading-zero codes, preserve displayed precision beside raw values, and test
-   sheet boundaries with an official multi-sheet export. This protects grouped
+   sheet boundaries beyond the audited ADNKS workbook. This protects grouped
    comparisons such as A03 and M02 and count-based analysis such as L02 and L03.

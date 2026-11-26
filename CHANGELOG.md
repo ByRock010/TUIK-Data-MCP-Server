@@ -24,7 +24,9 @@ All notable changes to this project are documented here. The format follows
   files (#86). The default path traced 290 of 300 sampled observations.
   The ten remaining observations traced offline in two CSVs above the default
   download cap. The audit pins the sample and records workbook header, period
-  and unit gaps for normalized reporting.
+  and unit gaps for normalized reporting. A supplemental held-out 2021 ADNKS
+  workbook traces seven population counts across six worksheets with an explicit
+  offline cap. The default cell cap still rejects the full workbook.
 - Report artifacts: `chart_tuik_data(save=true)` stores an immutable bundle with the
   PNG, the plotted values as CSV, notes and the unchanged source file. A versioned
   `manifest.json` pins each input's page, retrieval time, SHA-256 and selection, and
