@@ -1,0 +1,98 @@
+{
+  "schema_version": "tuik.evds-pilot-input/1",
+  "base_month": "2026-01",
+  "cpi": {
+    "publisher": "TÜİK",
+    "redistributor": null,
+    "series_id": "flow:DF_TUFE_SDMX_TT01+V1.0",
+    "channel": "tuik_public_csv",
+    "source_terms": "https://www.tuik.gov.tr/Kurumsal/Yasal_Uyari",
+    "frequency": "monthly",
+    "unit": "index",
+    "currency": null,
+    "index_base": "2025=100",
+    "seasonal_adjustment": "original",
+    "calendar_adjustment": "original",
+    "aggregation": "published_month",
+    "decimal_separator": ",",
+    "observations": [
+      {
+        "id": "obs:43b17170cfe0dafd:254",
+        "period": "2026-01",
+        "source_date": null,
+        "value_text": "115,73",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_TUFE_SDMX_TT01%2BV1.0/file/csv",
+        "sha256": "43b17170cfe0dafd99c4c611278dc602bbb40bce2cec575f0d81fdedb7342394",
+        "retrieved_at": "2026-11-27T21:11:30.745759Z",
+        "locator": "CSV record 254, Gözlem Değeri"
+      },
+      {
+        "id": "obs:43b17170cfe0dafd:255",
+        "period": "2026-02",
+        "source_date": null,
+        "value_text": "119,16",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_TUFE_SDMX_TT01%2BV1.0/file/csv",
+        "sha256": "43b17170cfe0dafd99c4c611278dc602bbb40bce2cec575f0d81fdedb7342394",
+        "retrieved_at": "2026-11-27T21:11:30.745759Z",
+        "locator": "CSV record 255, Gözlem Değeri"
+      },
+      {
+        "id": "obs:43b17170cfe0dafd:256",
+        "period": "2026-03",
+        "source_date": null,
+        "value_text": "121,47",
+        "source_url": "https://veriportali.tuik.gov.tr/api/tr/dataflows/DF_TUFE_SDMX_TT01%2BV1.0/file/csv",
+        "sha256": "43b17170cfe0dafd99c4c611278dc602bbb40bce2cec575f0d81fdedb7342394",
+        "retrieved_at": "2026-11-27T21:11:30.745759Z",
+        "locator": "CSV record 256, Gözlem Değeri"
+      }
+    ]
+  },
+  "usd_try": {
+    "publisher": "TCMB",
+    "redistributor": null,
+    "series_id": "TP.DK.USD.A.YTL",
+    "channel": "tcmb_public_daily_xml",
+    "source_terms": "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB%2BTR/Bottom%2BMenu/Diger",
+    "frequency": "monthly",
+    "unit": "TRY per USD",
+    "currency": "TRY/USD",
+    "index_base": null,
+    "seasonal_adjustment": "not_applicable",
+    "calendar_adjustment": "not_applicable",
+    "aggregation": "last_published_business_day",
+    "decimal_separator": ".",
+    "observations": [
+      {
+        "period": "2026-01",
+        "source_date": "2026-01-30",
+        "source_url": "https://www.tcmb.gov.tr/kurlar/202601/30012026.xml",
+        "value_text": "43.3414",
+        "sha256": "58f19890a17655a33740c1ef31caca05b0212f191380c144ec3fe4c00b144f84",
+        "retrieved_at": "2026-11-27T21:11:34.220325Z",
+        "id": "TP.DK.USD.A.YTL:2026-01-30",
+        "locator": "Currency[USD]/ForexBuying (Unit=1)"
+      },
+      {
+        "period": "2026-02",
+        "source_date": "2026-02-27",
+        "source_url": "https://www.tcmb.gov.tr/kurlar/202602/27022026.xml",
+        "value_text": "43.8000",
+        "sha256": "ef8a6b037a007fa9628e964aa92dddb13199b12b230afe093548b47f6a5c0a34",
+        "retrieved_at": "2026-11-27T21:11:35.295836Z",
+        "id": "TP.DK.USD.A.YTL:2026-02-27",
+        "locator": "Currency[USD]/ForexBuying (Unit=1)"
+      },
+      {
+        "period": "2026-03",
+        "source_date": "2026-03-31",
+        "source_url": "https://www.tcmb.gov.tr/kurlar/202603/31032026.xml",
+        "value_text": "44.3961",
+        "sha256": "a8ce51ebd8ec44baffd176b381f72376f4229fd84ebc0dfdcdcbfaaff045905d",
+        "retrieved_at": "2026-11-27T21:11:36.378660Z",
+        "id": "TP.DK.USD.A.YTL:2026-03-31",
+        "locator": "Currency[USD]/ForexBuying (Unit=1)"
+      }
+    ]
+  }
+}
