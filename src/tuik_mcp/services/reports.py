@@ -3,6 +3,7 @@
 import hashlib
 import json
 from calendar import monthrange
+from collections.abc import Callable
 from datetime import date
 from decimal import Decimal
 
@@ -599,7 +600,16 @@ class ReportService:
             inputs=result.inputs,
         )
 
-    async def build(self, spec: ReportSpec | dict) -> Report:
+    async def build(self, spec: ReportSpec | dict, *, pdf: bool = False) -> Report:
+        pdf_renderer = None
+        if pdf:
+            try:
+                from tuik_mcp.reports.pdf import render_pdf
+            except ImportError as exc:
+                raise SourceError(
+                    "pdf_unavailable", "Install tuik-mcp with the [pdf-out] extra.", PORTAL
+                ) from exc
+            pdf_renderer = render_pdf
         spec = spec if isinstance(spec, ReportSpec) else ReportSpec.model_validate(spec)
         language = spec.language
         cache: dict[str, Loaded] = {}
@@ -837,7 +847,7 @@ class ReportService:
             spec=spec,
         )
         if status != "rejected":
-            manifest = await self.save(report, cache)
+            manifest = await self.save(report, cache, pdf_renderer)
             report = report.model_copy(
                 update={"artifact": self.catalog.artifacts.summary(manifest)}
             )
@@ -945,8 +955,13 @@ class ReportService:
         ]
         return report.model_copy(update={"sections": sections})
 
-    async def save(self, report: Report, cache: dict[str, Loaded]):
-        document = report.model_dump(mode="json", exclude={"artifact"})
+    async def save(
+        self,
+        report: Report,
+        cache: dict[str, Loaded],
+        pdf_renderer: Callable[[bytes], bytes] | None = None,
+    ):
+        document = report.model_dump_json(exclude={"artifact"}, indent=2).encode()
         rows = []
         for item in report.evidence:
             rows.append(
@@ -1068,34 +1083,37 @@ class ReportService:
             + "; ".join(i.resource_id for i in inputs)[:160]
             + f" · tuik-mcp raporu {report.report_id}"
         )
+        files = [
+            PendingFile(
+                name="report.json", role="output", mime_type="application/json", content=document
+            ),
+            PendingFile(
+                name="report.md",
+                role="output",
+                mime_type="text/markdown",
+                content=markdown(report).encode(),
+            ),
+            PendingFile(
+                name="evidence.csv",
+                role="data",
+                mime_type="text/csv",
+                content=csv_bytes(header, rows),
+            ),
+            PendingFile(name="README.txt", role="notes", mime_type="text/plain", content=readme),
+        ]
+        if pdf_renderer is not None:
+            content = await self.catalog.files.work(pdf_renderer, document)
+            files.append(
+                PendingFile(
+                    name="report.pdf", role="output", mime_type="application/pdf", content=content
+                )
+            )
         return await self.catalog.artifacts.create(
             kind="report",
             title=report.title[:200],
             citation=citation,
             inputs=inputs,
-            files=[
-                PendingFile(
-                    name="report.json",
-                    role="output",
-                    mime_type="application/json",
-                    content=json.dumps(document, ensure_ascii=False, indent=2).encode(),
-                ),
-                PendingFile(
-                    name="report.md",
-                    role="output",
-                    mime_type="text/markdown",
-                    content=markdown(report).encode(),
-                ),
-                PendingFile(
-                    name="evidence.csv",
-                    role="data",
-                    mime_type="text/csv",
-                    content=csv_bytes(header, rows),
-                ),
-                PendingFile(
-                    name="README.txt", role="notes", mime_type="text/plain", content=readme
-                ),
-            ],
+            files=files,
             sources=sources,
             transformations=[
                 "Evidence resolved from reviewed normalized observations (tuik.observation/1) "
