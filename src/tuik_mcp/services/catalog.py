@@ -11,6 +11,7 @@ from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.clients.classification import ClassificationClient
 from tuik_mcp.clients.tuik_portal import TuikPortal, normalize_result
 from tuik_mcp.config import CLASSIFICATION, PORTAL
+from tuik_mcp.databrowser.service import DataBrowser
 from tuik_mcp.identities import FILE_ID, KIND_TYPES, SEARCH_ID, key_parts
 from tuik_mcp.models.chart import ChartResponse
 from tuik_mcp.models.common import SearchInput, now
@@ -88,6 +89,7 @@ class CatalogService:
     def __init__(self, http: HttpClient, cache: Cache | None = None):
         self.portal = TuikPortal(http)
         self.classifications = ClassificationClient(http)
+        self.databrowser = DataBrowser(http)
         self.cache = cache if cache is not None else MemoryTTLCache()
         self._dataset_lock = asyncio.Lock()
         self.files = FileStore(self.portal)

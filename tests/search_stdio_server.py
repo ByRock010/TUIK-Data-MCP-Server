@@ -21,6 +21,14 @@ SERIES = "series:press:57987"
 
 def upstream(request):
     path = request.url.path
+    if MODE == "databrowser" and request.url.host == "databrowser2.tuik.gov.tr":
+        folder = FIXTURES / "databrowser"
+        if path.endswith("/download/structure"):
+            return httpx.Response(200, content=(folder / "prices-dsd.json").read_bytes())
+        if path.endswith("/PartialCodelists/FREQ"):
+            return httpx.Response(200, json={"obsCount": 2})
+        if path.endswith("/download/csv"):
+            return httpx.Response(200, content=(folder / "prices-selected.csv").read_bytes())
     if path.endswith("/file/csv"):
         return httpx.Response(
             200,

@@ -24,6 +24,7 @@ TOOLS = {
     "chart_tuik_data",
     "get_tuik_observations",
     "export_tuik_workbook",
+    "query_tuik_dimensions",
     "list_tuik_themes",
     "read_tuik_document",
     "search_tuik_classifications",

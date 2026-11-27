@@ -448,6 +448,11 @@ running the server, `tuik-mcp-artifacts export <id> --to <directory>` copies a b
 Bundles expire after a day by default and are never refreshed in place. See
 [report artifacts](docs/ARTIFACTS.md) for storage, budgets and safety rules.
 
+## Audited DataBrowser pilot
+
+`query_tuik_dimensions` inspects versioned dimension codelists and queries
+bounded selections for six audited flows. See the [dimensional data contract](docs/DIMENSIONAL_DATA.md).
+
 ## Typed observations
 
 Call `get_tuik_observations` without arguments to list reviewed CSV and Excel

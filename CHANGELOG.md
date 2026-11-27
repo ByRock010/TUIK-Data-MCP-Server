@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `query_tuik_dimensions` adds an opt-in bounded DataBrowser pilot for six
+  audited dataflows. It exposes versioned dimension codelists and confirmed
+  coded selections with exact observation values and provenance (#105).
+
 - Four guided MCP prompts and text-only recipes cover current releases,
   regional comparisons, trends and methodology audits. They make statistical
   selections explicit and give a sourced fallback when charting or the
