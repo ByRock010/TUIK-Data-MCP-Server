@@ -48,6 +48,7 @@ from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
+from tuik_mcp.services.reports import ReportService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 SOURCE_TYPES = {
@@ -111,6 +112,7 @@ class CatalogService:
         self.portal_search = PortalBackend(self.search)
         self.normalized = ObservationService(self)
         self.calculations = CalculationService(self)
+        self.reports = ReportService(self)
 
     async def close(self) -> None:
         if self.index is not None:
@@ -682,6 +684,10 @@ class CatalogService:
     async def calculate(self, resource_id: str, operation: str, **specification):
         """Auditable derived values from reviewed observations (#89)."""
         return await self.calculations.calculate(resource_id, operation, **specification)
+
+    async def report(self, spec):
+        """A validated, evidence-bound report and its bundle (#91)."""
+        return await self.reports.build(spec)
 
     async def inspect(
         self,

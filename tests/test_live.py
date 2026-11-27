@@ -71,6 +71,7 @@ async def test_live_mcp_workflow():
         "search_tuik_classifications",
         "get_tuik_observations",
         "calculate_tuik_series",
+        "build_tuik_report",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
@@ -218,5 +219,82 @@ async def test_live_reviewed_workbook_observation_cells():
             if recipe.id == "population-2025":
                 (row,) = result.observations
                 assert row.locator.headers[1].merged_from == "B3"
+    finally:
+        await http.close()
+
+
+@pytest.mark.live
+async def test_live_report_binds_cpi_values_and_verifies_its_narrative():
+    """A Turkish CPI report with host narrative passes the claim checks (#91)."""
+    http = HttpClient(Settings.from_env())
+    try:
+        service = CatalogService(http)
+        resource_id = "flow:DF_TUFE_SDMX_TT01+V1.0"
+        total = {"COICOP 2018 (Amaca Göre Bireysel Tüketim Sınıflaması, 2018)": "TÜFE"}
+        annual = {
+            **total,
+            "Endeks-Değişim": "Bir önceki yılın aynı ayına göre (yıllık) değişim oranı (%)",
+        }
+        period = max(
+            o.period.value
+            for o in (
+                await service.observations(
+                    resource_id, filters=annual, period_from="2025-01", limit=200
+                )
+            ).observations
+            if o.status == "valid"
+        )
+        evidence = [
+            {
+                "kind": "observation",
+                "key": "published",
+                "resource_id": resource_id,
+                "filters": annual,
+                "period": period,
+                "decimals": 2,
+            },
+            {
+                "kind": "calculation",
+                "key": "derived",
+                "resource_id": resource_id,
+                "filters": {**total, "Endeks-Değişim": "Endeks"},
+                "operation": "percent_change",
+                "basis": "same_period_previous_year",
+                "period": period,
+            },
+        ]
+        draft = await service.report(
+            {
+                "title": "TÜFE özeti",
+                "evidence": evidence,
+                "sections": [{"kind": "summary", "findings": [{"evidence": ["published"]}]}],
+            }
+        )
+        value = next(e for e in draft.evidence if e.key == "published").display
+        report = await service.report(
+            {
+                "title": "TÜFE özeti",
+                "evidence": evidence,
+                "sections": [
+                    {
+                        "kind": "summary",
+                        "findings": [
+                            {"evidence": ["published", "derived"]},
+                            {
+                                "evidence": ["published"],
+                                "text": f"Yıllık enflasyon {period} döneminde {value} oldu.",
+                                "claims": [{"evidence": "published", "quote": value}],
+                            },
+                        ],
+                    }
+                ],
+            }
+        )
+        assert report.status == "ok", [s.findings for s in report.sections]
+        published, derived = report.evidence
+        assert published.id.startswith("obs:") and derived.id.startswith("calc:")
+        # The derived year-ago change rounds to TÜİK's own published rate.
+        assert derived.rounded == published.rounded
+        assert report.artifact and report.timeline.latest_observation == period
     finally:
         await http.close()

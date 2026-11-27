@@ -23,6 +23,7 @@ verification and pending reviewed promotion/publication.
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
 | `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
 | `calculate_tuik_series(resource_id, operation, filters=None, basis=None, periods=None, window=None, base_period=None, period_from=None, period_to=None, decimals=2, snapshot_id=None, save=False)` | Derived values from reviewed observations: differences, percent and percentage-point changes, moving averages, extrema and rebasing, with formula, input IDs, unit and rounding; `save` stores a recomputable bundle |
+| `build_tuik_report(spec)` | Evidence-bound report for every renderer: resolves observation, calculation and series evidence, checks every number, date and comparison in the narrative against it, and saves `report.json`, an escaped `report.md`, `evidence.csv` and the sources |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -444,6 +445,18 @@ Missing periods stay missing. Incompatible units, adjustments and index bases
 are refused, and every result is labelled as derived, not published by TÜİK.
 `save=true` stores a bundle that recomputes to the same results. See
 [calculations](docs/CALCULATIONS.md).
+
+## Evidence-bound reports
+
+`build_tuik_report` turns reviewed evidence into one validated report that the
+PowerPoint, PDF and Word renderers read without recalculating or adding prose.
+Each value cites an observation ID or a deterministic calculation ID with its
+period and unit. A finding without text gets a deterministic Turkish or English
+sentence. Host-written narrative must bind every number to evidence; changed
+signs, units, dates and unsupported comparisons are rejected or kept as a
+visibly marked draft. The latest release, latest observation, retrieval time and
+data cutoff stay distinct, and coverage gaps and method notes become visible
+limitations. See [reports](docs/REPORTS.md).
 
 ## Read PDF documents
 

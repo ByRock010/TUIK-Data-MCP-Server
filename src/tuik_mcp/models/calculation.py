@@ -118,6 +118,10 @@ class CalculationResponse(Provenance):
     schema_version: str = SCHEMA_VERSION
     status: Literal["ok"] = "ok"
     message: str
+    # Deterministic: the same resource, recipe version, snapshot and specification
+    # always give the same ID. A result is `{calculation_id}:{period}`, an extremum
+    # `{calculation_id}:min` or `:max`; reports (#91) cite these.
+    calculation_id: str
     resource_id: str
     recipe: RecipeRef
     snapshot_id: str
