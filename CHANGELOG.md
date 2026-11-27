@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Four guided MCP prompts and text-only recipes cover current releases,
+  regional comparisons, trends and methodology audits. They make statistical
+  selections explicit and give a sourced fallback when charting or the
+  requested coverage is unavailable (#96).
+
 - `get_tuik_observations` returns versioned observations from six reviewed CSV
   families and selected cells in three pinned XLS/XLSX releases. Values include
   CSV records or worksheet addresses with merged-header anchors, periods, units,

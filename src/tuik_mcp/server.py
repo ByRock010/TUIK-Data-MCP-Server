@@ -17,6 +17,7 @@ from tuik_mcp.config import CLASSIFICATION, PORTAL, Settings
 from tuik_mcp.models.common import ErrorResponse
 from tuik_mcp.models.query import TableQuery
 from tuik_mcp.parsers.errors import ParseError
+from tuik_mcp.prompts import register_prompts
 from tuik_mcp.services.catalog import CatalogService
 from tuik_mcp.utils.rendering import rendered
 
@@ -492,6 +493,9 @@ async def search_tuik_classifications(
 ) -> CallToolResult:
     """Search TÜİK's Classification Server for NACE and other classifications/codelists."""
     return reply(await respond(service(ctx).search_classifications(query, limit), CLASSIFICATION))
+
+
+register_prompts(mcp)
 
 
 def main() -> None:
