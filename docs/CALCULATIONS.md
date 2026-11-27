@@ -103,9 +103,8 @@ the complete calculation. The inline response, artifact summary included, stays
 within the budget: it keeps the counts, coverage and extrema values, and lists at
 most 10 tied periods per extremum, with `tie_count` giving the full number
 (`inline_complete: false`). If even that is too large, the reply falls back to
-the totals, the issues and
-one resource link to `calculation.json`; series and coverage gaps are then read
-from that file. Under a smaller budget, down to the supported minimum of 1 KiB,
+the totals, the issues and one resource link to `calculation.json`; series and
+coverage gaps are then read from that file. Under a smaller budget, down to the supported minimum of 1 KiB,
 the reply is a receipt of about 0.9 KB: `status: ok`, the counts,
 `coverage_complete`, `issue_count` and the `calculation.json` link. Every reply
 fits the configured budget. The receipt is sized before the artifact is written,
