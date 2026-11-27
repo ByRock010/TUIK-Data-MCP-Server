@@ -566,3 +566,61 @@ async def test_an_oversized_saved_calculation_still_returns_its_bundle_link(tmp_
     assert len(bundle["series"]) == 20 and bundle["coverage"]["gaps"]
     assert all(len(item["results"]) == 27 for item in bundle["series"])
     assert recompute(bundle) == bundle["series"]
+
+
+async def test_the_smallest_supported_budget_still_bounds_a_saved_calculation(tmp_path):
+    sources = [{"Enerji Kaynak (T)": f"Kaynak {n:02}", "Gözlem Değeri": "88"} for n in range(20)]
+    limit = 1024  # The minimum query_max_output_bytes.
+    http, catalog = labour_catalog(
+        energy(*sources), artifact_dir=str(tmp_path), query_max_output_bytes=limit
+    )
+    try:
+        payload = await respond(
+            catalog.calculate(
+                ENERGY.resource_ids[0],
+                "rebase",
+                base_period="2024",
+                period_from="2024",
+                period_to="2050",
+                save=True,
+            )
+        )
+        text, *links = reply(payload).content
+        (link,) = links
+        content, _ = catalog.artifacts.read(*artifacts.parse_uri(str(link.uri)))
+    finally:
+        await http.close()
+    # The configured byte limit holds for the whole MCP text, not only the payload.
+    assert len(text.text.encode()) <= limit, len(text.text.encode())
+    assert payload["status"] == "ok" and payload["inline_complete"] is False
+    assert payload["counts"]["series"] == 20 and payload["counts"]["results"] == 540
+    assert payload["coverage_complete"] is False and payload["issue_count"] >= 1
+    assert link.name == "calculation.json"
+    assert str(link.uri) == payload["artifact"]["files"][0]["uri"]
+    bundle = json.loads(content)
+    assert len(bundle["series"]) == 20 and recompute(bundle) == bundle["series"]
+
+
+async def test_a_budget_too_small_for_a_receipt_saves_nothing(tmp_path, monkeypatch):
+    from tuik_mcp.services import calculations
+
+    # A resource ID and source URL can be long; the receipt is sized before saving.
+    monkeypatch.setattr(calculations, "RECEIPT_MESSAGE", "x" * 1024)
+    http, catalog = labour_catalog(
+        labour(*RATES), artifact_dir=str(tmp_path), query_max_output_bytes=1024
+    )
+    try:
+        payload = await respond(
+            catalog.calculate(
+                RESOURCE,
+                "pp_difference",
+                basis="previous_period",
+                period_from="2025-01",
+                period_to="2026-03",
+                save=True,
+            )
+        )
+    finally:
+        await http.close()
+    assert payload["code"] == "query_limit_exceeded" and "Nothing was saved" in payload["message"]
+    assert not list(tmp_path.rglob("calculation.json"))
