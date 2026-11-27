@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 from pydantic import AnyUrl
 from test_observations import FIXTURES, FLOW, LABOUR, labour, labour_catalog
 
+from tuik_mcp.observations import UNAVAILABLE
 from tuik_mcp.server import respond
 from tuik_mcp.workbooks import MIME_TYPE, PERCENT_FORMAT, build
 
@@ -113,8 +114,12 @@ async def test_missing_confidential_raw_strings_and_excel_percentage(tmp_path):
             first.model_copy(update={"value": None, "status": "invalid", "value_text": raw})
             for raw in bad_text
         ]
+        note = "Rakamlar yuvarlanmıştır.\nKapsam değişmiştir."
         output = build(
-            [*observations.observations, *hostile], [], "test-manifest", complete_range=False
+            [*observations.observations, *hostile],
+            [("Source note", note)],
+            "test-manifest",
+            complete_range=False,
         )
         workbook = load_workbook(io.BytesIO(output))
         normal = workbook["Normalized Data"]
@@ -127,8 +132,11 @@ async def test_missing_confidential_raw_strings_and_excel_percentage(tmp_path):
         raw = workbook["Raw Data"]
         assert raw["B2"].value == "-2,8" and raw["B3"].value == "-"
         assert [(raw[f"B{i}"].data_type, raw[f"B{i}"].value) for i in range(5, 12)] == [
-            ("s", raw_value) for raw_value in [*bad_text[:4], r"\u0009=1", r"\u0000=4", "#N/A"]
+            ("s", raw_value) for raw_value in [*bad_text[:5], r"\u0000=4", "#N/A"]
         ]
+        methods = workbook["Sources and Methods"]
+        assert methods["B2"].value == note
+        assert methods.row_dimensions[2].height == 36
     finally:
         await http.close()
 
@@ -141,6 +149,10 @@ async def test_rejected_export_has_no_partial_artifact(tmp_path, monkeypatch):
     )
     try:
         resource = LABOUR.resource_ids[0]
+        held = UNAVAILABLE[0]
+        unavailable = await respond(catalog.workbooks.export(held.flows[0] + "+V1.0"))
+        assert unavailable["code"] == "unavailable"
+        assert held.reason in unavailable["message"]
         mismatch = await respond(
             catalog.workbooks.export(resource, snapshot_id="sha256:" + "0" * 64)
         )

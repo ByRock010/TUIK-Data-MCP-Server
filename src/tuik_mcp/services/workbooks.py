@@ -7,7 +7,7 @@ from tuik_mcp.artifacts import ArtifactInput, ArtifactSummary, PendingFile
 from tuik_mcp.clients.base import SourceError
 from tuik_mcp.config import PORTAL
 from tuik_mcp.models.common import Provenance
-from tuik_mcp.observations import BY_RESOURCE, SchemaChanged
+from tuik_mcp.observations import BY_RESOURCE, SchemaChanged, unavailable
 from tuik_mcp.observations.workbooks import BY_WORKBOOK, WorkbookRecipe
 from tuik_mcp.services.observations import (
     ObservationService,
@@ -44,6 +44,11 @@ class WorkbookService:
         validate_id(resource_id)
         validate_selection(filters, period_from, period_to, offset=0, limit=1)
         validate_period_range(period_from, period_to)
+        held = unavailable(resource_id)
+        if held is not None:
+            raise SourceError(
+                "unavailable", f"No reviewed observations for {held.domain}: {held.reason}", PORTAL
+            )
         if resource_id not in BY_RESOURCE and resource_id not in BY_WORKBOOK:
             raise SourceError(
                 "unsupported_observation_recipe",

@@ -22,7 +22,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from tuik_mcp.models.observation import Observation
 
 MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-INVALID_TEXT = re.compile(r"[\x00-\x1f\x7f-\x9f\ufffe\uffff]")
+INVALID_TEXT = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\ufffe\uffff]")
 MAX_CHART_PERIODS = 60
 NUMBER_FORMAT = "#,##0.##########"
 PERCENT_FORMAT = "0.00####%"
@@ -389,7 +389,8 @@ def build(
     for row in range(2, methods_end + 1):
         cell = methods.cell(row, 2)
         cell.alignment = Alignment(wrap_text=True, vertical="center")
-        methods.row_dimensions[row].height = min(100, 18 * max(1, (len(cell.value) + 85) // 86))
+        lines = sum(max(1, (len(line) + 85) // 86) for line in cell.value.split("\n"))
+        methods.row_dimensions[row].height = min(100, 18 * lines)
 
     output = io.BytesIO()
     workbook.save(output)
