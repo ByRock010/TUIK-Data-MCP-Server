@@ -22,6 +22,7 @@ verification and pending reviewed promotion/publication.
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
 | `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
+| `export_tuik_workbook(resource_id, filters=None, period_from=None, period_to=None, snapshot_id=None)` | Export a reviewed observation selection as an editable XLSX with analysis, original values and a provenance manifest |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
 | `search_tuik_classifications(query, limit=10)` | Classification Server search, including NACE |
@@ -98,6 +99,31 @@ Replace `command` with the absolute path to your environment's `tuik-mcp`
 executable (`Scripts/tuik-mcp.exe` on Windows). Any stdio-compatible MCP
 client can launch the same command; no API key or working-directory setting is
 required. Restart the client after changing its configuration.
+
+## Guided workflows
+
+Clients that expose MCP prompts can list and open these four recipes. In a
+client without a prompt menu, paste the example question and follow the same
+tool sequence. The examples correspond to the
+[frozen benchmark tasks](docs/verification/issue-85/tasks.json).
+
+| MCP prompt | Text-only example and first steps |
+| --- | --- |
+| `latest_indicator_brief` | “Son TÜFE bültenindeki yıllık ve aylık değişimi, dönemi ve baz yılını ver.” Start with live bulletin search, then open the returned ID. |
+| `regional_comparison` | “2025 ADNKS sonuçlarına göre İstanbul ve Ankara il nüfuslarını karşılaştır.” Open the regional release, inspect the table, and select the exact province labels. |
+| `trend_analysis` | “Altın hariç dış ticaret hadlerinde gıda grubunun 2015 Ocak–Mart eğilimini göster.” Discover the dataset, inspect its exact columns or reviewed recipe, and retrieve the full selected range. |
+| `source_methodology_audit` | “Eylül 2026 işgücü araştırmasının görüşme yöntemlerini ve örnek hacmini sayfa numarasıyla doğrula.” Follow the release's methodology link and read the relevant document pages. |
+
+Before asking for a report or artifact, verify the indicator, observation
+period and frequency, geography, unit/base, adjustment, release cutoff and
+output format. An unsupported request such as monthly unemployment for
+İstanbul should identify the missing geography/frequency combination and offer
+annual provincial or monthly national estimates, labelled by scope.
+
+If indexed search is unavailable, use the Turkish literal dataset catalog or
+live portal search. The trend workflow can provide a PNG and its CSV/source
+bundle when the visualization extra and client support are present. A sourced
+text table uses the same selection in a core-only installation or text client.
 
 ## Example questions and calls
 
@@ -436,6 +462,26 @@ within the pinned snapshot. A period range reports gaps for each series and
 `next_cursor` pins the snapshot, recipe version and selection. Housing sales
 remain unavailable pending source validation. See [normalized observations](
 docs/OBSERVATIONS.md).
+
+## Export a reviewed selection to Excel
+
+Use `get_tuik_observations` to inspect the reviewed recipe, filters and coverage.
+Call `export_tuik_workbook` with the same resource ID, filters and period range.
+Pass the inspected `snapshot_id` if you need to pin the export to that exact file.
+An export includes the entire selection, even when the observation response had
+multiple pages. Narrow selections larger than 10,000 observations.
+
+The workbook includes typed values, the original text and source locators,
+materialized per-series counts and extrema, and a Sources and Methods sheet.
+Percent cells use Excel's fractional storage and percentage formatting. Codes
+are text. Blank numeric cells keep their source status and marker. The exact
+normalized decimal is available alongside Excel's 15-digit numeric value. A
+fully covered range with one comparable series and 2–60 valid periods also gets
+an editable line chart. Excel charting does not require the `viz` extra.
+
+Use `resources/read` on the XLSX link to retrieve the file and on `manifest_uri`
+to retrieve the source hashes, recipe version and range coverage. The export
+uses the same retention and limits as other [report artifacts](docs/ARTIFACTS.md).
 
 ## Read PDF documents
 

@@ -16,6 +16,7 @@ from tuik_mcp.config import CLASSIFICATION, PORTAL, Settings
 from tuik_mcp.models.common import ErrorResponse
 from tuik_mcp.models.query import TableQuery
 from tuik_mcp.parsers.errors import ParseError
+from tuik_mcp.prompts import register_prompts
 from tuik_mcp.services.catalog import CatalogService
 from tuik_mcp.services.files import finish_worker
 from tuik_mcp.utils.rendering import rendered
@@ -333,6 +334,33 @@ async def get_tuik_observations(
 
 
 @mcp.tool(structured_output=False)
+async def export_tuik_workbook(
+    resource_id: Annotated[str, Field(min_length=1, max_length=200)],
+    ctx: Context,
+    filters: dict[str, str] | None = None,
+    period_from: Annotated[str | None, Field(min_length=4, max_length=7)] = None,
+    period_to: Annotated[str | None, Field(min_length=4, max_length=7)] = None,
+    snapshot_id: Annotated[str | None, Field(max_length=80)] = None,
+) -> CallToolResult:
+    """Save an editable XLSX of the complete reviewed observation selection.
+
+    Discover source IDs and filters with get_tuik_observations. Pass its snapshot_id
+    to pin the exact input, plus the original filters and optional inclusive period
+    range. Exports at most 10,000 selected records, including every page. The workbook
+    contains the original values and locators, normalized evidence, sources/methods
+    and materialized per-series counts/minimum/maximum. A complete selected range
+    with one comparable series of 2–60 periods also gets an editable Excel line chart.
+    Missing or confidential observations keep their source marker and a blank value.
+    Retrieve the XLSX link and the manifest_uri with resources/read.
+    """
+    return reply(
+        await respond(
+            service(ctx).workbooks.export(resource_id, filters, period_from, period_to, snapshot_id)
+        )
+    )
+
+
+@mcp.tool(structured_output=False)
 async def chart_tuik_data(
     resource_id: Annotated[str, Field(max_length=200)],
     x: Annotated[
@@ -471,6 +499,9 @@ async def search_tuik_classifications(
 ) -> CallToolResult:
     """Search TÜİK's Classification Server for NACE and other classifications/codelists."""
     return reply(await respond(service(ctx).search_classifications(query, limit), CLASSIFICATION))
+
+
+register_prompts(mcp)
 
 
 def main() -> None:

@@ -47,6 +47,7 @@ from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
+from tuik_mcp.services.workbooks import WorkbookService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
 
 SOURCE_TYPES = {
@@ -119,6 +120,7 @@ class CatalogService:
         self.literal = LiteralBackend(self._datasets)
         self.portal_search = PortalBackend(self.search)
         self.normalized = ObservationService(self)
+        self.workbooks = WorkbookService(self.normalized)
 
     async def close(self) -> None:
         if self.index is not None:
