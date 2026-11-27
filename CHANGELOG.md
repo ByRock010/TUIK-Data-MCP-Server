@@ -19,6 +19,9 @@ All notable changes to this project are documented here. The format follows
   geography and adjustment. The tool exposes period coverage and publication
   metadata, holds housing sales for review, and binds continuation to the
   snapshot, recipe version and selection (#87).
+- `export_tuik_workbook` delivers a snapshot-pinned Excel workbook with original
+  values, typed observations, materialized series summaries, source notes, and
+  an editable line chart for a complete single-series selection (#92).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
