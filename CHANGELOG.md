@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `build_tuik_report(pdf=true)` saves a searchable vector PDF with source links,
+  report dates, tables and findings alongside the canonical evidence bundle.
+  PDF authoring uses the optional `pdf-out` extra (#94).
+
 - `build_tuik_report` builds one validated, evidence-bound report (#91) for the
   PowerPoint, PDF and Word renderers. Evidence resolves to published
   observation IDs or deterministic calculation IDs. Findings get deterministic

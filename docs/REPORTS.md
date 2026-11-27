@@ -5,6 +5,9 @@ PowerPoint (#93), PDF (#94) and Word (#95) render the same `report.json`. They
 never fetch, recalculate or write prose, so numbers and citations cannot drift
 between formats.
 
+The optional [printable PDF output](REPORT_PDF.md) is requested with
+`pdf: true` alongside the report spec.
+
 The client sends a `ReportSpec` (`tuik.report-spec/1`) and the server returns a
 `Report` (`tuik.report/1`). Both are defined in
 [`models/report.py`](../src/tuik_mcp/models/report.py). The server does four
