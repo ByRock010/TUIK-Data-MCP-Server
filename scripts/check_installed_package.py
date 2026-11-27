@@ -25,6 +25,7 @@ TOOLS = {
     "get_tuik_observations",
     "calculate_tuik_series",
     "build_tuik_report",
+    "export_tuik_workbook",
     "list_tuik_themes",
     "read_tuik_document",
     "search_tuik_classifications",

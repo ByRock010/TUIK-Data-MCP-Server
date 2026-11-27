@@ -12,9 +12,12 @@ from tuik_mcp.config import PORTAL
 from tuik_mcp.models.calculation import (
     CalculationCounts,
     CalculationInput,
+    CalculationReceipt,
     CalculationResponse,
     CalculationSpec,
     MeasureSpec,
+    ReceiptArtifact,
+    ReceiptFile,
     Rounding,
     UnitSpec,
 )
@@ -343,7 +346,7 @@ def locator_text(observation: Observation) -> str:
     return f"{locator.sheet}!{locator.cell}"
 
 
-def size(response: CalculationResponse) -> int:
+def size(response: CalculationResponse | CalculationReceipt) -> int:
     return len(rendered(response.model_dump(mode="json")))
 
 
@@ -401,6 +404,48 @@ def compact(response: CalculationResponse) -> CalculationResponse:
     )
 
 
+RECEIPT_MESSAGE = (
+    "Derived, not published by TÜİK. Read calculation.json for all inputs, results, "
+    "issues and gaps."
+)
+# The largest values a saved bundle's link can take, to size a receipt before saving.
+PLACEHOLDER_ID = "art_" + "f" * 32
+PLACEHOLDER_SIZE = 10**15
+
+
+def receipt(
+    response: CalculationResponse,
+    artifact_id: str = PLACEHOLDER_ID,
+    expires_at=None,
+    file: ReceiptFile | None = None,
+) -> CalculationReceipt:
+    """Counts, coverage completeness and the calculation.json link, nothing else."""
+    return CalculationReceipt(
+        source_url=response.source_url,
+        retrieved_at=response.retrieved_at,
+        message=RECEIPT_MESSAGE,
+        calculation_id=response.calculation_id,
+        resource_id=response.resource_id,
+        snapshot_id=response.snapshot_id,
+        counts=response.counts,
+        coverage_complete=response.coverage.complete,
+        issue_count=len(response.issues),
+        artifact=ReceiptArtifact(
+            artifact_id=artifact_id,
+            expires_at=expires_at or response.retrieved_at,
+            files=[
+                file
+                or ReceiptFile(
+                    name="calculation.json",
+                    mime_type="application/json",
+                    size=PLACEHOLDER_SIZE,
+                    uri=f"tuik-artifact://{artifact_id}/calculation.json",
+                )
+            ],
+        ),
+    )
+
+
 def csv_bytes(header: list[str], rows: list[list]) -> bytes:
     stream = io.StringIO()
     writer = csv.writer(stream, lineterminator="\n")
@@ -428,7 +473,7 @@ class CalculationService:
         snapshot_id: str | None = None,
         save: bool = False,
         bounded: bool = True,
-    ) -> CalculationResponse:
+    ) -> CalculationResponse | CalculationReceipt:
         """bounded=False skips the output budget for an in-process caller (reports)."""
         spec = checked_spec(
             operation,
@@ -551,6 +596,15 @@ class CalculationService:
                     response.source_url,
                 )
             return response
+        # Every reply fits the budget. Refuse before writing anything when even the
+        # receipt, sized with the largest possible link, would not.
+        if size(receipt(response)) > budget:
+            raise SourceError(
+                "query_limit_exceeded",
+                "The output budget cannot hold even the artifact receipt of this "
+                "calculation; raise query_max_output_bytes. Nothing was saved.",
+                response.source_url,
+            )
         # The artifact keeps the complete calculation; the budget bounds what is
         # returned inline, artifact summary included.
         manifest = await self.save(response, recipe, resource, file, table)
@@ -563,9 +617,20 @@ class CalculationService:
             response = inline_summary(response, ties)
         if size(response) <= budget:
             return response
-        # The artifact exists: always hand back its calculation.json link rather
-        # than an error that leaves a client to build the resource URI itself.
-        return compact(response)
+        # The artifact exists: hand back its calculation.json link rather than an
+        # error that leaves a client to build the resource URI itself.
+        response = compact(response)
+        if size(response) <= budget:
+            return response
+        (bundle,) = response.artifact.files
+        return receipt(
+            response,
+            manifest.artifact_id,
+            manifest.expires_at,
+            ReceiptFile(
+                name=bundle.name, mime_type=bundle.mime_type, size=bundle.size, uri=bundle.uri
+            ),
+        )
 
     async def save(self, response: CalculationResponse, recipe, resource, file, table):
         by_id = {o.id: o for o in table.observations}

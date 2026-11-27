@@ -5,6 +5,7 @@ input observation IDs and values, the output unit and the rounding, so the same
 result can be recomputed from the response or its saved bundle alone.
 """
 
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -148,3 +149,37 @@ class CalculationResponse(Provenance):
     notes: list[str] = Field(default_factory=list)
     issues: list[str] = Field(default_factory=list)
     artifact: ArtifactSummary | None = None
+
+
+class ReceiptFile(BaseModel):
+    name: str
+    mime_type: str
+    size: int = Field(ge=0)
+    uri: str
+
+
+class ReceiptArtifact(BaseModel):
+    artifact_id: str
+    expires_at: datetime
+    # calculation.json only; its manifest lists the bundle's other files.
+    files: list[ReceiptFile]
+
+
+class CalculationReceipt(Provenance):
+    """The reply of a saved calculation too large for any fuller inline view.
+
+    It fits the smallest supported output budget and carries the one link a client
+    needs: calculation.json, which holds the complete calculation.
+    """
+
+    schema_version: str = SCHEMA_VERSION
+    status: Literal["ok"] = "ok"
+    message: str
+    calculation_id: str
+    resource_id: str
+    snapshot_id: str
+    inline_complete: Literal[False] = False
+    counts: CalculationCounts
+    coverage_complete: bool
+    issue_count: int = Field(ge=0)
+    artifact: ReceiptArtifact
