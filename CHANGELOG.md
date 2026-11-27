@@ -18,12 +18,20 @@ All notable changes to this project are documented here. The format follows
   bases are refused, and missing periods are never filled. `save=true` stores
   `calculation.json`, which `tuik_mcp.calculations.recompute` reproduces, with
   CSVs of inputs and results and the source file.
+- Four guided MCP prompts and text-only recipes cover current releases,
+  regional comparisons, trends and methodology audits. They make statistical
+  selections explicit and give a sourced fallback when charting or the
+  requested coverage is unavailable (#96).
+
 - `get_tuik_observations` returns versioned observations from six reviewed CSV
   families and selected cells in three pinned XLS/XLSX releases. Values include
   CSV records or worksheet addresses with merged-header anchors, periods, units,
   geography and adjustment. The tool exposes period coverage and publication
   metadata, holds housing sales for review, and binds continuation to the
   snapshot, recipe version and selection (#87).
+- `export_tuik_workbook` delivers a snapshot-pinned Excel workbook with original
+  values, typed observations, materialized series summaries, source notes, and
+  an editable line chart for a complete single-series selection (#92).
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).

@@ -71,6 +71,7 @@ async def test_live_mcp_workflow():
         "search_tuik_classifications",
         "get_tuik_observations",
         "calculate_tuik_series",
+        "export_tuik_workbook",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]

@@ -24,6 +24,7 @@ import secrets
 import shutil
 import sys
 import threading
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Literal
@@ -184,12 +185,12 @@ class ArtifactStore:
         title: str | None,
         citation: str,
         inputs: list[ArtifactInput],
-        files: list[PendingFile],
+        files: list[PendingFile] | Callable[[str], list[PendingFile]],
         sources: dict[int, tuple[str, str, bytes]] | None = None,
         transformations: list[str] | None = None,
         warnings: list[str] | None = None,
     ) -> ArtifactManifest:
-        """Write one immutable bundle; `sources` maps input index → (name, mime, bytes)."""
+        """Write a bundle. A file builder receives its manifest URI within the job slot."""
         async with self.jobs:
             # A cancelled caller cannot stop the thread; keep its slot until it exits.
             return await finish_worker(
@@ -208,7 +209,8 @@ class ArtifactStore:
         if not inputs:
             raise ValueError("An artifact needs at least one pinned input")
         inputs = [item.model_copy() for item in inputs]
-        pending = list(files)
+        artifact_id = "art_" + secrets.token_hex(16)
+        pending = list(files(uri(artifact_id, MANIFEST)) if callable(files) else files)
         warnings = list(warnings)
         for index, (name, mime, content) in sorted(sources.items()):
             item = inputs[index]
@@ -243,7 +245,6 @@ class ArtifactStore:
                     f"{item.name} is {len(item.content)} bytes; the limit is {self.max_file}"
                 )
         base = self.base()
-        artifact_id = "art_" + secrets.token_hex(16)
         created = datetime.now(UTC)
         times = {item.retrieved_at for item in inputs}
         if len(times) > 1:

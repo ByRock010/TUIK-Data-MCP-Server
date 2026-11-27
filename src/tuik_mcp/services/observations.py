@@ -151,6 +151,15 @@ def validate_selection(filters, period_from, period_to, offset, limit) -> None:
         raise ValueError("limit must be an integer between 1 and 200")
 
 
+def validate_period_range(period_from: str | None, period_to: str | None) -> None:
+    if period_from is not None and period_to is not None:
+        frequency = period_frequency(period_from, "period_from")
+        if frequency != period_frequency(period_to, "period_to"):
+            raise ValueError("period_from and period_to must have the same frequency")
+        if ordinal(period_from, frequency) > ordinal(period_to, frequency):
+            raise ValueError("period_from is after period_to")
+
+
 def catalog() -> ObservationResponse:
     return ObservationResponse(
         source_url=PORTAL,
@@ -296,12 +305,7 @@ class ObservationService:
                     "rows with get_tuik_data."
                 ),
             )
-        if period_from is not None and period_to is not None:
-            frequency = period_frequency(period_from, "period_from")
-            if frequency != period_frequency(period_to, "period_to"):
-                raise ValueError("period_from and period_to must have the same frequency")
-            if ordinal(period_from, frequency) > ordinal(period_to, frequency):
-                raise ValueError("period_from is after period_to")
+        validate_period_range(period_from, period_to)
         try:
             recipe, resource, file, table = await self.table(resource_id, snapshot_id)
         except SchemaChanged as exc:
