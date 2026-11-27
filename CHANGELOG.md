@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `chart_tuik_data` adds a reusable ChartSpec, SVG and vector PDF artifacts, and
+  horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
+  notes, accessible themes and alt text while preserving legacy PNG calls (#90).
+
 - Four guided MCP prompts and text-only recipes cover current releases,
   regional comparisons, trends and methodology audits. They make statistical
   selections explicit and give a sourced fallback when charting or the
