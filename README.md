@@ -456,6 +456,11 @@ Bundles expire after a day by default and are never refreshed in place. See
 Use `chart_options` for vector files, themes and portable plot data. Horizontal and
 ranked bars, scatter and heatmaps are also available. See the [chart contract](docs/CHARTS.md).
 
+## Audited DataBrowser pilot
+
+`query_tuik_dimensions` inspects versioned dimension codelists and queries
+bounded selections for six audited flows. See the [dimensional data contract](docs/DIMENSIONAL_DATA.md).
+
 ## Typed observations
 
 Call `get_tuik_observations` without arguments to list reviewed CSV and Excel

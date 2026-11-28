@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `query_tuik_dimensions` adds an opt-in bounded DataBrowser pilot for six
+  audited dataflows. It exposes versioned dimension codelists and confirmed
+  coded selections with exact observation values and provenance (#105).
+
 - `chart_tuik_data` adds a reusable ChartSpec, SVG and vector PDF artifacts, and
   horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
   notes, accessible themes and alt text while preserving legacy PNG calls (#90).

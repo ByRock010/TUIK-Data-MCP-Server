@@ -35,9 +35,22 @@ class HttpClient:
             await asyncio.sleep(max(0, self._next_request - time.monotonic()))
             self._next_request = time.monotonic() + self.settings.min_interval_seconds
 
-    async def request(self, method: str, url: str, **kwargs) -> httpx.Response:
+    async def request(
+        self,
+        method: str,
+        url: str,
+        *,
+        max_bytes: int | None = None,
+        classify_status: bool = False,
+        **kwargs,
+    ) -> httpx.Response:
         official_url(url, fetch=True)
         original_url = url
+        byte_limit = (
+            min(max_bytes, self.settings.max_response_bytes)
+            if max_bytes is not None
+            else (self.settings.max_response_bytes)
+        )
         for attempt in range(self.settings.attempts):
             current_url = original_url
             retry_after = 0.0
@@ -75,8 +88,17 @@ class HttpClient:
                                 retry_after = 0
                             response.raise_for_status()
                         if response.is_error:
+                            code = (
+                                {
+                                    401: "upstream_auth_required",
+                                    403: "upstream_forbidden",
+                                    404: "upstream_not_found",
+                                }.get(response.status_code, "upstream_http")
+                                if classify_status
+                                else "upstream_http"
+                            )
                             raise SourceError(
-                                "upstream_http",
+                                code,
                                 f"TÜİK returned HTTP {response.status_code}",
                                 original_url,
                             )
@@ -84,7 +106,7 @@ class HttpClient:
                         chunks = []
                         async for chunk in response.aiter_bytes():
                             size += len(chunk)
-                            if size > self.settings.max_response_bytes:
+                            if size > byte_limit:
                                 raise SourceError(
                                     "response_too_large",
                                     "TÜİK response exceeds the configured size limit",
@@ -102,11 +124,16 @@ class HttpClient:
                         )
             except (httpx.TransportError, httpx.HTTPStatusError) as exc:
                 if attempt + 1 == self.settings.attempts:
-                    code = (
-                        "upstream_timeout"
-                        if isinstance(exc, httpx.TimeoutException)
-                        else "upstream_unavailable"
-                    )
+                    if isinstance(exc, httpx.TimeoutException):
+                        code = "upstream_timeout"
+                    elif (
+                        classify_status
+                        and isinstance(exc, httpx.HTTPStatusError)
+                        and exc.response.status_code == 429
+                    ):
+                        code = "upstream_rate_limited"
+                    else:
+                        code = "upstream_unavailable"
                     raise SourceError(
                         code, "TÜİK request failed after bounded retries", original_url
                     ) from exc

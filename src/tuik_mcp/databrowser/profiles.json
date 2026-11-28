@@ -1,0 +1,315 @@
+{
+  "flow:DF_TUFE_SDMX_TT05+V1.0": {
+    "domain": "prices",
+    "dsd": "TR:DSD_TUFE(1.12)",
+    "period": "2026-10",
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "required": {
+      "OZEL_KAPSAM_TUFE": [
+        "GT_1"
+      ]
+    },
+    "dimensions": [
+      "REF_AREA",
+      "FREQ",
+      "SINIFLAMA_DUZEYI",
+      "DEGISIM",
+      "OZEL_KAPSAM_TUFE",
+      "BASE_PER",
+      "YAYIM_DONEMI",
+      "COICOP_1999",
+      "COICOP_2018",
+      "INDICATOR",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "CONF_STATUS",
+      "DECIMALS",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "UNIT_MEASURE",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["TR", "M", "_Z", "1", "GT_1", "2025", "2026_01", "_Z", "_Z", "F_MEATG", "2026-10"],
+      ["TR", "M", "_Z", "2", "GT_1", "2025", "2026_01", "_Z", "_Z", "F_MEATG", "2026-10"]
+    ]
+  },
+  "flow:DF_ISGUCU_AYLIK_TEMEL_ISGUCU_C+V1.0": {
+    "domain": "labour",
+    "dsd": "TR:DSD_ISGUCU_ISTATISTIKLERI(1.3)",
+    "period": "2026-09",
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "required": {
+      "SEX": [
+        "_T"
+      ]
+    },
+    "dimensions": [
+      "REF_AREA",
+      "FREQ",
+      "INDICATOR",
+      "ISGUCU_GOSTERGE",
+      "TEMEL_YAS",
+      "SEASONAL_ADJUST",
+      "SEX",
+      "FIIL_CALISMA_SURE",
+      "YAYIM_DONEMI",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "CONF_STATUS",
+      "DECIMAL",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "UNIT_MEASURE",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["TR", "M", "ISGI_TIG", "1", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "1", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "1", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "1", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "2", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "2", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "2", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "2", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "3", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "3", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "3", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "3", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "4", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "4", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "4", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "4", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "5", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "5", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "5", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "5", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "6", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "6", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "6", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "6", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "7", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "7", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "7", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "7", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "8", "Y15T24", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "8", "Y15T24", "S", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "8", "Y_GE15", "N", "_T", "_Z", "2026_01", "2026-09"],
+      ["TR", "M", "ISGI_TIG", "8", "Y_GE15", "S", "_T", "_Z", "2026_01", "2026-09"]
+    ]
+  },
+  "flow:DF_ADNKS_T30+V1.1": {
+    "domain": "population",
+    "dsd": "TR:DSD_ADNKS(1.7)",
+    "period": "2025",
+    "start": "2025-01-01",
+    "end": "2025-12-31",
+    "required": {
+      "IKAMET_YERI": [
+        "TR100"
+      ]
+    },
+    "dimensions": [
+      "REF_AREA",
+      "FREQ",
+      "INDICATOR",
+      "NUFUS_KAYIT_IL",
+      "YERLESIM_YERI_TUR",
+      "VATANDASLIK_ULKESI",
+      "DOGUM_YERI_IL",
+      "IKAMET_YERI",
+      "DOGUM_YERI_DURUM",
+      "DOGUM_YERI_ULKE",
+      "YAS",
+      "DOGUM_YIL",
+      "HANEHALKI_TIPI",
+      "HANEHALKI_BUYUKLUGU",
+      "SEX",
+      "YAS_GRUBU",
+      "ERKEK_ISIM",
+      "KADIN_ISIM",
+      "CIVIL_STATUS",
+      "ADNKS_GOSTERGE",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "DECIMAL",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "UNIT_MEASURE",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["TR", "A", "NG_ADNKS", "_Z", "_Z", "_Z", "_Z", "TR100", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "_Z", "NUFUS", "2025"]
+    ]
+  },
+  "flow:DF_ALTINSIZ_DTH+V1.0": {
+    "domain": "trade",
+    "dsd": "TR:DSD_DIS_TCARET_ENDEKS(1.5)",
+    "period": "2026-09",
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "required": {
+      "DTE_SEKTOR_KODLARI": [
+        "0"
+      ]
+    },
+    "dimensions": [
+      "FREQ",
+      "OLCU_BIRIMI",
+      "DISTIC_END_ALTGOSTERGE",
+      "DISTICARET_TUR",
+      "INDICATOR",
+      "ENDEKS_DEGISIM",
+      "SITC_REV4_205",
+      "DTE_SEKTOR_KODLARI",
+      "BASE_PER",
+      "REF_AREA",
+      "DUZELTME",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "CONF_STATUS",
+      "DECIMALS",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "0", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "02", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "04", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "05", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "06", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "07", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "08", "0", "2015", "TR", "_Z", "2026-09"],
+      ["M", "RO", "18", "_O", "UTOD_DISTIC_END", "_Z", "09", "0", "2015", "TR", "_Z", "2026-09"]
+    ]
+  },
+  "flow:DF_SATIS_SEKLI_SATIS_DURUMU_V3+V1.0": {
+    "domain": "housing",
+    "dsd": "TR:DSD_KONUT_ISYERI_SATIS(1.6)",
+    "period": "2026-10",
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "required": {
+      "SATIS_TURU": [
+        "_T"
+      ]
+    },
+    "dimensions": [
+      "FREQ",
+      "SATIS_TURU",
+      "REF_AREA",
+      "ENDEKS_DEGISIM",
+      "KONUT_ISYERI_SAHP",
+      "KONUT_ISYERI_GSTERGE",
+      "ULKE",
+      "OLCU_BIRIMI",
+      "SATIS_ADET_PAY",
+      "INDICATOR",
+      "DUZELTME",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "CONF_STATUS",
+      "DECIMALS",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["M", "_T", "TR", "_Z", "_Z", "2", "_Z", "_Z", "_T", "MII_ISS", "_Z", "2026-10"],
+      ["M", "_T", "TR", "_Z", "_Z", "2", "_Z", "_Z", "_T", "MII_KSS", "_Z", "2026-10"],
+      ["M", "_T", "TR", "_Z", "_Z", "3", "_Z", "_Z", "_T", "MII_ISS", "_Z", "2026-10"],
+      ["M", "_T", "TR", "_Z", "_Z", "3", "_Z", "_Z", "_T", "MII_KSS", "_Z", "2026-10"]
+    ]
+  },
+  "flow:DF_SANAYI_URETIM_ENDEKS_ANA_C+V1.0": {
+    "domain": "industry",
+    "dsd": "TR:DSD_SANAYI_URETIM_ENDEKSI(1.7)",
+    "period": "2026-09",
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "required": {
+      "SEASONAL_ADJUST": [
+        "Y"
+      ],
+      "DEGISIM_TUR": [
+        "1"
+      ]
+    },
+    "dimensions": [
+      "REF_AREA",
+      "FREQ",
+      "ACTIVITY_ISIC_REV3",
+      "ACTIVITY_EFFECT_NACE_REV2",
+      "ACTIVITY_NACE_REV2",
+      "INDICATOR",
+      "SEASONAL_ADJUST",
+      "BASE_PER",
+      "SECTOR",
+      "DEGISIM_TUR",
+      "FAAL_GRUP",
+      "YAYIM_DONEMI",
+      "TIME_PERIOD"
+    ],
+    "attributes": [
+      "CONF_STATUS",
+      "DECIMALS",
+      "OBS_STATUS",
+      "TIME_FORMAT",
+      "TRANSFORMATION",
+      "UNIT_MEASURE",
+      "UNIT_MULT"
+    ],
+    "keys": [
+      ["TR", "M", "_Z", "_Z", "B", "II_SUE", "Y", "2021", "_Z", "1", "4", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "B-C-D", "II_SUE", "Y", "2021", "_Z", "1", "1", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "B05", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "B06", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "B07", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "B08", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C", "II_SUE", "Y", "2021", "_Z", "1", "4", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C10", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C11", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C12", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C13", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C14", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C15", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C16", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C17", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C18", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C19", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C20", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C21", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C22", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C23", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C24", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C25", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C26", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C27", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C28", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C29", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C30", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C31", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C32", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C33", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C_HTC", "II_SUE", "Y", "2021", "_Z", "1", "3", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C_HTC_M", "II_SUE", "Y", "2021", "_Z", "1", "3", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C_LTC", "II_SUE", "Y", "2021", "_Z", "1", "3", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "C_LTC_M", "II_SUE", "Y", "2021", "_Z", "1", "3", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "D", "II_SUE", "Y", "2021", "_Z", "1", "4", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "D35", "II_SUE", "Y", "2021", "_Z", "1", "5", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "MIG_CAG", "II_SUE", "Y", "2021", "_Z", "1", "2", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "MIG_DCOG", "II_SUE", "Y", "2021", "_Z", "1", "2", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "MIG_ING", "II_SUE", "Y", "2021", "_Z", "1", "2", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "MIG_NDCOG", "II_SUE", "Y", "2021", "_Z", "1", "2", "2026_01", "2026-09"],
+      ["TR", "M", "_Z", "_Z", "MIG_NRG_X_E", "II_SUE", "Y", "2021", "_Z", "1", "2", "2026_01", "2026-09"]
+    ]
+  }
+}
