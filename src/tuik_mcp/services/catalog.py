@@ -43,6 +43,7 @@ from tuik_mcp.search.backend import (
 )
 from tuik_mcp.search.embeddings import Embedder
 from tuik_mcp.search.indexer import OpenSearchStore
+from tuik_mcp.services.calculations import CalculationService
 from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
@@ -85,14 +86,24 @@ def chart_notes(title: str, unit: str | None, citation: str, warnings: list[str]
 
 
 class CatalogService:
-    def __init__(self, http: HttpClient, cache: Cache | None = None):
-        self.portal = TuikPortal(http)
+    def __init__(
+        self,
+        http: HttpClient,
+        cache: Cache | None = None,
+        *,
+        files: FileStore | None = None,
+        dataset_lock: asyncio.Lock | None = None,
+        dataset_cache: Cache | None = None,
+        artifacts: ArtifactStore | None = None,
+    ):
+        self.portal = files.portal if files is not None else TuikPortal(http)
         self.classifications = ClassificationClient(http)
         self.cache = cache if cache is not None else MemoryTTLCache()
-        self._dataset_lock = asyncio.Lock()
-        self.files = FileStore(self.portal)
+        self._dataset_lock = dataset_lock if dataset_lock is not None else asyncio.Lock()
+        self._dataset_cache = dataset_cache if dataset_cache is not None else self.cache
+        self.files = files if files is not None else FileStore(self.portal)
         self.queries = QueryService(self.files, http.settings)
-        self.artifacts = ArtifactStore(http.settings)
+        self.artifacts = artifacts if artifacts is not None else ArtifactStore(http.settings)
         settings = http.settings
         self.index = (
             OpenSearchBackend(
@@ -110,6 +121,7 @@ class CatalogService:
         self.literal = LiteralBackend(self._datasets)
         self.portal_search = PortalBackend(self.search)
         self.normalized = ObservationService(self)
+        self.calculations = CalculationService(self)
         self.workbooks = WorkbookService(self.normalized)
 
     async def close(self) -> None:
@@ -122,7 +134,7 @@ class CatalogService:
     async def _datasets(self) -> tuple[datetime, list[TuikResource]]:
         # Share one catalog fetch across discovery/detail and concurrent tool calls.
         async with self._dataset_lock:
-            cached = self.cache.get("datasets")
+            cached = self._dataset_cache.get("datasets")
             if cached is not None:
                 return cached
             flows = await self.portal.flows()
@@ -131,7 +143,7 @@ class CatalogService:
             for resource in resources:
                 resource.retrieved_at = retrieved_at
             result = (retrieved_at, resources)
-            self.cache.set("datasets", result, 3600)
+            self._dataset_cache.set("datasets", result, 3600)
             return result
 
     async def search_index(
@@ -678,6 +690,10 @@ class CatalogService:
     async def observations(self, resource_id: str | None = None, **selection):
         """Normalized observations of a reviewed source family (#87)."""
         return await self.normalized.observations(resource_id, **selection)
+
+    async def calculate(self, resource_id: str, operation: str, **specification):
+        """Auditable derived values from reviewed observations (#89)."""
+        return await self.calculations.calculate(resource_id, operation, **specification)
 
     async def inspect(
         self,

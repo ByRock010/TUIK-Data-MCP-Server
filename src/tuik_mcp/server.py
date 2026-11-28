@@ -1,4 +1,3 @@
-import asyncio
 import base64
 from collections.abc import AsyncIterator, Awaitable
 from contextlib import asynccontextmanager
@@ -19,12 +18,14 @@ from tuik_mcp.models.query import TableQuery
 from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.prompts import register_prompts
 from tuik_mcp.services.catalog import CatalogService
+from tuik_mcp.services.files import finish_worker
 from tuik_mcp.utils.rendering import rendered
 
 
 @dataclass
 class App:
     service: CatalogService
+    inline_saved_images: bool = True
 
 
 @asynccontextmanager
@@ -46,7 +47,7 @@ class TuikMCP(FastMCP):
         store = self.get_context().request_context.lifespan_context.service.artifacts
         try:
             artifact_id, name = artifacts.parse_uri(str(uri))
-            content, mime_type = await asyncio.to_thread(store.read, artifact_id, name)
+            content, mime_type = await finish_worker(store.read, artifact_id, name)
         except artifacts.ArtifactError as exc:
             raise ResourceError(f"{exc.code}: {exc}") from exc
         if mime_type.startswith("text/") or mime_type == "application/json":
@@ -333,6 +334,72 @@ async def get_tuik_observations(
 
 
 @mcp.tool(structured_output=False)
+async def calculate_tuik_series(
+    resource_id: Annotated[str, Field(max_length=200)],
+    operation: Literal[
+        "difference", "percent_change", "pp_difference", "moving_average", "extrema", "rebase"
+    ],
+    ctx: Context,
+    filters: dict[str, str] | None = None,
+    basis: Literal["previous_period", "same_period_previous_year", "periods"] | None = None,
+    periods: Annotated[
+        list[Annotated[str, Field(min_length=4, max_length=7)]] | None,
+        Field(min_length=2, max_length=2),
+    ] = None,
+    window: Annotated[int | None, Field(ge=2, le=60)] = None,
+    base_period: Annotated[str | None, Field(min_length=4, max_length=7)] = None,
+    period_from: Annotated[str | None, Field(min_length=4, max_length=7)] = None,
+    period_to: Annotated[str | None, Field(min_length=4, max_length=7)] = None,
+    decimals: Annotated[int, Field(ge=0, le=10)] = 2,
+    snapshot_id: Annotated[str | None, Field(max_length=80)] = None,
+    save: bool = False,
+) -> CallToolResult:
+    """Compute derived values from reviewed TÜİK observations, with their full audit trail.
+
+    Reads the complete normalized snapshot of a get_tuik_observations recipe, never a
+    displayed page. The results are DERIVED, not published by TÜİK: cite the formula
+    and input IDs. filters must leave one series (several only for rebase) and one
+    frequency.
+    - difference: x[t] − x[r] for levels (persons, currency, terajoules).
+    - pp_difference: x[t] − x[r] in percentage points, for percent values.
+    - percent_change: (x[t] − x[r]) × 100 ÷ x[r], for levels and indexes.
+      basis picks r: previous_period (t − 1), same_period_previous_year (the same
+      month, quarter or half one year earlier, never "12 rows back") or periods=
+      [reference, target].
+    - moving_average: trailing mean of `window` consecutive periods. Not for change
+      rates.
+    - extrema: min and max over the range, with every tied period.
+    - rebase: x[t] × 100 ÷ x[base_period]. A missing, zero or negative base is refused.
+    period_from/period_to bound the output periods. Lags and windows may read earlier
+    inputs. A missing input makes that result missing with the reason; nothing is
+    filled, resampled or extrapolated. Incompatible units, measures, adjustments or
+    index bases are refused. Each result lists its input observation IDs. Divisions
+    round half-to-even to 10 places, and `rounded` uses `decimals`. coverage shows
+    which periods had a valid value. save=true stores calculation.json (recompute it
+    with tuik_mcp.calculations.recompute), results.csv, inputs.csv and the source
+    file as an artifact.
+    """
+    return reply(
+        await respond(
+            service(ctx).calculate(
+                resource_id,
+                operation,
+                filters=filters,
+                basis=basis,
+                periods=periods,
+                window=window,
+                base_period=base_period,
+                period_from=period_from,
+                period_to=period_to,
+                decimals=decimals,
+                snapshot_id=snapshot_id,
+                save=save,
+            )
+        )
+    )
+
+
+@mcp.tool(structured_output=False)
 async def export_tuik_workbook(
     resource_id: Annotated[str, Field(min_length=1, max_length=200)],
     ctx: Context,
@@ -427,6 +494,11 @@ async def chart_tuik_data(
             save=save,
         )
         summary = result.model_dump(mode="json")
+        if (
+            result.artifact is not None
+            and not ctx.request_context.lifespan_context.inline_saved_images
+        ):
+            image = None
     except Exception as exc:  # Same error shapes as respond(), without the image.
         summary = await respond(_raise(exc))
         image = None
