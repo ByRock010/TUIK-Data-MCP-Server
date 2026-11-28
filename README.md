@@ -496,6 +496,11 @@ visibly marked draft. The latest release, latest observation, retrieval time and
 data cutoff stay distinct, and coverage gaps and method notes become visible
 limitations. See [reports](docs/REPORTS.md).
 
+With the `pptx-out` extra, `pptx: true` adds `report.pptx` to the same bundle:
+an editable 16:9 briefing with native text, tables and line/bar charts whose
+data are embedded, a source note on every analytical slide and full citations
+in the speaker notes. See [PowerPoint briefings](docs/REPORT_PPTX.md).
+
 ## Export a reviewed selection to Excel
 
 Use `get_tuik_observations` to inspect the reviewed recipe, filters and coverage.
