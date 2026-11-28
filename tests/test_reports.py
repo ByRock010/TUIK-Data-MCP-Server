@@ -269,6 +269,96 @@ async def test_supported_comparisons_and_dates_pass(tmp_path):
     assert payload["status"] == "ok", [f["problems"] for f in findings(payload)]
 
 
+WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
+
+
+@pytest.mark.parametrize(
+    ("text", "claims", "problem"),
+    [
+        # January (8.4%) and March (8.0%) swapped, across sentences and within one.
+        (
+            "Ocak 2026'da oran %8,0 oldu. Mart 2026'da oran %8,4 oldu.",
+            [("rate", "%8,0"), ("january", "%8,4")],
+            "'Ocak 2026' is not a period of rate",
+        ),
+        (
+            "Oran Ocak 2026'da %8,0, Mart 2026'da %8,4 oldu.",
+            [("rate", "%8,0"), ("january", "%8,4")],
+            "is not a period of january",
+        ),
+        # A count of persons stated as money, with the currency inside or after the quote.
+        (
+            "İşsiz sayısı 3.214 bin ABD doları.",
+            [("unemployed", "3.214 bin ABD doları")],
+            "not a currency ('dolar')",
+        ),
+        ("İşsiz sayısı 3.214 bin TL.", [("unemployed", "3.214 bin")], "not a currency ('tl')"),
+        # The national rate presented as a provincial one.
+        (
+            "Mart 2026'da İstanbul işsizlik oranı %8,0 oldu.",
+            [("rate", "%8,0")],
+            "'İstanbul' is not the geography of the bound evidence",
+        ),
+        (
+            "In Istanbul the rate was 8,0% in 2026-03.",
+            [("rate", "8,0%")],
+            "'Istanbul' is not the geography",
+        ),
+    ],
+)
+async def test_wrong_period_unit_or_scope_is_rejected(tmp_path, text, claims, problem):
+    spec = report_spec(summary(host(text, *claims)), evidence=WITH_JANUARY)
+    payload = await build(spec, tmp_path)
+    assert payload["status"] == "rejected" and payload["artifact"] is None
+    (finding,) = findings(payload)
+    messages = finding["problems"] + [p for c in finding["claims"] for p in c["problems"]]
+    assert any(problem in message for message in messages), messages
+    assert not list(tmp_path.rglob("report.json"))
+    # Under the draft policy the same text is kept, visibly unverified.
+    marked = await build({**spec, "on_unverified": "mark"}, tmp_path / "draft")
+    assert marked["status"] == "draft"
+    assert [f["status"] for f in findings(marked)] == ["unverified"]
+
+
+async def test_matching_period_unit_and_scope_pass(tmp_path):
+    spec = report_spec(
+        summary(
+            host(
+                "Ocak 2026'da oran %8,4 oldu. Mart 2026'da oran %8,0 oldu.",
+                ("january", "%8,4"),
+                ("rate", "%8,0"),
+            ),
+            host(
+                "Oran Ocak 2026'da %8,4, Mart 2026'da %8,0 oldu.",
+                ("january", "%8,4"),
+                ("rate", "%8,0"),
+            ),
+            host("İşsiz sayısı 3.214 bin kişi.", ("unemployed", "3.214 bin kişi")),
+            host("Mart 2026'da Türkiye işsizlik oranı %8,0 oldu.", ("rate", "%8,0")),
+        ),
+        evidence=WITH_JANUARY,
+    )
+    payload = await build(spec, tmp_path)
+    assert payload["status"] == "ok", [f["problems"] for f in findings(payload)]
+    assert all(c["status"] == "verified" for f in findings(payload) for c in f["claims"])
+
+
+def test_scope_follows_the_geography_named_by_the_evidence():
+    rate = {"r": fact("r", "8", "percent")}
+    binding = [ClaimBinding(evidence="r", quote="%8,0")]
+
+    def problems(text, labels):
+        claims, found = check_text(text, binding, rate, "tr", labels, {"2026-03"})
+        return found + [p for c in claims for p in c.problems]
+
+    # A province the evidence names may be stated, with its case suffix.
+    assert problems("İstanbul'da oran %8,0 oldu.", ["İstanbul"]) == []
+    assert problems("İzmir'de oran %8,0 oldu.", ["İstanbul"]) != []
+    # Provincial evidence is never stated as national.
+    assert any("national scope" in p for p in problems("Türkiye'de oran %8,0.", ["İstanbul"]))
+    assert problems("Türkiye'de oran %8,0.", []) == []
+
+
 async def test_marked_drafts_keep_unverified_text_visible(tmp_path):
     text = "Oran %8,5 oldu ve 12 ayın en iyisi."
     spec = report_spec(

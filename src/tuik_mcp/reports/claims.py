@@ -12,7 +12,12 @@ cannot verify is reported, never assumed:
 - direction words (rose, azaldı) need a bound change with the same sign;
   comparatives (higher than, daha düşük) need a bound change too; superlatives
   (highest, en düşük, record) need a bound extremum of that kind;
-- every date mentioned is a period of the bound evidence;
+- every date mentioned is a period of the bound evidence, and the date nearest
+  a quote in its sentence is a period of that quote's own evidence;
+- a currency stated next to a quote is the evidence's currency, and a
+  non-currency value is never stated in a currency;
+- a province named in the text is part of the bound evidence's labels or
+  dimensions, and a national scope word is not used for provincial evidence;
 - every other number in the text is unbound and fails.
 """
 
@@ -24,6 +29,7 @@ from fractions import Fraction
 from tuik_mcp.calculations import place
 from tuik_mcp.models.calculation import UnitSpec
 from tuik_mcp.models.report import Claim, ClaimBinding
+from tuik_mcp.observations.geography import PROVINCES
 
 from .numbers import (
     CURRENCY_MARKERS,
@@ -156,6 +162,25 @@ PERCENTAGE_POINTS = re.compile(
     r"yüzde\s+puan\w*|(?<!\w)puan\w*|(?<!\w)pp(?!\w)|percentage[\s-]+points?|(?<!\w)points?(?!\w)"
 )
 PERCENT = re.compile(r"%|(?<!\w)yüzde(?!\w)|(?<!\w)per\s*cent(?!\w)")
+# Clause breaks: punctuation followed by a space (never a decimal comma) or a conjunction.
+CLAUSE_BREAK = re.compile(
+    r"[,;:]\s+|\s+(?:ve|ama|fakat|ancak|iken|and|but|while|whereas)(?=\s)", re.IGNORECASE
+)
+# Unit words a quote's number may carry right after it, before the next number.
+UNIT_TAIL = 40
+ASCII = str.maketrans("çğıöşüâîû", "cgiosuaiu")
+# Province names keep their case suffix after an apostrophe (İstanbul'da, Van'ın).
+PLACE = re.compile(
+    r"(?<!\w)("
+    + "|".join(
+        sorted({lowered(name, "tr").translate(ASCII) for name in PROVINCES}, key=len, reverse=True)
+    )
+    + r")(?:['’]\w*)?(?!\w)"
+)
+NATIONAL_SCOPE = re.compile(
+    r"(?<!\w)(türkiye\w*|turkey|türkiye\s+geneli\w*|ülke\s+genel\w*|ulusal|national\w*|"
+    r"nationwide)(?![\w])"
+)
 
 
 @dataclass
@@ -260,8 +285,28 @@ def words(pattern_map: dict, low: str, start: int, end: int):
             yield kind, match.group(0)
 
 
-def check_quote(quote: str, fact: Fact, language: str, decrease_stated: bool) -> list[str]:
-    """Problems with one bound quote; empty when it states the evidence faithfully."""
+def currencies(low: str) -> list[tuple[str, str]]:
+    """(code, marker) for every currency marker; words keep Turkish suffixes (doları)."""
+    found = []
+    for code, markers in CURRENCY_MARKERS.items():
+        for marker in markers:
+            tail = r"\w*" if len(marker) > 3 else r"(?!\w)"
+            if re.search(rf"(?<!\w){re.escape(marker)}{tail}", low):
+                found.append((code, marker))
+    return found
+
+
+def places(folded: str) -> list[tuple[str, tuple[int, int]]]:
+    return [(match.group(1), match.span()) for match in PLACE.finditer(folded)]
+
+
+def check_quote(
+    quote: str, fact: Fact, language: str, decrease_stated: bool, tail: str = ""
+) -> list[str]:
+    """Problems with one bound quote; empty when it states the evidence faithfully.
+
+    `tail` is the text right after the quote, where a unit word may follow it.
+    """
     if fact.status != "valid" or fact.value is None:
         reason = fact.reason or fact.status
         return [f"{fact.key} has no valid value ({reason}); it cannot be stated"]
@@ -300,16 +345,13 @@ def check_quote(quote: str, fact: Fact, language: str, decrease_stated: bool) ->
         )
     elif kind not in ("percent", "percentage_points") and (points or percent):
         problems.append(f"{fact.key} is in {kind}, not percent or percentage points")
+    stated_currencies = currencies(low + " " + lowered(tail, language))
     if kind == "currency" and fact.unit.currency:
-        others = [
-            marker
-            for code, markers in CURRENCY_MARKERS.items()
-            if code != fact.unit.currency
-            for marker in markers
-            if re.search(rf"(?<!\w){re.escape(marker)}(?!\w)", low)
-        ]
+        others = [marker for code, marker in stated_currencies if code != fact.unit.currency]
         if others:
             problems.append(f"{fact.key} is in {fact.unit.currency}, not {others[0]!r}")
+    elif kind != "currency" and stated_currencies:
+        problems.append(f"{fact.key} is in {kind}, not a currency ({stated_currencies[0][1]!r})")
     actual = place(scaled(fact.value, fact.unit) / Fraction(10) ** scale, decimals)
     if explicit:
         stated = -number if explicit in ("-", "−") else number
@@ -331,6 +373,43 @@ def mismatch(quote: str, fact: Fact, actual: Decimal, language: str, scale: int)
         f"{quote!r} does not match {fact.key}: the evidence is "
         f"{localized(actual, language)}{unit} at that precision"
     )
+
+
+def period_problems(
+    span: tuple[int, int],
+    sentence: tuple[int, int],
+    mentions: list[Mention],
+    fact: Fact,
+    text: str,
+) -> list[str]:
+    """The date nearest a quote in its clause must be a period of that quote's evidence.
+
+    A clause is the part of the sentence between commas, semicolons or conjunctions;
+    a date in another clause may govern a different value, so it is not attributed.
+    """
+    start, end = sentence
+    for match in CLAUSE_BREAK.finditer(text, start, end):
+        if match.end() <= span[0]:
+            start = match.end()
+        elif match.start() >= span[1]:
+            end = match.start()
+            break
+    near = [m for m in mentions if start <= m.span[0] and m.span[1] <= end]
+    if not near or not fact.periods:
+        return []
+
+    def gap(mention: Mention) -> int:
+        return max(mention.span[0] - span[1], span[0] - mention.span[1], 0)
+
+    closest = min(gap(m) for m in near)
+    candidates = [m for m in near if gap(m) == closest]
+    if any(supported(m, fact.periods) for m in candidates):
+        return []
+    shown = text[candidates[0].span[0] : candidates[0].span[1]]
+    return [
+        f"{shown!r} is not a period of {fact.key} ({', '.join(sorted(fact.periods))}); the "
+        "value is stated for the wrong period"
+    ]
 
 
 def check_text(
@@ -363,6 +442,8 @@ def check_text(
         )
         quote_spans.append(span)
     bounds = sentences(text)
+    rest = masked(low, [*label_spans, *(span for span in quote_spans if span)])
+    mentions = dates(rest)
 
     def sentence_of(position: int) -> tuple[int, int]:
         return next((b for b in bounds if b[0] <= position < b[1]), (0, len(text)))
@@ -381,7 +462,11 @@ def check_text(
                     *words(COMPARATIVES, words_low, start, end),
                 ]
             )
-            problems = check_quote(text[span[0] : span[1]], fact, language, decrease)
+            after = text[span[1] : min(end, span[1] + UNIT_TAIL)]
+            next_number = NUMBER.search(lowered(after, language))
+            tail = after[: next_number.start()] if next_number else after
+            problems = check_quote(text[span[0] : span[1]], fact, language, decrease, tail)
+            problems += period_problems(span, (start, end), mentions, fact, text)
         results.append(
             Claim(
                 evidence=claim.evidence,
@@ -423,8 +508,19 @@ def check_text(
                     f"unsupported comparison {word!r}: bind {wanted} extremum over the "
                     "compared range in the same sentence"
                 )
-    rest = masked(low, [*label_spans, *(span for span in quote_spans if span)])
-    mentions = dates(rest)
+    folded = words_low.translate(ASCII)
+    for _, span in places(folded):
+        problems.append(
+            f"{text[span[0] : span[1]]!r} is not the geography of the bound evidence; the "
+            "scope of a statement must match its evidence"
+        )
+    provincial = any(places(lowered(label, language).translate(ASCII)) for label in labels)
+    if provincial:
+        for match in NATIONAL_SCOPE.finditer(words_low):
+            problems.append(
+                f"{text[match.start() : match.end()]!r} states a national scope, but the bound "
+                "evidence is provincial"
+            )
     for mention in mentions:
         if not supported(mention, allowed):
             shown = ", ".join(sorted(allowed)) or "none"
