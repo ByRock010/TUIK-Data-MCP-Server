@@ -166,6 +166,17 @@ PERCENT = re.compile(r"%|(?<!\w)yüzde(?!\w)|(?<!\w)per\s*cent(?!\w)")
 CLAUSE_BREAK = re.compile(
     r"[,;:]\s+|\s+(?:ve|ama|fakat|ancak|iken|and|but|while|whereas)(?=\s)", re.IGNORECASE
 )
+# Explicit units written after a number, with the unit kind each one states; None is a
+# physical unit no reviewed recipe publishes (tonnes, kilograms, …), never a match.
+EXPLICIT_UNITS = re.compile(
+    r"(?<![^\W\d_])("
+    r"(?P<persons>kişi\w*|insan\w*|people|persons?)"
+    r"|(?P<terajoule>tj|terajoule?s?|terajul\w*)"
+    r"|(?P<other>tonne?s?|ton(?:luk|u|a|da|dan)?|kg|kilogram\w*|gram\w*|km|kilomet\w*|metre\w*"
+    r"|meters?|m2|m²|m3|m³|litre\w*|liters?|lt|kwh|mwh|gwh|twh|hektar\w*|hectares?|dekar\w*"
+    r"|adet\w*|hane\w*|households?|firma\w*|işyer\w*|araç\w*|vehicles?)"
+    r")(?![^\W\d_])"
+)
 # Unit words a quote's number may carry right after it, before the next number.
 UNIT_TAIL = 40
 ASCII = str.maketrans("çğıöşüâîû", "cgiosuaiu")
@@ -390,6 +401,15 @@ def check_quote(
             problems.append(f"{fact.key} is in {fact.unit.currency}, not {others[0]!r}")
     elif kind != "currency" and stated_currencies:
         problems.append(f"{fact.key} is in {kind}, not a currency ({stated_currencies[0][1]!r})")
+    # Physical units follow their number, so only the quote and the text after it count.
+    for match in EXPLICIT_UNITS.finditer(low[token.end() :] + " " + lowered(tail, language)):
+        stated = next(name for name, value in match.groupdict().items() if value)
+        if stated != kind:
+            problems.append(
+                f"{fact.key} is in {kind}, not {match.group(0)!r}; an explicit unit must be "
+                "the evidence's unit"
+            )
+            break
     actual = place(scaled(fact.value, fact.unit) / Fraction(10) ** scale, decimals)
     if explicit:
         stated = -number if explicit in ("-", "−") else number
@@ -454,6 +474,12 @@ def period_problems(
                 position += step
             if near:
                 break
+    if not near:
+        # A date leading the sentence, before its first quote, scopes every parallel
+        # statement after it (`Ocak 2026'da oran %8,4, işsiz sayısı 3.214 bin kişi`).
+        start, end = sentence
+        first = min((q[0] for q in quotes if start <= q[0] < end), default=span[0])
+        near = [m for m in mentions if start <= m.span[0] and m.span[1] <= first]
     if not near:
         return []
 
@@ -525,6 +551,10 @@ def check_text(
                 (b for b in clauses(text, (start, end)) if b[0] <= span[0] < b[1]),
                 (start, end),
             )
+            # A neighbouring quote's own words (`1,2 milyar ABD doları`) never count here.
+            others = [q for q in quote_spans if q and q != span]
+            low_clause = max([low_clause, *(q[1] for q in others if q[1] <= span[0])])
+            high_clause = min([high_clause, *(q[0] for q in others if q[0] >= span[1])])
             after = text[span[1] : min(max(high_clause, span[1]), span[1] + UNIT_TAIL)]
             next_number = NUMBER.search(lowered(after, language))
             tail = after[: next_number.start()] if next_number else after
