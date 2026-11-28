@@ -6,7 +6,7 @@ import json
 from dataclasses import dataclass
 
 from tuik_mcp.artifacts import ArtifactInput, PendingFile
-from tuik_mcp.calculations import FORMULAS, compute, formula, text
+from tuik_mcp.calculations import FORMULAS, calculation_id, compute, formula, text
 from tuik_mcp.clients.base import SourceError
 from tuik_mcp.config import PORTAL
 from tuik_mcp.models.calculation import (
@@ -424,6 +424,7 @@ def receipt(
         source_url=response.source_url,
         retrieved_at=response.retrieved_at,
         message=RECEIPT_MESSAGE,
+        calculation_id=response.calculation_id,
         resource_id=response.resource_id,
         snapshot_id=response.snapshot_id,
         counts=response.counts,
@@ -471,7 +472,9 @@ class CalculationService:
         decimals: int = 2,
         snapshot_id: str | None = None,
         save: bool = False,
+        bounded: bool = True,
     ) -> CalculationResponse | CalculationReceipt:
+        """bounded=False skips the output budget for an in-process caller (reports)."""
         spec = checked_spec(
             operation,
             filters,
@@ -559,6 +562,9 @@ class CalculationService:
                 "input observation IDs, unit and rounding; recompute any of them from "
                 "series[].inputs."
             ),
+            calculation_id=calculation_id(
+                resource_id, recipe.id, recipe.version, "sha256:" + file.digest, spec
+            ),
             resource_id=resource_id,
             recipe=ObservationService.reference(recipe),
             snapshot_id="sha256:" + file.digest,
@@ -581,7 +587,7 @@ class CalculationService:
         )
         budget = self.catalog.queries.limits.max_output_bytes
         if not save:
-            if size(response) > budget:
+            if bounded and size(response) > budget:
                 raise SourceError(
                     "query_limit_exceeded",
                     "The calculation with its inputs exceeds the output budget. Narrow "

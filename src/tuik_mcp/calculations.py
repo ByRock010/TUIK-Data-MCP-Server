@@ -11,6 +11,8 @@ t − 4 quarters, t − 2 halves or t − 1 year. A missing period is reported, 
 filled, skipped or extrapolated.
 """
 
+import hashlib
+import json
 from collections import defaultdict
 from decimal import (
     MAX_EMAX,
@@ -261,6 +263,20 @@ def series_results(spec, frequency, period_from, period_to, series) -> list[Seri
             SeriesResult(dimensions=dimensions, inputs=used, results=values, extrema=extrema)
         )
     return output
+
+
+def calculation_id(
+    resource_id: str, recipe_id: str, recipe_version: int, snapshot_id: str, spec: CalculationSpec
+) -> str:
+    """Stable ID of one calculation: a digest of everything that determines it."""
+    identity = {
+        "resource_id": resource_id,
+        "recipe": [recipe_id, recipe_version],
+        "snapshot_id": snapshot_id,
+        "spec": spec.model_dump(mode="json"),
+    }
+    canonical = json.dumps(identity, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return "calc:" + hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
 
 def recompute(bundle: dict) -> list[dict]:

@@ -210,6 +210,25 @@ def steps() -> list[Step]:
                  and r["output_unit"]["kind"] == "percentage_points"
                  and r["series"][0]["results"][0]["inputs"]
                  and r["response_bytes"] <= 64 * 1024, "no year-ago difference")),
+        Step("report", "csv", "build_tuik_report",
+             lambda done: {"spec": {
+                 "title": "İşgücü özeti",
+                 "evidence": [
+                     {"kind": "observation", "key": "rate", "resource_id": FLOW,
+                      "filters": {**RATE, "Cinsiyet": "Kadın"},
+                      "period": done["calculation"]["period_to"]},
+                     {"kind": "calculation", "key": "change", "resource_id": FLOW,
+                      "operation": "pp_difference", "basis": "same_period_previous_year",
+                      "filters": {**RATE, "Cinsiyet": "Kadın"},
+                      "period": done["calculation"]["period_to"]},
+                 ],
+                 "sections": [{"kind": "summary",
+                               "findings": [{"evidence": ["rate", "change"]}]}],
+             }},
+             lambda r, _: expect(
+                 r["status"] == "ok" and r["counts"]["verified"] == 1
+                 and r["artifact"] and r["response_bytes"] <= 64 * 1024,
+                 "no verified report")),
         Step("xls_rows", "excel", "get_tuik_data",
              lambda done: {"resource_id": link(done, "xls"), "limit": 3},
              lambda r, _: expect(r["status"] == "ok" and r["sheet"] and len(r["rows"]) == 3,

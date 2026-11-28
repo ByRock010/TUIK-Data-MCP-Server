@@ -16,6 +16,18 @@ All notable changes to this project are documented here. The format follows
   horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
   notes, accessible themes and alt text while preserving legacy PNG calls (#90).
 
+- `build_tuik_report` builds one validated, evidence-bound report (#91) for the
+  PowerPoint, PDF and Word renderers. Evidence resolves to published
+  observation IDs or deterministic calculation IDs. Findings get deterministic
+  Turkish or English sentences or carry host narrative whose numbers must be
+  bound by claims; changed values, signs, units, dates, periods, geographic
+  scope, number locales and unsupported comparisons are rejected or kept as a
+  marked draft. Latest release, latest observation, retrieval time and data
+  cutoff stay distinct.
+  Coverage gaps, adjustment differences and recipe notes become limitations.
+  The bundle holds `report.json`, an escaped `report.md`, `evidence.csv` and the
+  sources. Calculations now carry a deterministic `calculation_id`.
+
 - `calculate_tuik_series` computes auditable derived values from reviewed
   observations (#89): absolute and percentage-point differences, percent
   change, previous-period and same-period-previous-year matching by calendar

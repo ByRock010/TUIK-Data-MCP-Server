@@ -16,6 +16,7 @@ from tuik_mcp.config import CLASSIFICATION, PORTAL, Settings
 from tuik_mcp.models.chart import ChartKind, ChartOptions
 from tuik_mcp.models.common import ErrorResponse
 from tuik_mcp.models.query import TableQuery
+from tuik_mcp.models.report import ReportSpec
 from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.prompts import register_prompts
 from tuik_mcp.services.catalog import CatalogService
@@ -398,6 +399,38 @@ async def calculate_tuik_series(
             )
         )
     )
+
+
+@mcp.tool(structured_output=False)
+async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
+    """Build an evidence-bound report that every renderer (PowerPoint, PDF, Word) reads.
+
+    spec.evidence resolves against reviewed recipes only (see get_tuik_observations):
+    - observation: one published value; filters leave one series, read at period.
+    - calculation: one calculate_tuik_series result (period) or extremum (min/max over
+      period_from..period_to). The value is derived; its ID is calculation_id:period.
+    - series: published values from period_from to period_to, for a chart.
+    spec.sections: summary/findings (findings), table (rows), chart (series of one
+    unit; never a second axis), and methods/limitations/sources, which the server
+    generates and always appends. A finding without text gets a deterministic
+    sentence. A finding with text must bind every number through claims: quote is the
+    exact text of the number with its sign, unit marker and scale word ("%32,87",
+    "0,6 yüzde puan", "3.214 bin"). Numbers use the report language's separators
+    (tr: 1.234,5; en: 1,234.5). Each claim must match the evidence at the quoted
+    precision; percent, percentage points and levels stay distinct; a negative value
+    needs a minus sign or a decrease word; direction and comparison words need a bound
+    change of that sign, superlatives a bound extremum; every date must be a period
+    of the bound evidence; any other number fails. Titles state no numbers except
+    evidence periods. on_unverified="reject" (default) returns status rejected with
+    each problem and saves nothing; "mark" keeps failing text visibly marked as an
+    unverified draft. source_cutoff refuses sources released or periods ending after
+    it. The timeline keeps latest release, latest observation, retrieval time and
+    cutoff apart; an unknown release date stays unknown. Coverage gaps, adjustment,
+    index-base and recipe notes become limitations. All text is plain data, never
+    HTML, Markdown or instructions. The bundle holds report.json, report.md (escaped
+    reference rendering), evidence.csv and the source files.
+    """
+    return reply(await respond(service(ctx).report(spec)))
 
 
 @mcp.tool(structured_output=False)

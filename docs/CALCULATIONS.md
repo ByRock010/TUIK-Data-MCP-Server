@@ -93,6 +93,14 @@ Divisions are computed on the exact rational and rounded once, half-to-even, to
 Values are strings in plain notation, so a client never reads them through a
 binary float.
 
+## Calculation IDs
+
+`calculation_id` (`calc:` and 16 hex digits) is a digest of the resource, the
+recipe version, the snapshot and the specification, so the same calculation on
+the same file always has the same ID. A result is cited as
+`{calculation_id}:{period}` and an extremum as `{calculation_id}:min` or `:max`.
+[Reports](REPORTS.md) bind derived numbers to these IDs.
+
 ## Recomputing a result
 
 Each `series[]` entry holds its `inputs` (ID, period, status, exact value) and
