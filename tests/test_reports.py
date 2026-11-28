@@ -166,7 +166,14 @@ async def test_a_template_report_is_reproducible_without_any_language_model(tmp_
     assert chart["unit"]["kind"] == "percent" and "en yüksek %9,00 (2025-01)" in chart["alt_text"]
 
     names = [f["name"] for f in first["artifact"]["files"]]
-    assert names == ["report.json", "report.md", "evidence.csv", "README.txt", "source-1.csv"]
+    assert names == [
+        "report.json",
+        "report.md",
+        "evidence.csv",
+        "README.txt",
+        "report-recipe.json",
+        "source-1.csv",
+    ]
     saved = Report.model_validate_json(read(first, "report.json", tmp_path / "a"))
     assert saved.report_id == first["report_id"] and saved.spec == ReportSpec(**spec)
     table = list(

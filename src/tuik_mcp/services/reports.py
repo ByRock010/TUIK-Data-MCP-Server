@@ -15,6 +15,7 @@ from tuik_mcp.models.observation import Observation
 from tuik_mcp.models.report import (
     GENERATED,
     MAX_SERIES_POINTS,
+    REPORT_RECIPE,
     Adjustment,
     CalculationEvidenceSpec,
     Chart,
@@ -600,9 +601,20 @@ class ReportService:
         )
 
     async def build(self, spec: ReportSpec | dict) -> Report:
+        report, cache = await self.resolve_report(spec)
+        if report.status != "rejected":
+            manifest = await self.save(report, cache)
+            report = report.model_copy(
+                update={"artifact": self.catalog.artifacts.summary(manifest)}
+            )
+        return self.fit(report)
+
+    async def resolve_report(
+        self, spec: ReportSpec | dict, *, loaded: dict[str, Loaded] | None = None
+    ) -> tuple[Report, dict[str, Loaded]]:
         spec = spec if isinstance(spec, ReportSpec) else ReportSpec.model_validate(spec)
         language = spec.language
-        cache: dict[str, Loaded] = {}
+        cache = {} if loaded is None else loaded
         evidence = [await self.resolve(item, language, cache) for item in spec.evidence]
         by_key = {item.key: item for item in evidence}
         facts = {item.key: fact(item) for item in evidence}
@@ -836,12 +848,7 @@ class ReportService:
             problems=problems,
             spec=spec,
         )
-        if status != "rejected":
-            manifest = await self.save(report, cache)
-            report = report.model_copy(
-                update={"artifact": self.catalog.artifacts.summary(manifest)}
-            )
-        return self.fit(report)
+        return report, cache
 
     def chart(self, section: SectionSpec, items: list[Evidence], language: str, number: int):
         units = {unit_key(i.unit) for i in items}
@@ -945,7 +952,9 @@ class ReportService:
         ]
         return report.model_copy(update={"sections": sections})
 
-    async def save(self, report: Report, cache: dict[str, Loaded]):
+    async def save(
+        self, report: Report, cache: dict[str, Loaded], *, extra: PendingFile | None = None
+    ):
         document = report.model_dump(mode="json", exclude={"artifact"})
         rows = []
         for item in report.evidence:
@@ -1035,7 +1044,8 @@ class ReportService:
                     selection={
                         "evidence": [
                             e.key for e in report.evidence if e.source.resource_id == resource_id
-                        ]
+                        ],
+                        "columns": loaded.table.columns,
                     },
                 )
             )
@@ -1095,11 +1105,23 @@ class ReportService:
                 PendingFile(
                     name="README.txt", role="notes", mime_type="text/plain", content=readme
                 ),
+                PendingFile(
+                    name=REPORT_RECIPE,
+                    role="data",
+                    mime_type="application/json",
+                    content=report.spec.model_dump_json(indent=2).encode(),
+                ),
+                *([extra] if extra is not None else []),
             ],
             sources=sources,
             transformations=[
                 "Evidence resolved from reviewed normalized observations (tuik.observation/1) "
                 "and deterministic calculations (tuik.calculation/1).",
+                *(
+                    ["Source comparison and both snapshot identities are in refresh.json."]
+                    if extra is not None
+                    else []
+                ),
                 "Every number, date and comparison in narrative text was checked against its "
                 "bound evidence.",
             ],

@@ -3,6 +3,7 @@ import base64
 from collections.abc import AsyncIterator, Awaitable
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from datetime import date
 from typing import Annotated, Any, Literal
 
 from mcp.server.fastmcp import Context, FastMCP
@@ -429,6 +430,28 @@ async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
     reference rendering), evidence.csv and the source files.
     """
     return reply(await respond(service(ctx).report(spec)))
+
+
+@mcp.tool(structured_output=False)
+async def refresh_tuik_report(
+    manifest_uri: Annotated[str, Field(max_length=100)],
+    ctx: Context,
+    series_through: Annotated[dict[str, str] | None, Field(max_length=40)] = None,
+    source_cutoff: date | None = None,
+) -> CallToolResult:
+    """Replay a saved report recipe against current reviewed TÜİK sources.
+
+    Pass the previous report's manifest_uri from this server. By default use the
+    same periods and data cutoff. To extend a series, pass an evidence key and
+    its requested end period in series_through. A later source_cutoff is explicit.
+    Read refresh.json for added, removed and revised observations, source digests
+    and mapping versions. Keep the original artifact until its retention expires.
+    """
+    return reply(
+        await respond(
+            service(ctx).report_refresh.refresh(manifest_uri, series_through, source_cutoff)
+        )
+    )
 
 
 @mcp.tool(structured_output=False)

@@ -48,6 +48,7 @@ from tuik_mcp.services.files import FileStore
 from tuik_mcp.services.observations import ObservationService
 from tuik_mcp.services.parsing import parse_source_in_thread
 from tuik_mcp.services.query import QueryService
+from tuik_mcp.services.report_refresh import ReportRefreshService
 from tuik_mcp.services.reports import ReportService
 from tuik_mcp.services.workbooks import WorkbookService
 from tuik_mcp.utils.normalization import turkish_casefold, validate_id
@@ -114,6 +115,7 @@ class CatalogService:
         self.normalized = ObservationService(self)
         self.calculations = CalculationService(self)
         self.reports = ReportService(self)
+        self.report_refresh = ReportRefreshService(self)
         self.workbooks = WorkbookService(self.normalized)
 
     async def close(self) -> None:

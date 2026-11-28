@@ -24,6 +24,7 @@ from .common import Provenance
 
 SPEC_VERSION = "tuik.report-spec/1"
 SCHEMA_VERSION = "tuik.report/1"
+REPORT_RECIPE = "report-recipe.json"
 
 MAX_EVIDENCE = 40
 MAX_SECTIONS = 12
