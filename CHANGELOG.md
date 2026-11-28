@@ -8,6 +8,15 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `build_tuik_report` with `docx: true` and the optional `docx-out` extra adds
+  an editable Word brief to the report bundle (#95). It has real heading
+  styles, editable paragraphs and tables with repeating header rows, numbered
+  captions, page headers and footers with page numbers, chart pictures beside
+  editable chart data, and a source list linked only to official hosts.
+  `docx_template` fills header and footer text from five fixed placeholders.
+  The brief is drawn from the saved `report.json` and read back before it is
+  returned.
+
 - `query_tuik_dimensions` adds an opt-in bounded DataBrowser pilot for six
   audited dataflows. It exposes versioned dimension codelists and confirmed
   coded selections with exact observation values and provenance (#105).
