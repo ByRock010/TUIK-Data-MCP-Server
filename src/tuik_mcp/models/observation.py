@@ -169,7 +169,7 @@ class RangeCoverage(BaseModel):
     # last period; `bounds` says which side the caller requested.
     period_from: str
     period_to: str
-    bounds: Literal["requested", "from_requested", "to_requested"]
+    bounds: Literal["requested", "from_requested", "to_requested", "series_extent"]
     periods: int = Field(ge=0)
     series: int = Field(ge=0)
     # series × periods: one valid value expected for each.

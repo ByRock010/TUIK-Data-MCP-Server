@@ -1,0 +1,32 @@
+services:
+  worker:
+    build:
+      context: ../..
+      args:
+        TUIK_EXTRAS: hosted,viz
+    entrypoint: [tuik-mcp-hosted]
+    env_file: "${TUIK_HOSTED_ENV_FILE:?Set the hosted worker env file}"
+    environment:
+      TUIK_HOSTED_ARTIFACT_DIR: /var/lib/tuik-hosted
+      TUIK_HOSTED_INTROSPECTION_SECRET_FILE: /run/secrets/introspection
+    ports:
+      - "127.0.0.1:8443:8443"
+    secrets:
+      - introspection
+    volumes:
+      - artifacts:/var/lib/tuik-hosted
+  proxy:
+    image: caddy:2-alpine
+    network_mode: "service:worker"
+    depends_on: [worker]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - local_ca:/data
+
+secrets:
+  introspection:
+    file: "${TUIK_HOSTED_INTROSPECTION_FILE:?Set the secret file path}"
+
+volumes:
+  artifacts:
+  local_ca:

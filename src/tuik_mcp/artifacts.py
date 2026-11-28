@@ -137,11 +137,14 @@ def valid_name(name: str) -> bool:
 
 
 class ArtifactStore:
-    def __init__(self, settings: Settings, *, root: Path | None = None):
+    def __init__(
+        self, settings: Settings, *, root: Path | None = None, max_bundle_bytes: int | None = None
+    ):
         self.root = Path(root or settings.artifact_dir or DEFAULT_DIR).expanduser()
         self.ttl = timedelta(seconds=settings.artifact_ttl_seconds)
         self.max_total = settings.artifact_max_total_bytes
         self.max_file = settings.artifact_max_file_bytes
+        self.max_bundle = max_bundle_bytes if max_bundle_bytes is not None else self.max_total
         self.max_files = settings.artifact_max_files
         self.retain_sources = settings.artifact_retain_sources
         self.jobs = asyncio.Semaphore(settings.artifact_max_jobs)
@@ -285,6 +288,8 @@ class ArtifactStore:
         size = sum(len(item.content) for item in pending) + len(record)
         if size > self.max_total:
             raise ValueError("The artifact is larger than the whole artifact storage budget")
+        if size > self.max_bundle:
+            raise ValueError(f"The report bundle exceeds the {self.max_bundle}-byte limit")
         self._reserve(base, size)
         # Build in a private temporary directory, then publish it with one rename.
         staging = base / f".staging-{artifact_id}"

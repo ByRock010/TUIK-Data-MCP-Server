@@ -12,6 +12,20 @@ All notable changes to this project are documented here. The format follows
   audited dataflows. It exposes versioned dimension codelists and confirmed
   coded selections with exact observation values and provenance (#105).
 
+- `chart_tuik_data` adds a reusable ChartSpec, SVG and vector PDF artifacts, and
+  horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
+  notes, accessible themes and alt text while preserving legacy PNG calls (#90).
+
+- `calculate_tuik_series` computes auditable derived values from reviewed
+  observations (#89): absolute and percentage-point differences, percent
+  change, previous-period and same-period-previous-year matching by calendar
+  position, explicit trailing moving averages, min/max with every tie, and
+  rebasing to a declared common period. Results list their formula, input
+  observation IDs, output unit, half-to-even rounding and missing or undefined
+  reasons. Incompatible units, measures, adjustments, frequencies and index
+  bases are refused, and missing periods are never filled. `save=true` stores
+  `calculation.json`, which `tuik_mcp.calculations.recompute` reproduces, with
+  CSVs of inputs and results and the source file.
 - Four guided MCP prompts and text-only recipes cover current releases,
   regional comparisons, trends and methodology audits. They make statistical
   selections explicit and give a sourced fallback when charting or the
@@ -29,6 +43,9 @@ All notable changes to this project are documented here. The format follows
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
+- Optional [local hosted MCP pilot](docs/HOSTED_MCP.md) with Streamable HTTP,
+  OAuth introspection, isolated caller cursors and report files, and bounded
+  single-worker admission (#103).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry
