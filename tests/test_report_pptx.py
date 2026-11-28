@@ -3,6 +3,7 @@
 import io
 import json
 import sys
+import time
 
 import pytest
 
@@ -137,7 +138,9 @@ async def test_english_labels_and_a_deterministic_deck(tmp_path):
     assert texts(prs.slides[1])[-1].startswith("Source: TurkStat (TÜİK)")
     # The same report.json renders the same deck, byte for byte.
     document = read(payload, "report.json", tmp_path)
-    assert renderer.render_pptx(document) == renderer.render_pptx(document) == content
+    first = renderer.render_pptx(document)
+    time.sleep(1.1)  # Zip entries carry fixed timestamps, not the clock.
+    assert renderer.render_pptx(document) == first == content
 
 
 async def test_drafts_are_marked_on_every_slide_and_long_content_continues(tmp_path):

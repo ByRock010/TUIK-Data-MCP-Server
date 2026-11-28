@@ -14,9 +14,11 @@ reference (a remote image, a link) may exist.
 
 import io
 import math
+import re
 import unicodedata
+import zipfile
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import UTC, datetime
 
 from pptx import Presentation
 from pptx.chart.data import CategoryChartData
@@ -565,6 +567,30 @@ class Deck:
                         cell.fill.fore_color.rgb = ACCENT
 
 
+CORE_DATES = re.compile(rb"(<dcterms:(?:created|modified)[^>]*>)[^<]*(</dcterms:)")
+
+
+def stable_zip(content: bytes, stamp: str) -> bytes:
+    """The same package with fixed timestamps, so equal reports give equal bytes.
+
+    Zip entries get a fixed date, and embedded chart workbooks, whose writer stamps
+    the current time in their own core properties, get the report's time.
+    """
+    source = zipfile.ZipFile(io.BytesIO(content))
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as target:
+        for entry in source.infolist():
+            data = source.read(entry.filename)
+            if entry.filename == "docProps/core.xml":
+                data = CORE_DATES.sub(rb"\g<1>" + stamp.encode() + rb"\g<2>", data)
+            elif entry.filename.endswith(".xlsx"):
+                data = stable_zip(data, stamp)
+            info = zipfile.ZipInfo(entry.filename, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            target.writestr(info, data)
+    return output.getvalue()
+
+
 def render_pptx(document: bytes) -> bytes:
     """A PowerPoint deck of the validated report whose JSON is `document`."""
     if len(document) > MAX_REPORT_BYTES:
@@ -573,7 +599,8 @@ def render_pptx(document: bytes) -> bytes:
     if report.status == "rejected":
         raise RenderError("A rejected report has no briefing")
     deck = Deck(report)
-    content = deck.build()
+    stamp = report.timeline.retrieved_to.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    content = stable_zip(deck.build(), stamp)
     if len(content) > MAX_DECK_BYTES:
         raise RenderError(f"The briefing exceeds {MAX_DECK_BYTES} bytes")
     verify(content, deck.expected_tables, deck.expected_charts)

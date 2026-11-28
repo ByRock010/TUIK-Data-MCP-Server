@@ -43,8 +43,9 @@ table, trend, comparison, methods and limitations, sources.
 - **Language.** Slide labels, the source note and the speaker-note labels
   follow the report language (`tr` or `en`). Values keep the report's own
   localized display text.
-- **Deterministic.** The same `report.json` gives the same bytes: document
-  timestamps are the report's retrieval time.
+- **Deterministic.** The same `report.json` gives the same bytes. The
+  document and each embedded chart workbook carry the report's retrieval time,
+  and zip entries have a fixed date.
 
 ## Read-back and limits
 
