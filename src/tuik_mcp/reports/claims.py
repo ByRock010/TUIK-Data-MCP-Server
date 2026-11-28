@@ -177,6 +177,22 @@ EXPLICIT_UNITS = re.compile(
     r"|adet\w*|hane\w*|households?|firma\w*|işyer\w*|araç\w*|vehicles?)"
     r")(?![^\W\d_])"
 )
+# Every word a quote may hold besides its number: scales, percent and point words,
+# currencies, persons and terajoules. Any other word in a quote is an unrecognised unit
+# or qualifier (`3.214 bin varil`) and leaves the claim unverified.
+QUANTITY_WORD = re.compile(
+    r"(?:"
+    + "|".join(sorted(SCALE_WORDS, key=len, reverse=True))
+    + r"|yüzde|puan\w*|pp|percentage|points?|percent|per|cent"
+    + r"|kişi\w*|persons?|people|tj|terajoule?s?|terajul\w*"
+    + r"|abd|us|türk|tl|try|lira\w*|usd|dolar\w*|dollars?|eur|euros?|avro\w*"
+    + r")"
+)
+WORD = re.compile(r"[^\W\d_]+")
+# The word or symbol attached to a number from outside its quote: right after it
+# (`3.214 bin` + `ton`), or right before it (`USD` + `3.214 bin`).
+ATTACHED_AFTER = re.compile(r"\s*((?:abd|us|türk)\s+[^\W\d_]+|[^\W\d_]+|[%$₺€])")
+ATTACHED_BEFORE = re.compile(r"((?:abd|us)\s+[^\W\d_]+|[^\W\d_]+|[$₺€])\s*$")
 # Unit words a quote's number may carry right after it, before the next number.
 UNIT_TAIL = 40
 ASCII = str.maketrans("çğıöşüâîû", "cgiosuaiu")
@@ -392,17 +408,27 @@ def check_quote(
         )
     elif kind not in ("percent", "percentage_points") and (points or percent):
         problems.append(f"{fact.key} is in {kind}, not percent or percentage points")
-    stated_currencies = currencies(
-        lowered(head, language) + " " + low + " " + lowered(tail, language)
-    )
+    # The quote is a quantity: sign, number, scale and unit words, nothing else.
+    rest = masked(low, [token.span()])
+    unknown = [w.group(0) for w in WORD.finditer(rest) if not QUANTITY_WORD.fullmatch(w.group(0))]
+    if unknown:
+        problems.append(
+            f"quote {quote!r} has an unrecognised unit or qualifier {unknown[0]!r}; quote only "
+            "the number, its scale and its unit"
+        )
+    after = ATTACHED_AFTER.match(lowered(tail, language))
+    before = ATTACHED_BEFORE.search(lowered(head, language))
+    attached_after = after.group(1) if after else ""
+    attached_before = before.group(1) if before else ""
+    stated_currencies = currencies(attached_before + " " + low + " " + attached_after)
     if kind == "currency" and fact.unit.currency:
         others = [marker for code, marker in stated_currencies if code != fact.unit.currency]
         if others:
             problems.append(f"{fact.key} is in {fact.unit.currency}, not {others[0]!r}")
     elif kind != "currency" and stated_currencies:
         problems.append(f"{fact.key} is in {kind}, not a currency ({stated_currencies[0][1]!r})")
-    # Physical units follow their number, so only the quote and the text after it count.
-    for match in EXPLICIT_UNITS.finditer(low[token.end() :] + " " + lowered(tail, language)):
+    # Physical units follow their number: the quote's own words and the one attached word.
+    for match in EXPLICIT_UNITS.finditer(low[token.end() :] + " " + attached_after):
         stated = next(name for name, value in match.groupdict().items() if value)
         if stated != kind:
             problems.append(

@@ -308,6 +308,17 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
         # A physical unit other than the evidence's, in the quote or right after it.
         ("İşsiz sayısı 3.214 bin ton.", [("unemployed", "3.214 bin ton")], "not 'ton'"),
         ("İşsiz sayısı 3.214 bin adet.", [("unemployed", "3.214 bin")], "not 'adet'"),
+        # Any word in a quote that is not its scale or a known unit is unverified.
+        (
+            "İşsiz sayısı 3.214 bin varil.",
+            [("unemployed", "3.214 bin varil")],
+            "unrecognised unit or qualifier 'varil'",
+        ),
+        (
+            "İşsiz sayısı 3.214 bin megavat.",
+            [("unemployed", "3.214 bin megavat")],
+            "unrecognised unit or qualifier 'megavat'",
+        ),
         # ... or before it, as a code or a symbol touching the digits.
         ("İşsiz sayısı USD 3.214 bin.", [("unemployed", "3.214 bin")], "not a currency ('usd')"),
         ("İşsiz sayısı $3.214 bin.", [("unemployed", "$3.214 bin")], "not a currency ('$')"),
@@ -361,6 +372,8 @@ async def test_matching_period_unit_and_scope_pass(tmp_path):
                 ("rate", "%8,0"),
                 ("unemployed", "3.214 bin kişi"),
             ),
+            # Source prose after a value is not its unit.
+            host("İşsizlik oranı %8,0 oldu (hanehalkı işgücü verileri).", ("rate", "%8,0")),
             host("İşsiz sayısı 3.214 bin kişi.", ("unemployed", "3.214 bin kişi")),
             host("Mart 2026'da Türkiye işsizlik oranı %8,0 oldu.", ("rate", "%8,0")),
         ),
@@ -385,6 +398,21 @@ async def test_a_label_cannot_give_national_evidence_a_provincial_scope(tmp_path
     assert allowed["status"] == "ok"
     (finding,) = findings(allowed)
     assert finding["text"].startswith("Türkiye işsizlik oranı, 2026-03 döneminde %8,00")
+
+
+async def test_a_denominator_after_a_percent_is_not_its_unit(tmp_path):
+    spec = report_spec(
+        summary(
+            host("The unemployment rate was 8.0% of people in the labour force.", ("rate", "8.0%")),
+            host(
+                "Unemployed persons numbered 3,214 thousand people.",
+                ("unemployed", "3,214 thousand"),
+            ),
+        ),
+        language="en",
+    )
+    payload = await build(spec, tmp_path)
+    assert payload["status"] == "ok", [f["claims"] for f in findings(payload)]
 
 
 def test_each_quote_keeps_its_own_currency_and_unit():
