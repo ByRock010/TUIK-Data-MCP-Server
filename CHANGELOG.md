@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Report bundles can include editable Word briefs with real headings, repeated
+  table headers, linked sources and the original chart data (#95).
+
 - `build_tuik_report` builds one validated, evidence-bound report (#91) for the
   PowerPoint, PDF and Word renderers. Evidence resolves to published
   observation IDs or deterministic calculation IDs. Findings get deterministic

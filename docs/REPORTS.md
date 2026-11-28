@@ -107,6 +107,11 @@ Published labels and dimension values may contain digits, such as `15+` or
 titles state no claims: a number other than an evidence period, or a direction
 word, in them is a problem.
 
+## Editable DOCX
+
+Pass `docx: true` to include the optional [editable DOCX export](REPORT_DOCX.md)
+in the same evidence bundle.
+
 ## Statuses
 
 | `status` | When | Bundle |
