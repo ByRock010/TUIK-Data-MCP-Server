@@ -286,6 +286,12 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
             [("rate", "%8,0"), ("january", "%8,4")],
             "is not a period of january",
         ),
+        # A date leading the sentence scopes every parallel statement after it.
+        (
+            "Ocak 2026'da işsizlik oranı %8,4, işsiz sayısı 3.214 bin kişi oldu.",
+            [("january", "%8,4"), ("unemployed", "3.214 bin kişi")],
+            "'Ocak 2026' is not a period of unemployed",
+        ),
         # A leading date in a clause of its own still belongs to the value after it.
         (
             "Ocak 2026'da, oran %8,0 oldu. Mart 2026'da, oran %8,4 oldu.",
@@ -299,6 +305,9 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
             "not a currency ('dolar')",
         ),
         ("İşsiz sayısı 3.214 bin TL.", [("unemployed", "3.214 bin")], "not a currency ('tl')"),
+        # A physical unit other than the evidence's, in the quote or right after it.
+        ("İşsiz sayısı 3.214 bin ton.", [("unemployed", "3.214 bin ton")], "not 'ton'"),
+        ("İşsiz sayısı 3.214 bin adet.", [("unemployed", "3.214 bin")], "not 'adet'"),
         # ... or before it, as a code or a symbol touching the digits.
         ("İşsiz sayısı USD 3.214 bin.", [("unemployed", "3.214 bin")], "not a currency ('usd')"),
         ("İşsiz sayısı $3.214 bin.", [("unemployed", "$3.214 bin")], "not a currency ('$')"),
@@ -347,6 +356,11 @@ async def test_matching_period_unit_and_scope_pass(tmp_path):
                 ("january", "%8,4"),
                 ("rate", "%8,0"),
             ),
+            host(
+                "Mart 2026'da işsizlik oranı %8,0, işsiz sayısı 3.214 bin kişi oldu.",
+                ("rate", "%8,0"),
+                ("unemployed", "3.214 bin kişi"),
+            ),
             host("İşsiz sayısı 3.214 bin kişi.", ("unemployed", "3.214 bin kişi")),
             host("Mart 2026'da Türkiye işsizlik oranı %8,0 oldu.", ("rate", "%8,0")),
         ),
@@ -371,6 +385,31 @@ async def test_a_label_cannot_give_national_evidence_a_provincial_scope(tmp_path
     assert allowed["status"] == "ok"
     (finding,) = findings(allowed)
     assert finding["text"].startswith("Türkiye işsizlik oranı, 2026-03 döneminde %8,00")
+
+
+def test_each_quote_keeps_its_own_currency_and_unit():
+    usd = Fact(
+        key="x",
+        status="valid",
+        reason=None,
+        value=Decimal("1204"),
+        unit=UnitSpec(kind="currency", multiplier=6, currency="USD"),
+        change=False,
+        extremum=None,
+        periods={"2026-03"},
+    )
+    persons = fact("p", "3214", "persons", multiplier=3)
+    text = "İhracat 1,2 milyar ABD doları düzeyindeyken işsiz sayısı 3.214 bin kişi oldu."
+    bindings = [
+        ClaimBinding(evidence="x", quote="1,2 milyar ABD doları"),
+        ClaimBinding(evidence="p", quote="3.214 bin kişi"),
+    ]
+    claims, problems = check_text(text, bindings, {"x": usd, "p": persons}, "tr", [], {"2026-03"})
+    assert not problems and [c.status for c in claims] == ["verified", "verified"], claims
+    # Without a neighbouring quote the currency before a persons count still counts.
+    swapped = "İhracat düzeyindeyken işsiz sayısı ABD doları 3.214 bin kişi oldu."
+    claims, _ = check_text(swapped, bindings[1:], {"p": persons}, "tr", [], {"2026-03"})
+    assert claims[0].status == "rejected"
 
 
 def test_scope_follows_the_geography_named_by_the_evidence():
