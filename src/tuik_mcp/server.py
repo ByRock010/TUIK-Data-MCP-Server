@@ -400,7 +400,7 @@ async def calculate_tuik_series(
 
 
 @mcp.tool(structured_output=False)
-async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
+async def build_tuik_report(spec: ReportSpec, ctx: Context, docx: bool = False) -> CallToolResult:
     """Build an evidence-bound report that every renderer (PowerPoint, PDF, Word) reads.
 
     spec.evidence resolves against reviewed recipes only (see get_tuik_observations):
@@ -426,9 +426,10 @@ async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
     cutoff apart; an unknown release date stays unknown. Coverage gaps, adjustment,
     index-base and recipe notes become limitations. All text is plain data, never
     HTML, Markdown or instructions. The bundle holds report.json, report.md (escaped
-    reference rendering), evidence.csv and the source files.
+    reference rendering), evidence.csv and the source files. Pass docx=true with
+    the docx-out extra to append an editable DOCX of the same report.
     """
-    return reply(await respond(service(ctx).report(spec)))
+    return reply(await respond(service(ctx).report(spec, docx=docx)))
 
 
 @mcp.tool(structured_output=False)

@@ -25,6 +25,7 @@ search = ["opensearch-py>=3,<4"]
 viz = ["matplotlib>=3.9,<4"]
 # Hybrid semantic search (#21): ONNX multilingual-e5-small embeddings, no PyTorch.
 semantic = ["fastembed>=0.7,<1"]
+docx-out = ["python-docx>=1.2,<2", "matplotlib>=3.9,<4"]
 fixtures = []  # Compatibility extra; all corpus readers are now runtime dependencies.
 dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 
