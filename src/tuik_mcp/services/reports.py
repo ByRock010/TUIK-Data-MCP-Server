@@ -36,7 +36,7 @@ from tuik_mcp.models.report import (
 )
 from tuik_mcp.observations import BY_RESOURCE, SchemaChanged, unavailable
 from tuik_mcp.observations.workbooks import BY_WORKBOOK, WorkbookRecipe
-from tuik_mcp.reports.claims import Fact, check_text
+from tuik_mcp.reports.claims import Fact, check_text, geography_terms
 from tuik_mcp.reports.numbers import display, unit_label
 from tuik_mcp.reports.render import markdown
 from tuik_mcp.reports.templates import TEXT, finding_text
@@ -249,12 +249,44 @@ class Loaded:
 
     def label(self, spec, observation: Observation | None) -> str:
         if spec.label:
+            self.check_label_scope(spec, observation)
             return spec.label
         measure = observation.measure.label if observation and observation.measure else None
         rest = [v for v in spec.filters.values() if v != measure]
         if measure is None:
             return ", ".join(rest) or self.recipe.title
         return f"{measure} ({', '.join(rest)})" if rest else measure
+
+    def check_label_scope(self, spec, observation: Observation | None) -> None:
+        """A caller's label may not name a geography the source series does not have.
+
+        Labels are masked before claim checks, so a province in a label would turn a
+        national value into a verified provincial statement.
+        """
+        named, national = geography_terms(spec.label)
+        source, _ = geography_terms(source_geography(spec, observation, self.recipe.title))
+        extra = sorted(named - source)
+        if extra:
+            raise ValueError(
+                f"{spec.key}: label names {extra[0]!r}, which is not the geography of the "
+                "source series; remove it or select that province's series"
+            )
+        if national and source:
+            raise ValueError(
+                f"{spec.key}: label states a national scope, but the source series is provincial"
+            )
+
+
+def source_geography(spec, observation: Observation | None, title: str) -> str:
+    """The published text that establishes a series' geography."""
+    parts = [title, *spec.filters.values()]
+    if observation is not None:
+        parts += list(observation.dimensions.values())
+        if observation.measure is not None:
+            parts.append(observation.measure.label)
+        if observation.geography is not None:
+            parts.append(observation.geography.label)
+    return " ".join(part for part in parts if part)
 
 
 def fact(evidence: Evidence) -> Fact:

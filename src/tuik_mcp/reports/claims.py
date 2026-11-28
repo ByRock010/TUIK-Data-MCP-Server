@@ -285,13 +285,26 @@ def words(pattern_map: dict, low: str, start: int, end: int):
             yield kind, match.group(0)
 
 
+LETTER = r"[^\W\d_]"
+
+
 def currencies(low: str) -> list[tuple[str, str]]:
-    """(code, marker) for every currency marker; words keep Turkish suffixes (doları)."""
+    """(code, marker) for every currency marker.
+
+    Symbols ($, ₺, €) count even when touching a digit (`$3.214`); codes and words
+    need no letter around them, so `USD3.214` counts too, and words keep Turkish
+    suffixes (doları).
+    """
     found = []
     for code, markers in CURRENCY_MARKERS.items():
         for marker in markers:
-            tail = r"\w*" if len(marker) > 3 else r"(?!\w)"
-            if re.search(rf"(?<!\w){re.escape(marker)}{tail}", low):
+            if not marker.isalnum():
+                pattern = re.escape(marker)
+            elif len(marker) > 3:
+                pattern = rf"(?<!{LETTER}){re.escape(marker)}\w*"
+            else:
+                pattern = rf"(?<!{LETTER}){re.escape(marker)}(?!{LETTER})"
+            if re.search(pattern, low):
                 found.append((code, marker))
     return found
 
@@ -300,12 +313,35 @@ def places(folded: str) -> list[tuple[str, tuple[int, int]]]:
     return [(match.group(1), match.span()) for match in PLACE.finditer(folded)]
 
 
+def geography_terms(text: str) -> tuple[set[str], bool]:
+    """Provinces a text names (ASCII-folded) and whether it uses national wording."""
+    low = lowered(text, "tr")
+    return {name for name, _ in places(low.translate(ASCII))}, bool(NATIONAL_SCOPE.search(low))
+
+
+def clauses(text: str, sentence: tuple[int, int]) -> list[tuple[int, int]]:
+    """Clause bounds of a sentence: between commas, semicolons, colons or conjunctions."""
+    start, end = sentence
+    bounds = []
+    for match in CLAUSE_BREAK.finditer(text, start, end):
+        bounds.append((start, match.start()))
+        start = match.end()
+    bounds.append((start, end))
+    return bounds
+
+
 def check_quote(
-    quote: str, fact: Fact, language: str, decrease_stated: bool, tail: str = ""
+    quote: str,
+    fact: Fact,
+    language: str,
+    decrease_stated: bool,
+    tail: str = "",
+    head: str = "",
 ) -> list[str]:
     """Problems with one bound quote; empty when it states the evidence faithfully.
 
-    `tail` is the text right after the quote, where a unit word may follow it.
+    `head` and `tail` are the clause text right before and after the quote, where a
+    currency or unit word may stand next to its number.
     """
     if fact.status != "valid" or fact.value is None:
         reason = fact.reason or fact.status
@@ -345,7 +381,9 @@ def check_quote(
         )
     elif kind not in ("percent", "percentage_points") and (points or percent):
         problems.append(f"{fact.key} is in {kind}, not percent or percentage points")
-    stated_currencies = currencies(low + " " + lowered(tail, language))
+    stated_currencies = currencies(
+        lowered(head, language) + " " + low + " " + lowered(tail, language)
+    )
     if kind == "currency" and fact.unit.currency:
         others = [marker for code, marker in stated_currencies if code != fact.unit.currency]
         if others:
@@ -381,21 +419,42 @@ def period_problems(
     mentions: list[Mention],
     fact: Fact,
     text: str,
+    quotes: list[tuple[int, int]],
 ) -> list[str]:
-    """The date nearest a quote in its clause must be a period of that quote's evidence.
+    """The date attached to a quote must be a period of that quote's evidence.
 
-    A clause is the part of the sentence between commas, semicolons or conjunctions;
-    a date in another clause may govern a different value, so it is not attributed.
+    The attached date is the nearest one in the quote's clause (between commas,
+    semicolons or conjunctions). Without one, a date standing in a clause of its own
+    right before (`Ocak 2026'da, oran …`) or right after the quote's clause is
+    attached; a clause holding another quote stops the search, since its date may
+    govern that value instead.
     """
-    start, end = sentence
-    for match in CLAUSE_BREAK.finditer(text, start, end):
-        if match.end() <= span[0]:
-            start = match.end()
-        elif match.start() >= span[1]:
-            end = match.start()
-            break
-    near = [m for m in mentions if start <= m.span[0] and m.span[1] <= end]
-    if not near or not fact.periods:
+    if not fact.periods:
+        return []
+    parts = clauses(text, sentence)
+    index = next(
+        i for i, (start, end) in enumerate(parts) if start <= span[0] < end or i == len(parts) - 1
+    )
+
+    def inside(bounds: tuple[int, int]) -> list[Mention]:
+        return [m for m in mentions if bounds[0] <= m.span[0] and m.span[1] <= bounds[1]]
+
+    def quoted(bounds: tuple[int, int]) -> bool:
+        return any(bounds[0] <= q[0] < bounds[1] for q in quotes)
+
+    near = inside(parts[index])
+    if not near:
+        for step in (-1, 1):
+            position = index + step
+            while 0 <= position < len(parts) and not quoted(parts[position]):
+                found = inside(parts[position])
+                if found:
+                    near = [found[-1] if step < 0 else found[0]]
+                    break
+                position += step
+            if near:
+                break
+    if not near:
         return []
 
     def gap(mention: Mention) -> int:
@@ -462,11 +521,20 @@ def check_text(
                     *words(COMPARATIVES, words_low, start, end),
                 ]
             )
-            after = text[span[1] : min(end, span[1] + UNIT_TAIL)]
+            low_clause, high_clause = next(
+                (b for b in clauses(text, (start, end)) if b[0] <= span[0] < b[1]),
+                (start, end),
+            )
+            after = text[span[1] : min(max(high_clause, span[1]), span[1] + UNIT_TAIL)]
             next_number = NUMBER.search(lowered(after, language))
             tail = after[: next_number.start()] if next_number else after
-            problems = check_quote(text[span[0] : span[1]], fact, language, decrease, tail)
-            problems += period_problems(span, (start, end), mentions, fact, text)
+            before = text[max(low_clause, span[0] - UNIT_TAIL) : span[0]]
+            numbers_before = list(NUMBER.finditer(lowered(before, language)))
+            head = before[numbers_before[-1].end() :] if numbers_before else before
+            problems = check_quote(text[span[0] : span[1]], fact, language, decrease, tail, head)
+            problems += period_problems(
+                span, (start, end), mentions, fact, text, [q for q in quote_spans if q]
+            )
         results.append(
             Claim(
                 evidence=claim.evidence,

@@ -286,6 +286,12 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
             [("rate", "%8,0"), ("january", "%8,4")],
             "is not a period of january",
         ),
+        # A leading date in a clause of its own still belongs to the value after it.
+        (
+            "Ocak 2026'da, oran %8,0 oldu. Mart 2026'da, oran %8,4 oldu.",
+            [("rate", "%8,0"), ("january", "%8,4")],
+            "'Ocak 2026' is not a period of rate",
+        ),
         # A count of persons stated as money, with the currency inside or after the quote.
         (
             "İşsiz sayısı 3.214 bin ABD doları.",
@@ -293,6 +299,9 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
             "not a currency ('dolar')",
         ),
         ("İşsiz sayısı 3.214 bin TL.", [("unemployed", "3.214 bin")], "not a currency ('tl')"),
+        # ... or before it, as a code or a symbol touching the digits.
+        ("İşsiz sayısı USD 3.214 bin.", [("unemployed", "3.214 bin")], "not a currency ('usd')"),
+        ("İşsiz sayısı $3.214 bin.", [("unemployed", "$3.214 bin")], "not a currency ('$')"),
         # The national rate presented as a provincial one.
         (
             "Mart 2026'da İstanbul işsizlik oranı %8,0 oldu.",
@@ -333,6 +342,11 @@ async def test_matching_period_unit_and_scope_pass(tmp_path):
                 ("january", "%8,4"),
                 ("rate", "%8,0"),
             ),
+            host(
+                "Ocak 2026'da, oran %8,4 oldu. Mart 2026'da, oran %8,0 oldu.",
+                ("january", "%8,4"),
+                ("rate", "%8,0"),
+            ),
             host("İşsiz sayısı 3.214 bin kişi.", ("unemployed", "3.214 bin kişi")),
             host("Mart 2026'da Türkiye işsizlik oranı %8,0 oldu.", ("rate", "%8,0")),
         ),
@@ -341,6 +355,22 @@ async def test_matching_period_unit_and_scope_pass(tmp_path):
     payload = await build(spec, tmp_path)
     assert payload["status"] == "ok", [f["problems"] for f in findings(payload)]
     assert all(c["status"] == "verified" for f in findings(payload) for c in f["claims"])
+
+
+async def test_a_label_cannot_give_national_evidence_a_provincial_scope(tmp_path):
+    def labelled(label):
+        evidence = [
+            {**item, "label": label} if item["key"] == "rate" else item for item in EVIDENCE
+        ]
+        return report_spec(summary({"evidence": ["rate"]}), evidence=evidence)
+
+    refused = await build(labelled("İstanbul işsizlik oranı"), tmp_path)
+    assert refused["status"] == "error" and "rate: label names 'istanbul'" in refused["message"]
+    assert not list(tmp_path.rglob("report.json"))
+    allowed = await build(labelled("Türkiye işsizlik oranı"), tmp_path / "ok")
+    assert allowed["status"] == "ok"
+    (finding,) = findings(allowed)
+    assert finding["text"].startswith("Türkiye işsizlik oranı, 2026-03 döneminde %8,00")
 
 
 def test_scope_follows_the_geography_named_by_the_evidence():
