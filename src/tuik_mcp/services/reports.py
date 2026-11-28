@@ -599,7 +599,18 @@ class ReportService:
             inputs=result.inputs,
         )
 
-    async def build(self, spec: ReportSpec | dict) -> Report:
+    async def build(self, spec: ReportSpec | dict, *, pptx: bool = False) -> Report:
+        renderer = None
+        if pptx:
+            try:
+                from tuik_mcp.reports.pptx import render_pptx
+            except ModuleNotFoundError as exc:
+                if exc.name != "pptx":
+                    raise
+                raise SourceError(
+                    "pptx_unavailable", "Install tuik-mcp with the [pptx-out] extra.", PORTAL
+                ) from exc
+            renderer = render_pptx
         spec = spec if isinstance(spec, ReportSpec) else ReportSpec.model_validate(spec)
         language = spec.language
         cache: dict[str, Loaded] = {}
@@ -837,7 +848,16 @@ class ReportService:
             spec=spec,
         )
         if status != "rejected":
-            manifest = await self.save(report, cache)
+            extra = None
+            if renderer is not None:
+                content = await self.catalog.files.work(renderer, report)
+                extra = PendingFile(
+                    name="report.pptx",
+                    role="output",
+                    mime_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    content=content,
+                )
+            manifest = await self.save(report, cache, extra=extra)
             report = report.model_copy(
                 update={"artifact": self.catalog.artifacts.summary(manifest)}
             )
@@ -945,7 +965,9 @@ class ReportService:
         ]
         return report.model_copy(update={"sections": sections})
 
-    async def save(self, report: Report, cache: dict[str, Loaded]):
+    async def save(
+        self, report: Report, cache: dict[str, Loaded], *, extra: PendingFile | None = None
+    ):
         document = report.model_dump(mode="json", exclude={"artifact"})
         rows = []
         for item in report.evidence:
@@ -1095,6 +1117,7 @@ class ReportService:
                 PendingFile(
                     name="README.txt", role="notes", mime_type="text/plain", content=readme
                 ),
+                *([extra] if extra is not None else []),
             ],
             sources=sources,
             transformations=[
