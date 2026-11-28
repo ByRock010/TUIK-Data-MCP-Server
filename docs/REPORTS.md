@@ -107,6 +107,33 @@ Published labels and dimension values may contain digits, such as `15+` or
 titles state no claims: a number other than an evidence period, or a direction
 word, in them is a problem.
 
+## Refresh a saved report
+
+Every new report bundle includes `report-recipe.json`. Older bundles with an
+embedded validated spec are also eligible. Call `refresh_tuik_report` with the
+bundle's `manifest_uri` while it is still retained.
+
+The tool fetches current official metadata and source files using the same
+reviewed selection. The saved periods, calculations and cutoff are reused.
+For a series, `series_through={"trend":"2026-10"}` extends its end explicitly.
+A later `source_cutoff` can be provided when the original cutoff would exclude
+the requested release. The refresh compares selected evidence only.
+
+Read `refresh.json` from the new manifest for its comparison with the earlier
+bundle. It distinguishes newly included periods, historical additions, removed
+rows and revised values or statuses. Each side lists its source digest, release
+and retrieval dates, reviewed recipe version and available column mapping.
+The previous manifest shows which original source bytes were retained. Without
+those bytes, comparison covers the saved resolved evidence.
+
+An unchanged attempt links the original artifact and reports the current
+retrieval time. Concurrent retries against the same baseline and current inputs
+reuse the same refreshed artifact within the running process while it remains
+cached. A new process may produce a new artifact ID or expiry for the same
+comparison. A changed mapping requests a recipe review. Invalidated narrative
+follows the original reject/draft policy. An expired baseline or failed download
+returns an error. Search index freshness is separate from this upstream check.
+
 ## Statuses
 
 | `status` | When | Bundle |

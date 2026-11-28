@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Saved reports include their reusable recipe. Refresh compares reviewed official
+  snapshots and links a revision ledger without overwriting the earlier bundle (#99).
+
 - `build_tuik_report` builds one validated, evidence-bound report (#91) for the
   PowerPoint, PDF and Word renderers. Evidence resolves to published
   observation IDs or deterministic calculation IDs. Findings get deterministic
