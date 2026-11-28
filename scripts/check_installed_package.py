@@ -23,6 +23,7 @@ TOOLS = {
     "inspect_tuik_data",
     "chart_tuik_data",
     "get_tuik_observations",
+    "calculate_tuik_series",
     "export_tuik_workbook",
     "list_tuik_themes",
     "read_tuik_document",

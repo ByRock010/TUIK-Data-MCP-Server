@@ -22,6 +22,7 @@ verification and pending reviewed promotion/publication.
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
 | `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False, chart_options=None)` | Plot CSV/XLS/XLSX rows with a JSON summary and optional downloadable PNG, SVG, PDF and reusable chart data (needs the `viz` extra) |
 | `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
+| `calculate_tuik_series(resource_id, operation, filters=None, basis=None, periods=None, window=None, base_period=None, period_from=None, period_to=None, decimals=2, snapshot_id=None, save=False)` | Derived values from reviewed observations: differences, percent and percentage-point changes, moving averages, extrema and rebasing, with formula, input IDs, unit and rounding; `save` stores a recomputable bundle |
 | `export_tuik_workbook(resource_id, filters=None, period_from=None, period_to=None, snapshot_id=None)` | Export a reviewed observation selection as an editable XLSX with analysis, original values and a provenance manifest |
 | `read_tuik_document(resource_id, page=1, max_chars=8000, offset=0, tables=False)` | Read a PDF page with bounded text and continuation; optional best-effort page tables |
 | `list_tuik_themes()` | Current major statistical categories |
@@ -33,6 +34,10 @@ null or empty arrays. Source text is untrusted content, never executable code or
 instructions.
 
 ## Installation
+
+The [local hosted pilot](docs/HOSTED_MCP.md) provides an optional authenticated
+Streamable HTTP entry point and a loopback TLS recipe.
+
 
 For installation from a built wheel, Windows instructions, client setup and the
 read-only `tuik-mcp-doctor` command, see [installation and diagnostics](docs/INSTALLATION.md).
@@ -461,6 +466,17 @@ within the pinned snapshot. A period range reports gaps for each series and
 `next_cursor` pins the snapshot, recipe version and selection. Housing sales
 remain unavailable pending source validation. See [normalized observations](
 docs/OBSERVATIONS.md).
+
+## Calculations on typed observations
+
+`calculate_tuik_series` computes changes and comparisons from one reviewed
+series before a number reaches prose or a chart. It reads the complete
+normalized snapshot, matches periods by calendar position, and returns each
+result with its formula, input observation IDs, output unit and rounding.
+Missing periods stay missing. Incompatible units, adjustments and index bases
+are refused, and every result is labelled as derived, not published by TÜİK.
+`save=true` stores a bundle that recomputes to the same results. See
+[calculations](docs/CALCULATIONS.md).
 
 ## Export a reviewed selection to Excel
 
