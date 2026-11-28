@@ -201,6 +201,15 @@ def steps() -> list[Step]:
                  r["status"] == "ok" and r["complete"] and r["counts"]["valid"] > 100
                  and r["observations"][0]["unit"]["kind"] == "percent"
                  and r["response_bytes"] <= 64 * 1024, "no typed observations")),
+        Step("calculation", "csv", "calculate_tuik_series",
+             {"resource_id": FLOW, "operation": "pp_difference",
+              "basis": "same_period_previous_year", "period_from": "2025-01",
+              "filters": {**RATE, "Cinsiyet": "Kadın"}},
+             lambda r, _: expect(
+                 r["status"] == "ok" and r["counts"]["valid"] > 0
+                 and r["output_unit"]["kind"] == "percentage_points"
+                 and r["series"][0]["results"][0]["inputs"]
+                 and r["response_bytes"] <= 64 * 1024, "no year-ago difference")),
         Step("xls_rows", "excel", "get_tuik_data",
              lambda done: {"resource_id": link(done, "xls"), "limit": 3},
              lambda r, _: expect(r["status"] == "ok" and r["sheet"] and len(r["rows"]) == 3,
