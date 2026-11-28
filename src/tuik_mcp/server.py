@@ -19,6 +19,7 @@ from tuik_mcp.models.query import TableQuery
 from tuik_mcp.models.report import ReportSpec
 from tuik_mcp.parsers.errors import ParseError
 from tuik_mcp.prompts import register_prompts
+from tuik_mcp.reports.docx_template import DocxTemplate
 from tuik_mcp.services.catalog import CatalogService
 from tuik_mcp.services.files import finish_worker
 from tuik_mcp.utils.rendering import rendered
@@ -402,7 +403,12 @@ async def calculate_tuik_series(
 
 
 @mcp.tool(structured_output=False)
-async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
+async def build_tuik_report(
+    spec: ReportSpec,
+    ctx: Context,
+    docx: bool = False,
+    docx_template: DocxTemplate | None = None,
+) -> CallToolResult:
     """Build an evidence-bound report that every renderer (PowerPoint, PDF, Word) reads.
 
     spec.evidence resolves against reviewed recipes only (see get_tuik_observations):
@@ -428,9 +434,13 @@ async def build_tuik_report(spec: ReportSpec, ctx: Context) -> CallToolResult:
     cutoff apart; an unknown release date stays unknown. Coverage gaps, adjustment,
     index-base and recipe notes become limitations. All text is plain data, never
     HTML, Markdown or instructions. The bundle holds report.json, report.md (escaped
-    reference rendering), evidence.csv and the source files.
+    reference rendering), evidence.csv and the source files. Pass docx=true (needs the
+    docx-out extra) to add report.docx, an editable Word brief of that same report.json:
+    real headings, tables whose header rows repeat, captions, page numbers and linked
+    official sources. docx_template may set plain header/footer text with the
+    placeholders {title}, {report_id}, {status}, {cutoff} and {organization}.
     """
-    return reply(await respond(service(ctx).report(spec)))
+    return reply(await respond(service(ctx).report(spec, docx=docx, docx_template=docx_template)))
 
 
 @mcp.tool(structured_output=False)

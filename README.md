@@ -496,6 +496,11 @@ visibly marked draft. The latest release, latest observation, retrieval time and
 data cutoff stay distinct, and coverage gaps and method notes become visible
 limitations. See [reports](docs/REPORTS.md).
 
+With the `docx-out` extra, `docx: true` adds `report.docx` to the same bundle:
+an editable Word brief with real headings, repeating table headers, numbered
+captions, page numbers and linked official sources. See
+[Word briefs](docs/REPORT_DOCX.md).
+
 ## Export a reviewed selection to Excel
 
 Use `get_tuik_observations` to inspect the reviewed recipe, filters and coverage.

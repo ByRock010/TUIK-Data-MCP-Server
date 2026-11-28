@@ -711,9 +711,9 @@ class CatalogService:
         """Auditable derived values from reviewed observations (#89)."""
         return await self.calculations.calculate(resource_id, operation, **specification)
 
-    async def report(self, spec):
-        """A validated, evidence-bound report and its bundle (#91)."""
-        return await self.reports.build(spec)
+    async def report(self, spec, *, docx: bool = False, docx_template=None):
+        """A validated, evidence-bound report and its bundle (#91), optionally a brief (#95)."""
+        return await self.reports.build(spec, docx=docx, docx_template=docx_template)
 
     async def inspect(
         self,

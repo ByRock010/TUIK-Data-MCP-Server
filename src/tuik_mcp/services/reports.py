@@ -37,6 +37,7 @@ from tuik_mcp.models.report import (
 from tuik_mcp.observations import BY_RESOURCE, SchemaChanged, unavailable
 from tuik_mcp.observations.workbooks import BY_WORKBOOK, WorkbookRecipe
 from tuik_mcp.reports.claims import Fact, check_text, geography_terms
+from tuik_mcp.reports.docx_template import DocxTemplate
 from tuik_mcp.reports.numbers import display, unit_label
 from tuik_mcp.reports.render import markdown
 from tuik_mcp.reports.templates import TEXT, finding_text
@@ -50,6 +51,8 @@ from tuik_mcp.services.observations import (
 )
 from tuik_mcp.utils.normalization import validate_id
 from tuik_mcp.utils.rendering import rendered
+
+DOCX_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 OPERATIONS = {
     "tr": {
@@ -631,7 +634,32 @@ class ReportService:
             inputs=result.inputs,
         )
 
-    async def build(self, spec: ReportSpec | dict) -> Report:
+    async def build(
+        self,
+        spec: ReportSpec | dict,
+        *,
+        docx: bool = False,
+        docx_template: DocxTemplate | dict | None = None,
+    ) -> Report:
+        if type(docx) is not bool:
+            raise ValueError("docx must be a boolean")
+        if docx_template is not None and not docx:
+            raise ValueError("docx_template applies only with docx=true")
+        docx_renderer = None
+        if docx:
+            template = DocxTemplate.model_validate(docx_template or {})
+            try:
+                from tuik_mcp.reports.docx import render_docx
+            except ImportError as exc:
+                raise SourceError(
+                    "docx_unavailable",
+                    "Install tuik-mcp with the [docx-out] extra for Word briefs.",
+                    PORTAL,
+                ) from exc
+
+            def docx_renderer(document: bytes) -> bytes:
+                return render_docx(document, template)
+
         spec = spec if isinstance(spec, ReportSpec) else ReportSpec.model_validate(spec)
         language = spec.language
         cache: dict[str, Loaded] = {}
@@ -869,7 +897,7 @@ class ReportService:
             spec=spec,
         )
         if status != "rejected":
-            manifest = await self.save(report, cache)
+            manifest = await self.save(report, cache, docx_renderer)
             report = report.model_copy(
                 update={"artifact": self.catalog.artifacts.summary(manifest)}
             )
@@ -977,8 +1005,9 @@ class ReportService:
         ]
         return report.model_copy(update={"sections": sections})
 
-    async def save(self, report: Report, cache: dict[str, Loaded]):
+    async def save(self, report: Report, cache: dict[str, Loaded], docx_renderer=None):
         document = report.model_dump(mode="json", exclude={"artifact"})
+        report_json = json.dumps(document, ensure_ascii=False, indent=2).encode()
         rows = []
         for item in report.evidence:
             rows.append(
@@ -1100,34 +1129,42 @@ class ReportService:
             + "; ".join(i.resource_id for i in inputs)[:160]
             + f" · tuik-mcp raporu {report.report_id}"
         )
+        files = [
+            PendingFile(
+                name="report.json",
+                role="output",
+                mime_type="application/json",
+                content=report_json,
+            ),
+            PendingFile(
+                name="report.md",
+                role="output",
+                mime_type="text/markdown",
+                content=markdown(report).encode(),
+            ),
+            PendingFile(
+                name="evidence.csv",
+                role="data",
+                mime_type="text/csv",
+                content=csv_bytes(header, rows),
+            ),
+            PendingFile(name="README.txt", role="notes", mime_type="text/plain", content=readme),
+        ]
+        if docx_renderer is not None:
+            # The brief is drawn from the exact report.json bytes saved beside it.
+            try:
+                brief = await self.catalog.files.work(docx_renderer, report_json)
+            except ValueError as exc:
+                raise SourceError("docx_failed", str(exc), PORTAL) from exc
+            files.append(
+                PendingFile(name="report.docx", role="output", mime_type=DOCX_TYPE, content=brief)
+            )
         return await self.catalog.artifacts.create(
             kind="report",
             title=report.title[:200],
             citation=citation,
             inputs=inputs,
-            files=[
-                PendingFile(
-                    name="report.json",
-                    role="output",
-                    mime_type="application/json",
-                    content=json.dumps(document, ensure_ascii=False, indent=2).encode(),
-                ),
-                PendingFile(
-                    name="report.md",
-                    role="output",
-                    mime_type="text/markdown",
-                    content=markdown(report).encode(),
-                ),
-                PendingFile(
-                    name="evidence.csv",
-                    role="data",
-                    mime_type="text/csv",
-                    content=csv_bytes(header, rows),
-                ),
-                PendingFile(
-                    name="README.txt", role="notes", mime_type="text/plain", content=readme
-                ),
-            ],
+            files=files,
             sources=sources,
             transformations=[
                 "Evidence resolved from reviewed normalized observations (tuik.observation/1) "
