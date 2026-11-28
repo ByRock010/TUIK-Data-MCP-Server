@@ -22,6 +22,7 @@ async def test_stdio_discovery_and_input_validation():
                 "calculate_tuik_series",
                 "build_tuik_report",
                 "export_tuik_workbook",
+                "query_tuik_dimensions",
                 "list_tuik_themes",
                 "read_tuik_document",
                 "search_tuik_classifications",

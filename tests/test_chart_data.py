@@ -15,6 +15,7 @@ from mcp.client.stdio import stdio_client
 from tuik_mcp import charts
 from tuik_mcp.clients.base import HttpClient, SourceError
 from tuik_mcp.config import Settings
+from tuik_mcp.models.chart import ChartSpec
 from tuik_mcp.parsers.query import QueryError
 from tuik_mcp.services.catalog import CatalogService
 
@@ -319,7 +320,14 @@ async def test_stdio_tool_returns_png_image_and_structured_summary():
             tool = next(
                 t for t in (await session.list_tools()).tools if t.name == "chart_tuik_data"
             )
-            assert tool.inputSchema["properties"]["chart"]["enum"] == ["line", "bar"]
+            assert tool.inputSchema["properties"]["chart"]["enum"] == [
+                "line",
+                "bar",
+                "horizontal_bar",
+                "ranked_bar",
+                "scatter",
+                "heatmap",
+            ]
             assert tool.inputSchema["required"] == ["resource_id", "x", "y"]
             result = await session.call_tool(
                 "chart_tuik_data",
@@ -340,3 +348,209 @@ async def test_stdio_tool_returns_png_image_and_structured_summary():
             assert [c.type for c in error.content] == ["text"]
             assert error.structuredContent["status"] == "error"
             assert error.structuredContent["code"] == "invalid_columns"
+
+
+async def test_saved_formats_share_a_snapshot_and_reusable_spec(tmp_path):
+    import pdfplumber
+
+    data = long_csv([("A", "2026-04", "2,5"), ("A", "2026-01", "-4,0"), ("A", "2026-03", "-")])
+    http, catalog, calls = service(data, "csv", artifact_dir=str(tmp_path))
+    title = "Türkiye'de seçilmiş ölçütler: Şubat, Nisan ve değişim"
+    note = "Ölçüm boşluğu Şubat ayında görülür. Çalışma örneği."
+    try:
+        result, image = await catalog.chart(
+            FLOW,
+            ["Zaman"],
+            ["Gözlem Değeri"],
+            title=title,
+            save=True,
+            chart_options={"formats": ["png", "svg", "pdf"], "source_note": note},
+        )
+        artifact = result.artifact
+
+        def read(name):
+            return catalog.artifacts.read(artifact.artifact_id, name)[0]
+
+        spec = ChartSpec.model_validate_json(read("chart-spec.json"))
+        svg = read("chart.svg").decode()
+        pdf = read("chart.pdf")
+        assert image == read("chart.png")
+        assert spec.snapshot_id == result.snapshot_id
+        assert spec.title == title and spec.source_note == note
+        assert spec.x_labels == ["2026-01", "2026-03", "2026-04"]
+        assert spec.break_before == [1]
+        assert spec.series[0].values == [-4.0, None, 2.5]
+        assert spec.series[0].states == ["ok", "missing", "ok"]
+        assert result.alt_text == spec.alt_text and "Unobserved calendar intervals" in spec.alt_text
+        assert "2026-01,-4" in read("chart-data.csv").decode()
+        assert "2026-03,\n" in read("chart-data.csv").decode()
+        assert "Türkiye" in svg and "Ölçüm" in svg and "<image" not in svg
+        assert "<!DOCTYPE" not in svg
+        assert "viewBox=" in svg
+        assert charts.render_spec(spec, "svg")[0] == svg.encode()
+        assert charts.render_spec(spec, "pdf")[0] == pdf
+        with pdfplumber.open(io.BytesIO(pdf)) as document:
+            (page,) = document.pages
+            assert title in page.extract_text() and note in page.extract_text()
+            assert not page.images
+        assert sum(path.endswith("/file/csv") for path in calls) == 1
+    finally:
+        await http.close()
+
+
+async def test_enhanced_workbook_uses_percent_column_not_population_scope():
+    http, catalog, _ = service((FILES / "labour-adjusted.xls").read_bytes(), "xls")
+    try:
+        columns = [RATE.format(10), RATE.format(21)]
+        result, _ = await catalog.chart(ID, X, columns, last=3, chart_options={})
+        assert result.unit == "%" and "Unit: %." in result.alt_text
+        with pytest.raises(ValueError, match="disagree with the common series unit"):
+            await catalog.chart(
+                ID, X, columns, last=3, chart_options={"series_units": ["people", "people"]}
+            )
+    finally:
+        await http.close()
+
+
+async def test_ranked_bars_put_ties_first_in_previous_order_and_gaps_last(tmp_path):
+    http, catalog, _ = service(
+        long_csv(
+            [("A", "İzmir", "-2"), ("A", "Van", "-3"), ("A", "Ankara", "-2"), ("A", "Şırnak", "-")]
+        ),
+        "csv",
+        artifact_dir=str(tmp_path),
+    )
+    try:
+        result, image = await catalog.chart(
+            FLOW, ["Zaman"], ["Gözlem Değeri"], "ranked_bar", save=True
+        )
+        data, _ = catalog.artifacts.read(result.artifact.artifact_id, "chart-spec.json")
+        spec = ChartSpec.model_validate_json(data)
+        assert image.startswith(PNG)
+        assert spec.x_labels == ["İzmir", "Ankara", "Van", "Şırnak"]
+        assert spec.series[0].values == [-2, -2, -3, None]
+        assert result.x_order == "value_descending"
+    finally:
+        await http.close()
+
+
+def test_grouped_scatter_keeps_repeated_numeric_coordinates():
+    rows = [
+        {"group": name, "x": x, "y": y}
+        for name, x, y in [("A", "1", "4"), ("A", "1", "5"), ("B", "1", "6"), ("B", "2", "7")]
+    ]
+    plot = charts.build(["group", "x", "y"], rows, ["x"], ["y"], series="group", scatter=True)
+    assert plot.labels == ["1", "1", "2"]
+    assert [line.values for line in plot.lines] == [[4, 5, None], [6, None, 7]]
+
+
+@pytest.mark.parametrize("kind", ["bar", "horizontal_bar", "scatter", "heatmap"])
+async def test_advanced_charts_render_groups_with_shared_units(kind, tmp_path):
+    rows = [("A", "1", "-1"), ("A", "2", "0"), ("B", "1", "1"), ("B", "2", "-")]
+    http, catalog, _ = service(long_csv(rows), "csv", artifact_dir=str(tmp_path))
+    try:
+        result, image = await catalog.chart(
+            FLOW,
+            ["Zaman"],
+            ["Gözlem Değeri"],
+            kind,
+            series="Sektör",
+            save=True,
+            chart_options={
+                "formats": ["svg"],
+                "theme": "monochrome",
+                "series_units": ["puan", "puan"],
+            },
+        )
+        assert image is None and result.image is None
+        evidence, mime = catalog.artifacts.read(result.artifact.artifact_id, "chart-spec.json")
+        spec = ChartSpec.model_validate_json(evidence)
+        svg, _ = catalog.artifacts.read(result.artifact.artifact_id, "chart.svg")
+        assert mime == "application/json"
+        assert b"<image" not in svg
+        assert spec.series[1].values == [1, None]
+        assert spec.theme == "monochrome"
+        assert spec.unit == "puan" and spec.unit_source == "declared"
+        if kind == "scatter":
+            assert spec.x_values == [1, 2]
+            assert "causation" in result.alt_text
+        elif kind == "heatmap":
+            assert "missing or invalid" in result.alt_text
+            assert "×".encode() in svg
+        else:
+            assert "baseline indicate gaps" in result.alt_text
+            assert "×".encode() in svg
+    finally:
+        await http.close()
+
+
+@pytest.mark.parametrize(
+    ("chart", "options", "match"),
+    [
+        ("scatter", {}, "valid numeric x"),
+        ("line", {"series_units": ["TRY", "%"]}, "same unit"),
+        ("line", {}, "common unit"),
+        ("heatmap", {"series_units": ["puan", "puan"]}, "at most 24"),
+        ("ranked_bar", {"series_units": ["puan", "puan"]}, "one descending series"),
+    ],
+)
+async def test_new_chart_contract_refuses_unsafe_or_oversized_combinations(chart, options, match):
+    rows = [(s, f"Bölge {i}", str(i)) for s in ("A", "B") for i in range(25)]
+    http, catalog, _ = service(long_csv(rows), "csv")
+    try:
+        with pytest.raises(ValueError, match=match):
+            await catalog.chart(
+                FLOW, ["Zaman"], ["Gözlem Değeri"], chart, series="Sektör", chart_options=options
+            )
+        with pytest.raises(ValueError, match="save=true"):
+            await catalog.chart(
+                FLOW, ["Zaman"], ["Gözlem Değeri"], chart_options={"formats": ["pdf"]}
+            )
+    finally:
+        await http.close()
+
+
+async def test_spec_and_output_byte_caps_leave_no_partial_artifact(tmp_path, monkeypatch):
+    data = long_csv([("A", "Ocak", "1"), ("A", "Şubat", "2")])
+    http, catalog, _ = service(data, "csv", artifact_dir=str(tmp_path))
+    args = (FLOW, ["Zaman"], ["Gözlem Değeri"])
+    try:
+        monkeypatch.setattr(charts, "MAX_SPEC_BYTES", 100)
+        with pytest.raises(SourceError, match="ChartSpec exceeds"):
+            await catalog.chart(*args, save=True, chart_options={"formats": ["svg"]})
+        monkeypatch.setattr(charts, "MAX_SPEC_BYTES", 2 * 1024 * 1024)
+        monkeypatch.setitem(charts.MAX_RENDER_BYTES, "svg", 100)
+        with pytest.raises(SourceError, match="SVG exceeds"):
+            await catalog.chart(*args, save=True, chart_options={"formats": ["png", "svg"]})
+        assert not list(tmp_path.iterdir())
+    finally:
+        await http.close()
+
+
+async def test_stdio_returns_readable_vector_resources_and_text_fallback(tmp_path):
+    params = StdioServerParameters(
+        command=sys.executable,
+        args=[str(Path(__file__).with_name("search_stdio_server.py")), "portal"],
+        env={"TUIK_ARTIFACT_DIR": str(tmp_path)},
+    )
+    async with stdio_client(params) as (read, write), ClientSession(read, write) as session:
+        await session.initialize()
+        result = await session.call_tool(
+            "chart_tuik_data",
+            {
+                "resource_id": FLOW,
+                "x": ["Zaman (2015-01)"],
+                "y": ["Gözlem Değeri"],
+                "save": True,
+                "chart_options": {"formats": ["svg", "pdf"]},
+            },
+        )
+        summary = result.structuredContent
+        assert summary["status"] == "ok", summary
+        assert summary["image"] is None and summary["alt_text"]
+        links = {item.name: item for item in result.content[1:]}
+        (pdf,) = (await session.read_resource(links["chart.pdf"].uri)).contents
+        assert pdf.mimeType == "application/pdf"
+        assert base64.b64decode(pdf.blob).startswith(b"%PDF-")
+        (spec,) = (await session.read_resource(links["chart-spec.json"].uri)).contents
+        assert ChartSpec.model_validate_json(spec.text).snapshot_id == summary["snapshot_id"]

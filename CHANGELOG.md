@@ -8,16 +8,26 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `query_tuik_dimensions` adds an opt-in bounded DataBrowser pilot for six
+  audited dataflows. It exposes versioned dimension codelists and confirmed
+  coded selections with exact observation values and provenance (#105).
+
+- `chart_tuik_data` adds a reusable ChartSpec, SVG and vector PDF artifacts, and
+  horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
+  notes, accessible themes and alt text while preserving legacy PNG calls (#90).
+
 - `build_tuik_report` builds one validated, evidence-bound report (#91) for the
   PowerPoint, PDF and Word renderers. Evidence resolves to published
   observation IDs or deterministic calculation IDs. Findings get deterministic
   Turkish or English sentences or carry host narrative whose numbers must be
-  bound by claims; changed values, signs, units, dates, number locales and
-  unsupported comparisons are rejected or kept as a marked draft. Latest
-  release, latest observation, retrieval time and data cutoff stay distinct.
+  bound by claims; changed values, signs, units, dates, periods, geographic
+  scope, number locales and unsupported comparisons are rejected or kept as a
+  marked draft. Latest release, latest observation, retrieval time and data
+  cutoff stay distinct.
   Coverage gaps, adjustment differences and recipe notes become limitations.
   The bundle holds `report.json`, an escaped `report.md`, `evidence.csv` and the
   sources. Calculations now carry a deterministic `calculation_id`.
+
 - `calculate_tuik_series` computes auditable derived values from reviewed
   observations (#89): absolute and percentage-point differences, percent
   change, previous-period and same-period-previous-year matching by calendar
@@ -45,6 +55,9 @@ All notable changes to this project are documented here. The format follows
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
+- Optional [local hosted MCP pilot](docs/HOSTED_MCP.md) with Streamable HTTP,
+  OAuth introspection, isolated caller cursors and report files, and bounded
+  single-worker admission (#103).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry

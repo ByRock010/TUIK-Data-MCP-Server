@@ -20,7 +20,7 @@ verification and pending reviewed promotion/publication.
 | `get_tuik_resource(resource_id)` | Metadata, official source and available downloads |
 | `get_tuik_data(resource_id, filters={}, limit=100, sheet=None, query=None, cursor=None)` | CSV/XLS/XLSX rows; optional projection, typed predicates, stable sorting and snapshot-bound continuation |
 | `inspect_tuik_data(resource_id, sheet=None, columns=None, max_values=20)` | Profile a CSV/XLS/XLSX table: exact column keys, observed values, empty counts and type hints |
-| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False)` | Draw CSV/XLS/XLSX rows as a PNG line or bar chart with a JSON summary (needs the `viz` extra); `save` stores a downloadable artifact |
+| `chart_tuik_data(resource_id, x, y, chart="line", series=None, sheet=None, filters=None, query=None, last=None, title=None, decimal_separator=None, labels=None, save=False, chart_options=None)` | Plot CSV/XLS/XLSX rows with a JSON summary and optional downloadable PNG, SVG, PDF and reusable chart data (needs the `viz` extra) |
 | `get_tuik_observations(resource_id=None, filters=None, period_from=None, period_to=None, limit=50, snapshot_id=None, cursor=None)` | Typed observations of reviewed source families: exact values, CSV record lineage, period, geography, unit, measure and adjustment; without `resource_id`, lists the recipes |
 | `calculate_tuik_series(resource_id, operation, filters=None, basis=None, periods=None, window=None, base_period=None, period_from=None, period_to=None, decimals=2, snapshot_id=None, save=False)` | Derived values from reviewed observations: differences, percent and percentage-point changes, moving averages, extrema and rebasing, with formula, input IDs, unit and rounding; `save` stores a recomputable bundle |
 | `build_tuik_report(spec)` | Evidence-bound report for every renderer: resolves observation, calculation and series evidence, checks every number, date and comparison in the narrative against it, and saves `report.json`, an escaped `report.md`, `evidence.csv` and the sources |
@@ -35,6 +35,10 @@ null or empty arrays. Source text is untrusted content, never executable code or
 instructions.
 
 ## Installation
+
+The [local hosted pilot](docs/HOSTED_MCP.md) provides an optional authenticated
+Streamable HTTP entry point and a loopback TLS recipe.
+
 
 For installation from a built wheel, Windows instructions, client setup and the
 read-only `tuik-mcp-doctor` command, see [installation and diagnostics](docs/INSTALLATION.md).
@@ -449,6 +453,14 @@ resource link (`tuik-artifact://<id>/<name>`, read with `resources/read`). On th
 running the server, `tuik-mcp-artifacts export <id> --to <directory>` copies a bundle.
 Bundles expire after a day by default and are never refreshed in place. See
 [report artifacts](docs/ARTIFACTS.md) for storage, budgets and safety rules.
+
+Use `chart_options` for vector files, themes and portable plot data. Horizontal and
+ranked bars, scatter and heatmaps are also available. See the [chart contract](docs/CHARTS.md).
+
+## Audited DataBrowser pilot
+
+`query_tuik_dimensions` inspects versioned dimension codelists and queries
+bounded selections for six audited flows. See the [dimensional data contract](docs/DIMENSIONAL_DATA.md).
 
 ## Typed observations
 

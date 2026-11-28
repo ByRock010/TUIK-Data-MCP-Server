@@ -73,6 +73,7 @@ async def test_live_mcp_workflow():
         "calculate_tuik_series",
         "build_tuik_report",
         "export_tuik_workbook",
+        "query_tuik_dimensions",
     }
     for key, fmt in [("inspect_csv", {"csv"}), ("inspect_excel", {"xls", "xlsx"})]:
         inspected = report[key]
