@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `chart_tuik_data` adds a reusable ChartSpec, SVG and vector PDF artifacts, and
+  horizontal/ranked bars, scatter and heatmaps. Enhanced charts include source
+  notes, accessible themes and alt text while preserving legacy PNG calls (#90).
+
 - `calculate_tuik_series` computes auditable derived values from reviewed
   observations (#89): absolute and percentage-point differences, percent
   change, previous-period and same-period-previous-year matching by calendar

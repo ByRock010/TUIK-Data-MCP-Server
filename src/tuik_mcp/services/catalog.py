@@ -12,7 +12,7 @@ from tuik_mcp.clients.classification import ClassificationClient
 from tuik_mcp.clients.tuik_portal import TuikPortal, normalize_result
 from tuik_mcp.config import CLASSIFICATION, PORTAL
 from tuik_mcp.identities import FILE_ID, KIND_TYPES, SEARCH_ID, key_parts
-from tuik_mcp.models.chart import ChartResponse
+from tuik_mcp.models.chart import ChartKind, ChartOptions, ChartResponse, ChartSpec
 from tuik_mcp.models.common import SearchInput, now
 from tuik_mcp.models.dataset import (
     DataResponse,
@@ -56,6 +56,7 @@ SOURCE_TYPES = {
     "xls": "application/vnd.ms-excel",
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 }
+CHART_TYPES = {"png": "image/png", "svg": "image/svg+xml", "pdf": "application/pdf"}
 
 
 def plain_number(value: float | None) -> str:
@@ -64,18 +65,29 @@ def plain_number(value: float | None) -> str:
     return str(int(value)) if value.is_integer() else repr(value)
 
 
-def chart_csv(plot, x: list[str]) -> bytes:
+def chart_csv(plot, x: list[str], spec: ChartSpec | None = None) -> bytes:
     """The plotted values exactly as drawn: one row per x label, one column per line."""
     output = io.StringIO()
     writer = csv.writer(output, lineterminator="\n")
     writer.writerow([" | ".join(x), *(line.name for line in plot.lines)])
-    for index, label in enumerate(plot.labels):
+    labels = (
+        [plain_number(value) for value in spec.x_values]
+        if spec and spec.x_values
+        else (plot.labels)
+    )
+    for index, label in enumerate(labels):
         writer.writerow([label, *(plain_number(line.values[index]) for line in plot.lines)])
     return output.getvalue().encode()
 
 
-def chart_notes(title: str, unit: str | None, citation: str, warnings: list[str]) -> bytes:
+def chart_notes(
+    title: str, unit: str | None, citation: str, warnings: list[str], *, spec: ChartSpec | None
+) -> bytes:
     lines = [title, f"Birim / unit: {unit}" if unit else None, citation, ""]
+    if spec:
+        lines.extend(
+            [spec.source_note, spec.alt_text, "Chart data and layout: chart-spec.json", ""]
+        )
     lines += ["Uyarılar / warnings:", *(f"- {w}" for w in warnings)] if warnings else []
     lines += [
         "",
@@ -807,7 +819,7 @@ class CatalogService:
         resource_id: str,
         x: list[str],
         y: list[str],
-        chart: str = "line",
+        chart: ChartKind = "line",
         *,
         series: str | None = None,
         sheet: str | None = None,
@@ -818,6 +830,7 @@ class CatalogService:
         decimal_separator: str | None = None,
         labels: list[str] | None = None,
         save: bool = False,
+        chart_options: ChartOptions | dict | None = None,
     ) -> tuple[ChartResponse, bytes | None]:
         """Chart the rows get_tuik_data would read, from the same retained snapshot (#72).
 
@@ -827,8 +840,18 @@ class CatalogService:
         validate_id(resource_id)
         if type(save) is not bool:
             raise ValueError("save must be a boolean")
-        if chart not in {"line", "bar"}:
-            raise ValueError("chart must be 'line' or 'bar'")
+        if chart not in {"line", "bar", "horizontal_bar", "ranked_bar", "scatter", "heatmap"}:
+            raise ValueError("Unsupported chart kind")
+        enhanced = chart_options is not None or chart not in {"line", "bar"}
+        options = (
+            ChartOptions.model_validate(chart_options)
+            if chart_options is not None
+            else (ChartOptions())
+        )
+        if not save and any(output != "png" for output in options.formats):
+            raise ValueError("Request save=true for SVG and PDF resource links")
+        if chart != "scatter" and options.x_unit is not None:
+            raise ValueError("x_unit is supported only for scatter charts")
         for name, names, most in (("x", x, 3), ("y", y, 6)):
             if (
                 not isinstance(names, list)
@@ -836,6 +859,8 @@ class CatalogService:
                 or any(not isinstance(c, str) or not 1 <= len(c) <= 200 for c in names)
             ):
                 raise ValueError(f"{name} must list 1-{most} exact column names")
+        if chart == "scatter" and (len(x) != 1 or last is not None):
+            raise ValueError("Scatter requires exactly one numeric x column and no last window")
         if labels is not None and (
             not isinstance(labels, list)
             or any(not isinstance(label, str) or not 1 <= len(label) <= 100 for label in labels)
@@ -925,9 +950,8 @@ class CatalogService:
                 f"Workbook has no sheet named {sheet!r}; sheets: {[t.sheet for t in tables]}"
             )
         heading = title or table.title or resource.title or resource_id
-        retrieved = file.retrieved_at.date().isoformat()
         # Download URLs change within hours (#27); the image cites the resource page.
-        footer = f"Kaynak: TÜİK · {resource.source_url[:120]} · Erişim: {retrieved}"
+        footer = charts.source_caption(resource.source_url, file.retrieved_at)
         try:
             columns, rows = await self.files.work(evaluate, table, query, filters, limits)
             plot = await self.files.work(
@@ -940,10 +964,45 @@ class CatalogService:
                 last=last,
                 decimal_separator=decimal_separator,
                 labels=labels,
+                scatter=chart == "scatter",
             )
-            image, width, height = await self.files.work(
-                charts.render, plot, chart, heading, table.unit, footer
+            spec = (
+                charts.prepare_spec(
+                    plot,
+                    chart,
+                    options,
+                    title=heading,
+                    x=x,
+                    source_unit=table.unit,
+                    resource_id=resource_id,
+                    source_url=resource.source_url,
+                    retrieved_at=file.retrieved_at,
+                    snapshot_id="sha256:" + file.digest,
+                    decimal_separator=decimal_separator,
+                )
+                if enhanced
+                else None
             )
+            spec_bytes = spec.model_dump_json().encode() if spec is not None and save else None
+            if spec_bytes is not None and len(spec_bytes) > charts.MAX_SPEC_BYTES:
+                raise QueryError(
+                    "chart_limit_exceeded",
+                    "ChartSpec exceeds the byte limit; narrow the selection.",
+                )
+            images = {}
+            width = height = None
+            for output in options.formats:
+                if spec:
+                    rendered_image, pixel_width, pixel_height = await self.files.work(
+                        charts.render_spec, spec, output
+                    )
+                else:
+                    rendered_image, pixel_width, pixel_height = await self.files.work(
+                        charts.render, plot, chart, heading, table.unit, footer
+                    )
+                images[output] = rendered_image
+                if output == "png":
+                    width, height = pixel_width, pixel_height
         except QueryError as exc:
             raise SourceError(exc.code, str(exc), verified.source_url) from exc
         warnings = [*table.warnings, *plot.warnings]
@@ -964,6 +1023,43 @@ class CatalogService:
                 last=last,
                 decimal_separator=decimal_separator,
                 labels=labels,
+                chart_options=options.model_dump(mode="json", exclude_none=True) if spec else None,
+            )
+            files = [
+                PendingFile(
+                    name=f"chart.{extension}",
+                    role="output",
+                    mime_type=CHART_TYPES[extension],
+                    content=content,
+                )
+                for extension, content in images.items()
+            ]
+            if spec_bytes is not None:
+                files.append(
+                    PendingFile(
+                        name="chart-spec.json",
+                        role="data",
+                        mime_type="application/json",
+                        content=spec_bytes,
+                    )
+                )
+            files.extend(
+                [
+                    PendingFile(
+                        name="chart-data.csv",
+                        role="data",
+                        mime_type="text/csv",
+                        content=chart_csv(plot, x, spec),
+                    ),
+                    PendingFile(
+                        name="README.txt",
+                        role="notes",
+                        mime_type="text/plain",
+                        content=chart_notes(
+                            heading, spec.unit if spec else table.unit, footer, warnings, spec=spec
+                        ),
+                    ),
+                ]
             )
             manifest = await self.artifacts.create(
                 kind="chart",
@@ -982,23 +1078,7 @@ class CatalogService:
                         selection={k: v for k, v in selection.items() if v not in (None, {}, [])},
                     )
                 ],
-                files=[
-                    PendingFile(
-                        name="chart.png", role="output", mime_type="image/png", content=image
-                    ),
-                    PendingFile(
-                        name="chart-data.csv",
-                        role="data",
-                        mime_type="text/csv",
-                        content=chart_csv(plot, x),
-                    ),
-                    PendingFile(
-                        name="README.txt",
-                        role="notes",
-                        mime_type="text/plain",
-                        content=chart_notes(heading, table.unit, footer, warnings),
-                    ),
-                ],
+                files=files,
                 sources={
                     0: (
                         f"source.{verified.format}",
@@ -1022,7 +1102,7 @@ class CatalogService:
             **base,
             status="ok",
             title=heading,
-            unit=table.unit,
+            unit=spec.unit if spec else table.unit,
             format=verified.format,
             sheet=table.sheet,
             sheets=[] if csv else [t.sheet for t in tables],
@@ -1032,15 +1112,19 @@ class CatalogService:
             x_points=len(plot.labels),
             matched_rows=len(rows),
             series=charts.summarize(plot),
-            image="image/png",
+            image="image/png" if "png" in images else None,
             width_px=width,
             height_px=height,
+            alt_text=spec.alt_text if spec else None,
             warnings=warnings,
             message=(
-                "PNG chart of the published values; gaps are empty cells, placeholders or "
+                "Chart of the published values. Cite source_url and verify exact values with "
+                "get_tuik_data. Saved SVG and PDF files are resource links."
+                if enhanced
+                else "PNG chart of the published values; gaps are empty cells, placeholders or "
                 "non-numeric values. Cite source_url and verify exact values with get_tuik_data."
             ),
-        ), image
+        ), images.get("png")
 
     async def document(
         self,
