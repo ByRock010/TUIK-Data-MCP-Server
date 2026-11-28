@@ -24,6 +24,8 @@ search = ["opensearch-py>=3,<4"]
 hosted = ["mcp==1.30.0", "uvicorn>=0.34,<1"]
 # PNG charts for chart_tuik_data (#72); the other tools never import it.
 viz = ["matplotlib>=3.9,<4"]
+# Editable PowerPoint briefings from validated reports (#93); loaded only for pptx=true.
+pptx-out = ["python-pptx>=1,<2"]
 # Hybrid semantic search (#21): ONNX multilingual-e5-small embeddings, no PyTorch.
 semantic = ["fastembed>=0.7,<1"]
 fixtures = []  # Compatibility extra; all corpus readers are now runtime dependencies.

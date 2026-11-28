@@ -8,6 +8,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `build_tuik_report` with `pptx: true` and the optional `pptx-out` extra adds
+  an editable 16:9 PowerPoint briefing to the report bundle (#93). It has
+  native text, tables and line/bar charts with embedded data, a source, period
+  and unit note on every analytical slide, and full citations in the speaker
+  notes. The deck is drawn from the saved `report.json` and read back before
+  it is returned.
+
 - `query_tuik_dimensions` adds an opt-in bounded DataBrowser pilot for six
   audited dataflows. It exposes versioned dimension codelists and confirmed
   coded selections with exact observation values and provenance (#105).
