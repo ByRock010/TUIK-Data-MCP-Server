@@ -185,13 +185,14 @@ QUANTITY_WORD = re.compile(
     + "|".join(sorted(SCALE_WORDS, key=len, reverse=True))
     + r"|yüzde|puan\w*|pp|percentage|points?|percent|per|cent"
     + r"|kişi\w*|persons?|people|tj|terajoule?s?|terajul\w*"
-    + r"|abd|us|türk|tl|try|lira\w*|usd|dolar\w*|dollars?|eur|euros?|avro\w*"
+    + r"|abd|us|amerikan|american|türk|turkish|tl|try|lira\w*|usd|dolar\w*|dollars?|eur"
+    + r"|euros?|avro\w*"
     + r")"
 )
 WORD = re.compile(r"[^\W\d_]+")
 # The word or symbol attached to a number from outside its quote: right after it
 # (`3.214 bin` + `ton`), or right before it (`USD` + `3.214 bin`).
-ATTACHED_AFTER = re.compile(r"\s*((?:abd|us|türk)\s+[^\W\d_]+|[^\W\d_]+|[%$₺€])")
+ATTACHED_AFTER = re.compile(r"\s*([^\W\d_]+|[%$₺€])(?:\s+([^\W\d_]+))?")
 ATTACHED_BEFORE = re.compile(r"((?:abd|us)\s+[^\W\d_]+|[^\W\d_]+|[$₺€])\s*$")
 # Unit words a quote's number may carry right after it, before the next number.
 UNIT_TAIL = 40
@@ -419,6 +420,9 @@ def check_quote(
     after = ATTACHED_AFTER.match(lowered(tail, language))
     before = ATTACHED_BEFORE.search(lowered(head, language))
     attached_after = after.group(1) if after else ""
+    # A currency often takes two words (`Amerikan doları`, `Türk lirası`, `US dollars`).
+    if after and after.group(2) and currencies(after.group(2)):
+        attached_after += " " + after.group(2)
     attached_before = before.group(1) if before else ""
     stated_currencies = currencies(attached_before + " " + low + " " + attached_after)
     if kind == "currency" and fact.unit.currency:

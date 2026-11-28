@@ -305,6 +305,12 @@ WITH_JANUARY = [*EVIDENCE, observation("january", "2026-01")]
             "not a currency ('dolar')",
         ),
         ("İşsiz sayısı 3.214 bin TL.", [("unemployed", "3.214 bin")], "not a currency ('tl')"),
+        (
+            "İşsiz sayısı 3.214 bin Amerikan doları.",
+            [("unemployed", "3.214 bin")],
+            "not a currency ('dolar')",
+        ),
+        ("İşsiz sayısı 3.214 bin Türk lirası.", [("unemployed", "3.214 bin")], "not a currency"),
         # A physical unit other than the evidence's, in the quote or right after it.
         ("İşsiz sayısı 3.214 bin ton.", [("unemployed", "3.214 bin ton")], "not 'ton'"),
         ("İşsiz sayısı 3.214 bin adet.", [("unemployed", "3.214 bin")], "not 'adet'"),
@@ -434,6 +440,11 @@ def test_each_quote_keeps_its_own_currency_and_unit():
     ]
     claims, problems = check_text(text, bindings, {"x": usd, "p": persons}, "tr", [], {"2026-03"})
     assert not problems and [c.status for c in claims] == ["verified", "verified"], claims
+    # A two-word currency after a money value is that value's own unit.
+    american = "İhracat 1,2 milyar Amerikan doları oldu."
+    binding = [ClaimBinding(evidence="x", quote="1,2 milyar")]
+    claims, problems = check_text(american, binding, {"x": usd}, "tr", [], {"2026-03"})
+    assert not problems and claims[0].status == "verified", claims
     # Without a neighbouring quote the currency before a persons count still counts.
     swapped = "İhracat düzeyindeyken işsiz sayısı ABD doları 3.214 bin kişi oldu."
     claims, _ = check_text(swapped, bindings[1:], {"p": persons}, "tr", [], {"2026-03"})
