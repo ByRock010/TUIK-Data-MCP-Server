@@ -21,6 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 search = ["opensearch-py>=3,<4"]
+hosted = ["mcp==1.30.0", "uvicorn>=0.34,<1"]
 # PNG charts for chart_tuik_data (#72); the other tools never import it.
 viz = ["matplotlib>=3.9,<4"]
 # Hybrid semantic search (#21): ONNX multilingual-e5-small embeddings, no PyTorch.
@@ -30,6 +31,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1"]
 
 [project.scripts]
 tuik-mcp = "tuik_mcp.server:main"
+tuik-mcp-hosted = "tuik_mcp.hosted:main"
 tuik-mcp-index = "tuik_mcp.search.index_cli:main"
 tuik-mcp-doctor = "tuik_mcp.doctor:main"
 tuik-mcp-artifacts = "tuik_mcp.artifacts:main"

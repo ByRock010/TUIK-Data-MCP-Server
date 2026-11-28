@@ -35,6 +35,9 @@ All notable changes to this project are documented here. The format follows
 - [Hosted MCP pilot ADR](docs/adr/0006-hosted-mcp-pilot.md) records the
   authenticated transport decision, isolation and operating budgets, and a
   deterministic HTTP prototype using recorded TÜİK data (#102).
+- Optional [local hosted MCP pilot](docs/HOSTED_MCP.md) with Streamable HTTP,
+  OAuth introspection, isolated caller cursors and report files, and bounded
+  single-worker admission (#103).
 - `search_tuik(group_series=true)` folds the releases of a bulletin series (and
   their metadata) into the best-matching release, reporting `series.collapsed`,
   `series.releases` and `series.latest`; indexed bulletin/metadata results carry

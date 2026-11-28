@@ -35,6 +35,10 @@ instructions.
 
 ## Installation
 
+The [local hosted pilot](docs/HOSTED_MCP.md) provides an optional authenticated
+Streamable HTTP entry point and a loopback TLS recipe.
+
+
 For installation from a built wheel, Windows instructions, client setup and the
 read-only `tuik-mcp-doctor` command, see [installation and diagnostics](docs/INSTALLATION.md).
 The examples below install from a source checkout; no public package-index
